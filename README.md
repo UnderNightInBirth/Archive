@@ -17,7 +17,9 @@ For reference, [Eiton](https://github.com/Eiton/Hantei-chan) and [DamienIsPogger
 
 - hanteichan_interpolation.exe - Latest Eiton build, a test that allows smooth previews of interpolation effects.
 - hanteichan_pat_editor.exe - Version that is apparently meant to help edit pats. Redundant.
+- hanteichan_pat_editor_altconfig.exe - Same as above, has seperate config file.
 - hanteichan_v1_MBAACC.exe - "Original" rendition of Hantei-chan, which is most properly used to open Melty Blood Actress Again HA6 files. Should not be used to mod modern games, just to reference.
+- hanteichan_essentials.7z - Backup "regular" versions of 2.1.666 and 2.2.1 that didn't seperate configs.
 
 ### Other
 
