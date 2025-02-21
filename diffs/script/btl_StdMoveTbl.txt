@@ -62,6 +62,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 4;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 4;
 	chrparam.Param[type][Def_ChrNo_Udu] = 5;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 6;
 }
 
 {	// ƒ_ƒbƒVƒ…’â~•s”\‚e
@@ -98,6 +99,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 4;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 7;
 	chrparam.Param[type][Def_ChrNo_Udu] = 9;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 4;
 }
 
 {	//ƒ_ƒbƒVƒ…’â~‚âMv”²‚¯‚Ì‚Æ‚«‚ÌƒxƒNƒgƒ‹ŒW”
@@ -129,6 +131,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = [100,10,2700,200];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [100,10,2700,200];
 	chrparam.Param[type][Def_ChrNo_Udu] = [100,10,2700,200];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [100,10,2700,200];
 }
 
 {	//ƒ_ƒbƒVƒ…ƒWƒƒƒ“ƒv‚ÌŠµ«
@@ -160,6 +163,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 17;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 17;
 	chrparam.Param[type][Def_ChrNo_Udu] = 17;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 18;
 }
 
 
@@ -175,7 +179,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Gor] = 8;
 	chrparam.Param[type][Def_ChrNo_Mer] = 10;
 	chrparam.Param[type][Def_ChrNo_Vat] = 8;
-	chrparam.Param[type][Def_ChrNo_Set] = 7;
+	chrparam.Param[type][Def_ChrNo_Set] = 8;
 	chrparam.Param[type][Def_ChrNo_Yuz] = 8;
 	chrparam.Param[type][Def_ChrNo_Hil] = 9;
 	chrparam.Param[type][Def_ChrNo_Elt] = 8;
@@ -192,6 +196,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 8;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 8;
 	chrparam.Param[type][Def_ChrNo_Udu] = 8;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 8;
 }
 
 {	// ƒoƒNƒXƒe‚Ì“Š‚°–³“GƒtƒŒ[ƒ€
@@ -222,6 +227,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 10;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 10;
 	chrparam.Param[type][Def_ChrNo_Udu] = 10;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 10;
 }
 
 //•à‚«‚âƒ_ƒbƒVƒ…‚Ì‘«‰¹‚r‚d’è‹`
@@ -266,6 +272,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[typeA][Def_ChrNo_Tsu] = _FSST_Shoes;
 	chrparam.Param[typeA][Def_ChrNo_Kuo] = -1;
 	chrparam.Param[typeA][Def_ChrNo_Udu] = -1;
+	chrparam.Param[typeA][Def_ChrNo_Ogr] = _FSST_Boots;
 
 	local typeB = "‘«‰¹‚a_‚r‚d”Ô†";
 	
@@ -295,6 +302,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[typeB][Def_ChrNo_Tsu] = _FSST_Shoes+1;
 	chrparam.Param[typeB][Def_ChrNo_Kuo] = -1;
 	chrparam.Param[typeB][Def_ChrNo_Udu] = -1;
+	chrparam.Param[typeB][Def_ChrNo_Ogr] = _FSST_Boots+1;
 }
 
 {
@@ -325,6 +333,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 1;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 1;
 	chrparam.Param[type][Def_ChrNo_Udu] = 1;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 1;
 }
 
 {
@@ -355,6 +364,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 0;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 0;
 	chrparam.Param[type][Def_ChrNo_Udu] = 0;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 0;
 }
 
 {
@@ -385,6 +395,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 1;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 1;
 	chrparam.Param[type][Def_ChrNo_Udu] = 1;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 1;
 }
 
 {
@@ -415,6 +426,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = 0;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 0;
 	chrparam.Param[type][Def_ChrNo_Udu] = 0;
+	chrparam.Param[type][Def_ChrNo_Ogr] = 0;
 }
 
 {
@@ -445,6 +457,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = [100,100];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [100,100];
 	chrparam.Param[type][Def_ChrNo_Udu] = [100,100];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [100,100];
 }
 
 {
@@ -478,6 +491,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = [-1,-1,-1];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [9,-1,11];
 	chrparam.Param[type][Def_ChrNo_Udu] = [-1,-1,-1];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [9,9,-1];
 }
 
 {
@@ -511,6 +525,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = [-1,-1,-1];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [8,-1,-1];
 	chrparam.Param[type][Def_ChrNo_Udu] = [-1,-1,-1];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [7,7,8];
 }
 
 {
@@ -542,6 +557,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = [5,4];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [5,4];
 	chrparam.Param[type][Def_ChrNo_Udu] = [5,4];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [5,4];
 }
 
 {	// •à‚«ƒxƒNƒgƒ‹’è‹`
@@ -553,7 +569,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Wal] = [  0,    0,    0,     0]; // [  0,    0,    0,     0];
 	chrparam.Param[type][Def_ChrNo_Car] = [512, 1260, -512, -1000]; // [512, 1200, -512,  -900];
 	chrparam.Param[type][Def_ChrNo_Ori] = [512, 1400, -512, -1050]; // [512, 1400, -512, -1100];
-	chrparam.Param[type][Def_ChrNo_Gor] = [512, 1180, -512,  -860]; // [512, 1100, -512,  -700];
+	chrparam.Param[type][Def_ChrNo_Gor] = [512, 1260, -512, -1000]; // [512, 1100, -512,  -700]; 1.12:[512, 1180, -512,  -860];
 	chrparam.Param[type][Def_ChrNo_Mer] = [512,  740, -512,  -660]; // [512,  500, -512,  -400];
 	chrparam.Param[type][Def_ChrNo_Vat] = [512, 1180, -512,  -910]; // [512, 1000, -512,  -800];
 	chrparam.Param[type][Def_ChrNo_Set] = [512,  740, -512,  -790]; // [512,  550, -512,  -650];
@@ -573,6 +589,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = [512, 1100, -512,  -860]; // [512,  800, -700,  -600];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [512, 1100, -512,  -910]; // [512, 1100, -512,  -800];
 	chrparam.Param[type][Def_ChrNo_Udu] = [512, 1050, -512,  -940];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [512, 1130, -512,  -880];
 }
 
 {	// ˜AƒLƒƒƒ“ƒ_ƒ[ƒW•â³
@@ -604,6 +621,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Tsu] = [98,98];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [98,97];
 	chrparam.Param[type][Def_ChrNo_Udu] = [98,97];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [98,97];
 }
 local rapidAtkAHoseiAr = chrparam.Get( { type="˜AƒLƒƒƒ“ƒ_ƒ[ƒW•â³", chrnum=_ChrNo } );
 
@@ -642,7 +660,8 @@ local rapidAtkAHoseiAr = chrparam.Get( { type="˜AƒLƒƒƒ“ƒ_ƒ[ƒW•â³", chrnum=_Ch
 	chrparam.Param[type][Def_ChrNo_Kag] = [168,0, 1,0];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [153,0,10,0];
 	chrparam.Param[type][Def_ChrNo_Pho] = [150,0, 1,0];
-	chrparam.Param[type][Def_ChrNo_Udu] = [120,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Udu] = [136,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [133,0, 1,0];
 }
 local SS_ratio = chrparam.Get( { type="ƒXƒ}[ƒgƒXƒeƒA•â³", chrnum=_ChrNo } );
 
@@ -674,6 +693,7 @@ local SS_ratio = chrparam.Get( { type="ƒXƒ}[ƒgƒXƒeƒA•â³", chrnum=_ChrNo } );
 	chrparam.Param[type][Def_ChrNo_Kag] = { power=35 };
 	chrparam.Param[type][Def_ChrNo_Kuo] = { power=50 };
 	chrparam.Param[type][Def_ChrNo_Pho] = { power=50 };
+	chrparam.Param[type][Def_ChrNo_Ogr] = { power=50 };
 }
 local SS_DamageLockParams = chrparam.Get( { type="ƒXƒeƒAƒGƒ“ƒ_[”¼ƒƒbƒNˆø‚«Šñ‚¹", chrnum=_ChrNo } );
 
@@ -705,6 +725,7 @@ local SS_DamageLockParams = chrparam.Get( { type="ƒXƒeƒAƒGƒ“ƒ_[”¼ƒƒbƒNˆø‚«Šñ‚¹
 	chrparam.Param[type][Def_ChrNo_Kag] = [6, 9];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [6,10];
 	chrparam.Param[type][Def_ChrNo_Pho] = [6, 8];
+	chrparam.Param[type][Def_ChrNo_Ogr] = [6, 9];
 }
 local SteerEnderStoptime = chrparam.Get( { type="ƒXƒeƒAƒGƒ“ƒ_[ŠÔ’â~F", chrnum=_ChrNo } );
 
@@ -1559,6 +1580,39 @@ CommonStandbyParams[20] =
 	},	
 ];
 
+// ƒI[ƒK‚Ì—«”»’è
+// ƒŠƒ“ƒlAƒoƒeƒBƒXƒ^Aƒ~ƒJ‚ ‚½‚è‚Íq‹Ÿ‚È‚Ì‚ÅœŠO‚µ‚½‚¢‚ªA‚»‚¤‚·‚é‚ÆDí“I‚ÈƒZƒŠƒt‚Åˆá˜aŠ´‚ ‚é‚Ì‚Åˆê—¥‚Åc‚·
+// ƒqƒ‹ƒ_‚Íˆö‰‚ ‚è{Š|‚¯‡‚¢‚ª‚ ‚é‚Ì‚Å“ü‚ç‚È‚¢
+local lady_chara_list = [1,4,7,9,11,12,16,20,21,22,24];
+
+CommonStandbyParams[25] =
+[
+	{ WaitPAT = 50, timeline = [ { delay=186, SE=100, time=186 }, ], }, //u–œ‹S‰ï‚ª’· ƒI[ƒK‚¾ ‚æ‚ë‚µ‚­‚½‚Ì‚Şv
+	{ WaitPAT = 50, timeline = [ { delay=175, SE=101, time=175 }, ], }, //u‚æ[‚µ ¡“ú‚Ív‚¢‚Á‚«‚è–\‚ê‚Ä‚İ‚é‚©v
+	{ WaitPAT = 50, timeline = [ { delay=180, SE=102, time=180 }, ], }, //u‚â‚ê‚â‚ê –Ê“|‚È‚Ì‚É•ß‚Ü‚Á‚¿‚Ü‚Á‚½‚©Hv
+	{ WaitPAT = 50, timeline = [ { delay=132, SE=103, time=132 }, ], }, //u‚¢‚¢‚Ë‚¥ ƒAƒ“ƒ^‹­‚»‚¤‚¾v
+	
+	// ‘Î—«
+	{ Enemy=lady_chara_list, WaitPAT = 50, timeline = [ { delay=220, SE=107, time=220 }, ], }, //u‘f“G‚È‚¨ì‚³‚ñ ‚¨–¼‘O‚ğf‚Á‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚µ‚å‚¤‚©Hv
+
+	{
+		Enemy=[13], WaitPAT = [50,50],
+		duet_timeline =
+		[
+			{ PL=1, delay=194, SE=122 }, //u–³«‚É• ‚ª—§‚Â‚Ë ƒLƒ~‚ğŒ©‚Ä‚é‚Æv
+			{ PL=0, delay=229, time=229, SE=110 }, //u‚»‚¢‚Â‚Íc”O ‚Ü –ì˜Y‚ÉD‚©‚ê‚é‚æ‚è—Ç‚¢‚©v
+		],
+	},
+	{
+		Enemy=[10], WaitPAT = [900,50],
+		duet_timeline =
+		[
+			{ PL=0, delay=156, SE=113 }, //u–²‚È‚ç ‚±‚±‚ÅÁ‚ß‚é‚È‚æcHv
+			{ PL=1, delay=273, SE=118 }, //u’¼‚É§Šè‚·‚é‚í‚ŸB‘‚­Á‚ß‚Ä‚­‚êA‚Á‚Ä‚Ëccv
+		],
+	},
+];
+
 //CommonStandbyParams‚ÌƒGƒ‰[ƒ`ƒFƒbƒNˆ—
 //time‚æ‚è‚à‹É’[‚Édelay‚ª­‚È‚¢‚Æš–‹‚ª‚©‚Ô‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å‚»‚ê‚ğ’²‚×‚é
 //time‚Æparam‚Ì·‚à’²‚×‚é
@@ -1815,49 +1869,107 @@ Std_MoveTable.GeneralInterrupt <- function( info )
 					if( Def_Dbg_NoPlayUpsetSE == 0 ) BSound.SE_Play( { type=_SeType_Normal, num=75 } ); //GRDŸ—˜Œø‰Ê‰¹‚ğÄ¶
 				}
 				
-				// ƒZƒŒƒXƒeƒBƒAƒ‹ƒ”ƒH[ƒpƒ‹
+				// ƒZƒŒƒXƒeƒBƒAƒ‹ƒ”ƒH[ƒpƒ‹‚Ìˆ—
 				// GRD‚ª6ŒÂˆÈã‚¾‚Á‚½‚ç‘S•”©•ª‚Ì‚à‚Ì‚É‚·‚é
+				// ƒgƒŒƒ‚‚Ìİ’è‚à‚ ‚é‚Ì‚ÅA‘S•”©•ª‚Ì‚à‚Ì‚É‚·‚é‚Ì‚ÍGRD‚ª6ŒÂˆÈã‚Ì‚Æ‚«‚¾‚¯
 				if( Def_Sys_CelesVorpal )
 				{
-					local is_celes_vp = 0;
+					local is_celes_vp = 0; // ƒZƒŒƒXƒeƒBƒAƒ‹VP‚É‚È‚Á‚½‚©‚Ç‚¤‚©
 					local grd_stock = BMvEff.GRD_CheckStock( { val=-1 } );
+					local enemy_grd_stock = 0;
+					local enemy = BMvCore.GetEnemyCharaData();
+					if( enemy.push() )
+					{
+						enemy_grd_stock = BMvEff.GRD_CheckStock( { val=-1 } );
+						enemy.pop();
+					}
+					local grd_overenemy = ( grd_stock > enemy_grd_stock )? 1 : 0; // GRD‚ª‘Šè‚æ‚è‘½‚¢‚©
 					
-					if( grd_stock >= 6 )
+					local stage_st = BMvTbl.GetMvStageStatus().IsTrainingBattle(); // 1-Training  2-Tutorial  3-Mission
+					local grd_countover = 0; // GRD‚ğ‘S•”©•ª‚Ì‚à‚Ì‚É‚·‚é‚©
+					
+					// GRD‚ª6ŒÂ‚æ‚è‘½‚¢‚Æ‚«‚ÍƒZƒŒƒXƒeƒBƒAƒ‹VP‚¾‚µGRD‚ğ‘S•”©•ª‚Ì‚à‚Ì‚É‚·‚é
+					// ‚½‚¾AƒgƒŒƒ‚‚ÌƒŠƒXƒ^[ƒg‚Í‚±‚Ìƒ^ƒCƒ~ƒ“ƒO‚Å‚Í0‚É‚È‚Á‚Ä‚¢‚é‚Ì‚ÅŒŸ’m•s‰Â
+					// is_restart_first ‚Å’e‚¢‚½•û‚ªˆ—‚Í“Ç‚İ‚â‚·‚¢‚ªA•|‚¢‚Ì‚Åˆê’U‚±‚Ì‚Ü‚Ü
+					// GRD6ˆÈã‚È‚çƒZƒŒƒXƒeƒBƒAƒ‹‚É‚È‚é‚Í‚¸‚¾‚ªAƒgƒŒƒ‚‚ª—¼ÒVP‚Ì‚Æ‚«‚Í‰ñ”ğ‚·‚é@¦•Ğ‘¤VP‚Í‚»‚Ì‚Ü‚Ü‚Ì•û‚ªg‚¢‚â‚·‚¢
+					// ‚¨Œİ‚¢GRD6‚Å—¼ÒƒZƒŒƒXƒeƒBƒAƒ‹‚É‚È‚é‚Ì‚à‚Ü‚¸‚¢‚Ì‚ÅœŠO
+					// —¼ÒVP‚Ì‚Æ‚«‚ÍuGRD VORPALv‚Í‚¨Œİ‚¢‚Éo‚È‚¢d—l
+					if( grd_stock >= 6 && grd_overenemy && BMvEff.TM_IsNormalVorpalGRDMode() != 110 ) // 1:©•ªVP 2:‘ŠèVP 101:©•ªVP&©•ª‘¤ 102:‘ŠèVP&‘Šè‘¤ 110:—¼‘¤VP
+					{
+						is_celes_vp = 1;
+						grd_countover = 1;
+					}
+					
+					if( BMvEff.TM_IsCelestialVorpalGRDMode() >= 100 ) // 1:©•ªCVP 2:‘ŠèCVP 101:©•ªCVP&©•ª‘¤ 102:‘ŠèCVP&‘Šè‘¤
+					{
+						// _dpn("¦ƒgƒŒƒ‚İ’è‚ÅƒZƒŒƒXƒeƒBƒAƒ‹‰»");
+						is_celes_vp = 1;
+					}
+					
+					if( grd_countover && stage_st )
 					{
 						local enemy = BMvCore.GetEnemyCharaData();
 						if( enemy.push() )
 						{
-							local enemy_grd_stock = BMvEff.GRD_CheckStock( { val=-1 } );
+							local enemyIsVorpal = ( BMvEff.GRD_GetJudgeResult() > 0 )? 1 : 0;
+							enemy.pop();
 							
-							if( grd_stock > enemy_grd_stock )
+							if( enemyIsVorpal )
 							{
-								is_celes_vp = 1;
-								BMvEff.GRD_UseStock( { val=12 } );//‹ó‚É‚·‚é
+								// ƒZƒŒƒXƒeƒBƒAƒ‹‚É‚·‚é‚ÆA©•ª‚ªƒZƒŒƒXƒeƒBƒAƒ‹VP‚Å‘Šè‚ªVP‚Æ‚¢‚¤“ä‚Èó‘Ô‚É‚È‚é‚Ì‚Å‰ñ”ğ‚·‚é
+								// _dpn("¦‚¨‚»‚ç‚­ƒgƒŒƒ‚‚Ì—¼ÒVP‚Ìİ’è‚È‚Ì‚ÅGRD’D‚¤‚Ì‚ğ‰ñ”ğ");
+								grd_countover = 0;
+							}
+						}
+					}
+					
+					if( grd_countover ) // GRD‚ª‚½‚­‚³‚ñ‚ ‚Á‚Ä’D‚¤‚Æ‚«@grd_overenemy‚Ìƒ`ƒFƒbƒN‚Í•s—v‚¾‚ªˆê‰c‚µ‚Ä‚¨‚­
+					{
+						local enemy = BMvCore.GetEnemyCharaData();
+						if( enemy.push() )
+						{
+							if( grd_overenemy )
+							{
+								BMvEff.GRD_UseStock( { val=12 } );//‹ó‚É‚·‚éi‘S•”’D‚í‚ê‚é‚½‚ßj
 							}
 							enemy.pop();
+							
+							// GRD‚ğ‘S•”©•ª‚Ì‚à‚Ì‚É‚·‚é
+							if( grd_overenemy )
+							{
+								BMvEff.GRD_AddValue( { val=10000*12, pressure=0, boundplus=1 } ); // GRD‚ğÅ‘å‚É
+							}
 						}
 					}
 					
 					// ƒZƒŒƒXƒeƒBƒAƒ‹‚ÌŒø‰Ê”­“®
 					if( is_celes_vp )
 					{
+						// _dpn("šƒZƒŒƒXƒeƒBƒAƒ‹VP");
 						BMvEff.AttackInfoString_Set({ word=def_AISW_CelesVorpal,} );
 
-						BMvEff.GRD_AddValue( { val=10000*12, pressure=0, boundplus=1 } ); // GRD‚ğÅ‘å‚É
-						
 						// ƒZƒŒƒXƒeƒBƒAƒ‹Eƒ”ƒH[ƒpƒ‹‚Ìˆ—
 						Battle_Std.GS_AddFlag( def_PP_GS_CelecVorpal ); // ƒZƒŒƒXƒ”ƒH[ƒpƒ‹‚È‚Ì‚ğ‹L‰¯
-
+						
 						BMvTbl.SetCelestialVorpalMode(1); // ƒZƒŒƒXƒeƒBƒAƒ‹‚ÈUŒ‚—ÍƒAƒbƒv
-					}
-					else if( is_restart_first )
-					{
-						// ƒgƒŒƒ‚‚ÌGRD‚ÌŒÂ”İ’è‚ªƒYƒŒ‚é‚Ì‚Å‰½‚à‚µ‚È‚¢
-						BMvTbl.SetCelestialVorpalMode(0); // ’Êí‚Ì’l‚É–ß‚·
+						
+						// ƒŠƒXƒ^[ƒg‚ÍƒgƒŒƒ‚‚ÌGRD‚ÌŒÂ”İ’è‚ªƒYƒŒ‚é‚Ì‚Å‰½‚à‚µ‚È‚¢
+						// ƒgƒŒƒ‚ŒÀ’è‚¾‚ªƒZƒŒƒXƒeƒBƒAƒ‹VP‚¾‚¯‚ÇGRD‚ª6ŒÂ–¢–‚Ì‚Æ‚«‚Í’ÊíVP“¯—l‚ÉGRD‚ğ1‚Â‘‚â‚·
+						if( !is_restart_first && !grd_countover )
+						{
+							BMvEff.GRD_AddValue( { val=10000, pressure=0, boundplus=1 } ); // VPŒø‰Ê‚Æ‚µ‚ÄGRD‚ğ1‚Â‘‚â‚·
+						}
 					}
 					else
 					{
-						BMvEff.GRD_AddValue( { val=10000, pressure=0, boundplus=1 } ); // VPŒø‰Ê‚Æ‚µ‚ÄGRD‚ğ1‚Â‘‚â‚·
+						// ’Êíƒ”ƒH[ƒpƒ‹
+						// _dpn("š’ÊíVP");
+
+						// ƒŠƒXƒ^[ƒg‚ÍƒgƒŒƒ‚‚ÌGRD‚ÌŒÂ”İ’è‚ªƒYƒŒ‚é‚Ì‚Å‰½‚à‚µ‚È‚¢
+						if( !is_restart_first )
+						{
+							BMvEff.GRD_AddValue( { val=10000, pressure=0, boundplus=1 } ); // VPŒø‰Ê‚Æ‚µ‚ÄGRD‚ğ1‚Â‘‚â‚·
+						}
 						BMvTbl.SetCelestialVorpalMode(0); // ’Êí‚Ì’l‚É–ß‚·
 					}
 				}
@@ -1934,7 +2046,7 @@ Std_MoveTable.Mv_SPAfterImage_KanriObject <-
 		
 		if( obj_mvs_MvCount == def_FL_SPCutinStopTime ) // ˆÃ“]”²‚¯‚½ƒ^ƒCƒ~ƒ“ƒO
 		{
-			_dp("\n ˆÃ“]‚¨‚í‚è");
+			// _dpn("ˆÃ“]‚¨‚í‚è");
 			Battle_Std.GS_DelFlag( def_PP_GS_SPKanriObjFlag ); // ˆÃ“]‚ğ”²‚¯‚½‚Ì‚Åƒtƒ‰ƒO‚ğÁ‚·
 		}
 		else if( obj_mvs_MvCount > def_FL_SPCutinStopTime )
@@ -1954,7 +2066,7 @@ Std_MoveTable.Mv_SPAfterImage_KanriObject <-
 		}
 		if( object_daburi )
 		{
-			_dp("\n ƒ_ƒuƒŠ‚ÅI—¹");
+			// _dpn("ƒ_ƒuƒŠ‚ÅI—¹");
 			BMvTbl.SetFinalize(100);
 		}
 	}
@@ -2196,7 +2308,7 @@ Std_MoveTable.Mv_GuardCancelAttack <-
 		// ‚Ü‚Ÿ‚¢‚¢‚©‚Èc‚Á‚Ä‚±‚Æ‚Åest‚©‚ç‚ÍŒ¸‚ç‚³‚È‚¢‚æ‚¤‚É‚·‚é
 
 		local stop_frame = 6; // ©•ª‚É‚¾‚¯‚©‚©‚éƒqƒbƒgƒXƒgƒbƒv
-		local muteki_frame = 15+stop_frame; // –³“GŠÔ@‘Š‘Å‚¿‚ª‘½‚¢‚Ì‚Å+1F‚µ‚½
+		local muteki_frame = 19+stop_frame; // –³“GŠÔ@‘Š‘Å‚¿‚ª‘½‚¢‚Ì‚Å+5F‚µ‚½@1.12 15+stop_frame
 		BMvEff.SetPlayerTimer( { muteki_dage=muteki_frame, muteki_dageX=muteki_frame, muteki_nage=muteki_frame, muteki_nageX=muteki_frame } );
 		
 		// ƒK[ƒLƒƒƒ“‰‰o‹­‰»
@@ -2957,7 +3069,7 @@ Std_MoveTable.Mv_Guard <-
 				if( grd_add_timing )
 				{
 					//GRD‘‰ÁH
-					_dpn("ƒV[ƒ‹ƒh‚É‚æ‚éGRD‘‰Á:"+def_GRD_Shield_Success_WeakBonus);
+					// _dpn("ƒV[ƒ‹ƒh‚É‚æ‚éGRD‘‰Á:"+def_GRD_Shield_Success_WeakBonus);
 					Battle_Std.GRD_AddValue( { val=def_GRD_Shield_Success_WeakBonus, boundplus=1 } );
 					
 					local enemy_LastDmgPlayer = BMvCore.GetLastDamageCharaData( 1 ); // ‰£‚ç‚ê‚½“Gî•ñ‚ğ“¾‚é
@@ -2985,7 +3097,7 @@ Std_MoveTable.Mv_Guard <-
 						if( bound_time >= 17 ) bound_time = 17; // ‹­ƒK[ƒh‚®‚ç‚¢‚ğŒÀŠE’l‚É‚·‚é
 						local set_bound_time = bound_time - 6;
 						if( set_bound_time <= 8 ) set_bound_time = 8; // ãƒK[ƒh-3F‚æ‚è‚ÍŒ¸‚ç‚È‚¢
-						_dpn("ƒV[ƒ‹ƒhƒK[ƒhd’¼:"+set_bound_time);
+						// _dpn("ƒV[ƒ‹ƒhƒK[ƒhd’¼:"+set_bound_time);
 						BMvEff.SetBoundSt( { settime = set_bound_time } );
 						
 					}
@@ -3212,6 +3324,12 @@ Std_MoveTable.Mv_Guard <-
 					if( rc.sx != _Hantei_Error ) // ‘¶İ‚·‚é‚©
 					{			
 						BMvEff.CreateObject( { x=rc.sx, y=rc.sy, datatype=1, start_pat=74, mvname="Mv_GuadShieldEff", flags=_Position_ToolShift } );
+					}
+					
+					// ƒV[ƒ‹ƒh‚Ì“®ì’†‚ğ”íƒJƒEƒ“ƒ^[‚É‚·‚é
+					if( Def_Sys_SetCounterHitFlagToShield )
+					{
+						BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
 					}
 				}
 			}
@@ -4064,6 +4182,9 @@ Std_MoveTable.Mv_41236SP_ABC <-
 	{
 		//yƒgƒƒtƒB[zÀí‚ÅƒNƒƒXƒLƒƒƒXƒgƒ”ƒF[ƒ‹ƒIƒt’†‚ÉA+B+C‚Ì“ü—Í‚ÅƒCƒ“ƒtƒBƒjƒbƒgƒ[ƒX‚ğg—p‚µ‚½B
 		// BMvTbl.Achievement_Unlock(3);
+
+		//ƒXƒeƒAƒGƒ“ƒ_[‚©‚ço‚µ‚½‚È‚Ç‚¿‚å‚Á‚Æ•‚‚¢‚Ä‚¢‚é‚±‚Æ‚ª‚ ‚é
+		BMvTbl.SetPosition( { y=0 } ); // ’n–Ê‚É‚­‚Á‚Â‚¯‚é
 		
 		BMvTbl.SetFinalize(0);
 	}
@@ -5335,6 +5456,8 @@ Std_MoveTable.Mv_Skill_SSRelayAtk <-
 				Battle_Std.SetPosition_DamageHanteiRect( SS_DamageLockParams );
 			}
 		}
+		
+		Battle_Std.MvRule_Skill_HitInterrupt(); // •KE‹Z‚Ìƒqƒbƒgˆ—
 	}
 	function LastUpdate_Before() : (SS_ratio) // Skill‚È‚Ì‚ÅBefore
 	{
@@ -5343,7 +5466,8 @@ Std_MoveTable.Mv_Skill_SSRelayAtk <-
 		if( !is_mvchange )
 		{
 			// MvˆÚs‚µ‚È‚¢‹Z‚È‚ç’ÇŒ‚•s”\‚É‚·‚é(ˆÚs‚·‚é‹Z‚ÍŒÂ•Ê‚É‘Î‰)
-			Battle_Std.NoCansel_NoAttackHit( { no_zurasi_hosei = 1 } ); //‰½‚©‚ÅƒLƒƒƒ“ƒZƒ‹‚µ‚È‚©‚Á‚½ê‡’ÇŒ‚•s”\‚É‚·‚é
+			local check_mvdamage = (Def_Sys_StearEnderNoAttackHitCheckDamage)? 1 : 0; // MV‚Ìƒ_ƒ[ƒW‚ğƒ`ƒFƒbƒN‚·‚é‚©‚Ç‚¤‚©
+			Battle_Std.NoCansel_NoAttackHit( { no_zurasi_hosei = 1, check_mvdamage=check_mvdamage } ); //‰½‚©‚ÅƒLƒƒƒ“ƒZƒ‹‚µ‚È‚©‚Á‚½ê‡’ÇŒ‚•s”\‚É‚·‚é
 		}
 		
 		/*
@@ -5843,11 +5967,35 @@ Std_MoveTable.Mv_Dash_B <- // ƒoƒNƒXƒe
 			_dp("\n ƒ{ƒ^ƒ“ƒ_ƒbƒVƒ…");
 			Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GenFlag ); // ƒ{ƒ^ƒ“ƒ_ƒbƒVƒ…		
 		}
+		
+		//ƒfƒoƒbƒO—p
+		local pos = BMvTbl.GetPosition();
+		BMvTbl.SetLP(9,pos.x);
+		BMvTbl.SetLP(8,0);//–³“G‚ªØ‚ê‚½‚Æ‚±‚ë
+	}
+	function Update_Std() : (dageki_mutekiF)
+	{
+		if(1)
+		{
+			if( BMvTbl.GetMvStatus().MvCount == dageki_mutekiF )
+			{
+				local pos = BMvTbl.GetPosition();
+				BMvTbl.SetLP(8,pos.x);
+			}
+		}
 	}
 	function Finalize_Std() // 
 	{
 		BMvTbl.SetNextMoveTable( "Mv_Neutral" );
-	}		
+	}
+	function LastUpdate_Std()
+	{
+		local start_pos = BMvTbl.GetLP(9);
+		local muteki_pos = BMvTbl.GetLP(8);
+		local pos = BMvTbl.GetPosition();
+		local mvs = BMvTbl.GetMvStatus();
+		_dpn((mvs.MvCount)+","+(start_pos-pos.x)+","+(start_pos-muteki_pos)/128 );
+	}
 }
 
 //ƒV[ƒ‹ƒhŒÄ‚Ño‚µ‹¤’ÊŠÖ”
@@ -5893,7 +6041,7 @@ Std_MoveTable.Mv_BarrierEff <-
 //ƒV[ƒ‹ƒh‚Ìˆ—‹¤’Ê
 local Func_Barrier = 
 {
-	Init = function(pat=def_PAT_Barrier_Std) : (Call_BarrierEff)
+	Init = function(pat=def_PAT_Barrier_Std, type="Std") : (Call_BarrierEff)
 	{
 		BMvEff.GuardSP_Set( { val=2 } ); //SPƒK[ƒhó‘Ô‚Ìİ’è
 		
@@ -5909,6 +6057,27 @@ local Func_Barrier =
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // “¯‰Ÿ‚µ‚Å‘¼‚Ìs“®‚ÉˆÚ‚ê‚és“®
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // 4+DD‚ÅCS‚ªo‚¹‚é‚æ‚¤‚É‚·‚é		
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
+		
+		// ƒV[ƒ‹ƒh‚Ì“®ì’†‚ğ”íƒJƒEƒ“ƒ^[‚É‚·‚é
+		if( Def_Sys_SetCounterHitFlagToShield )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
+		if( Def_Sys_EnableDashShieldCommand && ( type == "Std" || type == "Cro" ) )
+		{
+			// ‘O‚Ìs“®‚ªƒ_ƒbƒVƒ…Œn‚Ì‚Æ‚«Šµ«‚ğ­‚µ—}‚¦‚é
+			// DashStop‚É“ü‚é‚Æ‚·‚Å‚É’á‰º‚µ‚Ä‚¢‚é‚ªA–Ê“|‚È‚Ì‚ÅˆêŠ‡‚Å—}‚¦‚é
+			if( Battle_Std.IsMatchChangeMvNameArray( ["Mv_Dash_F","Mv_DashStop_F"] ) )
+			{
+				local vec = BMvTbl.GetVector( { flags=_Vector_DivKeep } );
+				local par = Def_Sys_EnableDashShieldCommand;
+				_dpn(format("ƒ_ƒbƒVƒ…Šµ«’á‰º(%d):%d",Def_Sys_EnableDashShieldCommand, vec.x));
+				vec.x = vec.x * par / 100;
+				vec.addx = vec.addx * par / 100;
+				_dp(" -> "+vec.x);
+				BMvTbl.SetVector( { x=vec.x, addx=vec.addx, flags=_Vector_DivKeep } );
+			}
+		}
 	},
 	Update = function(cmd, grd, time)
 	{
@@ -5920,7 +6089,8 @@ local Func_Barrier =
 		
 		if( BMvTbl.GetFrameID() == 10 ) // ƒz[ƒ‹ƒh‰Â
 		{
-			if( ( !BMvTbl.CheckCommandString( cmd ) && s.MvCount>=time ) || (s.MvCount>= def_FL_Shield_MaxTime) )
+			// ƒV[ƒ‹ƒh‚Ìƒz[ƒ‹ƒh‘€ì‚Ícommandcheckmuki=1‚É‚µ‚Ä©•ª‚ÌŒü‚«€‹’‚É•ÏX
+			if( ( !BMvTbl.CheckCommandString( { command=cmd, commandcheckmuki=1 } ) && s.MvCount>=time ) || (s.MvCount>= def_FL_Shield_MaxTime) )
 			{
 				if (BMvTbl.JumpFrameID( 20 ) == -1)
 				{
@@ -5951,7 +6121,7 @@ Std_MoveTable.Mv_Barrier_Std <-
 {
 	function Init_Std() : (Func_Barrier)
 	{
-		Func_Barrier.Init(def_PAT_Barrier_Std);
+		Func_Barrier.Init(def_PAT_Barrier_Std,"Std");
 		Battle_Std.InitCharaVector() //Šµ«‚ğc‚µ‚½ƒxƒNƒgƒ‹‰Šú‰»
 	}
 	function Update_Std() : (Func_Barrier)
@@ -5976,7 +6146,7 @@ Std_MoveTable.Mv_Barrier_Cro <-
 {
 	function Init_Std() : (Func_Barrier)
 	{
-		Func_Barrier.Init(def_PAT_Barrier_Cro);
+		Func_Barrier.Init(def_PAT_Barrier_Cro,"Cro");
 		Battle_Std.InitCharaVector() //Šµ«‚ğc‚µ‚½ƒxƒNƒgƒ‹‰Šú‰»
 	}
 	function Update_Std() : (Func_Barrier)
@@ -5997,13 +6167,12 @@ Std_MoveTable.Mv_Barrier_Cro <-
 	}			
 }
 
-// ‹ó’†‚Å—§‚ÂƒoƒO‚ª‚ ‚é
 Std_MoveTable.Mv_Barrier_Air <- 
 {
 	function Init_Std() : (Func_Barrier)
 	{
-		Func_Barrier.Init(def_PAT_Barrier_Air);
-		//’…’n‚Ü‚Ås“®•s”\‚É‚·‚é
+		Func_Barrier.Init(def_PAT_Barrier_Air,"Air");
+		//—‰º‚Ü‚Ås“®•s”\‚É‚·‚éi—‰º‚Í•Ês“®j
 		BMvTbl.SetMoveableFlag( { move=0, time=254, flag=_ClearFlag_ChangeMv } );
 	}
 	function Update_Std() : (Func_Barrier)
@@ -6040,6 +6209,11 @@ Std_MoveTable.Mv_Barrier_Air_Land <-
 	{
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
 		BMvTbl.SetMoveableFlag( { move=0, time=def_FL_BarrierAir_LandRecovery, flag=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } );
+		// ƒV[ƒ‹ƒh‚Ì“®ì’†‚ğ”íƒJƒEƒ“ƒ^[‚É‚·‚é
+		if( Def_Sys_SetCounterHitFlagToShield )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
 		Battle_Std.InitVector(); //ƒxƒNƒgƒ‹‰Šú‰»
 	}
 	function Finalize_Std() // 
@@ -6054,7 +6228,20 @@ Std_MoveTable.Mv_Barrier_Air_Fall <-
 	function Init_Std() // 
 	{
 		// Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
-		BMvTbl.SetMoveableFlag( { move=1, time=254, flag=_ClearFlag_ChangeMv } ); // s“®‰Â”\‚É
+		if( Def_Sys_AirShieldFallMovable )
+		{
+			BMvTbl.SetMoveableFlag( { move=1, time=254, flag=_ClearFlag_ChangeMv } ); // s“®‰Â”\‚É
+		}
+		else
+		{
+			BMvTbl.SetMoveableFlag( { move=0, time=254, flag=_ClearFlag_ChangeMv } ); // s“®•s”\‚É
+		}
+
+		// ƒV[ƒ‹ƒh‚Ì“®ì’†‚ğ”íƒJƒEƒ“ƒ^[‚É‚·‚é
+		if( Def_Sys_SetCounterHitFlagToShield )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}		
 		BMvTbl.SetPattern( 20 ); // —‰ºƒpƒ^[ƒ“w’è
 	}
 	function FrameUpdate_Std()
@@ -6074,6 +6261,12 @@ Std_MoveTable.Mv_Barrier_AirFall_Land <-
 	{
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
 		BMvTbl.SetMoveableFlag( { move=0, time=def_FL_BarrierAirFall_LandRecovery, flag=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } ); // ’…’nd’¼
+
+		// ƒV[ƒ‹ƒh‚Ì“®ì’†‚ğ”íƒJƒEƒ“ƒ^[‚É‚·‚é
+		if( Def_Sys_SetCounterHitFlagToShield )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
 		Battle_Std.InitVector(); //ƒxƒNƒgƒ‹‰Šú‰»
 	}
 	function Finalize_Std() // 
@@ -6134,7 +6327,30 @@ if( assault_AirAtkParam.air.min > assault_AirAtkParam.air.c ) assault_AirAtkPara
 //nomove: startupˆÈ~‚©‚ç“®‚¯‚é‚æ‚¤‚É‚È‚é‚Ü‚Å
 //Å‘¬F@startup+nomove+ƒWƒƒƒ“ƒvUŒ‚”­¶F
 
-local Make_AssaultFU = function(type=0, default_startup=6, nomove=14) : (assault_AirAtkParam)
+// ƒAƒTƒ‹ƒg‚ÌƒGƒtƒFƒNƒg‚Í‚¾‚¢‚½‚¢6F–Ú‚É•\¦‚·‚é‚ªA1F–Ú‚©‚çŠp“x‚¾‚¯Œˆ‚ß‚ÄŒÄ‚Ño‚µ‚Ä‚¨‚­
+// ‚»‚¤‚·‚é‚±‚Æ‚ÅA‘Šè‚ÌCS‚Æ‚©ˆÃ“]‚ÉƒGƒtƒFƒNƒg‚¾‚¯•\¦‚³‚ê‚é‚Ì‚ÅA”íCS‚ÉƒAƒTƒ‹ƒg‚Æ¯•Ê‚Å‚«‚é‚æ‚¤‚É‚È‚é
+
+// ’nãƒAƒTƒ‹ƒg‚ÌƒxƒNƒgƒ‹æ“¾
+local getGroundAutoAssultXVector = function( xvec, xmax )
+{
+	local use_xvec = xvec;
+	//‘Šè‚Ü‚Å‚Ì‹——£
+	local enemy = BMvCore.GetNearEnemyCharaData(); // ‘Šèî•ñæ“¾
+	if( enemy.isdone() ) // —LŒø‚©‚Ç‚¤‚©ˆê‰ƒ`ƒFƒbƒN
+	{
+		local posst = BMvEff.GetPointStatus( { target=enemy } ); // ˆÊ’uî•ñæ“¾
+		
+		local muki = BMvTbl.GetMuki();
+		local isBack = ( muki == 1 && posst.angle >= 1.0 ) || ( muki == -1 && posst.angle <= 1.0 );
+
+		use_xvec = posst.distance_x / 24;
+		if( use_xvec  > xmax ) use_xvec = xmax;
+		if( use_xvec  < 256 || isBack ) use_xvec = 256; //‘Šè‚ªŒã‚ë‚É‚¢‚½‚çÅ¬’l‚É‚·‚é
+	}
+	return use_xvec;
+}
+	
+local Make_AssaultFU = function(type=0, default_startup=6, nomove=14) : (assault_AirAtkParam, getGroundAutoAssultXVector)
 {
 	local isGround = (type==0);
 	local isAir = (type==1);
@@ -6150,7 +6366,7 @@ local Make_AssaultFU = function(type=0, default_startup=6, nomove=14) : (assault
 	
 	local use_assult_param = (isGround)? assault_AirAtkParam.ground : assault_AirAtkParam.air;
 	
-	local func = function() : (type, default_startup, isGround, isAir, xvec, xmax, yvec, yadd, nomove, use_assult_param)
+	local func = function() : (type, default_startup, isGround, isAir, xvec, xmax, yvec, yadd, nomove, use_assult_param, getGroundAutoAssultXVector)
 	{
 		// local mvs = BMvTbl.GetMvStatus();
 		// local pos = BMvTbl.GetPosition();
@@ -6159,6 +6375,28 @@ local Make_AssaultFU = function(type=0, default_startup=6, nomove=14) : (assault
 		// local startup = default_startup + BMvTbl.GetLP(4); // ’á‹óƒAƒTƒ‹ƒg‚Ì‚Æ‚«‚É­‚µ”­¶‚ª’x‚­‚·‚é’x‰„F
 		local startup = use_assult_param.startup-1 + BMvTbl.GetLP(4); // ’á‹óƒAƒTƒ‹ƒg‚Ì‚Æ‚«‚É­‚µ”­¶‚ª’x‚­‚·‚é’x‰„F -1F‚µ‚Ä‚¢‚é‚Ì‚Íˆ—‚Ì“s‡ã
 		local s = BMvTbl.GetMvStatus(); // ƒXƒe[ƒ^ƒXæ“¾
+		
+		if( Def_Sys_ChangeAssaultEffect && s.MvCount==0 ) // 1F–Ú‚¾‚¯
+		{
+			// ƒAƒTƒ‹ƒg¯•ÊƒGƒtƒFƒNƒg
+			// 1F–Ú‚©‚çŒÄ‚Ô{ŠÔ’â~‚Ì‰e‹¿‚ğó‚¯‚È‚¢‚Æ‚¢‚¤“Áê‚Èì‚è‚ÅA‘Šè‚ÌCS‚Å‹”F‚µ‚â‚·‚­‚µ‚Ä‚¢‚é
+			local use_xvec = xvec;
+			
+			// ’nãƒAƒTƒ‹ƒg‚Ì‚Æ‚«‚ÍƒxƒNƒgƒ‹—Ê‚Í©“®’²®‚³‚ê‚é
+			if( Def_Dbg_AssaultAutoVector && isGround )
+			{
+				use_xvec = getGroundAutoAssultXVector( xvec, xmax );
+			}
+			
+			local angle = Battle_Std.CCharaVector_GetToolAngle( { x=use_xvec, y=yvec } );
+			local eff = BMvEff.CreateObject( { datatype=1, mvname="Mv_AssaultJumpEffect", start_pat=221, x=0, y=-200*128, id=def_ObjID_AssultRingEffect } );
+			if( eff.push() )
+			{
+				BMvTbl.SetAngle({ angle=angle });
+				eff.pop();
+			}
+		}
+		
 		switch( s.FrameID )
 		{
 		case 10: //’nã‚ÌŠJnŠG
@@ -6207,57 +6445,58 @@ local Make_AssaultFU = function(type=0, default_startup=6, nomove=14) : (assault
 				BMvTbl.SetLP(0,0); //ƒ_ƒbƒWƒ‚[ƒVƒ‡ƒ“‚É‚È‚Á‚½‚©‚Ç‚¤‚©
 				if( Def_Dbg_AssaultAutoVector && isGround )
 				{
-					//‘Šè‚Ü‚Å‚Ì‹——£
-					local enemy = BMvCore.GetNearEnemyCharaData(); // ‘Šèî•ñæ“¾
-					if( enemy.IsDone ) // —LŒø‚©‚Ç‚¤‚©ˆê‰ƒ`ƒFƒbƒN
+					use_xvec = getGroundAutoAssultXVector( xvec, xmax );
+					
+					//ƒxƒNƒgƒ‹‚ª­‚È‚¢‚Æ‚«‚ÍƒAƒTƒ‹ƒg‚¾‚Æ•Ï‚È‚Ì‚Åƒ_ƒbƒWƒ‚[ƒVƒ‡ƒ“‚ğg‚¨‚¤
+					if( use_xvec < 1600 )
 					{
-						local posst = BMvEff.GetPointStatus( { target=enemy } ); // ˆÊ’uî•ñæ“¾
-						
-						local muki = BMvTbl.GetMuki();
-						// 0`1.0@‘Šè‚ª‰E‘¤‚É‚¢‚é 1.0`2.0 ‘Šè‚ª¶‘¤‚É‚¢‚é
-						//print("\n muki:"+muki+" angle:"+posst.angle);
-						//‘Šè‚ªŒã‚ë‚É‚¢‚é‚©‚Ç‚¤‚©
-						local isBack = ( muki == 1 && posst.angle >= 1.0 ) || ( muki == -1 && posst.angle <= 1.0 );
-						//print("\n isBack:"+isBack);
-
-						use_xvec = posst.distance_x / 24;
-						if( use_xvec  > xmax ) use_xvec = xmax;
-						if( use_xvec  < 256 || isBack ) use_xvec = 256; //‘Šè‚ªŒã‚ë‚É‚¢‚½‚çÅ¬’l‚É‚·‚é
-						
-						//ƒxƒNƒgƒ‹‚ª­‚È‚¢‚Æ‚«‚ÍƒAƒTƒ‹ƒg‚¾‚Æ•Ï‚È‚Ì‚Åƒ_ƒbƒWƒ‚[ƒVƒ‡ƒ“‚ğg‚¨‚¤
-						if( use_xvec < 1600 )
-						{
-							BMvTbl.SetPattern(def_PAT_Mv_Assault_Dodge);
-							BMvTbl.JumpFrameID(30); //”ò‚ñ‚Å‚İ‚ë
-							BMvTbl.SetLP(0,1); //ƒ_ƒbƒWƒ‚[ƒVƒ‡ƒ“‚É‚È‚Á‚½
-						}
+						BMvTbl.SetPattern(def_PAT_Mv_Assault_Dodge);
+						BMvTbl.JumpFrameID(30); //”ò‚ñ‚Å‚İ‚ë
+						BMvTbl.SetLP(0,1); //ƒ_ƒbƒWƒ‚[ƒVƒ‡ƒ“‚É‚È‚Á‚½
 					}
 				}
-				//print("\nuse_xvec:"+use_xvec);
 				
 				BMvTbl.SetVector( { x=use_xvec, y=yvec, addx=0, addy=yadd, flags=_Vector_Normal } ); //ˆÚ“®ŠJn
-				//BMvTbl.SetVector( { x=2800, y=-3000, addx=0, addy=0, flags=_Vector_Normal } ); //ˆÚ“®ŠJn
-				
-				local angle = Battle_Std.CCharaVector_GetToolAngle();	
+				local angle = Battle_Std.CCharaVector_GetToolAngle( { x=use_xvec, y=yvec } );
 
-				local eff = BMvEff.CreateObject( { x=0, y=-200, mvname="", datatype=1, start_pat=66, flags=_Position_ToolShift } );
-				if( eff.IsDone )
+				if( Def_Sys_ChangeAssaultEffect )
 				{
-					BMvCore.PushCharaData( eff );
+					local asaulteff = BMvCore.CFindObject().Get(def_ObjID_AssultRingEffect);
+					if( asaulteff.push() )
+					{
+						local frameid = BMvTbl.GetMvStatus().FrameID;
+						// _dpn("frameid:"+frameid);
+						if( frameid != 100 ) // ‚à‚¤ƒGƒtƒFƒNƒg‚ªo‚Ä‚½‚ç‚â‚ç‚È‚¢
+						{
+							BMvTbl.JumpFrameID(100);
+							BMvTbl.SetAngle({ angle=angle }); // ‚·‚Å‚ÉŠp“x‚Í‚Â‚¢‚Ä‚é‚¯‚ÇÄŒvZ‚µ‚Äİ’è
+						}
+						
+						// s“®•Ï‰»‚ÅÁ‹‚È‚Ç‚ğÁ‚·B‚±‚Ìƒtƒ‰ƒO‚ª‚È‚¢‚Æ6D>A‚È‚Ç‚Ì“Š‚°‚Ì‚Æ‚«‚ÉƒGƒtƒFƒNƒg‚ªo‚Ä‚µ‚Ü‚¤‚Ì‚Å•K—v‚¾‚ªA‚±‚±‚Ü‚Åi‚ñ‚¾‚ç•s—v‚É‚È‚é
+						BMvEff.ObjProcFlags_Erase( { flags=_ObjProcFlags_EraseChangeParentMv|_ObjProcFlag_EraseParentDelete } );
+						
+						asaulteff.pop();
+					}
+				}
+				else
+				{
+					local eff = BMvEff.CreateObject( { x=0, y=-200, mvname="", datatype=1, start_pat=66, flags=_Position_ToolShift } );
+					if( eff.push() )
+					{
 						BMvEff.SetObjectFlags( { flags=_ObjFlags_NoGround|_ObjFlags_MoveTimeStopAll } );
 						BMvTbl.SetAngle({ angle=angle });
-					BMvCore.PopCharaData();
+						eff.pop();
+					}
 				}
 				
 				if( isGround ) //’nã‚Ì‚¾‚¯
 				{
 					local use_pat = (BMvTbl.GetLP(0)==0 )? 65 : 64; //’ÊíƒGƒtƒFƒNƒgorƒ_ƒbƒWƒGƒtƒFƒNƒg
 					local eff = BMvEff.CreateObject( { x=-50, y=0, mvname="", datatype=1, start_pat=use_pat, flags=_Position_ToolShift } );
-					if( eff.IsDone )
+					if( eff.push() )
 					{
-						BMvCore.PushCharaData( eff );
-							BMvEff.SetObjectFlags( { flags=_ObjFlags_MoveTimeStopAll } );
-						BMvCore.PopCharaData();
+						BMvEff.SetObjectFlags( { flags=_ObjFlags_MoveTimeStopAll } );
+						eff.pop();
 					}
 				}
 				
@@ -6365,16 +6604,19 @@ Std_MoveTable.Mv_Assault_Std <-
 		
 		BMvTbl.SetLP(4,0); // ’á‹óƒAƒTƒ‹ƒg‚Ì”­¶’x‰„F
 		
-		BMvEff.AddSkillCount( _SkillCount_Assult ); // —š—ğƒJƒEƒ“ƒ^‚ğ‰ÁZ
 		BMvTbl.SetPrio( _CharaPrio_Near ); // ƒAƒTƒ‹ƒg‚É‚æ‚éƒvƒ‰ƒCƒIƒŠƒeƒBè‘O
 		
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ƒc[ƒ‹‚ÅCS‰Â‚È‚ç‹óU‚èCS‰Â”\
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // “¯‰Ÿ‚µ‚Å‘¼‚Ìs“®‚ÉˆÚ‚ê‚és“®
 		
-		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_StdAssult );
+		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_StdAssult ); // ’nãƒAƒTƒ‹ƒg
 		
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_LightLegsMuteki );//¬‘«‘®«‚Ö‹óU‚è—\’è‚ÌMV
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
+	}
+	function Start_Std()
+	{
+		BMvEff.AddSkillCount( _SkillCount_Assult ); // —š—ğƒJƒEƒ“ƒ^‚ğ‰ÁZ
 	}
 	function Finalize_Std() // 
 	{
@@ -6516,17 +6758,20 @@ Std_MoveTable.Mv_Assault_Air <-
 			BMvTbl.SetVector( { x=vec.x, y=vec.y, addx=0, addy=0, flags=_Vector_Normal } ); //ƒ_ƒbƒVƒ…ŠJn‚Ó‚ñ‚Î‚è
 		}
 		
-		BMvEff.AddSkillCount( _SkillCount_Assult ); // —š—ğƒJƒEƒ“ƒ^‚ğ‰ÁZ		
 		BMvTbl.SetPrio( _CharaPrio_Near ); // ƒAƒTƒ‹ƒg‚É‚æ‚éƒvƒ‰ƒCƒIƒŠƒeƒBè‘O
 		
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ƒc[ƒ‹‚ÅCS‰Â‚È‚ç‹óU‚èCS‰Â”\
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // “¯‰Ÿ‚µ‚Å‘¼‚Ìs“®‚ÉˆÚ‚ê‚és“®
 		
-		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_AirAssult );
+		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_AirAssult ); // ‹ó’†ƒAƒTƒ‹ƒg
 		
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_LightLegsMuteki );//¬‘«‘®«‚Ö‹óU‚è—\’è‚ÌMV
 		BMvTbl.SetHitCheckFlag( { type=0, val=Def_HitCheckFlag_LightLegs, time=255, flag=_ClearFlag_ChangeMv } ); // ¬‘«–³“G‚ÉƒXƒJ‚é(‹ó’†‚Í1F‚©‚ç)
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
+	}
+	function Start_Std()
+	{
+		BMvEff.AddSkillCount( _SkillCount_Assult ); // —š—ğƒJƒEƒ“ƒ^‚ğ‰ÁZ		
 	}
 	function Finalize_Std() // 
 	{
@@ -6586,8 +6831,23 @@ Std_MoveTable.Mv_Assault_Air <-
 Std_MoveTable.Mv_Assault_Air.FrameUpdate_Std <- Make_AssaultFU(1, 4, 9);
 
 
+// ƒAƒTƒ‹ƒg‚Å”ò‚Ñã‚ª‚é‚Æ‚«‚Ì’n–Ê‚ÌƒGƒtƒFƒNƒg
+Std_MoveTable.Mv_AssaultJumpEffect <-
+{
+	function Init_Std()
+	{
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_MoveTimeStopAll } );
+		BMvEff.ObjProcFlags_Set( { flags=_ObjProcFlags_EraseChangeParentMv|_ObjProcFlag_EraseParentDelete } );
+	}
+	function Finalize_Std()
+	{
+		BMvTbl.SetDeleteMoveTable();
+	}
+}
+
 const DBGM_ForwardShift = 1; // ƒfƒoƒbƒO—p‚É«”\‚ğ•\¦‚·‚éˆ—
 
+// ƒNƒŠ[ƒsƒ“ƒOƒGƒbƒW
 Std_MoveTable.Mv_ForwardShift <-
 {
 	function Init_Std() // 
@@ -6796,6 +7056,16 @@ Std_MoveTable.Mv_ForwardShift <-
 		local mvhs = Battle_Std.Sousai.HitInterrupt( { hitstop = 0, noeffect=0, nosound=1, noquake=1, nocommanddelay=1 } );
 		if( mvhs )
 		{
+			if( Def_Sys_SetGuardPlus_ForwardShiftDodge )
+			{
+				local enemy = BMvCore.GetEnemyCharaData();
+				if( enemy.push() )
+				{
+					BMvEff.SetGuardPlusFlag(1<<0); // ‹t•ûŒü‚Å‚àƒK[ƒh‚ª‚Å‚«‚é‚æ‚¤‚É‚È‚é
+					enemy.pop();
+				}
+			}
+
 			local mvs = BMvTbl.GetMvStatus();
 			local mvcount = mvs.MvCount;//1F`
 			local pow_atemi = (mvcount >= 8)? 1 : 0; // ‹­‚¢ƒo[ƒWƒ‡ƒ“‚©‚Ç‚¤‚©@1:8FˆÈ~‚Éæ‚Á‚½ê‡@2:–³“G‹Z‚âƒWƒƒƒ“ƒvUŒ‚‚ğæ‚Á‚½
@@ -6961,6 +7231,17 @@ Std_MoveTable.Mv_ForwardShift <-
 		
 		BMvEff.SetExist( { level = _Exist_NoKasanariHantei, mode=_ExistMode_Erase } );
 
+		if( Def_Sys_SetGuardPlus_ForwardShiftDodge )
+		{
+			local enemy = BMvCore.GetEnemyCharaData();
+			if( enemy.push() )
+			{
+				// ‚±‚Ìˆ—‚¾‚Æ‘Šè‚Ì•\— –³Œø‹Z‚ğ•\— ‚ ‚è‚ÅƒK[ƒh‚·‚é‚±‚Æ‚É‚È‚Á‚Ä‚ ‚Ü‚è‚æ‚­‚È‚¢
+				BMvEff.SetGuardPlusFlag( 0 ); // U‚èŒü‚«‚ÌƒK[ƒh•ûŒüC³‚ğ–³Œø‰»‚Æ‚©FX‚ğÁ‚·
+				enemy.pop();
+			}
+		}
+		
 		UseCost(); // ƒRƒXƒgÁ”ïi‰½“x‚à“ü‚é‚ª1‰ñ‚Ì‚İˆ—j
 		
 		if( DBGM_ForwardShift )
@@ -7043,6 +7324,8 @@ Std_MoveTable.Mv_Throw_F <-
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_TechCheck );//“Š‚°”²‚¯‚³‚ê‚é‹Z
 		
 		Battle_Std.CharaBattleActivity_Increment(110,"’nã“Š‚°g—p");
+		
+		BMvTbl.SetFinalizeCode(0); //GetFinalizeCode‚Å•ªŠò‚µ‚Ä‚é‚Ì‚Å‰Šú‰»
 	}
 	function HitInterrupt_Std()
 	{
@@ -7073,10 +7356,12 @@ Std_MoveTable.Mv_Throw_F <-
 			local ret = Battle_Std.SetThrowHitFinalize(512); // ƒqƒbƒg•ªŠòƒtƒ@ƒCƒiƒ‰ƒCƒY
 			if( ret )
 			{
-				_dpn("‹à“Š‚°‚Ì•â³");
-				//ƒRƒ“ƒ{•â³‚ ‚è
-				BMvEff.ComboView_Set( { val=def_HOSEI_BoundMutekiCapture, type=1 } ); // æZ
-				// BMvEff.StdCall( { type=6, no=112, param=[ def_HOSEI_BoundMutekiCapture,1,0,0,0, 0,0,0,0,0, 0,0 ]} );
+				if( Def_Sys_ThrowF_BMCaptureHoseiType == 0 )
+				{
+					_dpn("‹à“Š‚°‚Ì•â³:"+def_HOSEI_BoundMutekiCapture);
+					//ƒRƒ“ƒ{•â³‚ ‚è
+					BMvEff.ComboView_Set( { val=def_HOSEI_BoundMutekiCapture, type=1 } ); // æZ
+				}
 			}
 		}
 		else
@@ -7134,7 +7419,9 @@ Std_MoveTable.Mv_Throw_F <-
 						
 						// _dpn("‹——£:"+kyori/128 );
 						
-						if( kyori > -120*128 && kyori < 170*128 )
+						// ‚¾‚¢‚½‚¢•W€‚Ì“Š‚°ŠÔ‡‚¢‚Í200ƒhƒbƒgi”»’è150{‘Šè‚Ìd‚È‚è‚ª50j
+						// if( kyori > -120*128 && kyori < 170*128 ) // ‚±‚ê‚¾‚Æ3D‚Åd‚È‚è‚ªÁ‚¦‚Ä‚¢‚é‚Æ‚«ƒXƒJ‚è‚â‚·‚©‚Á‚½
+						if( kyori > -120*128 && kyori < 230*128 ) // 170ƒhƒbƒg‚©‚çŠg‘å
 						{
 							local cap = BMvEff.CapturePlayer( { target=enemy } );
 							if( cap )
@@ -7377,6 +7664,12 @@ Std_MoveTable.Mv_Throw_F_TechWait2 <- //i‹à“Š‚°j‚Â‚©‚ñ‚Å‚©‚ç“Š‚°”²‚¯‚ğ‘Ò‚Â‚Ü‚Å
 				enemy.pop();
 			}
 			BMvEff.ThrowChara_SetCamera( 1 ); //“Š‚°‚Ä‚¢‚éƒLƒƒƒ‰‚ğƒJƒƒ‰ˆ—‚ÉŠÜ‚ß‚é
+			
+			if( Def_Sys_ThrowF_BMCaptureHoseiType == 1 )
+			{
+				_dpn("“Š‚°”²‚¯‰Â”\‚È‹à“Š‚°‚È‚Ì‚Å•â³‚ğ‚©‚¯‚é");
+				BMvEff.ComboView_Set( { val=def_HOSEI_BoundMutekiCapture, type=1 } ); // æZ
+			}
 		}
 		
 		Battle_Std.ThrowTech.SetPos(); //‚Â‚©‚Ş‘O‚Ì©•ª‚Æ‘Šè‚ÌÀ•W‚ğ‹L‰¯‚·‚é
@@ -7673,6 +7966,12 @@ Std_MoveTable.Mv_Throw_F_Hit <- //“Š‚°¬—§iˆÈ~‚Í“Š‚°”²‚¯•s‰Âj
 		Battle_Std.SetSpHosyoHosei( { type="Throw" } );
 		// Battle_Std.SetHosyoHosei_Multi( def_HosyoHosei_NormalThrow );
 		// Battle_Std.SetHosyoHosei( def_HosyoHosei_NormalThrow );
+		
+		if( Def_Sys_SetSpGaugeLimit_Throw )
+		{
+			// 241212 ’Êí“Š‚°Œã‚ÌƒRƒ“ƒ{‚¾‚¯ƒQ[ƒW‘‰Á§ŒÀ‚ğ‚©‚¯‚é
+	        BMvEff.SpGauge_SetLimitCombo( { val=Def_Sys_SetSpGaugeLimit_Throw, time=0 } ); //ƒQ[ƒW‘‰Á§ŒÀ
+        }
 	}
 }
 
@@ -8073,6 +8372,31 @@ Std_MoveTable.Mv_Startup <- //ŠJ–‹‚©‚Ü‚¹Eâ‘Î’Ê‚é‚æ‚¤‚É‚È‚Á‚½
 }
 
 
+local setTrainingDummyClearVorpal = function()
+{
+	// ƒgƒŒƒ‚İ’è‚ª‘¦VP‚Ì‚Æ‚«‚Ís‚í‚È‚¢‚æ‚¤‚É‚·‚é
+	// Œ‹‹ÇVP‚É‚È‚é‚Ì‚ÅC³‚Æ‚µ‚Ä‚Í•s\•ª‚¾‚ªAˆê’U‚Í‚±‚ê‚Å‘Î‰
+	if( BMvEff.TM_IsQuickRecoverVorpalMode() )
+	{
+		return;
+	}
+	
+	local player = BMvCore.GetPlayerCharaData();
+	local enemy = BMvCore.GetEnemyCharaData();
+	if( player.push() )
+	{
+		BMvEff.GRD_ClearVorpal( 0 ); // ƒ”ƒH[ƒpƒ‹‚ğ‰ğœ‚·‚é
+		
+		player.pop();
+	}
+	if( enemy.push() )
+	{
+		BMvEff.GRD_ClearVorpal( 0 ); // ƒ”ƒH[ƒpƒ‹‚ğ‰ğœ‚·‚é
+		
+		enemy.pop();
+	}
+}
+
 local setTrainingDummyResetChara = function()
 {
 	local player = BMvCore.GetPlayerCharaData();
@@ -8097,7 +8421,7 @@ local setTrainingDummyResetChara = function()
 
 Std_MoveTable.Mv_CharaRestart <-
 {
-	function Init_Std() : (setTrainingDummyResetChara)
+	function Init_Std() : (setTrainingDummyResetChara, setTrainingDummyClearVorpal)
 	{
 		BMvEff.SetObjectFlags( { flags=_ObjFlags_NoGround | _ObjFlags_NoRender } );	
 		BMvEff.SetExist( { level = _Exist_NoHantei } );
@@ -8105,16 +8429,30 @@ Std_MoveTable.Mv_CharaRestart <-
 		BMvTbl.SetPattern(990);
 
 		//‰æ–ÊˆêuˆÃ‚­‚µ‚ÄˆÊ’uŠÖŒW‚ğ’²®
-		BMvEff.FadeProc_Set({type=0, time=[0,2,15] color=0x000000}); //•‚­‚µ‚Ä‚©‚çŠJn
+		BMvEff.FadeProc_Set({type=0, time=[0,60,15] color=0x000000}); //•‚­‚µ‚Ä‚©‚çŠJn
 		
-		// ˆ—‚Æ‚µ‚Ä‚Í‚Ç‚¤‚©‚Æv‚¤‚ªAƒƒ‹ƒJƒ”ƒ@‚È‚Ç‚Í‚Q‰ñŒÄ‚Î‚È‚¢‚Æ‚¤‚Ü‚­‚¢‚©‚È‚¢
-		setTrainingDummyResetChara();
-		setTrainingDummyResetChara();
-
-		BMvTbl.SetFinalize();
+		setTrainingDummyClearVorpal(); // ˆê“x‚¾‚¯VP‰ğœi‘¦VP‚ª‚ ‚é‚Ì‚Å‰ğœ‚µ‚«‚ê‚È‚¢j
+	}
+	function Update_Std() : (setTrainingDummyResetChara)
+	{
+		// ƒoƒgƒ‹ƒLƒƒƒ‰‚Ì‚Â‚©‚İŠJ•ú‚Æd•¡‚·‚é‚Æ‚¨‚©‚µ‚­‚È‚é
+		// ˆ—‚Æ‚µ‚Ä‚Í‚Ç‚¤‚©‚Æv‚¤‚ªAƒƒ‹ƒJƒ”ƒ@‚È‚Ç‚Í‰½“x‚©ŒÄ‚Î‚È‚¢‚Æ‚¤‚Ü‚­‚¢‚©‚È‚¢
+		if( !Battle_Std.RoundisEnd() )
+		{
+			setTrainingDummyResetChara();
+		}
+		
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.MvCount >= 2 )
+		{
+			BMvTbl.SetFinalize();
+		}
 	}
 	function Finalize_Std()
 	{
+		//‰æ–ÊˆêuˆÃ‚­‚µ‚ÄˆÊ’uŠÖŒW‚ğ’²®
+		BMvEff.FadeProc_Set({type=0, time=[0,0,15] color=0x000000}); //•‚­‚µ‚Ä‚©‚çŠJn
+
 		BMvTbl.SetDeleteMoveTable();
 		
 		BMvEff.SetCamera_Focus( { time=[0,0,0] } );//ƒJƒƒ‰‰Šú‰»iƒ‰ƒEƒ“ƒhƒR[ƒ‹‚ÌƒJƒƒ‰ˆ—‚ğƒŠƒZƒbƒgj
@@ -8224,6 +8562,8 @@ Std_MoveTable.Mv_TrainingDummyMng <-
 		BMvTbl.SetLP(3,rnd); // TR_CommandType
 		// _dpn("ƒ`ƒFƒbƒN:"+rnd+" CMD:"+TR_CommandType[rnd].command );
 		
+		BMvTbl.SetLP(8,0); // ƒ^ƒCƒ€ƒAƒbƒv‚ÌƒGƒ‰[‚Å”²‚¯‚é‚Æ‚«—p
+		
 		// BMvTbl.SetLP(9,0); // 0:1P 1:2P
 		
 		BMvEff.CreateObject( { mvname="Mv_CharaRestart", datatype=1 } );
@@ -8253,6 +8593,28 @@ Std_MoveTable.Mv_TrainingDummyMng <-
 		
 		return ret_cores;
 	}
+	function EndExtraTrainingMode()
+	{
+		// “Š‚°‰‰o‚É‚à‚¢‚Á‚Ä‚¨‚ç‚¸ƒ^ƒCƒ€ƒAƒbƒv‚µ‚½‚Æ‚«‚Ìˆ—
+		// ‹C‡‚Å“Áê—ûK‚ğ”²‚¯‚é
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
+		{
+			BMvTbl.SetNextMoveTable("Mv_StandbyNoMotion");
+			BMvTbl.SetRoundEnd(); //í“¬I—¹ó‘Ô‚É‚·‚é
+
+			player.pop();
+		}
+		local enemy = BMvCore.GetEnemyCharaData();
+		if( enemy.push() )
+		{
+			BMvTbl.SetNextMoveTable("Mv_StandbyNoMotion");
+			BMvTbl.SetRoundEnd(); //í“¬I—¹ó‘Ô‚É‚·‚é
+
+			enemy.pop();
+		}
+		BMvEff.FadeProc_Set({type=0, time=[0,2,15] color=0x000000}); // ‚±‚ê‚ğ“ü‚ê‚È‚¢‚ÆˆêuƒsƒN‚Â‚­‚Ì‚ªŒ©‚¦‚é
+	}
 	function Init_Std()
 	{
 		// BMvTbl.SetLP(5,0); // ‰½‰ñ–Ú‚Ì‰Û‘è‚©
@@ -8268,9 +8630,24 @@ Std_MoveTable.Mv_TrainingDummyMng <-
 		local cmd_type = BMvTbl.GetLP(3); // TR_CommandType
 		local cmd_mode = BMvTbl.GetLP(4); // TR_CommandType
 		
-		if( (!Battle_Std.CheckExtraTraining() ) && BMvTbl.GetLP(2) != 25 )
+		local round_is_timeup = 0;
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
 		{
-			BMvTbl.SetLP(2,25); // ‘€ì•s”\‚Ö
+			local rs =  BMvTbl.GetMvRoundStatus(); //ƒ‰ƒEƒ“ƒhƒXƒe[ƒ^ƒXæ“¾
+			player.pop();
+			
+			// ƒ^ƒCƒ€ƒAƒbƒv‚Ì‚Æ‚«
+			if( rs.isKo && !rs.isMyKo )
+			{
+				round_is_timeup = 1;
+			}
+		}
+		
+		// ‚±‚±‚Ìˆ—‚¢‚éH
+		if( (!Battle_Std.CheckExtraTraining() ) && BMvTbl.GetLP(8) != 25 )
+		{
+			BMvTbl.SetLP(8,25); // ‘€ì•s”\‚Ö
 			
 			local player = BMvCore.GetPlayerCharaData();
 			if( player.push() )
@@ -8292,7 +8669,7 @@ Std_MoveTable.Mv_TrainingDummyMng <-
 			BMvTbl.SetFinalize(0);
 		}
 		
-		if( Battle_Std.RoundisEnd() && BMvTbl.GetLP(2) != 20 )
+		if( Battle_Std.RoundisEnd() && BMvTbl.GetLP(2) != 20 && !round_is_timeup )
 		{
 			BMvTbl.SetLP(2,20); // ‘€ì•s”\‚Ö
 			
@@ -8332,7 +8709,7 @@ Std_MoveTable.Mv_TrainingDummyMng <-
 			{
 				input_key = 1;
 			}
-			else if( checkl_cmd )
+			else if( checkl_cmd || round_is_timeup )
 			{
 				input_key = -1;
 			}
@@ -8362,8 +8739,8 @@ Std_MoveTable.Mv_TrainingDummyMng <-
 				//LP0:ƒŠƒUƒ‹ƒg‚Ég‚¤”½‰ƒtƒŒ[ƒ€
 				//LP1:Ÿ‚Ìƒ^ƒCƒ~ƒ“ƒO‚Ü‚Å‚ÌƒtƒŒ[ƒ€
 				//LP2:ƒ`ƒFƒbƒNŠJn‚µ‚½‚ç1
-				local result_frame = BMvTbl.GetLP(0)-1; // ŠiƒQ[“I‚É‘µ‚¦‚é
-				local next_timing_frame = BMvTbl.GetLP(1);
+				local result_frame = BMvTbl.GetLP(0)-1; // ŠiƒQ[“I‚É‘µ‚¦‚é@”½‰ƒtƒŒ[ƒ€
+				local next_timing_frame = BMvTbl.GetLP(1); // 0‚É‚È‚é‚Æƒ^ƒCƒ~ƒ“ƒO‚É‚È‚é‚æ
 				local check_status = BMvTbl.GetLP(2);
 				local check_side = BMvTbl.GetLP(9);
 				
@@ -8428,20 +8805,38 @@ Std_MoveTable.Mv_TrainingDummyMng <-
 								enemy.pop();
 							}
 							set_status = 11; // 10:¬Œ÷ 11:ƒRƒ}ƒ“ƒhƒ~ƒX 15:‘‚·‚¬
+							
+							// ‚±‚Ì‚ ‚Æ‚Í’Êíƒoƒgƒ‹‚É‚¢‚­{ƒŠƒXƒ^[ƒg‚È‚Ì‚ÅŠÇ—ƒ}ƒl[ƒWƒƒ‚àI—¹‚·‚é
+							if( round_is_timeup )
+							{
+								BMvTbl.SetFinalize(0);
+							}
 						}
 					}
 					else if( check_status==0 ) // ‚Ü‚¾ƒ`ƒFƒbƒNŠJn‚µ‚Ä‚È‚¢
 					{
-						if( player.push() )
+						// ’Êíƒoƒgƒ‹‚É‚Í‚¢‚©‚È‚¢‚Ì‚Å–³—‚â‚èI‚í‚è‚Ìˆ—‚ğ‚¢‚ê‚é
+						if( round_is_timeup )
 						{
-							local word = "Failed... ";//+result_frame+" F";
-							_dpn(word);
-							BMvEff.AttackInfoString_Set({ word=word } );
-							
-							BMvTbl.SetPattern(def_PAT_TimeupLose); // ŠG‚¾‚¯‚»‚ê‚Á‚Û‚¢‚à‚Ì‚É‚·‚é
-							player.pop();
+							EndExtraTrainingMode();
+							BMvTbl.SetFinalize(0);
 						}
-						set_status = 15; // 10:¬Œ÷ 11:ƒRƒ}ƒ“ƒhƒ~ƒX 15:‘‚·‚¬
+						else
+						{
+							if( player.push() )
+							{
+								local word = "Failed... ";//+result_frame+" F";
+								_dpn(word);
+								BMvEff.AttackInfoString_Set({ word=word } );
+								
+								BMvTbl.SetPattern(def_PAT_TimeupLose); // ŠG‚¾‚¯‚»‚ê‚Á‚Û‚¢‚à‚Ì‚É‚·‚é
+								player.pop();
+							}
+							set_status = 15; // 10:¬Œ÷ 11:ƒRƒ}ƒ“ƒhƒ~ƒX 15:‘‚·‚¬
+						
+						}
+					
+
 					}
 					
 					if( set_status )
@@ -8501,9 +8896,23 @@ Std_MoveTable.Mv_TrainingDummyNeutral <-
 		BMvTbl.SetPattern(0);
 		BMvTbl.SetMoveableFlag( { move=0, time=1024, flag=_ClearFlag_ChangeMv } ); // Mv’†s“®•s”\‚É‚·‚é
 		BMvTbl.SetPosition( { y=0 } );
-		BMvEff.GRD_ClearVorpal( 0 ); // ƒ”ƒH[ƒpƒ‹‚ğ‰ğœ‚·‚é
 
 		BMvTbl.SetAngle( { angle=0 } ); // “Š‚°’†‚ÉŠp“x‚ğ•ÏX‚µ‚Ä‚¢‚éƒLƒƒƒ‰‘Îô
+		
+		// ƒ”ƒH[ƒpƒ‹‘¦‚ª‚ ‚é‚Ì‚Å‚±‚±‚Å‚â‚é‚ÆƒAƒiƒEƒ“ƒX‚ª‰½d‚É‚à‚Å‚é
+		// BMvEff.GRD_ClearVorpal( 0 ); // ƒ”ƒH[ƒpƒ‹‚ğ‰ğœ‚·‚é
+	}
+	function Update_Std()
+	{
+		// KO‚µ‚Ä‚¢‚½‚çŸ—˜ƒ|[ƒY‚È‚Ç‚Éi‚Ş‚½‚ß–ß‚·
+		if( Battle_Std.RoundisEnd() )
+		{
+			BMvTbl.SetFinalize();
+		}
+	}
+	function Finalize_Std()
+	{
+		BMvTbl.SetNextMoveTable("Mv_Neutral");
 	}
 }
 
@@ -8900,8 +9309,15 @@ Std_MoveTable.Mv_StandbyNoMotion <-
 			}
 		}
 		
+		local round_is_timeup = 0; // ƒ^ƒCƒ€ƒAƒbƒvŒã‚Í‰½“x‚à“ü‚ç‚È‚¢‚æ‚¤‚É“Áê—ûK‚ğ‚â‚ç‚È‚¢
+		local rs = BMvTbl.GetMvRoundStatus(); //ƒ‰ƒEƒ“ƒhƒXƒe[ƒ^ƒXæ“¾
+		if( rs.isKo )
+		{
+			round_is_timeup = 1;
+		}
+
 		local extra_training = Battle_Std.CheckExtraTraining();
-		if( extra_training )
+		if( extra_training && !round_is_timeup )
 		{
 			// _dpn("“Š‚°”²‚¯ƒeƒXƒg‚ ‚è");
 			//©•ª‚ªƒvƒŒƒCƒ„[‚Å‘Šè‚ªCPU‚È‚ç¶¬
@@ -10712,6 +11128,8 @@ Std_MoveTable.Mv_DyingIWEAtk <-
 		{
 			BMvCore.CallEntryBCCachePreTransfer( { pat=def_PAT_Convert, frame=stopframe, rest=8 } );
 		}
+		
+		BMvTbl.SetFinalizeCode(0); // ‰Šú‰»
 	}
 	function Start_Std()
 	{
@@ -10726,6 +11144,12 @@ Std_MoveTable.Mv_DyingIWEAtk <-
 		local mvcount = mvs.MvCount;
 		local frameid = mvs.FrameID;
 		local mode = BMvTbl.GetLP(0);
+		
+		// XXX:s“®•s”\¨s“®‰Â”\‚Ìƒ^ƒCƒ~ƒ“ƒO‚ÅA+B+C+D‚ÅVO¨IWE‚Æ‚µ‚½‚Æ‚«A‚È‚º‚©2F–Ú‚ÅVO‚ÌƒxƒNƒgƒ‹‚ª“ü‚Á‚Ä•‚‚­‚Ì‚ğ–h‚®
+		if( mvcount <= 1 )
+		{
+			BMvTbl.SetPosition( { y=0 } ); // ’n–Ê‚É‚­‚Á‚Â‚¯‚é
+		}
 		
 		if( frameid == 200 ) BMvTbl.JumpFrameID( 100 ); // –³ŒÀƒ‹[ƒv
 		if( mvs.MvCount > (65 + def_FL_EXCutinStopTime) )
@@ -10745,7 +11169,12 @@ Std_MoveTable.Mv_DyingIWEAtk <-
 			if( vo_eff.push() )
 			{
 				BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentHitStatus } );
-				 
+				
+				// ‘Šè‚ª‚â‚ç‚ê’†‚Ì‚Æ‚«‚Í”»’è‚ğ‘å‚«‚­‚·‚é
+				if( Def_Sys_IWE_IncreaseDamageAtkRectSize && Battle_Std.CheckEnemyisDamage() )
+				{
+					BMvTbl.JumpFrameID(1000);
+				}
 				vo_eff.pop();
 			}
 		}
@@ -10808,6 +11237,9 @@ Std_MoveTable.Mv_DyingIWEAtk_Modori <-
 	}	
 }
 
+// UŒ‚”»’è¨’ÇŒ‚”»’è‚Ì2ƒqƒbƒg‹Z‚É‚È‚Á‚Ä‚¢‚é
+// ——R‚Í‚©‚È‚è“ä‚¾‚ªA‘½•ª–³ˆó‘ã‚É‘Š‘Å‚¿‚Æ‚©•Ê‹Z‚Æ‚Ì“¯ƒqƒbƒg‚ÅƒXƒbƒ|”²‚¯‚é‚±‚Æ‚ª‚ ‚Á‚½‚±‚Æ‚Ì‘Î‰‚¾‚Æv‚í‚ê‚é
+// ‚Å‚«‚ê‚Îˆ—‚ğ®—‚µ‚½‚¢‚ªˆê’U‚Í‚»‚Ì‚Ü‚Ü‚É‚µ‚Ä‚¢‚é
 Std_MoveTable.Mv_DyingIWEAtk_AtkEff <-
 {
 	function Init_Std()
@@ -10816,7 +11248,9 @@ Std_MoveTable.Mv_DyingIWEAtk_AtkEff <-
 	}
 	function HitInterrupt_Std()
 	{
-		if( Battle_Std.CheckDamageTiming() )
+		// ƒ_ƒ[ƒW‚ğ—^‚¦‚½‚Æ‚«‚Ìˆ—
+		// ˆ—‚ª‚©‚È‚è•|‚­Œ©‚¦‚é‚Ì‚ÅAe‚ÌMV‚ª•Ï‚í‚Á‚Ä‚¢‚½‚Æ‚«‚Íˆ—‚ğ‚µ‚È‚¢‚æ‚¤‚É•ÏX
+		if( Battle_Std.CheckDamageTiming() && BMvTbl.CheckMvUniqueID( { datatype=_DataType_Player } ) != 0 )
 		{
 			local mvs = BMvTbl.GetMvStatus();
 			local effhit = BMvTbl.GetLP(0);
@@ -10830,7 +11264,7 @@ Std_MoveTable.Mv_DyingIWEAtk_AtkEff <-
 				if( effhit == 0 )
 				{
 					BMvEff.Slowmotion_Set( { time=60, power=6666, power_minus=10000/60 } );
-					BMvEff.SetCamera_Focus( { charapos=1, zoom=1.25, time=[8,30,15], type_in=1, type_out=2 } );
+					BMvEff.SetCamera_Focus( { charapos=1, zoom=1.25, time=[8,40,15], type_in=1, type_out=2 } );
 					BMvEff.SetCamera_Quake( { time=35, type=2, clear=1 } );
 				}
 
@@ -10839,6 +11273,15 @@ Std_MoveTable.Mv_DyingIWEAtk_AtkEff <-
 				BMvEff.SetPlayerTimer( { muteki_nage=muteki_f, muteki_dage=muteki_f, muteki_nageX=muteki_f, muteki_dageX=muteki_f } ); // ‚¿‚å‚Á‚Æ’·‚ß‚É–³“G
 				
 				player.pop();
+				
+				if( BMvTbl.GetLP(0)==0 && mvs.FrameID == 110 )
+				{
+					// ‘±•”•ª‚¾‚¯ƒqƒbƒg‚µ‚½‚Ì‚ÅSE‚Æ‚©ƒGƒtƒFƒNƒg‚Æ‚©ŒÄ‚Ô
+					_dpn("š¡‚Ü‚ÅIWEƒqƒbƒg‚Å–³‰¹‚¾‚Á‚½‰ÓŠ");
+					BSound.SE_Play( { num=5 } ); // ƒLƒbƒNSE
+					local createPos = Battle_Std.GetCreatePosition( BMvEff.GetAttackHitPos() );
+					BMvEff.CreateObject( { datatype=1, start_pat="Grp_Hit_XDagekiCLimit", x=createPos.x, y=createPos.y } );
+				}
 				
 				BMvTbl.SetLP(0,1); // effhit‚ğ1‚É‚µ‚ÄA‹Êƒqƒbƒgˆ—‚µ‚½‚æ
 			}
@@ -10925,39 +11368,6 @@ Std_MoveTable.Mv_DyingIWEAtk_Land <- 	//ƒŠƒxƒŒ[ƒg’…’n
 	}
 }
 
-// ‘¦€‚·‚éIWE
-Std_MoveTable.Mv_SpecialIWEXIST <-
-{
-	function Init_Std()
-	{
-		// _dp("\nš‘¦€‚·‚éIWE”­“®");
-		BMvEff.ComboView_Set( { val=-100, type=2 } ); // Œ¸Z-200‚Å100ˆÈã‚É‚·‚é
-		BMvEff.ComboView_Set( { val=100, type=0 } ); // ã‘‚«100‚Å•â³100%‚É–ß‚·
-
-		BMvEff.ComboView_Set( { val=-200, type=2 } ); // Œ¸Z-200‚Å300‚É‚·‚é
-		BMvTbl.SetFinalize(0);
-	}
-	function Finalize_Std()
-	{
-		BMvTbl.SetNextMoveTable( "Mv_Skill_IWEXIST" );
-	}	
-}
-
-// ƒNƒƒXƒLƒƒƒXƒgƒ”ƒF[ƒ‹ƒIƒt‚©‚ç‚ÌIWH
-// ‚±‚ê‚ğŒo—R‚µ‚ÄƒGƒtƒFƒNƒg‚¾‚µ‚½‚ç‚·‚é‚Ì‚à–³‚­‚Í‚È‚¢‹C‚ª‚·‚é
-Std_MoveTable.Mv_ComboVO_IW <-
-{
-	function Init_Std()
-	{
-		_dp("\nšƒRƒ“ƒ{VO‚©‚ç‚Ì‚â‚Â");
-		BMvTbl.SetFinalize(0);
-	}
-	function Finalize_Std()
-	{
-		BMvTbl.SetNextMoveTable( "Mv_Skill_41236SP" );
-	}
-}
-
 Std_MoveTable.Mv_Liberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 {
 	function StepMode()
@@ -10976,8 +11386,6 @@ Std_MoveTable.Mv_Liberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SysAtk ); // ƒVƒXƒeƒ€“I‚ÈUŒ‚
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
 		
-		BMvEff.AddSkillCount( _SkillCount_VeilOff ); // —š—ğƒJƒEƒ“ƒ^‚ğ‰ÁZ
-		
 		Battle_Std.PlayerSE_StopLastPlaySound(); // “¯‰Ÿ‚µ‘¼‚Ì‹Z‚ªo‚é‚Ì‚Å~‚ß‚é
 	
 		//Battle_Std.PcAuraEffect_LiberateInit(); //ƒ”ƒF[ƒ‹ƒIƒt‚ÌƒI[ƒ‰
@@ -10990,8 +11398,6 @@ Std_MoveTable.Mv_Liberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 		BMvTbl.SetVector( { x=0, y=-64, addx=0, addy=0, flags=_Vector_Normal } );
 		
 		BMvEff.SetPlayerTimer( { muteki_nage=254, muteki_dage=254 } );
-		
-		BMvEff.GRD_ClearBreak( 0 ); //Œø‰Ê‚Æ‚µ‚ÄƒuƒŒƒCƒN‚ğƒNƒŠƒA
 		
 		BMvTbl.SetPP(def_PP_Temp,0); //”Ä—p•Ï”‰Šú‰»
 
@@ -11042,6 +11448,18 @@ Std_MoveTable.Mv_Liberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 		BMvCore.CallEntryBCCachePreTransfer( { pat=def_PAT_Liberate, frame=checkframe_20, rest=4 } ); // ƒ{ƒ^ƒ“—£‚µ‚Å”ò‚Ô‚Ì‚Å—\–ñ
 		BMvCore.CallEntryBCCachePreTransfer( { pat=def_PAT_Liberate, frame=checkframe_30, rest=6 } ); // ƒ{ƒ^ƒ“—£‚µ‚Å”ò‚Ô‚Ì‚Å—\–ñ
 		BMvCore.CallEntryBCCachePreTransfer( { pat=def_PAT_Liberate, frame=checkframe_40, rest=8 } ); // ƒ{ƒ^ƒ“—£‚µ‚Å”ò‚Ô‚Ì‚Å—\–ñ
+		
+		BMvTbl.SetFinalizeCode(0); // ‰Šú‰»
+		if( Def_Sys_SetCounterHitFlagToVeilOff )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
+	}
+	function Start_Std()
+	{
+		// ƒRƒXƒgÁ”ïEg—p‰ñ”Œn‚ÍStartƒ^ƒCƒ~ƒ“ƒO‚É•ÏX
+		BMvEff.AddSkillCount( _SkillCount_VeilOff ); // —š—ğƒJƒEƒ“ƒ^‚ğ‰ÁZ
+		BMvEff.GRD_ClearBreak( 0 ); //Œø‰Ê‚Æ‚µ‚ÄƒuƒŒƒCƒN‚ğƒNƒŠƒA
 	}
 	function FrameUpdate_Std()
 	{
@@ -11240,6 +11658,10 @@ Std_MoveTable.Mv_Liberate_End <- //—‰º•”•ª
 		
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SysAtk ); // ƒVƒXƒeƒ€“I‚ÈUŒ‚
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
+		if( Def_Sys_SetCounterHitFlagToVeilOff )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
 	}
 	function FrameUpdate_Std()
 	{
@@ -11275,6 +11697,10 @@ Std_MoveTable.Mv_Liberate_Land <- 	//ƒŠƒxƒŒ[ƒg’…’n
 		
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SysAtk ); // ƒVƒXƒeƒ€“I‚ÈUŒ‚
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
+		if( Def_Sys_SetCounterHitFlagToVeilOff )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
 	}
 	function Finalize_Std()
 	{
@@ -11291,27 +11717,28 @@ Std_MoveTable.Mv_ComboLiberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 {
 	function Init_Std() //
 	{
-		BMvEff.AddSkillCount( _SkillCount_VeilOff ); // —š—ğƒJƒEƒ“ƒ^‚ğ‰ÁZ
-		
-		//yƒgƒƒtƒB[zÀí‚ÅƒNƒƒXƒLƒƒƒXƒgƒ”ƒF[ƒ‹ƒIƒt‚ğg—p‚µ‚½B
-		// BMvTbl.Achievement_Unlock(2);
-		
 		Battle_Std.MoveCode.AddFlag( def_MC_EXAction ); // s“®ƒR[ƒh(‚d‚w)‚ğ’Ç‰Á
 		BMvTbl.SetMvAction( def_MVA_EXSystem );
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SysAtk ); // ƒVƒXƒeƒ€“I‚ÈUŒ‚
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // “¯‰Ÿ‚µ‚Å‘¼‚Ìs“®‚ÉˆÚ‚ê‚és“®
 	
 		Battle_Std.SetCharaFlash_LiberateInit(); //Œõ‚Á‚Ä
 		
 		BMvTbl.SetMuki(_Direction_Auto);
 		BMvTbl.SetPattern(def_PAT_Liberate);
+		
+		// ”­“®‚Ì‚‚³‚ğ‹L‰¯‚µ‚Ä‚¨‚«ƒYƒ‰‚µ‰Ÿ‚µ‚ÅIWE‚És‚¯‚é‚©‚Ç‚¤‚©Œˆ‚ß‚é
+		local pos = BMvTbl.GetPosition();
+		if( pos.y >= 0 ) // B–†‚É‚µ‚Ä‚à‚¢‚¢‚Æ‚Ív‚¤‚¯‚Ç•|‚¢‚Ì‚ÅƒVƒrƒA‚É
+		{
+			Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GenFlag ); // MvŒÅ—Lƒtƒ‰ƒO
+		}
 
 		Battle_Std.InitVector(); // ƒxƒNƒgƒ‹‰Šú‰»
 		BMvTbl.SetVector( { x=0, y=-1800, addx=0, addy=128, flags=_Vector_Div } );
 		
 		BMvEff.SetPlayerTimer( { muteki_nage=254, muteki_dage=254 } );
-		
-		BMvEff.GRD_ClearBreak( 0 ); //Œø‰Ê‚Æ‚µ‚ÄƒuƒŒƒCƒN‚ğƒNƒŠƒA
 		
 		// FrameIDƒƒ‚
 		// modeƒƒ‚(LP0) ver1.02
@@ -11337,37 +11764,40 @@ Std_MoveTable.Mv_ComboLiberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 		// BMvCore.CallEntryBCCachePreTransfer( { pat=def_PAT_Liberate, frame=checkframe_40, rest=8 } ); // ƒ{ƒ^ƒ“—£‚µ‚Å”ò‚Ô‚Ì‚Å—\–ñ
 		
 		BMvTbl.SetLP(0,0); // ƒJƒEƒ“ƒ^
-		
-		local stock = BMvEff.GRD_CheckStock( { val=-1 } );
 
-		if( stock>Def_Sys_ChainShiftGRDLimit ) stock=Def_Sys_ChainShiftGRDLimit; //ŒÀŠE‚ğ’´‚¦‚È‚¢‚æ‚¤‚É‚·‚éiclr‚Ü‚Å‚Í6ŒÂ§ŒÀj
-
-		local isSuperChainShift = (stock>=6)? 1 : 0; //‚·‚²‚¢ƒ`ƒFƒCƒ“ƒVƒtƒg‚ÌğŒ		
-		
-		local is_celes_vp = Battle_Std.GS_CheckFlag( def_PP_GS_CelecVorpal ); // ƒZƒŒƒXƒ”ƒH[ƒpƒ‹‚¾‚Á‚½‚©
-		Battle_Std.GS_DelFlag( def_PP_GS_CelecVorpal ); // ƒZƒŒƒXƒ”ƒH[ƒpƒ‹‚È‚Ì‚ğÁ‚·
-		if( is_celes_vp )
-		{
-			isSuperChainShift = 1;
-		}
-		
-		BMvTbl.SetLP(1,isSuperChainShift); // ‰½‚à‚µ‚Ä‚È‚¢‚æ‚¤‚¾
-
-		BMvEff.GRD_SetConvertBreak( { time=0 } );
-		
-		BMvEff.GRD_UseStock( { val=20 } );
-		
 		BMvTbl.SetLP(5,0); // ÕŒ‚‚ªƒqƒbƒg‚µ‚½‚©‚Ç‚¤‚©
 		
+		Battle_Std.PlayerSE_StopLastPlaySound(); // “¯‰Ÿ‚µ‘¼‚Ì‹Z‚ªo‚½‚è‘O‚Ì‹Z‚Ì‰¹º‚ª‚ ‚é‚Ì‚Å~‚ß‚é
+		
+		BMvTbl.SetFinalizeCode(0); // ‰Šú‰»
+		if( Def_Sys_SetCounterHitFlagToVeilOff )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
+	}
+	function Start_Std()
+	{
+		//ƒYƒ‰‚µ‰Ÿ‚µ‚É‚â‚â•Ï‚É‚È‚é‚Ì‚Åƒ^ƒCƒ~ƒ“ƒO‚ğStart‚É•ÏX
+		
 		//CVO”­“®E‘Šè‚ª“®‚¯‚È‚¢ƒ^ƒCƒ~ƒ“ƒO‚Å‰‰o
+		//‘Šè‚Í‘½•ª•Ê‚Ìˆ—‚ÅEXS Limit‚É‚È‚é‚ªA‚»‚ê‚Ìà–¾‚Ì‚½‚ß
 		local enemy = BMvCore.GetEnemyCharaData();
 		if( enemy.push() )
 		{
-			Battle_Std.DrawInActiveEffect(); // ƒ_ƒ‚»‚¤‚È‰‰o‚¾‚¯“ü‚ê‚é
+			Battle_Std.DrawInActiveEffect(0); // ƒ_ƒ‚»‚¤‚È‰‰o‚¾‚¯“ü‚ê‚é
 			enemy.pop();
 		}
 		
-		Battle_Std.PlayerSE_StopLastPlaySound(); // “¯‰Ÿ‚µ‘¼‚Ì‹Z‚ªo‚½‚è‘O‚Ì‹Z‚Ì‰¹º‚ª‚ ‚é‚Ì‚Å~‚ß‚é
+		// ƒRƒXƒgÁ”ïEg—p‰ñ”Œn‚ÍStartƒ^ƒCƒ~ƒ“ƒO‚É•ÏX
+		BMvEff.AddSkillCount( _SkillCount_VeilOff ); // —š—ğƒJƒEƒ“ƒ^‚ğ‰ÁZ
+		BMvEff.GRD_ClearBreak( 0 ); //Œø‰Ê‚Æ‚µ‚ÄƒuƒŒƒCƒN‚ğƒNƒŠƒA
+
+		//yƒgƒƒtƒB[zÀí‚ÅƒNƒƒXƒLƒƒƒXƒgƒ”ƒF[ƒ‹ƒIƒt‚ğg—p‚µ‚½B
+		// BMvTbl.Achievement_Unlock(2);
+
+		Battle_Std.GS_DelFlag( def_PP_GS_CelecVorpal ); // ƒZƒŒƒXƒ”ƒH[ƒpƒ‹‚È‚Ì‚ğÁ‚·
+		BMvEff.GRD_SetConvertBreak( { time=0 } );
+		BMvEff.GRD_UseStock( { val=20 } );
 	}
 	function FrameUpdate_Std()
 	{
@@ -11403,10 +11833,23 @@ Std_MoveTable.Mv_ComboLiberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 			case 10:
 				BMvEff.SetStopTime( { time=28 } ); //ƒ`ƒFƒCƒ“ƒVƒtƒg‚ÌŠÔ’â~
 				
-				local usepat = 104;//( BMvTbl.GetLP(1) )? 76 : 82; //ƒGƒtƒFƒNƒg‚Ìƒpƒ^[ƒ“‚ğŒˆ‚ß‚é
-				BMvEff.CreateObject( { x=0, y=-300, datatype=1, start_pat=usepat, flags=_Position_ToolShift } );
-				BMvEff.CutInProc_Set({ time=[3,37,10], cutin_mv="",erasetype=0, bgtype=1 });
+				local isOverLiberate = (BCMDTbl.GetComboGauge() >= 20000)? 1 : 0;
 				
+				local usepat = 104; // •m€‚©‚Ç‚¤‚©‚Å•Ï‚¦‚Ä‚à‘å·‚È‚¢‚Ì‚ÅŒÅ’è
+				local eff = BMvEff.CreateObject( { x=0, y=-300, datatype=1, start_pat=usepat, flags=_Position_ToolShift } );
+				if( eff.push() )
+				{
+					// 200%‚©‚Ç‚¤‚©‚ÅŒ©‚½–Ú‚ğ•Ï‚¦‚é
+					local mask = (1<<1);
+					if( Def_Sys_ChangeMaxCVOEffect && isOverLiberate )
+					{
+						mask = (1<<0);
+					}
+					BMvTbl.SetHan6LayerMask( {  val = mask } ); // ƒrƒbƒg‚ğ—§‚Ä‚½ƒŒƒCƒ„[‚ğ”ñ•\¦
+					BMvEff.ObjProcFlags_Set( { flags=_ObjProcFlags_EraseChangeParentMv } ); // MV•ÏX‚ÅÁ–Å
+					eff.pop();
+				}
+				BMvEff.CutInProc_Set({ time=[3,37,10], cutin_mv="",erasetype=0, bgtype=1 });
 				
 				if( Battle_Std.TypeSE_Play({ type="ƒNƒƒXƒLƒƒƒXƒgƒ”ƒF[ƒ‹ƒIƒt" }) )
 				{
@@ -11423,6 +11866,7 @@ Std_MoveTable.Mv_ComboLiberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 			case 40: // ŠJ•ú
 				local mvs = BMvTbl.GetMvStatus();
 				local isDying = ( mvs.flags & _MvStFlag_DangerHPDef )? 1 : 0; // •m€ó‘Ô
+				local isOverLiberate = (BCMDTbl.GetComboGauge() >= 20000)? 1 : 0;
 				
 				Battle_Std.SetSpHosyoHosei( { type="CVO" } );
 				
@@ -11433,6 +11877,17 @@ Std_MoveTable.Mv_ComboLiberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 				BMvTbl.SetVector( { y=0, addy=0, flags=_Vector_Div } );
 				local usepat = ( isDying )? 103 : 102;
 				local eff = BMvEff.CreateObject( { datatype=1, mvname="Mv_ComboVO_HitEffect", start_pat=usepat, x=0, y=-200*128 } );
+				if( eff.push() )
+				{
+					// 200%‚©‚Ç‚¤‚©‚ÅŒ©‚½–Ú‚ğ•Ï‚¦‚é
+					local mask = (1<<1);
+					if( Def_Sys_ChangeMaxCVOEffect && isOverLiberate )
+					{
+						mask = (1<<0);
+					}
+					BMvTbl.SetHan6LayerMask( {  val = mask } ); // ƒrƒbƒg‚ğ—§‚Ä‚½ƒŒƒCƒ„[‚ğ”ñ•\¦
+					eff.pop();
+				}
 				
 				if( !Battle_Std.RoundisEnd() ) // KO‚âƒ^ƒCƒ€ƒAƒbƒvŒã‚É”­“®‚·‚é‚ÆŸ‚Ìƒ‰ƒEƒ“ƒh‚ÅƒQ[ƒW‚ª‹ó‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å’e‚­
 				{
@@ -11509,6 +11964,10 @@ Std_MoveTable.Mv_ComboLiberate_End <- //—‰º•”•ª
 		
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SysAtk ); // ƒVƒXƒeƒ€“I‚ÈUŒ‚
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
+		if( Def_Sys_SetCounterHitFlagToVeilOff )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
 	}
 	function FrameUpdate_Std()
 	{
@@ -11537,6 +11996,14 @@ Std_MoveTable.Mv_ComboLiberate_Land <- 	//ƒŠƒxƒŒ[ƒg’…’n
 		// s“®‰Â”\‚È‚Ì‚Å–³“G‚É‚Í‚µ‚È‚¢
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SysAtk ); // ƒVƒXƒeƒ€“I‚ÈUŒ‚
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
+
+		// s“®‰Â”\‚È‚Ì‚Å”íƒJƒEƒ“ƒ^[‚Í‚Â‚¯‚È‚¢
+		/*
+		if( Def_Sys_SetCounterHitFlagToVeilOff )
+		{
+			BMvTbl.SetCounterHitFlag( { val=1, time=9999, flag=_ClearFlag_ChangeMv } );//”íƒJƒEƒ“ƒ^[‚ğ‚Â‚¯‚é
+		}
+		*/
 	}
 	function Finalize_Std()
 	{
@@ -12194,6 +12661,15 @@ Std_MoveTable.Mv_Convert <- 	//ƒŠƒo[ƒXƒRƒ“ƒo[ƒg
 		
 		//ƒAƒTƒ‹ƒg‰ñ”§ŒÀ‚ğƒŠƒZƒbƒg
 		BMvTbl.AddAirCount( def_AC_Assault, -10 ); // ƒAƒTƒ‹ƒg‰ñ”ƒŠƒZƒbƒg
+		
+		// ƒLƒƒƒ‰ŒÂ•Ê‚Ì‹ó’†•KE‹Z§ŒÀ‚ğƒŠƒZƒbƒg
+		if( Def_Sys_ChainShift_ResetCharaAirCount )
+		{
+			BMvTbl.ClearAllAirCounts(); // ƒXƒƒbƒg0`16‚Ü‚Å‚ğ‰Šú‰»‚·‚é
+			
+			// “ñ’iƒWƒƒƒ“ƒv§ŒÀ‚àƒŠƒZƒbƒg‚·‚é
+			BMvTbl.AddAirJumpCount( -10 ); // 0‰ñˆÈ‰º‚É‚Í‚È‚ç‚È‚¢‚Ì‚Å‘½‚ß‚Éˆø‚­
+		}
 
 		
 		local eff = BMvEff.CreateObject( { mvname="Mv_Convert_Object" } );
@@ -12227,6 +12703,7 @@ Std_MoveTable.Mv_Convert <- 	//ƒŠƒo[ƒXƒRƒ“ƒo[ƒg
 		//ŠÔ’â~‚ÆˆÃ“]‚Ìˆ—
 		BMvEff.SetStopTime( { time=def_FL_ConvertStopTime } ); //ƒ`ƒFƒCƒ“ƒVƒtƒg‚ÌŠÔ’â~
 		
+		// ¦ˆÈ‘O‚ÍCSI—¹Œã‚àˆÃ“]ŠÔ‚ªc‚Á‚Ä‚¢‚é‚ÆA“Š‚°‚ç‚ê‚Ä‚àGRDƒuƒŒƒCƒN‚µ‚È‚¢ƒoƒO‚ª‚ ‚Á‚½‚ª¡‚Í‘åä•v‚Ì‚Í‚¸
 		BMvEff.CutInProc_Set({ time=[3,def_FL_ConvertStopTime-3,10], cutin_mv="",erasetype=0, bgtype=1 });
 
 		BMvEff.SetSpGauge( {value=def_SP_Convert_Init,} );
@@ -12380,6 +12857,8 @@ Std_MoveTable.Mv_Convert_Modori <-
 		BMvEff.SetPlayerTimer( { muteki_nage=0, muteki_dage=0, muteki_dageX=0, muteki_nageX=0 } ); //LU‚Å‚à‚â‚é‚¯‚Çˆê‰‚±‚Á‚¿ƒƒCƒ“
 		
 		BMvTbl.SetCommandLongDelay(1); //ó•tŠÔ‘‰Áiæs“ü—Í—pj
+		
+		BMvTbl.SetFinalizeCode(0); // ‰Šú‰»
 	}
 	function FrameUpdate_Std()
 	{
@@ -13095,7 +13574,7 @@ Std_MoveTable.Mv_Bound_0238 <-
 }
 }
 
-local makemv_BoundSirimoti = function( frame1=9, frame2=15, frame3=25 )
+local makemv_BoundSirimoti = function( frame1=9, frame2=15, frame3=25, boundpow=100 )
 {
 	local retmv = {};
 	retmv.Init_Std <- function() // 
@@ -13109,7 +13588,7 @@ local makemv_BoundSirimoti = function( frame1=9, frame2=15, frame3=25 )
 		BMvTbl.SetLP(0,0); //•Ï”‰Šú‰»
 		BMvTbl.SetLP(1,0); //ƒJƒEƒ“ƒg
 	}
-	retmv.FrameUpdate_Std <- function() : (frame1, frame2, frame3)
+	retmv.FrameUpdate_Std <- function() : (frame1, frame2, frame3, boundpow)
 	{
 		local s = BMvTbl.GetMvStatus();
 		local mode = BMvTbl.GetLP(0);
@@ -13144,7 +13623,7 @@ local makemv_BoundSirimoti = function( frame1=9, frame2=15, frame3=25 )
 				//K‚©‚ç’…’n‚·‚é‚Æ‚±‚ë
 				BMvTbl.JumpFrameID(100);
 				
-				BMvTbl.SetVector( { x=-1000, y=0, addx=100, addy=0, flags=_Vector_Bound } );
+				BMvTbl.SetVector( { x=-1000*boundpow/100, y=0, addx=100*boundpow/100, addy=0, flags=_Vector_Bound } );
 				
 				//ƒoƒEƒ“ƒhƒGƒtƒFƒNƒgEŒø‰Ê‰¹ŒÄ‚Ñ
 				// callLandEffect(); // ’…’nƒGƒtƒFƒNƒg ‚±‚±‚Í‚¤‚é‚³‚¢‚Ì‚Åg‚í‚È‚¢
@@ -13197,13 +13676,14 @@ local makemv_BoundSirimoti = function( frame1=9, frame2=15, frame3=25 )
 
 //‚µ‚è‚à‚¿iì‚è’¼‚µj
 //ƒqƒ‹ƒ_‚ÌˆÖqˆ—‚Å‚±‚Ì”Ô†Œˆ‚ß‘Å‚¿‚µ‚Ä‚¢‚é‚Ì‚Å’ˆÓ
-//p1`p2‚Í10FˆÈ“à‚¶‚á‚È‚¢‚Æƒ_ƒ‚»‚¤
-//XXX:ƒqƒ‹ƒ_‘åä•vH
-Std_MoveTable.Mv_Bound_0197 <- makemv_BoundSirimoti( 7, 12, 20 ); // ‚µ‚è‚à‚¿ã
-Std_MoveTable.Mv_Bound_0198 <- makemv_BoundSirimoti( 8, 14, 22 ); // ‚µ‚è‚à‚¿’†
-Std_MoveTable.Mv_Bound_0201 <- makemv_BoundSirimoti( 9, 15, 25 ); // ‚µ‚è‚à‚¿
-Std_MoveTable.Mv_Bound_0205 <- makemv_BoundSirimoti( 9, 15, 25 ); // ‚µ‚è‚à‚¿“Á
-Std_MoveTable.Mv_Bound_0100 <- makemv_BoundSirimoti( 9, 15, 25 ); // ‚µ‚è‚à‚¿CHK“Á
+//HilCheck.isSirimoti()‚àˆê‚É‘Î‰‚·‚é‚±‚Æ
+Std_MoveTable.Mv_Bound_0197 <- makemv_BoundSirimoti( 7, 12, 20, 100 ); // ‚µ‚è‚à‚¿ã
+Std_MoveTable.Mv_Bound_0198 <- makemv_BoundSirimoti( 8, 14, 22, 100 ); // ‚µ‚è‚à‚¿’†
+Std_MoveTable.Mv_Bound_0201 <- makemv_BoundSirimoti( 9, 15, 25, 100 ); // ‚µ‚è‚à‚¿
+Std_MoveTable.Mv_Bound_0205 <- makemv_BoundSirimoti( 9, 15, 25, 100 ); // ‚µ‚è‚à‚¿“Á
+Std_MoveTable.Mv_Bound_0100 <- makemv_BoundSirimoti( 9, 15, 25, 100 ); // ‚µ‚è‚à‚¿CHK“Á
+Std_MoveTable.Mv_Bound_0274 <- makemv_BoundSirimoti( 9, 15, 25,  25 ); // ‚»‚Ìê‚µ‚è‚à‚¿
+Std_MoveTable.Mv_Bound_0286 <- makemv_BoundSirimoti( 9, 15, 25,  50 ); // ‚µ‚¿‚à‚¿’†P
 
 local makemv_BoundAirSirimoti = function( type=0 )
 {
@@ -14236,14 +14716,13 @@ Std_MoveTable.Mv_DebugButton_2 <-
 			}				
 			case 9:
 			{
-				BMvTbl.SetFinalize(256); // ƒCƒOƒWƒXƒg
 				break;
 			}				
 		}
 	}
 	function Finalize()
 	{
-		Battle_Std.SwitchNextMoveTable("Mv_Neutral", [256,"Mv_SpecialIWEXIST"], [512,"Mv_TimeupLose"] ); //ƒfƒtƒH,[code,mv]...
+		Battle_Std.SwitchNextMoveTable("Mv_Neutral", [512,"Mv_TimeupLose"] ); //ƒfƒtƒH,[code,mv]...
 	}
 }
 
@@ -16248,6 +16727,45 @@ Std_MoveTable.Mv_Null_SetNextMutekiObject <-
 	}
 }
 
+// 1FŒã‚ÉˆÃ“]’†‚Ì“Š‚°–³“G‚ğ•t—^‚·‚é–½—ß
+Std_MoveTable.Mv_Null_SetNextNageMutekiObject <-
+{
+	function Init_Std()
+	{
+		// BMvTbl.SetLP(0,0);// ¶¬‚ÉƒZƒbƒg‚³‚ê‚é–³“GŠÔ
+	}
+	function FrameUpdate_Std()
+	{
+		//ˆÃ“]`¶¬‚Ü‚Å‚ÉŠÔ‚ÉUŒ‚‚³‚ê‚½‚è‚µ‚½ê‡‚Í‚·‚®‚ÉÁ‚·
+		if( Battle_Std.CheckPlayerisBound() )
+		{
+			BMvTbl.SetFinalize(0);
+			return;
+		}
+		
+		local mvs = BMvTbl.GetMvStatus();
+		// _dpn("ƒJƒEƒ“ƒ^:"+mvs.MvCount);
+
+		if( mvs.MvCount >= 1 )
+		{
+			local muteki_time = BMvTbl.GetLP(0);// —\–ñ‚µ‚Ä‚ ‚Á‚½–³“GF
+
+			local player = BMvCore.GetPlayerCharaData();
+			if( player.push() )
+			{
+				BMvEff.SetPlayerTimer( { muteki_nage=muteki_time, muteki_nageX=muteki_time, mode=1 } ); //“Š‚°–³“G‚¾‚¯İ’è mode 1:‘å‚«‚¢•û—Dæ
+				
+				player.pop();
+			}
+			BMvTbl.SetFinalize();
+		}
+	}
+	function Finalize_Std()
+	{
+		BMvTbl.SetDeleteMoveTable();
+	}
+}
+
 //Ÿ‚ÌƒtƒŒ[ƒ€‚ÉƒJƒƒ‰‚ğ’Ç]ƒJƒƒ‰‚É‚­‚Á‚Â‚¯‚é
 Std_MoveTable.Mv_Null_NextFrameResetViewCamera <-
 {
@@ -16539,6 +17057,58 @@ Std_MoveTable.Mv_Null_GuardReversalThrowBouhatsuChecker <-
 		BMvTbl.SetDeleteMoveTable();
 	}
 }
+
+Std_MoveTable.Mv_Null_ClearLightLegsMutekiYoteiFlag <-
+{
+	function Init_Std()
+	{
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_NoRender } );
+		BMvEff.SetExist( { level = _Exist_NoHantei } );
+		BMvTbl.SetPosition( {y=1024, flags=_Position_CaptureShift } );
+		
+		// BMvTbl.SetLP(0,0); // ‰½ƒtƒŒ[ƒ€Œã‚ÉÁ‚·‚©
+	}
+	function FrameUpdate_Std()
+	{
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.MvCount >= BMvTbl.GetLP(0) )
+		{
+			BMvTbl.SetFinalize();
+			return;
+		}
+
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
+		{
+			local isAfterLanding = Battle_Std.MoveCodeEx.CheckFlag( 5, def_MC5_SkillAfterLanding );
+			player.pop();
+			
+			// _dpn("isAfterLanding:"+isAfterLanding);
+			
+			if( isAfterLanding )
+			{
+				BMvTbl.SetFinalize();
+			}
+		}
+	}
+	function Finalize_Std()
+	{
+		BMvTbl.SetDeleteMoveTable();
+	}
+	function LastUpdate_Std()
+	{
+		// _dpn("Á‚¦‚Ü‚·");
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
+		{
+			Battle_Std.MoveCodeEx.DelFlag( 7, def_MC7_LightLegsMuteki );//¬‘«‘®«‚Ö‹óU‚è—\’è‚ÌMV
+
+			player.pop();
+		}
+	}
+}
+
+
 
 _dp1p("\n btl_UkemiFunc.....OK");
 //Battle_Std.SetVector <- ukemi_tbl.SetVector;

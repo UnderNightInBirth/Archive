@@ -97,43 +97,70 @@ t.Convert <-
 		//×EXキャンセル　○チェインシフト
 		if(	Battle_Std.CheckExSpecialCancel() == 0 && BCMDTbl.CheckCancel( _SkillType_ChainShift ) )
 		{
+			// EXキャンセルはできないが、CS可のチェックがあって...
 			if( Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_ChainShiftOK ) )
 			{
-				//
-				// _dpn("空振りCS可能なやつ");
+				// 空振りCS可能フラグがあるなら基本いつでもOK
+				// _dpn("空振りCS可能");
+			}
+			else if( Battle_Std.MoveCodeEx.CheckFlag( 5, def_MC5_ChainShiftOK_NoShield ) )
+			{
+				// 空振りCS可能フラグがある（シールドされるとNG）
+				// _dpn("空振りCS可能(シールドはNG)");
+				
+				// だけどシールドされるとキャンセル不可にしたい技もある
+				// def_MC1_Shield_CanselNGのフラグだけを見るのが自然だが、影響範囲がかなり広いので専用フラグを増やして対応
+				if( Battle_Std.MoveCode.CheckFlag( def_MC_Shielded ) )
+				{
+					// _dpn("空振りCS可能だがシールドされるとキャンセル不能");
+					return 0;
+				}
 			}
 			else if( Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_GuardChainShiftOK ) && ( BMvTbl.GetMvHitStatus().Type & _HitType_Hit ) )
 			{
-				// _dpn("ガード時CS可能なやつ");
-				local normal = BCMDTbl.GetCancelFlagData( 0 );
-				local special = BCMDTbl.GetCancelFlagData( 1 );
-				//0:なし
-				//1:HIT
-				//2:いつでも
-				//3:DAMAGE時
-				
-				if( normal == 1 || normal == 2 || special == 1 || special == 2 )
+				// def_MC7_StdAssultLimitAirAtk2 : 地上アサルトの制限を受けている攻撃（技後再行動できる技も含む）
+				if( Def_Sys_AssultAirAtkCanGuardChainShift && Battle_Std.MoveCodeEx.CheckFlag( 7, def_MC7_StdAssultLimitAirAtk2 ) )
 				{
-					// HitならOK
-				}
-				else if( normal == 3 || special == 3 )
-				{
-					if( !(BMvTbl.GetMvHitStatus().Type & _HitType_Damage) )
+					// アサルトジャンプ攻撃をガードされてもCS可能にする処理を少し厳密にした
+					// 元の判定データ側で通常Cか必殺Cが設定されていないときはキャンセルできないようにしている
+					// アサルトガード時にフラグが付与されるので、それで変にキャンセルされないようにしている
+					
+					// _dpn("アサルトジャンプ攻撃後のガード時CS可能"); // ツール側の設定を見る
+					local normal = BCMDTbl.GetCancelFlagData( 0 );
+					local special = BCMDTbl.GetCancelFlagData( 1 );
+					//0:なし
+					//1:HIT
+					//2:いつでも
+					//3:DAMAGE時
+					
+					if( normal == 1 || normal == 2 || special == 1 || special == 2 )
 					{
-						// _dpn("Damage時のみなので不可");
+						// _dpn("HIT時はOK");
+					}
+					else if( normal == 3 || special == 3 )
+					{
+						if( !(BMvTbl.GetMvHitStatus().Type & _HitType_Damage) )
+						{
+							// _dpn("Damage時のみなので不可");
+							return 0;
+						}
+					}
+					else
+					{
+						// _dpn("そもそも判定データ側にキャンセルフラグがない");
+						return 0;
+					}
+					
+					if( Battle_Std.MoveCode.CheckFlag( def_MC_Shielded ) )
+					{
+						// _dpn("アサルトJ攻撃をシールドとられてるので不可");
 						return 0;
 					}
 				}
 				else
 				{
-					// _dpn("そもそも判定データ側にキャンセルフラグがない");
-					return 0;
-				}
-				
-				if( Def_Sys_AssultAirAtkCanGuardChainShift && Battle_Std.MoveCodeEx.CheckFlag( 7, def_MC7_StdAssultLimitAirAtk2 ) && Battle_Std.MoveCode.CheckFlag( def_MC_Shielded ) )
-				{
-					// _dpn("アサルトJ攻撃をシールドとられてるので不可");
-					return 0;
+					// アサルトジャンプ攻撃ではない場合はフラグ＋ヒット情報があれば常に成功
+					// _dpn("ガード時CS可能");
 				}
 			}
 			else //それ以外のMvの時
@@ -342,17 +369,37 @@ t.Skill_DyingIWEAtk <-
 			// _dp("\n 瀕死じゃない");
 			return 0;
 		}
-		// 基本的に地上じゃないと出せないけど、ヴェールオフのでかかりの時だけは空中でも出せる
-		if( Battle_Std.IsMatchMvNameArray( ["Mv_Liberate","Mv_ComboLiberate"] ) )
+
+		// 基本的に地上じゃないと出せないけど、ヴェールオフ中などは同時押しの猶予として空中でも出せるようにする
+		if( BCMDTbl.CheckPosState( _PosState_Ground ) )
 		{
-			// ヴェールオフ中だと空中でも出せるよ
-			local info0 = BCMDTbl.GetCmdInfoEx(0);
-			// print("\n ここっす:"+info0.GetFrame() );
-			if( info0.GetFrame() > 2 ) return 0;
+			// 地上
 		}
 		else
 		{
-			if( !BCMDTbl.CheckPosState( _PosState_Ground ) ) return 0;
+			// 空中
+			if( Battle_Std.IsMatchMvNameArray( ["Mv_Liberate","Mv_ComboLiberate","Mv_Skill_SSRelayAtk"] ) )
+			{
+				local info0 = BCMDTbl.GetCmdInfoEx(0);
+				if( info0.GetFrame() > 2 ) return 0; // 同時押しの猶予F内かどうか
+				
+				// CVOは空中でも出せるので地上スタートっぽくないときはNGにする
+				if( BMvTbl.GetMvName() == "Mv_ComboLiberate" )
+				{
+					if( !Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_GenFlag ) ) // Mv固有フラグ
+					{
+						return 0;
+					}
+				}
+				
+				// CVO以外はもともと地上でしか出せないので高さチェックは不要
+ 
+				// 成功
+			}
+			else
+			{
+				return 0;
+			}
 		}
 		return 1;
 	}
@@ -884,10 +931,26 @@ if( Def_Rule_GameSystem == Def_RGS_UNI )
 	t.GCAttack_Std <-
 	{
 		cmdtmplflags = Def_SCT_Common,
-		num = def_CN_GCAttack_Std, name = "Cmd_GCAttack_Std", command = [ "6+A+B+C" ], usegauge = 10000,
+		num = def_CN_GCAttack_Std, name = "Cmd_GCAttack_Std", command = [ "6+A+B+C","@H,6+A+B+C@" ], usegauge = 10000,
 		CmdCheck = { SkillType = "GuardCancel", MvCheck = { Only = ["Mv_Guard"] },
 		Cost = { ComboGauge = 10000 } },
 		flags = [ "lastdelay" ],
+		CmdBeforeStdFunc = function()
+		{
+			//暗転返しのときだけ6+A+B+Cおしっぱで出せるようにする
+			local btn_pos = BCMDTbl.GetSuccessButtonPos();
+			if( btn_pos == 1 )
+			{
+				if( Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_EnemyAntenStop ) )
+				{
+					_dpn("暗転されたときなので6+A+B+Cホールドで出せる");
+				}
+				else
+				{
+					return 0;
+				}
+			}
+		}
 		CmdAfterStdFunc = function()
 		{
 			//入力完了したら無敵にして光らせる（そうしないとヒットストップ密度高い攻撃が割れない）
@@ -905,7 +968,7 @@ if( Def_Rule_GameSystem == Def_RGS_UNI )
 t.ForwardShift <-
 {
 	cmdtmplflags = Def_SCT_Common,
-	num = def_CN_ForwardShift, name = "Cmd_ForwardShift", command = ["3+D"],
+	num = def_CN_ForwardShift, name = "Cmd_ForwardShift", command = ["3+D","@H,3D@"],
 	flags = [ "lastdelay" ], //1F増加
 	CmdBeforeStdFunc = function()
 	{
@@ -913,6 +976,21 @@ t.ForwardShift <-
 		local grd = BMvEff.GRD_GetBreak( 0 ); //自分のブレイク状態取得
 		if( grd==1 || grd==255 ) return 0; //ブレイクorオーバーブレイク中
 
+		//暗転返しのときだけ3Dおしっぱで出せるようにする
+		local btn_pos = BCMDTbl.GetSuccessButtonPos();
+		// _dpn(btn_pos);
+		if( btn_pos == 1 )
+		{
+			if( Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_EnemyAntenStop ) )
+			{
+				_dpn("暗転されたときなので3Dホールドで出せる");
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		
 		return 1;
 	},
 	CmdCheck = { SkillType = "None", MvCheck = { Fail = ["Mv_ForwardShift"] }, },
@@ -1205,6 +1283,8 @@ t.Atk_AirA <-
 
 if( Def_Rule_GameSystem == Def_RGS_UNI )
 {
+local GroShieldFailMv = (Def_Sys_EnableDashShieldCommand)? [] : ["Mv_DashWait_F","Mv_Dash_F","Mv_DashStop_F"];
+	
 //シールド
 t.Barrier_Cro <-
 {
@@ -1218,7 +1298,7 @@ t.Barrier_Cro <-
 		if( !Battle_Std.CheckShieldHoldCommandStrict(1) ) return 0; // ホールドは漏れやすいので厳密にチェック
 		return 1;
 	},
-	CmdCheck = { SkillType = "None", MvCheck = { Fail = ["Mv_DashWait_F","Mv_Dash_F","Mv_DashStop_F"] }, },
+	CmdCheck = { SkillType = "None", MvCheck = { Fail = GroShieldFailMv }, },
 	UpdateTable = { name = "Mv_Barrier_Cro", }
 }
 
@@ -1234,12 +1314,16 @@ t.Barrier_Std <-
 		
 		// 最後のcmdの"6+D"は、めくりジャンプ攻撃をシールドするためのもの
 		// うしろ入れっぱなしでガードしつつ、シールドしようとしてアサルトがもれないようにする
-		local cmd_spos = BCMDTbl.GetSuccessButtonPos();
-		// _dpn("cmd_spos:"+cmd_spos);
+
+		local cmd_spos = BCMDTbl.GetSuccessButtonPos(); // CPUだと0固定なので注意
+		if( BMvTbl.IsCpu() && BMvTbl.CheckCommandString( { command="6" } ) )
+		{
+			// CPUだとcmd_sposを見て弾けないので6に入っていたら強制的に失敗にする
+			return 0;
+		}
 		if( cmd_spos == 2 )
 		{
 			if( !Def_Sys_EnableCrossupBarrier ) return 0; // 通常時は失敗
-			if( BMvTbl.IsCpu() ) return 0; // 以降はプレイヤーのための処理なのでCPU時は処理しない
 			
 			local enable = 0;
 			// 後ろ歩き中の操作以外認めない
@@ -1289,7 +1373,7 @@ t.Barrier_Std <-
 
 		return 1;
 	},
-	CmdCheck = { SkillType = "None", MvCheck = { Fail = ["Mv_DashWait_F","Mv_Dash_F","Mv_DashStop_F"] }, },
+	CmdCheck = { SkillType = "None", MvCheck = { Fail = GroShieldFailMv }, },
 	UpdateTable = { name = "Mv_Barrier_Std", }
 }
 
@@ -1495,8 +1579,30 @@ t.Skill_41236SP <-
 t.Skill_41236SP_ABC <- 
 { //-------------------------------
 	num = def_CN_Skill_41236SP_ABC, name = "Cmd_Skill_41236SP_ABC", command = ["A+B+C","A+B+C@L,30@"], usegauge = 20000,
+	posstatus = _PosState_Always,
 	CmdBeforeStdFunc = function()
 	{
+		// 基本的に地上じゃないと出せないけど、ステアエンダー中は同時押しの猶予として空中でも出せるようにする
+		if( BCMDTbl.CheckPosState( _PosState_Ground ) )
+		{
+			// 地上
+		}
+		else
+		{
+			// 空中
+			if( Battle_Std.IsMatchMvNameArray( ["Mv_Skill_SSRelayAtk"] ) )
+			{
+				local info0 = BCMDTbl.GetCmdInfoEx(0);
+				if( info0.GetFrame() > 2 ) return 0;
+
+				// 成功
+			}
+			else
+			{
+				return 0;
+			}
+		}
+
 		if( !Battle_Std.CheckSSRelayAtkExCancel( 1 ) ) return 0; // ステアエンダー後のみ有効なコマンドチェック
 
 		// クロスキャストヴェールオフ中のみA+B+CでIWが出せるよ

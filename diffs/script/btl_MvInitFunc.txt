@@ -429,10 +429,34 @@ Battle_Std.StartDashAtk <- function()
 }
 
 //自動生成された必殺技MVのInitで呼ばれる
-Battle_Std.InitSkillMv <- function()
+Battle_Std.InitSkillMv <- function( preParam )
 {
-	//必殺技は必ず削りあり
 	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Body, time=255, flag=_ClearFlag_ChangeMv } ); // 体無敵にスカる
+	
+	if( Def_Sys_AirSkillStartupLightLegsMuteki )
+	{
+		if( preParam.isAir && preParam.isInit ) // 条件　空中必殺技の最初（派生とかは含まない）
+		{
+			if( Battle_Std.ChangeMoveCodeEx_CheckFlag( 7, def_MC7_LightLegsMuteki ) ) // 前の行動が小足無敵の予定行動だった
+			{
+				// 必殺技は着地で別MVに行かないので_ClearFlag_Landingが必要
+				// def_MC7_LightLegsMutekiのフラグは怖いのでつけないでおく
+				// _dpn("小足無敵を少しだけつける");
+				BMvTbl.SetHitCheckFlag( { type=0, val=Def_HitCheckFlag_LightLegs, time=Def_Sys_AirSkillStartupLightLegsMuteki, flag=_ClearFlag_ChangeMv|_ClearFlag_Landing } ); // 小足無敵にスカる
+
+				Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_LightLegsMuteki );//小足属性へ空振り予定のMV　※次のMVで一定時間後消す
+				
+				local eff = BMvEff.CreateObject( { mvname="Mv_Null_ClearLightLegsMutekiYoteiFlag" } );
+				if( eff.push() )
+				{
+					BMvTbl.SetLP(0,Def_Sys_AirSkillStartupLightLegsMuteki); // 何フレーム後に消すかを設定
+					eff.pop();
+				}
+			}
+		}
+	}
+	
+	//必殺技は必ず削りあり
 	Battle_Std.SetSkillMvChipDamage(); // 必殺技としての削りダメージを適用
 }
 
@@ -514,19 +538,21 @@ Battle_Std.InitWorthSkill <- function( _spcutinmv = "Mv_CutinGrp" )
 		// 開放中なら開放を終了する
 		BMvEff.Liberate_End();
 		
-		// 240415 EX>IWで繋いだらVOスカ相当の最低保障補整をかける
-		local comboUsedExSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseExSkill );
-		if( comboUsedExSkill )
-		{
-			_dpn("EXの保証補正");
-			Battle_Std.SetSpHosyoHosei( { type="VO" } );// EX>IWで繋いだらVOスカ相当の補正をかける
-		}
-		
 		local comboUsedSpSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseSpSkill );
 		if( comboUsedSpSkill )
 		{
 			_dpn("SPの保証補正");
 			Battle_Std.SetSpHosyoHosei( { type="SP" } );//２回目の補正をかける
+		}
+		
+		// 240415 EX>IWで繋いだらVOスカ相当の最低保障補整をかける
+		// 240726 IW>EX>IWと繋いだときにEX>IWの補正がかかったあとにIW>IWの補正がかかることで、計算に誤差が生まれていた
+		// なので、より補正がキツいほうから処理するようにして誤差を抑えた（よりキツいSP>SPの保証補正をかけることでEX>SPの保証補正はかからなくなる）
+		local comboUsedExSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseExSkill );
+		if( comboUsedExSkill )
+		{
+			_dpn("EXの保証補正");
+			Battle_Std.SetSpHosyoHosei( { type="VO" } );// EX>IWで繋いだらVOスカ相当の補正をかける
 		}
 		
 		BMvEff.CreateObject( { mvname="Mv_SPAfterImage_KanriObject", flags=0 } );//超技中持続するオブジェクト

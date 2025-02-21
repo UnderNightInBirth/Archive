@@ -23,6 +23,7 @@ const Def_ChrNo_Chr021	= 21;
 const Def_ChrNo_Chr022	= 22;
 const Def_ChrNo_Chr023	= 23;
 const Def_ChrNo_Chr024	= 24;
+const Def_ChrNo_Chr025	= 25;
 
 //キャラクター識別子
 const Def_ChrNo_Hyd		= 0;
@@ -50,9 +51,10 @@ const Def_ChrNo_Mik		= 21;
 const Def_ChrNo_Kag		= 22;
 const Def_ChrNo_Kuo		= 23;
 const Def_ChrNo_Pho		= 24;
+const Def_ChrNo_Ogr		= 25;
 
 //-----------------------------------------------------------------------------
-//キャラ固有定義関係 defc_***
+//キャラ固有定義関係 defc_***　(def_***は古い定義)
 //-----------------------------------------------------------------------------
 
 //自由変数のどれを使うか・キャラ別定数（0～19まで）
@@ -186,6 +188,15 @@ const def_PP_Udu_GusDamageStatus = 7;
 
 const def_PP_Udu_AirDiveCoffinLimit = 8;
 
+const def_PP_Ogr_BombStatus = 3;
+const def_PP_Ogr_BombSnapReady = 4;
+
+const def_ACS_OGR_JBandC = 0;
+
+
+// SP(ラウンド経過でリセットされない)
+// BMvTbl.SetSP(defc_SP_Udu_ThrowItem,0)
+const defc_SP_Udu_ThrowItem = 0;
 
 //-----------------------------------------------------------------------------
 //キャラ固有ゲージ設定 defcg_***

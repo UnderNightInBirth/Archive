@@ -1315,11 +1315,12 @@ Battle_Std.AttackImpact_StdFunc <- function(info)
 			local lowbreak = Battle_Std.MoveCode.CheckFlag( def_MC_GRDLowBreak );
 			if( lowbreak )
 			{
-				_dpn("ローカウンター");
+				_dpn("ローカウンターなので補正なし");
 				// Battle_Std.ComboPoint_Multi( def_CPH_LowCounterHit ); // コンボポイントを乗算
 			}
 			else
 			{
+				_dpn("カウンターヒット補正:"+def_CPH_CounterHit);
 				Battle_Std.ComboPoint_Multi( def_CPH_CounterHit ); // コンボポイントを乗算
 			}
 			
@@ -1531,7 +1532,8 @@ Battle_Std.DamageImpact_StdFunc <- function(info)
 
 	local enemyAtk_is_FastRocketeer = false; //早い発生のジャンプ攻撃によるロケッティアであるかどうか
 	
-	local overhead_frame = 0; // 中段のときのフレーム（GRD増加量に影響）
+	// def_MC5_DisableChangeGRD_AssultOverheadF のときは計測されないので注意
+	local overhead_frame = 0; // 中段のときのフレーム（GRD増加量に影響） ※アサルトのとき、最速かそうでないかで1Fズレるので注意
 
 	local enemy = BMvCore.GetNearEnemyCharaData(); // 敵の情報
 	if( enemy.push() )
@@ -1544,8 +1546,9 @@ Battle_Std.DamageImpact_StdFunc <- function(info)
 		enemyAtk_is_FastRocketeer = ( ( ( airatk_st&def_PP_AAS_Rocketeer )!=0 ) && ( (airatk_st&def_PP_AAS_inAssault) ==0 ) && emvs.MvCount<21 );
 		//print("\n enemyAtk_is_rocketeer:"+enemyAtk_is_rocketeer);
 		
-		//中段Fを測定しておいてGRD増加量を調整
-		if( Tyudan )
+		// 中段Fを測定しておいてGRD増加量を調整
+		// 発生Fに応じたアサルト中段ガード時のGRD増加量を無効にする行動は除外
+		if( Tyudan && !Battle_Std.ChangeMoveCodeEx_CheckFlag( 5, def_MC5_DisableChangeGRD_AssultOverheadF ) )
 		{
 			local mess = "中段F:";
 			local display_overhead_frame = emvs.MvCount; // 計算用の値
@@ -1676,6 +1679,7 @@ Battle_Std.DamageImpact_StdFunc <- function(info)
 			//GRD増加処理
 			if( BMvEff.GRD_GetJudgeResult()<=0 ) //ヴォーパル状態ではボーナス無し
 			{
+				// _dpn("GRD増加:"+grd_addval);
 				Battle_Std.GRD_AddValue({ val=grd_addval, pressure=0, boundplus=1 });
 			}
 		}
@@ -2110,13 +2114,14 @@ Battle_Std.DamageImpact_StdFunc <- function(info)
 				//exdmg_hoseiの処理が変わるので共通でOK
 				if( exdmg_hosei )
 				{
-					// 特殊な補正がかかるMvによる攻撃でした
-					_dp("\n 多段中段補正適用:"+def_HOSEI_ExDamageHosei);
-					BMvEff.StdCall( { type=6, no=112, param=[ def_HOSEI_ExDamageHosei,0,0,0,0, 0,0,0,0,0, 0,0 ]} );
+					// 特殊な補正がかかるMvによる攻撃
+					// 厳しすぎる崩しで入る（多段中段とか）
+					_dpn("多段中段補正適用:"+def_HOSEI_ExDamageHosei);
+					BMvEff.ComboView_Set( { val=def_HOSEI_ExDamageHosei, type=0 } ); // 上書き補正
 				}
 				else if( normal_atk && enable_airatkst && (airatk_st&def_PP_AAS_inAssault) ) // airatk_stはアサルトから出したジャンプ攻撃で。フラグはジャンプ攻撃（！）の着地で消える。
 				{
-					_dp("\n アサルト補正適用");
+					_dpn("アサルト補正適用");
 					if( GRDBreak ) // ブレイクさせた攻撃
 					{
 						// 無補正
@@ -3115,7 +3120,7 @@ Battle_Std.StartExSkill <- function( _Blocked = 0 )
 			Battle_Std.SetSpHosyoHosei( { type="EX" } );//２回目の補正をかける
 		}
 		
-		Battle_Std.EnemyDamageFlag_Add( def_DF_UseExSkill ); // コンボ中EX技を使ったのを相手に記憶
+		Battle_Std.EnemyDamageFlag_Add( def_DF_UseExSkill, 1 ); // コンボ中EX技を使ったのを相手に記憶(ダメージ中のみ)
 	}
 	
 	//デメリット
@@ -3172,7 +3177,7 @@ Battle_Std.Init_ExistAtkSkill <- function(type=0,stopframe=def_FL_EXCutinStopTim
 	}
 
 	//時間停止中に進む暗転
-	Battle_Std.SetSkillStopTime(stopframe,0); //時間停止,1F後に暗転中無敵は付与しない
+	Battle_Std.SetSkillStopTime(stopframe,0); //時間停止+1Fから投げ無敵を付与する
 
 	if( player.push() )
 	{
@@ -3198,7 +3203,7 @@ Battle_Std.Init_ExistAtkSkill <- function(type=0,stopframe=def_FL_EXCutinStopTim
 
 //必殺技用の時間停止
 //暗転中に進むタイプ
-Battle_Std.SetSkillStopTime <- function(stopframe=def_FL_EXCutinStopTime, set_nextf_muteki=0 )
+Battle_Std.SetSkillStopTime <- function(stopframe=def_FL_EXCutinStopTime, set_nage_muteki=0 )
 {
 	local player = BMvCore.GetPlayerCharaData(); // 操作親の情報を得る
 	if( player.push() )
@@ -3206,26 +3211,26 @@ Battle_Std.SetSkillStopTime <- function(stopframe=def_FL_EXCutinStopTime, set_ne
 		//相手に、暗転後動けるようになると消えるオブジェクトを呼ぶ
 		Battle_Std.CallAntenStopObject();	
 	
-		local muteki_time = stopframe+Def_Sys_EXCutinNageMuteki; // 投げ無敵時間をプラス
-		BMvEff.SetPlayerTimer( { muteki_nage=muteki_time, muteki_nageX=muteki_time } ); //投げ無敵だけ設定
-		//BMvEff.SetPlayerTimer( { muteki_nage=muteki_time, muteki_dage=muteki_time, muteki_time=stopframe, muteki_nageX=muteki_time } ); //暗転バグ回避
-		BMvEff.SetStopTime( { time=stopframe, bounderase=1 } ); //時間停止
-		
-		// 暗転2F～暗転終了までプレイヤーに打撃無敵を設定するオブジェクトを呼び出す
-		if( set_nextf_muteki )
+		if( Def_Sys_EXCutinNageMuteki || set_nage_muteki ) // 暗転時の投げ無敵
 		{
-			local eff = BMvEff.CreateObject( { mvname="Mv_Null_SetNextMutekiObject" } );
+			local muteki_time = stopframe+Def_Sys_EXCutinNageMuteki; // 投げ無敵時間をプラス
+			BMvEff.SetPlayerTimer( { muteki_nage=muteki_time, muteki_nageX=muteki_time } ); //投げ無敵だけ設定
+		}
+		else
+		{
+			local muteki_time = stopframe+Def_Sys_EXCutinNageMuteki-1; // 投げ無敵時間をプラス
+			local eff = BMvEff.CreateObject( { mvname="Mv_Null_SetNextNageMutekiObject" } );
 			if( eff.push() )
 			{
-				//MEMO:どんなパターンや行動か不明なのでPatやMv変更での消滅はさせていない
 				BMvEff.SetObjectFlags( { flags=_ObjFlags_NoRender|_ObjFlags_MoveTimeStopAll } );
 				BMvEff.SetExist( { level = _Exist_NoHantei } );
-			
-				BMvTbl.SetLP(0,stopframe);//暗転時間をオブジェクト側にわたす
-				
+
+				BMvTbl.SetLP(0,muteki_time);
 				eff.pop();
 			}
 		}
+		//BMvEff.SetPlayerTimer( { muteki_nage=muteki_time, muteki_dage=muteki_time, muteki_time=stopframe, muteki_nageX=muteki_time } ); //暗転バグ回避
+		BMvEff.SetStopTime( { time=stopframe, bounderase=1 } ); //時間停止
 		
 		player.pop();
 	}
@@ -3925,6 +3930,9 @@ Battle_Std.SetThrowHitFinalize <- function(code=0, gouin_code=-1, combo_code=-1,
 		local flag = (1<<1); // | (1<<2)
 		local isGouinNage = (((bs.isCapture&flag)!=0) && gouin_code!=-1); //ガードややられ中を掴んだときはこれ（通常投げでは入らない）
 		local isComboNage = ( (bs.isBound) && ( bs.Name.find("ガード")==null ) && combo_code!=-1); //コンボ投げ
+		
+		local punishHitAtk = Battle_Std.MoveCodeEx.CheckFlag( 4, def_MC4_PunishHit ); // この投げでパニッシュを取ってるか
+		
 		// local isComboNage = ( (bs.isBound) && ( bs.isBound != 2 ) && combo_code!=-1); //コンボ投げ ※こうするとハメ…
 		//print("\n isComboNage"+isComboNage+" bs.isBound"+bs.isBound );
 		//ガード中掴んだときもisBound==1になっているので注意（つかまれ中だからだった気がする）
@@ -3956,9 +3964,10 @@ Battle_Std.SetThrowHitFinalize <- function(code=0, gouin_code=-1, combo_code=-1,
 				}
 				else
 				{
-					/*
 					//敵が通常技や必殺技のモーション中で、かつ行動不能なら確定
-					if( enemyIsAtkMv && enemyCharaNo==Def_ChrNo_Vat && Battle_Std.ThrowTech.CheckTechImpossible() )
+					// if( enemyIsAtkMv && enemyCharaNo==Def_ChrNo_Vat && Battle_Std.ThrowTech.CheckTechImpossible() )
+					// 1.20 パニッシュ表記を出そうとしたら投げ抜け不可にする
+					if( Def_Sys_TechCommandThrowPunish && punishHitAtk && Battle_Std.ThrowTech.CheckTechImpossible() )
 					{
 						//確定投げで、投げ抜け不能なやつで、技の隙にあてるとここ（ワレンのAコマ投げとか）
 						// _dpn("通常技 or 必殺技1");
@@ -3972,7 +3981,6 @@ Battle_Std.SetThrowHitFinalize <- function(code=0, gouin_code=-1, combo_code=-1,
 						}
 						return 1;
 					}
-					*/
 	
 					if( isComboNage )
 					{
@@ -3988,14 +3996,14 @@ Battle_Std.SetThrowHitFinalize <- function(code=0, gouin_code=-1, combo_code=-1,
 						
 						//強引投げなので補正をかける
 						//乗算85%ぐらい？
-						//BMvEff.StdCall( { type=6, no=112, param=[ 85,1,0,0,0, 0,0,0,0,0, 0,0 ]} );
+						// BMvEff.ComboView_Set( { val=85, type=1 } ); // 乗算補正
 						
 						//掴んだ相手側に投げられ回数を加算
 						if( isDamageTiming )
 						{
 							if( enemy.push() )
 							{
-								BMvEff.AddSkillCount( _SkillCount_Throw ); // 履歴カウンタを加算
+								BMvEff.AddSkillCount( _SkillCount_Throw ); // 履歴カウンタを加算(投げられ回数)
 								if( Def_Sys_NoPunishSkillGouinNage )
 								{
 									Battle_Std.PP_DelFlag(def_PP_ImpactAnnounce,def_PP_IA_Punish ); // パニッシュ予約があったら消す
@@ -4022,16 +4030,16 @@ Battle_Std.SetThrowHitFinalize <- function(code=0, gouin_code=-1, combo_code=-1,
 				}
 				else
 				{
-					/*
 					//バティスタは被カウンターがついていないため、硬直中にあてても投げ抜けされてしまう
 					//敵が通常技や必殺技のモーション中で、かつ行動不能なら確定
-					if( enemyIsAtkMv && enemyCharaNo==Def_ChrNo_Vat && Battle_Std.ThrowTech.CheckTechImpossible() )
+					// if( enemyIsAtkMv && enemyCharaNo==Def_ChrNo_Vat && Battle_Std.ThrowTech.CheckTechImpossible() )
+					// 1.20 パニッシュ表記を出そうとしたら投げ抜け不可にする
+					if( Def_Sys_TechCommandThrowPunish && punishHitAtk && Battle_Std.ThrowTech.CheckTechImpossible() )
 					{
 						if( Def_Dbg_SkillThrowLog ) _dpn("通常技 or 必殺技のようだ");
 						BMvTbl.SetFinalize( miss_code );
 						return 1;
 					}
-					*/
 					
 					BMvTbl.SetFinalize( code );	
 					if( Def_Dbg_SkillThrowLog ) _dpn("SetThrowHitFinalizeで失敗じゃない時を掴んだ:"+code);
@@ -4042,7 +4050,7 @@ Battle_Std.SetThrowHitFinalize <- function(code=0, gouin_code=-1, combo_code=-1,
 						local enemy = BMvCore.GetCaptureCharaData();
 						if( enemy.push() )
 						{
-							BMvEff.AddSkillCount( _SkillCount_Throw ); // 履歴カウンタを加算
+							BMvEff.AddSkillCount( _SkillCount_Throw ); // 履歴カウンタを加算(投げられ回数)
 							if( Def_Sys_NoPunishSkillGouinNage )
 							{
 								Battle_Std.PP_DelFlag(def_PP_ImpactAnnounce,def_PP_IA_Punish ); // パニッシュ予約があったら消す
@@ -6078,7 +6086,6 @@ function Battle_Std::ThrowParam_WithHanteiEtc(_pat=0,_frame=0)
 						BMvTbl.SetAngle({ angle=tool_angle });
 					BMvCore.PopCharaData(); // 
 				}
-				//BMvEff.StdCall( { type=14, no=pat, param=[ rc.sx,rc.sy,0,0,0, 0,0,0,0,0, 0,0 ]} );
 			}
 			break; //最初にみつけたので終わる
 		}
@@ -6773,12 +6780,21 @@ Battle_Std.DrawEffect_LimitPat <- function( tbl )
 //キャンセルしない追撃なんて考えられない
 //相手が先に動き出すようなものでは使ってはいけない（使うときは追撃不能命令を入れない）
 //行動可能のフリーモーションだとダメそう→修正(大丈夫これ？)
+//MEMO:攻撃がヒットしたときだけ処理をする処理はデフォルトにしておきたい（技空振り＞設置ヒット＞技終了などで追撃不可になるため）
+//ただキャラクターにフリーモーションがあったとき、LastUpdateでは既にヒット情報が消滅している問題があるので注意
 Battle_Std.NoCansel_NoAttackHit <- function( tbl={} )
 {
 	local hosei_uwagaki = ("上書き補正" in tbl)? tbl["上書き補正"] : 80; //デフォルト上書き補正
+	if( "hosei_uwagaki" in tbl ) hosei_uwagaki = tbl.hosei_uwagaki; // そのうちこっちに統一したい
+
 	local hosei_zyozan = ("乗算補正" in tbl)? tbl["乗算補正"] : 90; //デフォルト乗算補正
+	if( "hosei_zyozan" in tbl ) hosei_zyozan = tbl.hosei_zyozan; // そのうちこっちに統一したい
+
+	local set_hosei = ("set_hosei" in tbl)? tbl.set_hosei : 1; // 補正の設定をやるかどうか
+
 	local no_atk_hit = ("noattackhit" in tbl)? tbl.noattackhit : 1; //追撃不能にするかどうか　デフォは1
 	local no_zurasi_hosei = ("no_zurasi_hosei" in tbl)? tbl.no_zurasi_hosei : 0;
+	local check_mvdamage = ("check_mvdamage" in tbl)? tbl.check_mvdamage : 0; // MVがダメージのときだけ追撃不能にする
 
 	//NoAttackHit
 	if( Battle_Std.CheckNoCansel() ) //キャンセルしないでFinalizeした
@@ -6787,7 +6803,30 @@ Battle_Std.NoCansel_NoAttackHit <- function( tbl={} )
 		// _dm("NoCansel_NoAttackHit キャンセルしなかった");
 		if( no_atk_hit==1 ) //追撃不可にする
 		{
-			Battle_Std.EnemyNoAttackHit(); // 相手を追撃不能にする
+			if( check_mvdamage ) // MVがダメージのときだけ追撃不能にする
+			{
+				local hitStatusDamage = 0;
+				local hs = BMvTbl.GetMvHitStatus();
+				if( hs.Type & _HitType_Damage )
+				{
+					hitStatusDamage = 1;
+				}
+
+				// hitstatus検知だとフリーモーション時にはヒット情報がなかったりするのでこの処理が必要
+				local hitStatusDamageFlag = Battle_Std.MoveCode.CheckFlag( def_MC_HitStatus_Damage ); // この行動でダメージしたか
+				
+				// _dpn("ダメージチェック:"+hitStatusDamage+", "+hitStatusDamageFlag);
+
+				// 攻撃がダメージしたときだけ追撃不能にする（空振りやガード後の設置ヒットで検知されないように）
+				if( hitStatusDamage || hitStatusDamageFlag )
+				{
+					Battle_Std.EnemyNoAttackHit(); // 相手を追撃不能にする
+				}
+			}
+			else
+			{
+				Battle_Std.EnemyNoAttackHit(); // 相手を追撃不能にする
+			}
 		}
 	}
 	else //キャンセルした、やられで途中でとまったとか
@@ -6800,9 +6839,18 @@ Battle_Std.NoCansel_NoAttackHit <- function( tbl={} )
 		}
 		else
 		{
-			// _dpn("キャンセル時の抜け補正");
-			BMvEff.StdCall( { type=6, no=112, param=[ hosei_uwagaki,0,0,0,0, 0,0,0,0,0, 0,0 ]} ); //上書き８０
-			BMvEff.StdCall( { type=6, no=112, param=[ hosei_zyozan,1,0,0,0, 0,0,0,0,0, 0,0 ]} ); //乗算９０
+			// _dpn("キャンセル時の抜け補正:"+set_hosei);
+			if( set_hosei ) // 補正処理あり
+			{
+				if( hosei_uwagaki )
+				{
+					BMvEff.ComboView_Set( { val=hosei_uwagaki, type=0 } ); // 上書き補正
+				}
+				if( hosei_zyozan )
+				{
+					BMvEff.ComboView_Set( { val=hosei_zyozan, type=1 } ); // 乗算補正
+				}
+			}
 		}
 		// レインコンボのみの取得はできない（LastUpdateで被ダメかどうかを検知できない）
 	}
@@ -6899,9 +6947,9 @@ Battle_Std.SetStatus_AirAtkStatus <- function()
 		else //空中アサルト以外のアサルトは、ジャンプ攻撃にキャンセル不可を設定するのだよ（チェインシフトだけは可能にしておく）
 		{
 			BMvTbl.SetAsStatusFlag( { normal=_CancelFlag_None, special=_CancelFlag_None, time=254, flag=_ClearFlag_ChangeMv }); //キャンセル不可
-			Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_StdAssultLimitAirAtk2 );//行動不能なのをフラグたて2(def_MC7_StdAssultIgnoreNoMoveの影響なし)
+			Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_StdAssultLimitAirAtk2 );//行動不能なのをフラグたて2(def_MC7_StdAssultIgnoreNoMove の影響なし)
 			
-			if( !Battle_Std.MoveCodeEx.CheckFlag( 7, def_MC7_StdAssultIgnoreNoMove ) )
+			if( !Battle_Std.MoveCodeEx.CheckFlag( 7, def_MC7_StdAssultIgnoreNoMove ) ) // 地上アサルトの行動不能フラグの影響を受けない技(空中で再行動できる技)じゃない
 			{
 				BMvTbl.SetMoveableFlag( { move=0,time=254, flag=_ClearFlag_ChangeMv }); //着地のMvに行くまで行動不能にする
 				Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_StdAssultLimitAirAtk );//行動不能なのをフラグたて
@@ -7237,7 +7285,8 @@ Battle_Std.CancelCheck_NormalAtk <- function()
 	return 1;
 }
 
-// この辺基本的にサポートキャンセルのチェックにしか使ってないっぽい
+
+// 必殺技がヒットしたときにする処理まとめ
 Battle_Std.MvRule_Skill_HitInterrupt <- function()
 {
 	local hs = BMvTbl.GetMvHitStatus();
@@ -9237,8 +9286,16 @@ Battle_Std.CheckDownOiuti <- function()
 }
 
 
-Battle_Std.EnemyDamageFlag_Add <- function( _flag )
+Battle_Std.EnemyDamageFlag_Add <- function( _flag, _onlyDamage=0 )
 {
+	if( Def_Sys_FixHosyoHoseiDamegeOnly && _onlyDamage )
+	{
+		if( !Battle_Std.CheckEnemyisDamage() )
+		{
+			return;
+		}
+	}
+
 	local enemy = BMvCore.GetEnemyCharaData();
 	if( enemy.push() )
 	{
@@ -9527,6 +9584,13 @@ Battle_Std.EnemyGRD_Drain <- function( _val, _useflag = 0 )
 	Battle_Std.EnemyGRD_Minus( _val, _val, _useflag );
 }
 
+// GRD吸収済みかフラグのチェックのみ
+// def_DF_GRD_Minused_TypeAなど直接指定のチェックだと仕様変更に対応し辛いので噛ませ完成として作成
+Battle_Std.EnemyGRD_CheckMinused <- function( _type=0 ) : (use_grd_minus_flag)
+{
+	return Battle_Std.EnemyDamageFlag_Check( use_grd_minus_flag[_type] );
+}
+
 Battle_Std.LP_Rebagatya_Init <- function( _LP0=0, _LP1=1, _LP2=2 )
 {
 	BMvTbl.SetLP(_LP0,0); // 連打カウンタ
@@ -9725,19 +9789,18 @@ Battle_Std.SetSpHosyoHosei <- function( param = {} ) : ( hosyoParams )
 	
 	local useparam = hosyoParams[ param.type ];
 	hosyoParam.flag = useparam.flag;
-	
-	if( Def_Sys_DyingVeilOffHosei ) // UNI2 1.04
-	{
-		// 瀕死時は最低保障補整が緩く。初めからVPだったなら更に最低保障補整が緩くなる
-		hosyoParam.hosei = ( isDying && vpcombo )? useparam.dyinghosei : ( isDying )? useparam.suddundyinghosei : useparam.hosei;
-	}
-	else
-	{
-		// 常に最低保障補整を緩めにする（瀕死時に緩くする仕様を廃止）
-		hosyoParam.hosei = useparam.dyinghosei;
-	}
+	hosyoParam.hosei = ( isDying && vpcombo )? useparam.dyinghosei : ( isDying )? useparam.suddundyinghosei : useparam.hosei;
 	
 	_dp("\n ■SetSpHosyoHosei:"+param.type+" 補正:"+hosyoParam.hosei+"%" );
+	
+	if( Def_Sys_FixHosyoHoseiDamegeOnly )
+	{
+		if( !Battle_Std.CheckEnemyisDamage() )
+		{
+			_dpn(" ダメージ中ではないので保証フラグは立てない");
+			return 0;
+		}
+	}
 
 	// const def_DF_SpHosyoHoseiSeted_DoubleEx = 512; // EXの同技
 	// const def_DF_SpHosyoHoseiSeted_VOsukasi = 1024; // VOスカ
@@ -10397,7 +10460,7 @@ Battle_Std.SetInActiveEffect <- function()
 {
 	if( !Battle_Std.GS_CheckFlag( def_PP_GS_KeepInActive ) )
 	{
-		Battle_Std.DrawInActiveEffect(); // 相手にもやもやを出す
+		Battle_Std.DrawInActiveEffect(1); // 相手にもやもやを出す
 		
 		// GRD減少のデメリット
 		// でばなをくじかれた…カウンター的なニュアンス
@@ -10411,7 +10474,7 @@ Battle_Std.SetInActiveEffect <- function()
 	}
 }
 
-Battle_Std.DrawInActiveEffect <- function()
+Battle_Std.DrawInActiveEffect <- function( enableThrowInActive=0 )
 {
 	// 行動不能でガードでもやられでも無敵でもない
 	BMvEff.SetCharaFlash( { color = 0xFFA0A0, type = 0, time = 15 } ); //動けないので赤く光る
@@ -10424,8 +10487,16 @@ Battle_Std.DrawInActiveEffect <- function()
 		sety = (rc.ey - rc.sy)/4 + rc.sy; // 重なりの真ん中よりちょい上
 		// _dp("\n sety:"+sety);
 	}
-	Battle_Std.CreateObjectEX( { x=0, y=sety, datatype=1, pat="sternness", flags=_Position_ToolShift,
-	objectflags=_ObjFlags_MoveTimeStopAll } );
+	Battle_Std.CreateObjectEX( { x=0, y=sety, datatype=1, pat="sternness", flags=_Position_ToolShift, objectflags=_ObjFlags_MoveTimeStopAll } );
+	
+	if( Def_Sys_AddThrowInActiveEffect && enableThrowInActive )
+	{
+		local mvname = BMvTbl.GetMvName();
+		if( mvname == "Mv_Throw_F" )
+		{
+			Battle_Std.CreateObjectEX( { x=0, y=sety, datatype=1, pat="inthroweff", flags=_Position_ToolShift, objectflags=_ObjFlags_MoveTimeStopAll } );
+		}
+	}
 }
 
 //何が何でも相手の方を向く、振り向く
@@ -10752,7 +10823,7 @@ Battle_Std.Play_SubtitleVoice <- function( _se, _delay=120, _timelinetype=0 )
 	
 	
 	//未定義のときは*が入るのでそこでチェック
-	if( string != "*" )
+	if( string != "*" &&  BMvTbl.GetSubtitleFlag() == 1 ) // オプション設定　0:字幕なし　1:字幕あり
 	{
 		if( _timelinetype == 0 ) // common
 		{
@@ -11267,6 +11338,36 @@ Battle_Std.CallSystemHereYouAre <- function()
 		// ネットワーク対戦で、自分が操作キャラの場合
 		local eff = BMvEff.CreateObject( { datatype=1, start_pat="sys_you", mvname="Mv_SystemHereYouAre" } );
 	}
+}
+
+Battle_Std.EnemyIsMan <- function()
+{
+	return !Battle_Std.EnemyIsWoman();
+}
+
+// 女性かどうか
+Battle_Std.EnemyIsWoman <- function()
+{
+	local e_num = Battle_Std.GetEnemyCharaNo();
+	// _dpn("e_num:"+e_num);
+	if( e_num == Def_ChrNo_Lin
+	|| e_num == Def_ChrNo_Ori
+	|| e_num == Def_ChrNo_Vat
+	|| e_num == Def_ChrNo_Yuz
+	|| e_num == Def_ChrNo_Hil
+	|| e_num == Def_ChrNo_Elt
+	|| e_num == Def_ChrNo_Nan
+	|| e_num == Def_ChrNo_Wag
+	|| e_num == Def_ChrNo_Udu
+	|| e_num == Def_ChrNo_Mik
+	|| e_num == Def_ChrNo_Kag
+	|| e_num == Def_ChrNo_Pho
+	)
+	{
+		// _dpn("女性");
+		return 1;
+	}
+	return 0;
 }
 
 //事前にみつけたEX暗転マーク箇所にエフェクトをよびつつ暗転する

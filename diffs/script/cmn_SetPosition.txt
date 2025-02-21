@@ -541,6 +541,56 @@ BtlPl.SetPos_SetPositionInStage <- function( param )
 	}
 }
 
+
+
+// 相手との距離が近いときは進む距離を減らす
+// 対空技などですり抜けないようにするのがメイン
+// 1<<0 : 自分の移動ベクトルを考慮
+// 1<<1 : 相手の移動ベクトルを考慮
+BtlPl.SetPos_MoveWithDistanceLimit <- function( param={} )
+{
+	local addXpos = ("x" in param)? param.x : 0;
+	local min_x = ("min_x" in param)? param.min_x : 0;
+	local flags = ("flags" in param)? param.flags : 0;
+	if( addXpos == 0 ) return; // 何もしない
+	
+	// 相手との距離が近いときは進む距離を減らすようにして対空ですり抜けにくく
+	local kyori = Battle_Std.GetEnemyDistance();
+	
+	// ベクトル補正
+	local kyori_tmp = kyori;
+	if( flags&(1<<0) ) // 自分のベクトル考慮
+	{
+		local p_vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+		local p_muki = BMvTbl.GetMuki();
+		kyori_tmp += p_vec.x * p_muki;
+	}
+
+	if( flags&(1<<1) ) // 相手のベクトル考慮
+	{
+		local enemy = BMvCore.GetEnemyCharaData();
+		if( enemy.push() )
+		{
+			local e_vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+			local e_muki = BMvTbl.GetMuki();
+			enemy.pop();
+
+			// _dpn("ベクトル:"+p_vec.x+", "+e_vec.x );
+			
+			kyori_tmp += e_vec.x * e_muki;
+		}
+	}
+	kyori = kyori_tmp;
+	
+	// 限界値など
+	if( addXpos > kyori ) addXpos = kyori;
+	if( addXpos < min_x ) addXpos = min_x; // 最小値
+
+	BMvTbl.SetPosition( { x=addXpos, flags=_Position_Add|_Position_ChangeMuki } );
+	// _dpn("移動値:"+addXpos/128 );
+}
+
+
 //-----------------------------------------------------------------------------
 // オブジェクト専用
 //-----------------------------------------------------------------------------
@@ -738,3 +788,5 @@ BtlOb.SetPos_MarkingPlayerEtcRect <- function()
 {
 	return BtlOb.SetPos_MarkingEtcRect( BMvCore.GetPlayerCharaData() );
 }
+
+

@@ -1,0 +1,186 @@
+//コマンドテーブル skillは格ゲーコマンド表記
+btl_debPrint2("\n[OGR_CommandTable]");
+
+local t =
+{
+	Skill_41236SP = {},
+	Skill_41236SP_ABC = {},
+
+	Skill_236EX = {},
+	Skill_236BorC = {},
+	Skill_236A = {},
+	
+	// オーガは派生のレバー入れを極力無くす（UNI2っぽくはない）
+	
+	Skill_236A_Add =
+	{
+		num = def_CN_Skill_AddCommand1,
+		command = ["A","B","C"],
+		CmdCheck =
+		{
+			SkillType = "SpecialAdd",
+			MvCheck = { Only = ["Mv_Skill_236A"] },
+		}
+	},	
+	Skill_236B_Add =
+	{
+		num = def_CN_Skill_AddCommand2,
+		command = ["A","B","C"],
+		CmdCheck =
+		{
+			SkillType = "SpecialAdd",
+			MvCheck = { Only = ["Mv_Skill_236B"] },
+		}
+	},	
+	
+	Skill_214EX = {},	
+	Skill_214BorC = {},
+	Skill_214A = {},
+	
+	Skill_214A_AddA =
+	{
+		num = def_CN_Atk_AddCommand1, // こっちにしておかないとスマートステアが出ない
+		command = ["A"],
+		CmdCheck =
+		{
+			SkillType = "SpecialAdd",
+			MvCheck = { Only = ["Mv_Skill_214A"] },
+		}
+	},
+	Skill_214A_AddB =
+	{
+		num = def_CN_Skill_AddCommand4,
+		command = ["B"],
+		CmdCheck =
+		{
+			SkillType = "SpecialAdd",
+			MvCheck = { Only = ["Mv_Skill_214A"] },
+		}
+	},
+	Skill_214A_AddC =
+	{
+		num = def_CN_Skill_AddCommand5,
+		command = ["C"],
+		CmdCheck =
+		{
+			SkillType = "SpecialAdd",
+			MvCheck = { Only = ["Mv_Skill_214A"] },
+		}
+	},
+	
+	// 6246 or 624^ で出せる
+	Skill_63214EX = {
+		num=def_CN_Skill_41236EX, command = [
+		"63214@D,9@6C@D,12@","6314@D,9@6C@D,12@","6324@D,9@6C@D,12@","6214@D,9@6C@D,12@",
+		"63214^C","6314^C","6214^C","6324^C",
+		],
+		CmdCheck = { SkillType="ExSpecialJump" },
+	},
+	Skill_63214BorC = {
+		num=def_CN_Skill_41236B, command = [
+		"63214@D,9@6B@D,12@","6314@D,9@6B@D,12@","6324@D,9@6B@D,12@","6214@D,9@6B@D,12@",
+		"63214^B","6314^B","6214^B","6324^B",
+		"63214@D,9@6C@D,12@","6314@D,9@6C@D,12@","6324@D,9@6C@D,12@","6214@D,9@6C@D,12@",
+		"63214^C","6314^C","6214^C","6324^C",
+		]
+		CmdCheck = { SkillType="SpecialJump" },
+	},
+	Skill_63214A = {
+		num=def_CN_Skill_41236A, command = [
+		"63214@D,9@6A@D,12@","6314@D,9@6A@D,12@","6324@D,9@6A@D,12@","6214@D,9@6A@D,12@",
+		"63214^A","6314^A","6214^A","6324^A",
+		],
+		CmdCheck = { SkillType="SpecialJump" },
+	},
+	
+	// Skill_CircleEX = {},
+	// Skill_CircleBorC = {},
+	// Skill_CircleA = {},
+	
+	Skill_623A = {},	
+	Skill_623BorC = {},	
+	Skill_623EX = {},	
+
+	Skill_0202A = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Ogr_BombSnapReady)==0 ) return 0;
+			return 1;
+		}
+	},
+	Skill_0202BorC = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Ogr_BombSnapReady)==0 ) return 0;
+			return 1;
+		}
+	},
+	
+	Skill_020202EX = {},
+
+	Skill_J236EX = { CmdCheck = { BallLimit = { [2] = 1 } } },
+	Skill_J236BorC = { CmdCheck = { BallLimit = { [1] = 1 } } },
+	Skill_J236A = { CmdCheck = { BallLimit = { [1] = 1 } } },
+
+	Atk_Cro3C = {},	
+	Atk_Std6C = {},	
+	
+	Atk_Std6B = {
+		// CmdCheck = { SkillType="None" }, // キャンセルで出せなくする　やる場合はチュートリアルなど修正する
+	},	
+	Atk_Air2C = {},
+
+	//FF
+	Atk_StdBandC = {},
+	Atk_AirBandC = {
+		CmdBeforeFunc = function()
+		{
+			// 空中制限
+			if( BMvTbl.AddAirCount( def_ACS_OGR_JBandC, 0 ) >= 2 ) return 0; // ２回まで
+			return 1;
+		}
+	},
+
+}
+
+local ar =
+[
+	{
+		CheckMoveName="Mv_Atk_StdA",
+		UpdateMoveName="Mv_Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdB",
+		UpdateMoveName="Mv_Atk_StdC",
+		ResetTmplName="Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdC",
+		UpdateMoveName="Mv_Skill_214A",
+		ResetTmplName="Atk_StdC",
+	},
+	{
+		CheckMoveName="Mv_Skill_214A",
+		UpdateMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_214A",
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			FrameIDCheck = { Only = [100,110] },
+		},
+		CmdTmplFlags=def_CMDFlags_AnnounceSmaetSteer, //スマートステアアナウンスの追加
+	},
+	{
+		CheckMoveName="Mv_Skill_SSRelayAtk",
+		UpdateMoveName="Mv_Skill_41236SP",
+		CmdCheck = 
+		{
+			Cost = { ComboGauge = "OverLiberate" },
+			SkillType = "SpSpecial",
+			HitStatus="Damage",
+		}
+	},
+]
+Battle_Std.MakeStdCombo( t, ar );
+
+CHR025_CommandTable <- Battle_Std.MakeCommandTable( { command=t } );
