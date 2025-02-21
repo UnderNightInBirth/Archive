@@ -106,6 +106,7 @@ Battle_Std.GetStd_BattleStatusTable <- function()
 			{ pos= def_MVA_EXAtk	, gaugeplusval=[  80, 25, 50, 28 ],	finishtype=  1 }, // “ÁŽê‹ZiFFj
 			{ pos= def_MVA_Skill	, gaugeplusval=[ 110, 35, 35, 28 ],	finishtype=  1 }, // •KŽE‹Z CLR:[  65, 35, 50, 28 ]
 			{ pos= def_MVA_EXSkill	, gaugeplusval=[   0,  0, 35, 28 ],	finishtype=  1 }, // EX •KŽE‹Z
+			{ pos= def_MVA_SSSkill	, gaugeplusval=[  80, 35, 50, 28 ],	finishtype=  1 }, // SS •KŽE‹Z
 			{ pos= def_MVA_SPSkill	, gaugeplusval=[   0,  0, 35, 28 ],	finishtype=  2 }, // SP IW
 			{ pos= def_MVA_LASkill	, gaugeplusval=[   0,  0, 35, 28 ],	finishtype=  3 }, // LA IWE
 			{ pos= def_MVA_EXSystem , gaugeplusval=[   0,  0, 35, 28 ],	finishtype=  1 }, // EX(“ÁŽê) VOEIWEUŒ‚

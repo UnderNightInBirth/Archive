@@ -140,6 +140,16 @@ t.Convert <-
 			{
 				//やられ中のみ可
 				if( !Battle_Std.CheckEnemyisDamage() ) return 0;
+				
+				//SS技は空振りCSで補正がすごいことになる可能性があるので絶対に除外する
+				if( Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_SSRelayAtk ) )
+				{
+					if( !(BMvTbl.GetMvHitStatus().Type & _HitType_Hit) )
+					{
+						//_dpn("SS技はヒットしてないとダメ");
+						return 0;
+					}						
+				}
 			}
 		}
 		
@@ -169,6 +179,7 @@ t.Convert <-
 			//print("\n★　×")
 			BMvTbl.SetPP(def_PP_ChainShiftStatus,1);
 		}
+		return 1;
 	}
 	UpdateTable = { name = "Mv_Convert", }
 }
@@ -318,6 +329,9 @@ t.Skill_DyingIWEAtk <-
 	},
 	CmdBeforeStdFunc = function()
 	{
+		// MEMO:IWEはステアエンダーから繋がらないキャラもいて怪しいので一旦入れないことにする
+		// if( !Battle_Std.CheckSSRelayAtkExCancel( 1 ) ) return 0; // ステアエンダー後のみ有効なコマンドチェック
+
 		local mvs = BMvTbl.GetMvStatus();
 		if( mvs.flags & _MvStFlag_DangerHPDef )
 		{
@@ -325,7 +339,7 @@ t.Skill_DyingIWEAtk <-
 		}
 		else
 		{
-			_dp("\n 瀕死じゃない");
+			// _dp("\n 瀕死じゃない");
 			return 0;
 		}
 		// 基本的に地上じゃないと出せないけど、ヴェールオフのでかかりの時だけは空中でも出せる
@@ -360,7 +374,6 @@ t.Throw_F <-
 	CmdCheck =
 	{
 		SkillType = "SpecialThrow", MvCheck={ Fail="Mv_Throw_F"},
-		flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck,
 	},
 	CmdBeforeStdFunc = function()
 	{
@@ -374,17 +387,45 @@ t.Throw_F <-
 		//コマンドがきたら投げ抜け管理を生成する
 		Battle_Std.CreateTechObject(0); //投げ抜け猶予０から開始
 		
-		if( BMvTbl.IsCpu()==0 ) // プレイヤーの時
+		local is_reversal_command = BCMDTbl.IsDirectCommand();
+		
+		// ダミーに3を記録、リバーサル行動を投げ　→　投げ
+		// ダミーに3+Cを記録、リバーサル行動を投げ　→　3Cになって欲しい…が無理そう
+		
+		// if( BMvTbl.IsCpu()==0 || !is_reversal_command ) // プレイヤーの時、もしくはリバーサル行動じゃないとき（しゃがみ時にリバーサル行動で投げが出ないのは不便なので）
+		// このチェックだと、3+C＋リバーサル投げのときは投げになってしまう
+		// けど、リバーサル行動が出ないことのほうが違和感があるのでこっちに修正
+		
+		if( !is_reversal_command ) // これだけだと、リバーサル行動投げ+3Cの同時再生のとき、3Cが出ない
 		{
 			if( Def_Sys_ThrowF_EnableStick1 )
 			{
-				if( !(BMvTbl.CheckStickHold( (1<<4) | (1<<6) | (1<<0) | (1<<1) | (1<<3) ) ) )
+				local check3graps = BMvTbl.CheckCommand( ["Cmd_Atk_Cro3B","Cmd_Atk_Cro3C","Cmd_Atk_Std3B","Cmd_Atk_Std3C"] );
+				local stick3 = BMvTbl.CheckStickHold( (1<<3) );
+
+				// 3方向だけど特殊技を入れていないとき＝投げを成功させたい
+				// 3方向で特殊技を入れているときは、3Cグラなど優先のため失敗にする必要あり
+				local no3atkgraps = (!check3graps && stick3);
+
+				// 上記に加えて、3D>2 or 7 or 8 or 9と入れた場合、3Dに投げ抜けを仕込めるのもよくないのでそれは防ぐ
+				// 3Dが始まったらグラは仕込めなくする＝A+Dを検知したときレバーが2や3でも投げに行くようになる
+				// 3D以外も6Dや4Dで同じ現象は起きるが、防御テクとして結構強そうなので、今回は3Dだけ修正した
+				local nograpmv = ( BMvTbl.GetMvName()=="Mv_ForwardShift" )? 1 : 0; // グラップを仕込めないMV
+
+				//if( !(BMvTbl.CheckStickHold( (1<<4) | (1<<6) | (1<<0) | (1<<1) | (1<<3) ) ) ) // これだと3グラができない
+				if( !(BMvTbl.CheckStickHold( (1<<4) | (1<<6) | (1<<0) | (1<<1) ) || no3atkgraps ) && !nograpmv )
 				{
-					// 2ADといれてすぐに1にすると投げが漏れるのは嫌なので塞ぐ
+					// 2ADといれてすぐに1にすると投げが漏れるのは嫌なので一定時間塞ぐ
 					// 一定時間投げ成功しないようにする
 					BMvTbl.SetCommandFailTime( { command=def_CN_Throw_F, time=3 } );
+					
+					// よくあるガードリバーサルだけ上記チェックを延長する
+					if( Battle_Std.CheckPlayerisGuard() )
+					{
+						BMvEff.CreateObject( { mvname="Mv_Null_GuardReversalThrowBouhatsuChecker" } );
+					}
 
-					return 0; //2グラ以外は禁止
+					return 0; //2と3グラ以外は禁止
 				}
 			}
 			else
@@ -1427,20 +1468,7 @@ t.Skill_41236SP <-
 	num = def_CN_Skill_41236SP, name = "Cmd_Skill_41236SP", command = ["41@D,13@236D",Def_CMD_Ex0_41236D,Def_CMD_Ex1_41236D,Def_CMD_Ex2_41236D,"41@D,13@236D@L,30@",Def_CMD_ExA_41236D,Def_CMD_ExB_41236D,Def_CMD_ExC_41236D], usegauge = 20000,
 	CmdBeforeStdFunc = function()
 	{
-		local cmd_pos = BCMDTbl.GetSuccessButtonPos();
-		if( cmd_pos >= 4 )
-		{
-			local cancel = BCMDTbl.CheckCancel(_SkillType_ExSpecial );
-			if( Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_SSRelayAtk ) && !Battle_Std.CharaisKO() && cancel!=255 && cancel!=0 )
-			{
-				_dpn("SS技っぽいので受付めっちゃ長い");
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		
+		if( !Battle_Std.CheckSSRelayAtkExCancel( 4 ) ) return 0; // ステアエンダー後のみ有効なコマンドチェック
 		return 1;
 	}	
 	CmdCheck = { MvCheck={ SkillFail="Mv_Skill_41236SP"}, Cost = { ComboGauge = "OverLiberate" }, SkillType = "SpSpecial", },
@@ -1466,9 +1494,11 @@ t.Skill_41236SP <-
 // コンボVO経由のコンボのみの仕様
 t.Skill_41236SP_ABC <- 
 { //-------------------------------
-	num = def_CN_Skill_41236SP_ABC, name = "Cmd_Skill_41236SP_ABC", command = ["A+B+C"], usegauge = 20000,
+	num = def_CN_Skill_41236SP_ABC, name = "Cmd_Skill_41236SP_ABC", command = ["A+B+C","A+B+C@L,30@"], usegauge = 20000,
 	CmdBeforeStdFunc = function()
 	{
+		if( !Battle_Std.CheckSSRelayAtkExCancel( 1 ) ) return 0; // ステアエンダー後のみ有効なコマンドチェック
+
 		// クロスキャストヴェールオフ中のみA+B+CでIWが出せるよ
 		local gauge_status = BMvEff.Liberate_Get();
 		if( gauge_status == _SpGaugeMode_Normal ) return 0; //ゲージVO状態でしか出せない
@@ -2437,6 +2467,8 @@ t.Atk_CroAandB <-
 	flags = [ "lastdelay" ],
 	function CmdBeforeStdFunc()
 	{
+		/*
+		//コマンドチェックの処理が新しくなっているのでこのあたりのチェックは不要のはず
 		//6+A+Bか4+A+Bでダッシュしようとした直後は出せない（先行入力用）
 		if( BMvTbl.GetPP(def_PP_CmdStatus)&def_PP_CS_InputDoujiDash_F )
 		{
@@ -2451,11 +2483,11 @@ t.Atk_CroAandB <-
 		{
 			return 0;
 		}
+		*/
 		return 1;
 	}
 	CmdCheck = { SkillType = "SpecialDouji", ComboLimit = DEF_BS_CL_ATKCAANDB,
-	MvCheck={ SkillFail="Mv_Atk_CroAandB"},
-	flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck },
+	MvCheck={ SkillFail="Mv_Atk_CroAandB"}, },
 	UpdateTable = { name = "Mv_Atk_CroAandB", }
 }
 
@@ -2465,8 +2497,7 @@ t.Atk_StdAandB <-
 	num = def_CN_AtkAandB, name = "Cmd_Atk_StdAandB", command = "A+B",
 	flags = [ "lastdelay" ],
 	CmdCheck = { SkillType = "SpecialDouji", ComboLimit = DEF_BS_CL_ATKAANDB,
-	MvCheck={ SkillFail="Mv_Atk_StdAandB"},
-	flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck },
+	MvCheck={ SkillFail="Mv_Atk_StdAandB"}, },
 	UpdateTable = { name = "Mv_Atk_StdAandB", }
 }
 
@@ -2492,8 +2523,7 @@ t.Atk_AirAandB <-
 	num = def_CN_AtkJAandB, name = "Cmd_Atk_AirAandB", command = "A+B",
 	flags = [ "lastdelay","airskill" ], posstatus = _PosState_Air,
 	CmdCheck = { SkillType = "SpecialDouji", PosState="Air", ComboLimit = DEF_BS_CL_ATKJAANDB,
-	MvCheck={ SkillFail="Mv_Atk_AirAandB"},
-	flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck },
+	MvCheck={ SkillFail="Mv_Atk_AirAandB"}, },
 	UpdateTable = { name = "Mv_Atk_AirAandB", }
 }
 
@@ -2505,8 +2535,7 @@ t.Atk_CroBandC <-
 	num = def_CN_AtkCBandC, name = "Cmd_Atk_CroBandC", command = "v+B+C",
 	flags = [ "lastdelay" ],
 	CmdCheck = { SkillType = "SpecialDouji", ComboLimit = DEF_BS_CL_ATKBANDC,
-	MvCheck={ SkillFail="Mv_Atk_CroBandC"},	
-	flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck },	
+	MvCheck={ SkillFail="Mv_Atk_CroBandC"},	},	
 	UpdateTable = { name = "Mv_Atk_CroBandC", }
 }
 
@@ -2515,8 +2544,7 @@ t.Atk_StdBandC <-
 	num = def_CN_AtkBandC, name = "Cmd_Atk_StdBandC", command = "B+C",
 	flags = [ "lastdelay" ],
 	CmdCheck = { SkillType = "SpecialDouji", ComboLimit = DEF_BS_CL_ATKBANDC,
-	MvCheck={ SkillFail="Mv_Atk_StdBandC"},
-	flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck },
+	MvCheck={ SkillFail="Mv_Atk_StdBandC"}, },
 	UpdateTable = { name = "Mv_Atk_StdBandC", }
 }
 

@@ -1,0 +1,489 @@
+//コマンドテーブル skillは格ゲーコマンド表記
+btl_debPrint2("\n[UDU_CommandTable]");
+
+//受け身に使ったボタンのホールドは無効にする
+local HoldCheck = function(button=1)
+{
+	local pp = BMvTbl.GetPP(def_PP_RecoverHoldMask);
+	//_dm("結果："+pp+" button:"+button);
+	if( (BMvTbl.GetPP(def_PP_RecoverHoldMask)&button) !=0 )
+	{
+		return 0; //使えない
+	}
+	else
+	{
+		return 1; //使える
+	}
+};
+
+// def_MC_CharaFlag1 : FF状態
+// def_MC_CharaFlag2 : 棺状態
+//Param2
+//&1 : FFや棺状態で行動可能みたいなとき。全ての技が出せる。
+local check_FFAtk = function( param2_flags=0 )
+{
+	if( BMvTbl.GetPP(def_PP_Udu_FFKeep) > 0 )
+	{
+		if( Battle_Std.MoveCode.CheckFlag( def_MC_CharaFlag1 ) ) // FF状態
+		{
+			if( !param2_flags ) return 1; // Paramチェックがないので成功に
+			
+			if( BMvTbl.GetMvStatus().Param2&param2_flags )
+			{
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+local Coffin = {};
+
+// type 1:param2&1に加えて必殺CならOK
+Coffin.CheckOnCoffinMove <- function( type = 0 )
+{
+	if( !Battle_Std.MoveCode.CheckFlag( def_MC_CharaFlag2 ) ) return 0; // 棺乗り技が出せる状態
+	if( BMvTbl.GetMvStatus().Param2&1 ) // Baseについているだけのフラグの模様
+	{
+		// ここは出せる
+	}
+	else
+	{
+		//行動不能みたいな状態
+		if( type == 1 && BCMDTbl.CheckCancel( _SkillType_Special ) )
+		{
+		}
+		else
+		{
+			return 0; // 必殺C
+		}
+	}
+	return 1;
+}
+
+local t =
+{
+	Skill_41236SP = {},
+	Skill_41236SP_ABC = {},
+
+	Skill_236EX = {},
+	Skill_236BorC = {},
+	Skill_236A = {},
+
+	Skill_0202EX = {},	
+	Skill_0202BorC = {},
+	Skill_0202A = {},	
+	
+	Skill_214C = {},
+	Skill_214B = {},
+	Skill_214A = {},
+	
+	//棺への移動
+	Skill_214A_AddMove = {
+		num = def_CN_Skill_AddCommand2, command = ["4D@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214A"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214B_AddMove = {
+		num = def_CN_Skill_AddCommand3, command = ["4D@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214B"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214C_AddMove = {
+		num = def_CN_Skill_AddCommand4, command = ["4D@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214C"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	
+	Skill_214A_AddA = {
+		num = def_CN_Skill_AddCommand5, command = ["4A@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214A"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214A_AddB = {
+		num = def_CN_Skill_AddCommand6, command = ["4B@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214A"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214A_AddC = {
+		num = def_CN_Skill_AddCommand7, command = ["4C@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214A"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	
+	Skill_214B_AddA = {
+		num = def_CN_Skill_AddCommand8, command = ["4A@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214B"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214B_AddB = {
+		num = def_CN_Skill_AddCommand9, command = ["4B@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214B"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214B_AddC = {
+		num = def_CN_Skill_AddCommand10, command = ["4C@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214B"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}	
+	Skill_214C_AddA = {
+		num = def_CN_Skill_AddCommand11, command = ["4A@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214C"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214C_AddB = {
+		num = def_CN_Skill_AddCommand12, command = ["4B@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214C"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214C_AddC = {
+		num = def_CN_Skill_AddCommand13, command = ["4C@L,8@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_214C"] }, ParamFlagCheck = { Only = { [1]=1 } }, },
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_PP_Udu_CoffinType) == 0 || BMvTbl.GetPP(def_PP_Udu_CanRideCoffin) == 0 ) return 0; //棺がない
+			return 1;
+		}
+	}
+	Skill_214_AddJump = {
+		num = def_CN_Skill_AddCommand27, command = ["^"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", HitStatus="Damage", MvCheck = { Only = ["Mv_Skill_214A_AddB"] }, },
+	}
+
+	//棺からの攻撃
+	Skill_OCA_AtkD = {
+		num = def_CN_Skill_AddCommand14, command = ["A+D"],
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { DoujiOnly = ["Mv_Skill_OnCoffinBaseA"] }, }, // 同時押し猶予あり
+	}
+	Skill_OCA_AtkA = {
+		num = def_CN_Skill_AddCommand15, command = ["A"],
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_OnCoffinBaseA"] }, },
+	}	
+	Skill_OCA_AtkB = {
+		num = def_CN_Skill_AddCommand16, command = ["B"],
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_OnCoffinBaseA"] }, },
+	}	
+	Skill_OCA_AtkC = {
+		num = def_CN_Skill_AddCommand17, command = ["C"],
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_OnCoffinBaseA"] }, },
+	}
+	
+	Skill_OCB_AtkD = {
+		num = def_CN_Skill_AddCommand18, posstatus = _PosState_Air, command = ["A+D"],
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { DoujiOnly = ["Mv_Skill_OnCoffinBaseB"] }, }, // 同時押し猶予あり
+	}	
+	Skill_OCB_AtkA = {
+		num = def_CN_Skill_AddCommand19, posstatus = _PosState_Air, command = ["A"],
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_OnCoffinBaseB"] }, },
+	}	
+	Skill_OCB_AtkB = {
+		num = def_CN_Skill_AddCommand20, posstatus = _PosState_Air, command = ["B"],
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_OnCoffinBaseB"] }, },
+	}	
+	Skill_OCB_AtkC = {
+		num = def_CN_Skill_AddCommand21, posstatus = _PosState_Air, command = ["C"],
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Skill_OnCoffinBaseB"] }, },
+	}	
+	
+	Atk_OnCoffin_ToJumpF = {
+		num = def_CN_Skill_AddCommand22, posstatus = _PosState_Always, command = ["9"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		function CmdBeforeFunc() : (Coffin)
+		{
+			if( !Coffin.CheckOnCoffinMove(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "AddCommand",
+		MvCheck = { Only = ["Mv_Skill_OnCoffinBaseA","Mv_Skill_OnCoffinBaseB",
+		"Mv_Skill_OCA_AtkA","Mv_Skill_OCA_AtkB","Mv_Skill_OCA_AtkC",
+		"Mv_Skill_OCB_AtkA","Mv_Skill_OCB_AtkB","Mv_Skill_OCB_AtkC"] }, },
+	}	
+	Atk_OnCoffin_ToJumpN = {
+		num = def_CN_Skill_AddCommand23, posstatus = _PosState_Always, command = ["8"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		function CmdBeforeFunc() : (Coffin)
+		{
+			if( !Coffin.CheckOnCoffinMove(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "AddCommand",
+		MvCheck = { Only = ["Mv_Skill_OnCoffinBaseA","Mv_Skill_OnCoffinBaseB",
+		"Mv_Skill_OCA_AtkA","Mv_Skill_OCA_AtkB","Mv_Skill_OCA_AtkC",
+		"Mv_Skill_OCB_AtkA","Mv_Skill_OCB_AtkB","Mv_Skill_OCB_AtkC"] }, },
+	}	
+	Atk_OnCoffin_ToJumpB = {
+		num = def_CN_Skill_AddCommand24, posstatus = _PosState_Always, command = ["7"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		function CmdBeforeFunc() : (Coffin)
+		{
+			if( !Coffin.CheckOnCoffinMove(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "AddCommand",
+		MvCheck = { Only = ["Mv_Skill_OnCoffinBaseA","Mv_Skill_OnCoffinBaseB",
+		"Mv_Skill_OCA_AtkA","Mv_Skill_OCA_AtkB","Mv_Skill_OCA_AtkC",
+		"Mv_Skill_OCB_AtkA","Mv_Skill_OCB_AtkB","Mv_Skill_OCB_AtkC"] }, },
+	}
+
+	// これは必殺技扱い（無敵アナウンスとか出す＋技っぽいので）
+	Skill_OnCoffinA_ToWarpB = {
+		num = def_CN_Skill_AddCommand25, command = ["4D"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		function CmdBeforeFunc() : (Coffin)
+		{
+			if( !Coffin.CheckOnCoffinMove(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "AddCommand",
+		MvCheck = { Only = ["Mv_Skill_OnCoffinBaseA",
+		"Mv_Skill_OCA_AtkA","Mv_Skill_OCA_AtkB","Mv_Skill_OCA_AtkC"] }, },
+	}
+
+	Skill_OnCoffinB_ToWarpB = {
+		num = def_CN_Skill_AddCommand26, posstatus = _PosState_Always, command = ["4D"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		function CmdBeforeFunc() : (Coffin)
+		{
+			if( !Coffin.CheckOnCoffinMove(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "AddCommand",
+		MvCheck = { Only = ["Mv_Skill_OnCoffinBaseB",
+		"Mv_Skill_OCB_AtkA","Mv_Skill_OCB_AtkB","Mv_Skill_OCB_AtkC"] }, },
+	}	
+
+	// A棺を地上判定にしたのでAirCountが初期化されるため、特殊な処理を入れているので注意
+	Skill_J214C = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.AddAirCount( 1, 0 ) ) return 0; // 何回も出せないようにする
+			return 1;
+		}
+	},
+	Skill_J214B = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.AddAirCount( 1, 0 ) ) return 0; // 何回も出せないようにする
+			return 1;
+		}
+	},
+	Skill_J214A = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.AddAirCount( 1, 0 ) ) return 0; // 何回も出せないようにする
+			return 1;
+		}
+	},
+	
+	
+	// Skill_623A = {},	
+	// Skill_623BorC = {},	
+	// Skill_623EX = {},	
+
+	Skill_J236EX = { },
+	Skill_J236BorC = { },
+	Skill_J236A = {},
+	
+	Atk_Cro3C = {},	
+	Atk_Std6C = {},	
+	Atk_Std4C = {},	
+	Atk_Air2C = {},
+	
+	//FF
+	Atk_StdBandC = {}, // 潜る
+	Atk_AirBandC = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.AddAirCount( 0, 0 ) ) return 0;
+			return 1;
+		}
+		CmdCheck = { HeightLimit = def_POS_AirDashLimitHeight, }
+	},
+
+	Atk_CroBandC = {}, // アイテム投げ
+	
+	Atk_FF_DashF =
+	{
+		num = def_CN_Basic_AddMove3, name = "Cmd_Atk_FF_FashF", command = ["0606","6+A+B"],
+		flags = [ "lastdelay" ],
+		function CmdBeforeFunc() : (check_FFAtk)
+		{
+			if( !check_FFAtk(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "Special", MvCheck = { Fail = ["Mv_Atk_FF_DashF"] }, },
+	},	
+	Atk_FF_DashB =
+	{
+		num = def_CN_Basic_AddMove4, name = "Cmd_Atk_FF_FashB", command = ["0404","4+A+B"],
+		flags = [ "lastdelay" ],
+		function CmdBeforeFunc() : (check_FFAtk)
+		{
+			if( !check_FFAtk(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "Special", MvCheck = { Fail = ["Mv_Atk_FF_DashB"] }, },
+	},	
+	
+	Atk_FF_ToJumpF =
+	{
+		num = def_CN_Basic_AddMove7, name = "Cmd_Atk_FF_ToJumpF", command = ["9"],
+		function CmdBeforeFunc() : (check_FFAtk)
+		{
+			if( !check_FFAtk(1) ) return 0;
+			if( BMvTbl.GetPP(def_PP_Udu_FFKeep) != 2 ) return 0; // FFになって少したったら
+			return 1;
+		}
+		CmdCheck = { SkillType = "Special", MvCheck = { Fail = ["Atk_FF_ToJumpF"] }, },
+	},
+	Atk_FF_ToJumpN =
+	{
+		num = def_CN_Basic_AddMove8, name = "Cmd_Atk_FF_ToJumpN", command = ["8"],
+		function CmdBeforeFunc() : (check_FFAtk)
+		{
+			if( !check_FFAtk(1) ) return 0;
+			if( BMvTbl.GetPP(def_PP_Udu_FFKeep) != 2 ) return 0; // FFになって少したったら
+			return 1;
+		}
+		CmdCheck = { SkillType = "Special", MvCheck = { Fail = ["Atk_FF_ToJumpN"] }, },
+	},
+	Atk_FF_ToJumpB =
+	{
+		num = def_CN_Basic_AddMove9, name = "Cmd_Atk_FF_ToJumpB", command = ["7"],
+		function CmdBeforeFunc() : (check_FFAtk)
+		{
+			if( !check_FFAtk(1) ) return 0;
+			if( BMvTbl.GetPP(def_PP_Udu_FFKeep) != 2 ) return 0; // FFになって少したったら
+			return 1;
+		}
+		CmdCheck = { SkillType = "Special", MvCheck = { Fail = ["Atk_FF_ToJumpB"] }, },
+	},
+	
+	Atk_FF_WalkF =
+	{
+		num = def_CN_Basic_AddMove20, name = "Cmd_Atk_FF_WalkF", command = [">"],
+		function CmdBeforeFunc() : (check_FFAtk)
+		{
+			if( !check_FFAtk(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "Special", MvCheck = { Fail = ["Mv_Atk_FF_WalkF","Mv_Atk_FF_WalkB","Mv_Atk_FF_WalkStopF","Mv_Atk_FF_WalkStopB"] }, },
+	},
+	Atk_FF_WalkB =
+	{
+		num = def_CN_Basic_AddMove21, name = "Cmd_Atk_FF_WalkB", command = ["<"],
+		function CmdBeforeFunc() : (check_FFAtk)
+		{
+			if( !check_FFAtk(1) ) return 0;
+			return 1;
+		}
+		CmdCheck = { SkillType = "Special", MvCheck = { Fail = ["Mv_Atk_FF_WalkF","Mv_Atk_FF_WalkB","Mv_Atk_FF_WalkStopF","Mv_Atk_FF_WalkStopB"] }, },
+	},
+
+}
+
+local ar =
+[
+	{
+		CheckMoveName="Mv_Atk_StdA",
+		UpdateMoveName="Mv_Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdB",
+		UpdateMoveName="Mv_Atk_StdC",
+		ResetTmplName="Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdC",
+		UpdateMoveName="Mv_Atk_CroC",
+		ResetTmplName="Atk_StdC",
+	},
+	{
+		CheckMoveName="Mv_Atk_CroC",
+		UpdateMoveName="Mv_Skill_0202A",
+		ResetTmplName="Atk_CroC",
+	},
+	{
+		CheckMoveName="Mv_Skill_0202A",
+		UpdateMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_0202A",
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			FrameIDCheck = { Only = [105] },
+		},
+		CmdTmplFlags=def_CMDFlags_AnnounceSmaetSteer, //スマートステアアナウンスの追加
+	},
+	{
+		CheckMoveName="Mv_Skill_SSRelayAtk",
+		UpdateMoveName="Mv_Skill_41236SP",
+		CmdCheck = 
+		{
+			Cost = { ComboGauge = "OverLiberate" },
+			SkillType = "SpSpecial",
+			HitStatus="Damage",
+		}
+	},
+]
+Battle_Std.MakeStdCombo( t, ar );
+
+
+CHR020_CommandTable <- Battle_Std.MakeCommandTable( { command=t } );
+

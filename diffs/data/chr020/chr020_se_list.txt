@@ -1,0 +1,378 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか
+	Path = [],	// パス設定簡略化用
+	Status = [],	// 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); //Path[0]
+SeList_Table.Path.append( "./se/battle_se/chr020/" ); //Path[1]
+SeList_Table.Path.append( "./se/battle_se/" ); //Path[2]
+
+SeList_Table.Status.resize(500); // 確保
+local st = SeList_Table.Status; // 登録しやすいように省略
+
+// SE関連
+st[10] = { volumetype=0, path=2, type=1, category=-1, file="SE_DrillSpin" }; //ドリル回転
+st[11] = { volumetype=0, path=2, type=1, category=-1, file="SE_Parasol" }; //傘展開
+st[12] = { volumetype=0, path=2, type=1, category=-1, file="SE_Ghost" }; //おばけ攻撃
+st[13] = { volumetype=0, path=2, type=1, category=-1, file="SE_BoneRoll" }; //骨が転がる音
+st[14] = { volumetype=0, path=2, type=1, category=-1, file="SE_BoneScraping_Swing" }; //骨の擦過音
+st[15] = { volumetype=0, path=2, type=1, category=-1, file="SE_BoneScraping_Trust" }; //骨の擦過音    
+// st[16] = { volumetype=0, path=2, type=1, category=-1, file="SE_DropCandy" }; //飴玉が落ちる音
+st[17] = { volumetype=0, path=2, type=1, category=-1, file="SE_GrassBreakShort" }; //ガラス割れ（短）
+st[18] = { volumetype=0, path=2, type=1, category=-1, file="SE_StuffedToy_01" }; //ぬいぐるみの足音
+st[19] = { volumetype=0, path=2, type=1, category=-1, file="SE_StuffedToy_02" }; //ぬいぐるみの足音      
+// st[20] = { volumetype=0, path=2, type=1, category=-1, file="SE_HealHP" }; //回復音（体力）
+// st[21] = { volumetype=0, path=2, type=1, category=-1, file="SE_HealEXS" }; //回復音（EXS）
+st[22] = { volumetype=0, path=2, type=1, category=-1, file="SE_PowerDown" }; //デバフ音
+st[23] = { volumetype=0, path=2, type=1, category=-1, file="SE_PoisonGus" }; //毒ガス噴射
+
+// FF
+st[24] = { volumetype=0, path=2, type=1, category=-1, file="SE_Dive" }; //潜水
+st[25] = { volumetype=0, path=2, type=1, category=-1, file="SE_LandingWater" }; //着水
+
+st[26] = { volumetype=0, path=2, type=1, category=-1, file="SE_BoundHeavy" }; //重い衝撃音
+st[27] = { volumetype=0, path=2, type=1, category=-1, file="SE_OpenDoor" }; //扉開閉音
+st[28] = { volumetype=0, path=2, type=1, category=-1, file="SE_Spring" }; //バネ
+st[29] = { volumetype=0, path=2, type=1, category=-1, file="SE_BoneFlap" }; //骸骨の羽ばたき
+st[30] = { volumetype=0, path=2, type=1, category=-1, file="SE_SummonShort" }; //召喚音（短）
+
+st[31] = { volumetype=0, path=2, type=1, category=-1, file="SE_RoaringA" }; // 人形吠える
+st[32] = { volumetype=0, path=2, type=1, category=-1, file="SE_Bomb" }; // 爆弾爆発
+
+//IW
+st[41] = { volumetype=0, path=2, type=1, category=-1, file="SE_SummonLong" }; //召喚音（長）
+st[42] = { volumetype=0, path=2, type=1, category=-1, file="SE_ManaCharge" }; //魔力弾チャージ
+st[43] = { volumetype=0, path=2, type=1, category=-1, file="SE_ManaBurst" }; //魔力弾臨界
+st[44] = { volumetype=0, path=2, type=1, category=-1, file="SE_BombEnergy" }; // 爆弾吸収
+
+//IWE
+st[64] = { volumetype=0, path=2, type=1, category=-1, file="SE_OpenCurtain" }; //暗幕オープン
+st[65] = { volumetype=0, path=2, type=1, category=-1, file="SE_CandleLighting" }; //蝋燭点火
+st[66] = { volumetype=0, path=2, type=1, category=-1, file="SE_HauntedHouse" }; //お化け屋敷
+st[67] = { volumetype=0, path=2, type=1, category=-1, file="SE_ManaDrain" }; //魔力吸収
+
+
+
+// 登場
+st[100] = { volumetype=1, path=1, file="udu_010_b_2000", type=0, category=1, userparam=150 }; //「邪魔すんなら消しちまうぜぇ！」
+st[101] = { volumetype=1, path=1, file="udu_010_b_2001", type=0, category=1, userparam=164 }; //「旨そうな『顕現(イグジス)』だなぁおい！」
+st[102] = { volumetype=1, path=1, file="udu_010_b_2002", type=0, category=1, userparam=242 }; //「オメーにも見せてやろうか？地獄ってやつをよぉ！」
+st[103] = { volumetype=1, path=1, file="udu_010_b_2003", type=0, category=1, userparam=205 }; //「オレ様に歯向かって無事で済むと思うなよぉ！」
+
+// 登場 特殊
+
+// 対オリエ
+st[108] = { volumetype=1, path=1, file="udu_010_b_2012", type=0, category=1, userparam=183 }; //「失礼な、こいつらはトモダチだよ」
+
+// 対ハイド
+st[111] = { volumetype=1, path=1, file="udu_010_b_2015", type=0, category=1, userparam=293 }; //「ヒッヒッヒ、お前の魂もその器から解放してやろう」
+
+// 対クオン
+st[114] = { volumetype=1, path=1, file="udu_010_b_2018", type=0, category=1, userparam=176 }; //「そりゃ、テメェの悲鳴次第だなぁ」
+
+// 対ヒルダ
+st[117] = { volumetype=1, path=1, file="udu_010_b_2021", type=0, category=1, userparam=187 }; //「な？　こうなるのは運命なんだよ」
+
+// 対エンキ
+st[120] = { volumetype=1, path=1, file="udu_010_b_2024", type=0, category=1, userparam=152 }; //「んなモン、最初からねぇよ」
+
+// 対ケイアス
+st[123] = { volumetype=1, path=1, file="udu_010_b_2027", type=0, category=1, userparam=235 }; //「隠し事、企み事…、嫌いじゃねぇがな」
+
+// ラウンド勝利
+st[135] = { volumetype=1, path=1, file="udu_010_b_2100", type=0, category=1, userparam=223 }; //「立てよ、死んだフリなんざ通じねえっつうの」
+st[136] = { volumetype=1, path=1, file="udu_010_b_2101", type=0, category=1, userparam=124 }; //「ふん、ざまぁねえなぁ！」
+st[137] = { volumetype=1, path=1, file="udu_010_b_2102", type=0, category=1, userparam=174 }; //「もう終わりかぁ？つまんねぇなぁ」
+
+// 決着勝利 汎用
+st[140] = { volumetype=1, path=1, file="udu_010_b_2111", type=0, category=1, userparam=224 }; //「キシシシシ、その『顕現(イグジス)』いただくぜぇ」
+st[141] = { volumetype=1, path=1, file="udu_010_b_2112", type=0, category=1, userparam=213 }; //「ヒャッヒャッヒャ、辞世の句は決まったかぁ？」
+st[142] = { volumetype=1, path=1, file="udu_010_b_2113", type=0, category=1, userparam=181 }; //「さ～て、どう料理してやろうかねぇ……」
+st[143] = { volumetype=1, path=1, file="udu_010_b_2114", type=0, category=1, userparam=173 }; //「なんだ、口ほどにもねえなぁ」
+
+// 決着勝利 辛勝
+st[146] = { volumetype=1, path=1, file="udu_010_b_2120", type=0, category=1, userparam=237 }; //「イッヒッヒッヒ、手間ぁかけさせてくれたなぁ」
+
+// 決着勝利 楽勝
+st[149] = { volumetype=1, path=1, file="udu_010_b_2123_b", type=0, category=1, userparam=228 }; //「フヒヒヒヒ、その程度の腕でよく今まで生き残れたなぁ！？」
+
+// 決着勝利 掛け合い
+// 対ヒルダ
+st[154] = { volumetype=1, path=1, file="udu_010_b_2127", type=0, category=1, userparam=233 }; //「なんだなんだぁ？こんなもんかよパラドクスぅ？」
+
+// タイムアップ判定負け
+st[157] = { volumetype=1, path=1, file="udu_010_b_2200", type=0, category=1, }; //「か～～～っ、煮え切らねえなぁ！」
+st[158] = { volumetype=1, path=1, file="udu_010_b_2201", type=0, category=1, }; //「あ～、ペース配分ミスっちまったぜ……」
+st[159] = { volumetype=1, path=1, file="udu_010_b_2202", type=0, category=1, }; //「は～～～！？んだよもう……」
+
+// 弱攻撃
+st[166] = { volumetype=1, path=1, file="udu_010_b_2300_a", type=0, category=1, }; //「は」
+st[167] = { volumetype=1, path=1, file="udu_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[168] = { volumetype=1, path=1, file="udu_010_b_2302_a", type=0, category=1, }; //「や」
+st[169] = { volumetype=1, path=1, file="udu_010_b_2303_a", type=0, category=1, }; //「し」
+st[170] = { volumetype=1, path=1, file="udu_010_b_2301_b", type=0, category=1, }; //「ふ」
+st[171] = { volumetype=1, path=1, file="udu_010_b_2302_b", type=0, category=1, }; //「や」
+st[172] = { volumetype=1, path=1, file="udu_010_b_2300_b", type=0, category=1, }; //「は」
+
+// 中攻撃
+st[177] = { volumetype=1, path=1, file="udu_010_b_2402_a", type=0, category=1, }; //「たっ」
+st[178] = { volumetype=1, path=1, file="udu_010_b_2403_a", type=0, category=1, }; //「しっ」
+st[179] = { volumetype=1, path=1, file="udu_010_b_2404_a", type=0, category=1, }; //「ひひっ」	// FF中ステップで使用
+st[180] = { volumetype=1, path=1, file="udu_010_b_2405_a", type=0, category=1, }; //「きひゃっ」
+
+st[181] = { volumetype=1, path=1, file="udu_010_b_2401_b", type=0, category=1, }; //「やっ」
+st[182] = { volumetype=1, path=1, file="udu_010_b_2403_b", type=0, category=1, }; //「しっ」
+st[183] = { volumetype=1, path=1, file="udu_010_b_2404_b", type=0, category=1, }; //「ひひっ」
+st[184] = { volumetype=1, path=1, file="udu_010_b_2405_b", type=0, category=1, }; //「きひゃっ」
+st[185] = { volumetype=1, path=1, file="udu_010_b_2400_b", type=0, category=1, }; //「せっ」
+st[186] = { volumetype=1, path=1, file="udu_010_b_2402_b", type=0, category=1, }; //「たっ」
+
+// 強攻撃
+st[187] = { volumetype=1, path=1, file="udu_010_b_2500_a", type=0, category=1, }; //「やあっ！」
+st[188] = { volumetype=1, path=1, file="udu_010_b_2501_a", type=0, category=1, }; //「せぃっ！」
+st[189] = { volumetype=1, path=1, file="udu_010_b_2502_a", type=0, category=1, }; //「はあっ！」
+st[190] = { volumetype=1, path=1, file="udu_010_b_2503_a", type=0, category=1, }; //「たあっ！」
+st[192] = { volumetype=1, path=1, file="udu_010_b_2500_b", type=0, category=1, }; //「やあっ！」
+st[193] = { volumetype=1, path=1, file="udu_010_b_2503_b", type=0, category=1, }; //「たあっ！」
+
+// 吹き飛ばし攻撃
+st[194] = { volumetype=1, path=1, file="udu_010_b_2600", type=0, category=1, }; //「ヒャッハァ！」※予備
+st[195] = { volumetype=1, path=1, file="udu_010_b_2601", type=0, category=1, }; //「舐めんなぁ！」 4[C]
+st[196] = { volumetype=1, path=1, file="udu_010_b_2602", type=0, category=1, }; //「ざまぁ！」
+st[197] = { volumetype=1, path=1, file="udu_010_b_2603", type=0, category=1, }; //「キシャ―ッ！」※予備
+
+st[198] = { volumetype=1, path=1, file="udu_010_b_2502_b", type=0, category=1, }; //「はあっ！」
+st[199] = { volumetype=1, path=1, file="udu_010_b_2504_b", type=0, category=1, }; //「えいっ！」
+
+st[200] = { volumetype=1, path=1, file="udu_010_b_2501_b", type=0, category=1, }; //「せぃっ！」※予備
+
+
+// 回避困難な攻撃
+st[203] = { volumetype=1, path=1, file="udu_010_b_2604", type=0, category=1, }; //「どうしたぁ！？」 4C
+st[204] = { volumetype=1, path=1, file="udu_010_b_2605", type=0, category=1, }; //「キヒヒヒヒ！」　214設置
+st[205] = { volumetype=1, path=1, file="udu_010_b_2606", type=0, category=1, }; //「ヴァーカ！」 4C
+st[206] = { volumetype=1, path=1, file="udu_010_b_2123_a_s0", type=0, category=1, }; //「ヒヒヒ…」 4[C]
+
+// その他特殊攻撃
+st[212] = { volumetype=1, path=1, file="udu_010_b_2608", type=0, category=1, }; //「すり潰す！」
+st[213] = { volumetype=1, path=1, file="udu_010_b_2609", type=0, category=1, }; //「オラオラオラァ！」　ダッシュB
+st[216] = { volumetype=1, path=1, file="udu_010_b_3300_a", type=0, category=1, }; //「行っくぜぇ！」 ステアエンダー
+
+
+// 投げ成功
+st[218] = { volumetype=1, path=1, file="udu_010_b_2700", type=0, category=1, }; //「ギャハハハハハハ！」
+st[219] = { volumetype=1, path=1, file="udu_010_b_2701", type=0, category=1, }; //「踊れ踊れぇ！」
+st[220] = { volumetype=1, path=1, file="udu_010_b_2702", type=0, category=1, }; //「アハハハハハハハ！」
+
+// 投げ失敗
+st[223] = { volumetype=1, path=1, file="udu_010_b_2800", type=0, category=1, }; //「ハァ！？」
+st[224] = { volumetype=1, path=1, file="udu_010_b_2801", type=0, category=1, }; //「あわわ！」
+st[225] = { volumetype=1, path=1, file="udu_010_b_2802", type=0, category=1, }; //「おっとと！」
+
+// 敵の投げ技を回避
+st[228] = { volumetype=1, path=1, file="udu_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; //「へへーん」
+st[229] = { volumetype=1, path=1, file="udu_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; //「うぜえ」
+st[230] = { volumetype=1, path=1, file="udu_010_b_2902", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; //「離れろ」
+st[231] = { volumetype=1, path=1, file="udu_010_b_2903", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; //「触んな」
+
+// ガードキャンセル攻撃
+st[234] = { volumetype=1, path=1, file="udu_010_b_2950", type=0, category=1, }; //「どけよっ！」
+st[235] = { volumetype=1, path=1, file="udu_010_b_2951", type=0, category=1, }; //「あっちいけっ！」
+
+// 振り向き
+st[238] = { volumetype=1, path=1, file="udu_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki, }; //「チッ」
+st[239] = { volumetype=1, path=1, file="udu_010_b_3001", type=0, category=1, prio=Def_SEP_Furimuki, }; //「そっちかよぉ」
+
+// 待機モーション
+st[243] = { volumetype=1, path=1, file="udu_010_b_3100", type=0, category=1, }; //「いつまで待たせんだよぉ」
+st[244] = { volumetype=1, path=1, file="udu_010_b_3101", type=0, category=1, }; //「ま～だ～か～よ～」
+st[245] = { volumetype=1, path=1, file="udu_010_b_3102", type=0, category=1, }; //「もう帰ってもいいかぁ？」
+
+// 前方回避
+st[248] = { volumetype=1, path=1, file="udu_010_b_3200", type=0, category=1, }; //「キャハッ」
+st[249] = { volumetype=1, path=1, file="udu_010_b_3201", type=0, category=1, }; //「クケケ」
+
+// ダッシュ
+st[252] = { volumetype=1, path=1, file="udu_010_b_3300_b", type=0, category=1, }; //「行っくぜぇ！」
+st[253] = { volumetype=1, path=1, file="udu_010_b_3301", type=0, category=1, }; //「そりゃっ」
+
+// アサルト
+st[256] = { volumetype=1, path=1, file="udu_010_b_3310", type=0, category=1, }; //「飛ぶぜ！」
+st[257] = { volumetype=1, path=1, file="udu_010_b_3311_b", type=0, category=1, }; //「ハッハァ！」
+
+// バックステップ
+st[260] = { volumetype=1, path=1, file="udu_010_b_3400", type=0, category=1, }; //「よっと」	// FF中ステップでも使用
+st[261] = { volumetype=1, path=1, file="udu_010_b_3401", type=0, category=1, }; //「あっぶね」
+
+// 弱攻撃ガード
+st[264] = { volumetype=1, path=1, file="udu_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「くっ」
+st[265] = { volumetype=1, path=1, file="udu_010_b_3501_b", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「チッ」
+st[266] = { volumetype=1, path=1, file="udu_010_b_3502_b", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ぬっ」
+
+// 中攻撃ガード
+st[269] = { volumetype=1, path=1, file="udu_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「ぎっ」
+st[270] = { volumetype=1, path=1, file="udu_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「ぐっ」
+st[271] = { volumetype=1, path=1, file="udu_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「んだよ」
+
+// 強攻撃ガード
+st[274] = { volumetype=1, path=1, file="udu_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「こいつっ！」
+st[275] = { volumetype=1, path=1, file="udu_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「てめぇ！」
+st[276] = { volumetype=1, path=1, file="udu_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「ぐぬっ！」
+
+// 攻撃を見切り余裕でガード
+st[279] = { volumetype=1, path=1, file="udu_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「ぬるい！」
+st[280] = { volumetype=1, path=1, file="udu_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「馬鹿が！」
+st[281] = { volumetype=1, path=1, file="udu_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「へへーん」
+st[282] = { volumetype=1, path=1, file="udu_010_b_3803", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「効かねー」
+
+// ガード失敗ダメージ
+st[286] = { volumetype=1, path=1, file="udu_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「マジかよ！？」
+st[287] = { volumetype=1, path=1, file="udu_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「うっそだろぉ！？」
+st[288] = { volumetype=1, path=1, file="udu_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「ずるくねぇ！？」
+
+// 受け身
+st[291] = { volumetype=1, path=1, file="udu_010_b_4000", type=0, category=1, prio=Def_SEP_Recover, }; //「とうっ！」
+st[292] = { volumetype=1, path=1, file="udu_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; //「このヤロー！」
+
+// シールド発動
+st[295] = { volumetype=1, path=1, file="udu_010_b_4100", type=0, category=1, }; //「来やがれ！」
+st[296] = { volumetype=1, path=1, file="udu_010_b_4101", type=0, category=1, }; //「止めてやる！」
+st[297] = { volumetype=1, path=1, file="udu_010_b_4102", type=0, category=1, }; //「えんがちょー」
+
+// シールド成功
+st[300] = { volumetype=1, path=1, file="udu_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「キヒヒ！」
+st[301] = { volumetype=1, path=1, file="udu_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「ギャハハ！」
+
+// 弱攻撃ダメージ
+st[305] = { volumetype=1, path=1, file="udu_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「あっ」
+st[306] = { volumetype=1, path=1, file="udu_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「うっ」
+st[307] = { volumetype=1, path=1, file="udu_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「つっ」
+
+// 中攻撃ダメージ
+st[310] = { volumetype=1, path=1, file="udu_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「ぐっ」
+st[311] = { volumetype=1, path=1, file="udu_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「つっ」
+st[312] = { volumetype=1, path=1, file="udu_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「がっ」
+
+// 強攻撃ダメージ
+st[315] = { volumetype=1, path=1, file="udu_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「があっ！」
+st[316] = { volumetype=1, path=1, file="udu_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「ぎゃぁあ！」
+st[317] = { volumetype=1, path=1, file="udu_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「うげっ！」
+st[318] = { volumetype=1, path=1, file="udu_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「げげっ！」
+st[319] = { volumetype=1, path=1, file="udu_010_b_4504", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「まじいてー！」
+
+// ダウン
+st[323] = { volumetype=1, path=1, file="udu_010_b_4600_b", type=0, category=1, prio=Def_SEP_KO, }; //「うぎゃぁあーーー！」
+st[324] = { volumetype=1, path=1, file="udu_010_b_4601_b", type=0, category=1, prio=Def_SEP_KO, }; //「やってくれたなぁー！」
+st[325] = { volumetype=1, path=1, file="udu_010_b_4602_b", type=0, category=1, prio=Def_SEP_KO, }; //「ぐええーーー！」
+
+// ラウンド敗北
+st[329] = { volumetype=1, path=1, file="udu_010_b_4650", type=0, category=1, prio=Def_SEP_KO, }; //「次はこうはいかねぇぞ」
+st[330] = { volumetype=1, path=1, file="udu_010_b_4651", type=0, category=1, prio=Def_SEP_KO, }; //「ふん、少しは骨があるじゃねぇか」
+
+// ダウン・ノックアウト
+st[334] = { volumetype=1, path=1, file="udu_010_b_4700", type=0, category=1, prio=Def_SEP_KO, }; //「ぎゃぁああああーーーーー！」
+st[335] = { volumetype=1, path=1, file="udu_010_b_4701", type=0, category=1, prio=Def_SEP_KO, }; //「ちっくしょーーーーっ！」
+st[336] = { volumetype=1, path=1, file="udu_010_b_4702", type=0, category=1, prio=Def_SEP_KO, }; //「負けちまったかぁ……」
+
+// 起き上がり
+st[340] = { volumetype=1, path=1, file="udu_010_b_4801", type=0, category=1, }; //「よっと！」
+st[339] = { volumetype=1, path=1, file="udu_010_b_4800_b", type=0, category=1, }; //「やりやがったな！」
+
+// 起き上がり・瀕死
+st[343] = { volumetype=1, path=1, file="udu_010_b_4900", type=0, category=1, }; //「やっべぇ……」
+st[344] = { volumetype=1, path=1, file="udu_010_b_4901", type=0, category=1, }; //「まじいかも……」
+
+// ヴェールオフ
+st[348] = { volumetype=1, path=1, file="udu_010_b_5000_b", type=0, category=3, }; //「覚悟しやがれ！」
+st[349] = { volumetype=1, path=1, file="udu_010_b_5001_b", type=0, category=3, }; //「潰してやんよぉ！」
+st[350] = { volumetype=1, path=1, file="udu_010_b_5002_b", type=0, category=3, }; //「待ってたぜ！　このときをよぉ！」
+
+// チェインシフト
+st[353] = { volumetype=1, path=1, file="udu_010_b_5100", type=0, category=1, }; //「いくぜぇっ！」
+st[354] = { volumetype=1, path=1, file="udu_010_b_5101", type=0, category=1, }; //「オレ様のターンだ！」
+st[355] = { volumetype=1, path=1, file="udu_010_b_5102", type=0, category=1, }; //「チャーンス！」
+
+// コンセントレーション
+st[358] = { volumetype=1, path=1, file="udu_010_b_5200", type=0, category=1, }; //「はぁぁぁぁ……」
+st[359] = { volumetype=1, path=1, file="udu_010_b_5201", type=0, category=1, }; //「高まれ、オレの力ぁ！」
+st[360] = { volumetype=1, path=1, file="udu_010_b_5202", type=0, category=1, }; //「もっと、もっとだ……」
+
+// ヴォーパル
+st[364] = { volumetype=1, path=1, file="udu_010_b_5300", type=0, category=4, }; //「ケケケケ！（喜）」
+st[365] = { volumetype=1, path=1, file="udu_010_b_5301", type=0, category=4, }; //「めんどくせー殺(や)っちまうか」
+
+// ヴォーパル・瀕死
+st[370] = { volumetype=1, path=1, file="udu_010_b_5302", type=0, category=4, }; //「イヒヒヒヒ（苦し紛れの笑い）」
+
+// 必殺技
+
+// （技名：ライド オン ボーン　骨に乗って突撃）
+st[376] = { volumetype=1, path=1, file="udu_010_b_6001", type=0, category=1, }; //「とつげ～き！」
+st[377] = { volumetype=1, path=1, file="udu_010_b_6002", type=0, category=1, }; //「どけどけぇ～！」　ステアエンダー
+st[378] = { volumetype=1, path=1, file="udu_010_b_6003", type=0, category=1, }; //「ひゃっほー！」
+st[379] = { volumetype=1, path=1, file="udu_010_b_6004", type=0, category=1, }; //「ライドオンボーン！」
+
+// （技名：ＥＸ ライド オン ボーン　骨に乗って突撃）
+st[381] = { volumetype=1, path=1, file="udu_010_b_6007", type=0, category=1, }; //「ぶちかませぇっ！」
+
+// （技名：ミスト フォー ヴェイン　毒ガスを吹きかけて攻撃）
+st[383] = { volumetype=1, path=1, file="udu_010_b_6014", type=0, category=1, }; //「食らえやぁ！」
+st[384] = { volumetype=1, path=1, file="udu_010_b_6015", type=0, category=1, }; //「吹きつけろ！」
+st[385] = { volumetype=1, path=1, file="udu_010_b_6016", type=0, category=1, }; //「ミストフォーヴェイン！」
+
+// （技名：ＥＸ ミスト フォー ヴェイン　毒ガスを吹きかけて攻撃）
+st[387] = { volumetype=1, path=1, file="udu_010_b_6020", type=0, category=1, }; //「くっせぇ～だろ！」
+st[389] = { volumetype=1, path=1, file="udu_010_b_6022", type=0, category=1, }; //「撒き散らせ！」
+st[388] = { volumetype=1, path=1, file="udu_010_b_6021_b", type=0, category=1, }; //「猛毒だ！」
+
+// （技名：トラップ オブ デス　巨大な棺で攻撃）
+st[391] = { volumetype=1, path=1, file="udu_010_b_6024", type=0, category=1, }; //「はいドーーーン！」
+st[392] = { volumetype=1, path=1, file="udu_010_b_6025", type=0, category=1, }; //「ひっかかったな！」
+st[393] = { volumetype=1, path=1, file="udu_010_b_6026", type=0, category=1, }; //「バカめ！」
+st[394] = { volumetype=1, path=1, file="udu_010_b_6027", type=0, category=1, }; //「トラップオブデス！」
+
+// （技名：コフィン オブ ゴージ　棺の中から魔物を呼び出して攻撃）
+st[397] = { volumetype=1, path=1, file="udu_010_b_6030", type=0, category=1, }; //「出てこい！」
+st[398] = { volumetype=1, path=1, file="udu_010_b_6031", type=0, category=1, }; //「ほれほれ出番だぞ」
+st[399] = { volumetype=1, path=1, file="udu_010_b_6032", type=0, category=1, }; //「コフィンオブゴージ！」
+
+// （技名：バッグ オブ シークレット　アイテム投擲）
+st[402] = { volumetype=1, path=1, file="udu_010_b_6039", type=0, category=1, }; //「何が出るかなっと」
+st[401] = { volumetype=1, path=1, file="udu_010_b_6038_b", type=0, category=1, }; //「ぽ～いっと」
+st[403] = { volumetype=1, path=1, file="udu_010_b_6040_b", type=0, category=1, }; //「バッグオブシークレット～」
+
+// （技名：メルト アンド ラーク　地面に潜る）
+st[408] = { volumetype=1, path=1, file="udu_010_b_6048", type=0, category=1, }; //「あらよっと」	//214_Addワープで使用
+st[409] = { volumetype=1, path=1, file="udu_010_b_6049", type=0, category=1, }; //「あばよっ」 // 棺からのワープで仕様
+st[410] = { volumetype=1, path=1, file="udu_010_b_6050", type=0, category=1, }; //「メルトアンドラーク（※呟く感じで）」
+
+// （技名：スパイン アンド クリーヴ　地面から槍を突き出す）
+st[412] = { volumetype=1, path=1, file="udu_010_b_6055", type=0, category=1, }; //「そこだぁっ！」
+st[413] = { volumetype=1, path=1, file="udu_010_b_6056", type=0, category=1, }; //「ブチ抜け！」
+st[414] = { volumetype=1, path=1, file="udu_010_b_6057", type=0, category=1, }; //「スパインアンドクリーヴ！」
+
+// 超必殺技
+// （技名：イービル オブ オーメン　巨大な魔物が球状のエネルギー塊で攻撃）
+st[420] = { volumetype=1, path=1, file="udu_010_b_6501", type=0, category=1, }; //「キシシッ！視えるぜオメーの未来がよ～（次に続く）」
+st[421] = { volumetype=1, path=1, file="udu_010_b_6502", type=0, category=1, }; //「後悔、絶望、お先真っ暗だぁ！」
+
+st[423] = { volumetype=1, path=1, file="udu_010_b_6503", type=0, category=1, }; //「イービルオブオーメン！」
+
+// （技名：ザ カーテンライズ オブ サバト　相手をいけにえに、闇の宴(うたげ)が催される）
+st[425] = { volumetype=1, path=1, file="udu_010_b_6515", type=0, category=1, }; //「さぁさぁ楽しい宴(うたげ)のはじまりだぁ！（次に続く）」
+st[426] = { volumetype=1, path=1, file="udu_010_b_6516", type=0, category=1, }; //「ヒッヒッヒ。狭き器より出でよ魂。死者の乾きを潤す極上なる甘露よ…。」
+
+st[427] = { volumetype=1, path=1, file="udu_010_b_6517_c", type=0, category=1, }; //「ザ カーテンライズ オブ サバト！（次に続く）」
+st[428] = { volumetype=1, path=1, file="udu_010_b_6518", type=0, category=1, }; //「終幕だ、どれ……。ま、骨も残らねぇか。（次に続く）」
+st[429] = { volumetype=1, path=1, file="udu_010_b_6519", type=0, category=1, }; //「食い過ぎだぞ、テメーらｗｗｗ」
+
+st[431] = { volumetype=1, path=1, file="udu_010_b_6521", type=0, category=1, }; //「お前達ぃ、せいぜい派手に食い尽くしな。（次に続く）」
+st[432] = { volumetype=1, path=1, file="udu_010_b_6522", type=0, category=1, }; //「食って、飲んで、もっと食って、騒げぇ！！　ぎゃははははー！！（次に続く）」
+
+st[434] = { volumetype=1, path=1, file="udu_010_b_6523", type=0, category=1, }; //「……って、丸々残ってんじゃねーか！」
+

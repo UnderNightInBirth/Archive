@@ -459,7 +459,7 @@ Battle_Std.InitFireBall <- function()
 {
 	BMvEff.ObjType_Set( { type=_ObjType_FireBall } ); //デバッグ出力用オブジェクトタイプ指定
 	Battle_Std.MoveCode.AddFlag( def_MC_FireBall ); // 行動コード(飛び道具)を設定
-	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
+	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=9999, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
 
 	Battle_Std.PassPlayerToFireBallMvCode();// 親から引き継ぐコード
 	if( Battle_Std.CheckParentIsSkill() )
@@ -512,7 +512,15 @@ Battle_Std.InitWorthSkill <- function( _spcutinmv = "Mv_CutinGrp" )
 		
 		// CheckAliveを行うならここで処理する
 		// 開放中なら開放を終了する
-		// BMvEff.Liberate_End();
+		BMvEff.Liberate_End();
+		
+		// 240415 EX>IWで繋いだらVOスカ相当の最低保障補整をかける
+		local comboUsedExSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseExSkill );
+		if( comboUsedExSkill )
+		{
+			_dpn("EXの保証補正");
+			Battle_Std.SetSpHosyoHosei( { type="VO" } );// EX>IWで繋いだらVOスカ相当の補正をかける
+		}
 		
 		local comboUsedSpSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseSpSkill );
 		if( comboUsedSpSkill )
@@ -575,4 +583,18 @@ Battle_Std.StartFFSkill <- function()
 		Battle_Std.PP_AddFlag( def_PP_GRDAction_UseGRD, def_PP_GAU_Used ); // 減らしたフラグを追加
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_PaySkillCost ); // コスト消費済み
 	}
+}
+
+
+// ジャンプ攻撃の着地共通処理
+// ジャンプ攻撃
+Battle_Std.InitAitAtkLand <- function()
+{
+	if( Def_Sys_AirAtkLandingClearComboLimit )
+	{
+		_dpn("コンボリミット初期化");
+		BMvTbl.ClearComboLimit(-1); // コンボリミット初期化
+	}
+
+	Battle_Std.PassLandMoveCodes(); // 着地時の行動コード引き継ぎ
 }

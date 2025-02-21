@@ -502,6 +502,11 @@ function Battle_Std::CmdCheck( t, tmplname="" )
 			_dpn("通常C可能な必殺技は強すぎるので駄目に");
 			return 0;
 		}
+		if( douji_st.CheckFlag( 3, def_MC3_DisableDirectSSSkill ) )
+		{
+			_dpn("ステアエンダー不可");
+			return 0;
+		}
 
 		// ヒット直後のみしか出せない（ディレイ不可）
 		local isJustHit = 0;
@@ -645,6 +650,10 @@ function Battle_Std::CmdCheck( t, tmplname="" )
 		if( !douji_st.CheckCancel( _SkillType_Normal ) ) return 0; //通常技レベルでキャンセルできない状態
 		// このチェックがあると通常CがDamageの特殊技とかもキャンセルできなくなった(問題のある技を修正)
 		if( !douji_st.CancelCheck_JumpCancel() ) return 0;
+		if( check_ZurashiCommandFromSpecial ) return 0; // 必殺技からのズラし押しはダメ
+		break;
+	case "AirThrow":	//通常技扱い空中投げ（エルトナムのみ・アカツキはとりあえずそのまま）
+		if( !douji_st.CheckCancel( _SkillType_Normal ) ) return 0; //通常技レベルでキャンセルできない状態
 		if( check_ZurashiCommandFromSpecial ) return 0; // 必殺技からのズラし押しはダメ
 		break;
 	case "SpecialJump": //必殺技（上要素あり）
@@ -1060,7 +1069,8 @@ function Battle_Std::CmdCheck( t, tmplname="" )
 	}
 	else if( flag_useComboGauge == 2 ) // VO中のみ
 	{
-		BMvEff.Liberate_End(); // ここで解除してしまうとCheckAliveで失敗してしまうので注意
+		// BMvEff.Liberate_End(); // ここで解除してしまうとCheckAliveで失敗してしまうので注意
+		
 		// MEMO:ゲージ消費予約があって技が出た時、必ずBMvEff.Liberate_End()を経由するようにするべき
 		BCMDTbl.SetSpUseBufferTmp( { value=20000 } ); //ゲージ消費予約
 		BMvTbl.SetPP(def_PP_CmdStatus, BMvTbl.GetPP(def_PP_CmdStatus)|def_PP_CS_UseGauge ); //ゲージ消費技予約

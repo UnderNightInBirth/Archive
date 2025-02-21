@@ -459,6 +459,7 @@ Battle_Std.Create_TechDelayCheckObject <- function( delay=0 )
 	}
 }
 
+// 個別に再生していいかのチェックと再生処理
 local individual_se_check = function( target, num, flags )
 {
 	local result = { 
@@ -492,12 +493,15 @@ local individual_se_check = function( target, num, flags )
 	{
 		//ディレイ再生が登録されていた
 		//_dm("ディレイ再生！");
+		local frame = ( flags&(1<<1) )? BSound.SE_GetUserParam( { type=_SeType_Player, num=num, } ) : 0;//音声のフレーム数を取得
+		//_dpn("ディレイ再生:"+flags+" frame:"+frame+" num:"+num);
 		local eff = BMvEff.CreateObject( { mvname="Mv_Obj_DelayPlaySE" } );
 		if( eff.push() )
 		{
 			BMvTbl.SetLP(0,target.delayframe);
 			BMvTbl.SetLP(1,num);
 			BMvTbl.SetLP(2,flags);
+			BMvTbl.SetLP(3,frame); // 音声の長さ
 			
 			eff.pop();
 		}
@@ -508,12 +512,14 @@ local individual_se_check = function( target, num, flags )
 	{
 		//ディレイParam0再生が登録されていた
 		//_dm("ディレイParam0再生！");
+		local frame = ( flags&(1<<1) )? BSound.SE_GetUserParam( { type=_SeType_Player, num=num, } ) : 0;//音声のフレーム数を取得
 		local eff = BMvEff.CreateObject( { mvname="Mv_Obj_DelayParam0PlaySE" } );
 		if( eff.push() )
 		{
 			BMvTbl.SetLP(0,target.delayParam0);
 			BMvTbl.SetLP(1,num);
 			BMvTbl.SetLP(2,flags);
+			BMvTbl.SetLP(3,frame); // 音声の長さ
 			
 			eff.pop();
 		}
@@ -639,7 +645,7 @@ local play_se = function( info, flags ) : (individual_se_check)
 	{
 		foreach( slot, val in targetar )
 		{
-			// _dpn("*"+val);
+			// _dpn(slot+":"+val);
 			local pick = 1;//抽選に入れるか
 			if( val in info && "checkfunc" in info[val] )
 			{
@@ -683,7 +689,23 @@ local play_se = function( info, flags ) : (individual_se_check)
 	if( pick_list.len()==0 ) return 0; //ないじゃん2
 	
 	//再生するファイルが確定
-	local num = pick_list[BMvEff.Random_Limit(pick_list.len())] //抽選　※intかtableの事がある
+	//Random_Limitが原因？でエラーが出ることがある？一応エラーチェックを入れるようにした
+	local num_pos = BMvEff.Random_Limit(pick_list.len());
+	if( num_pos > pick_list.len()-1 )
+	{
+		if( _DevWindows && Def_Dbg_LocalDebugScriptPath )
+		{
+			Battle_Std.DebugFunc.DrawDebugCharaInfo( num_pos, pick_list.len() );
+		}
+
+		// ありえないエラーだが…何故か発生することがあった
+		num_pos = pick_list.len()-1;
+	}
+	if( num_pos < 0 ) num_pos = 0;
+	
+	local num_tmp = pick_list[ num_pos ] //抽選　※intかtableの事があるので以下で分解
+	local num = ( typeof num_tmp == "integer" )? num_tmp : -1; // -1はエラー
+	local num_table = ( typeof num_tmp == "table" )? num_tmp : -1; // -1はエラー
 	
 	if( !( Battle_Std.PlayerisKO() && ((("dying" in info)? info.dying : 0 )==0) ) )
 	{
@@ -692,7 +714,7 @@ local play_se = function( info, flags ) : (individual_se_check)
 		{
 			local voice_flags = 0;
 			
-			if( num in info )
+			if( num != -1 && num in info )
 			{
 				//個別に弾く処理などがないか確認 [100] = {hoge}系
 				local target = info[num];
@@ -703,25 +725,36 @@ local play_se = function( info, flags ) : (individual_se_check)
 				voice_flags = individual_check.flags;
 				if( individual_check.ret_val != -1 )
 				{
+					// ここに着た時点で登録する
+					if( voice_flags&(1<<4) )
+					{
+						if( typeof num == "integer" )
+						{
+							BMvTbl.SetPP(def_PP_LastPlaySound,num);//記憶のみ
+						}
+					}
 					return individual_check.ret_val;
 				}
 			}
 			
 			//一気に呼ぶタイプ
-			if( typeof num == "table" )
+			if( num_table != -1 && typeof num_table == "table" )
 			{
 				//テーブル定義
-				foreach( slot, val in num )
+				foreach( slot, val in num_table )
 				{
 					// _dpn("音呼び:"+slot+" "+val );
 					if( typeof val == "integer" && typeof slot == "integer" )
 					{
+						local frame = ( flags&(1<<1) )? BSound.SE_GetUserParam( { type=_SeType_Player, num=val, } ) : 0;//音声のフレーム数を取得
+						
 						local eff = BMvEff.CreateObject( { mvname="Mv_Obj_DelayPlaySE" } );
 						if( eff.push() )
 						{
 							BMvTbl.SetLP(0,slot);
 							BMvTbl.SetLP(1,val);
 							BMvTbl.SetLP(2,flags);
+							BMvTbl.SetLP(3,frame); // 音声の長さ
 							
 							eff.pop();
 						}
@@ -740,37 +773,49 @@ local play_se = function( info, flags ) : (individual_se_check)
 				}
 			}
 			
+			// Battle_Std.PlayerSE_Playのフラグ flags
 			//1<<0 : 再生せずにdef_PP_LastPlaySoundに記憶する
 			//1<<1 : 字幕あり、音声は再生しない（事前に再生している）
 			//1<<2 : 再生時に直前の音声を止める
 			//1<<3 : def_PP_LastPlaySoundに記憶しない
-			if( flags&(1<<0) || voice_flags&(1<<0) )
+			
+			// ボイス定義側のフラグ voice_flags
+			//1<<0 : 再生せずにdef_PP_LastPlaySoundに記憶する
+			//1<<4 : 抽選された時点で再生前にdef_PP_LastPlaySoundに記憶
+			
+			if( num != -1 ) // 通常タイプで再生された
 			{
-				if( !(flags&(1<<3)) && typeof num == "integer" )
+				if( flags&(1<<0) || voice_flags&(1<<0) )
 				{
-					BMvTbl.SetPP(def_PP_LastPlaySound,num);//記憶のみ
+					if( !(flags&(1<<3)) && typeof num == "integer" )
+					{
+						BMvTbl.SetPP(def_PP_LastPlaySound,num);//記憶のみ
+					}
 				}
-			}
-			else if( flags&(1<<1) )
-			{
-				//登場掛け合いを除いた字幕表示箇所
-				//勝利など
-				local frame = BSound.SE_GetUserParam( { type=_SeType_Player, num=num, } );//音声のフレーム数を取得
-				local use_frame = ( frame != 0 )? frame : 180;
-				
-				Battle_Std.Play_SubtitleVoice( num, use_frame+10 );//10Fマージン
-				if( !(flags&(1<<3)) && typeof num == "integer" )
+				else if( flags&(1<<1) )
 				{
-					BMvTbl.SetPP(def_PP_LastPlaySound,num);//記憶(MEMO:字幕側のPlay_SubtitleVoiceで記憶するべきかもだが影響大きいので除外)
+					//登場掛け合いを除いた字幕表示箇所
+					//勝利など
+					local frame = BSound.SE_GetUserParam( { type=_SeType_Player, num=num, } );//音声のフレーム数を取得
+					local use_frame = ( frame != 0 )? frame : 180;
+					
+					if( typeof num == "integer" )
+					{
+						Battle_Std.Play_SubtitleVoice( num, use_frame+10 );//10Fマージン
+					}
+					if( !(flags&(1<<3)) && typeof num == "integer" )
+					{
+						BMvTbl.SetPP(def_PP_LastPlaySound,num);//記憶(MEMO:字幕側のPlay_SubtitleVoiceで記憶するべきかもだが影響大きいので除外)
+					}
 				}
-			}
-			else
-			{
-				if( flags&(1<<2) )
+				else
 				{
-					Battle_Std.PlayerSE_StopLastPlaySound();
+					if( flags&(1<<2) )
+					{
+						Battle_Std.PlayerSE_StopLastPlaySound();
+					}
+					Battle_Std.PlayerSE_Play( num, flags ); //_SeType_Playerのnumを再生して記憶
 				}
-				Battle_Std.PlayerSE_Play( num, flags ); //_SeType_Playerのnumを再生して記憶
 			}
 			return 1;
 		}
@@ -782,6 +827,7 @@ local play_se = function( info, flags ) : (individual_se_check)
 Battle_Std.PlayerSE_Play <- function( num=0, flags=0 )
 {
 	BSound.SE_Play( { type=_SeType_Player, num=num } );
+
 	if( !(flags&(1<<3)) && typeof num == "integer" )
 	{
 		BMvTbl.SetPP(def_PP_LastPlaySound, num); //最後に再生したのを記憶
@@ -1233,6 +1279,7 @@ Battle_Std.AttackImpact_StdFunc <- function(info)
 	if( Zenbu_Syodan )
 	{
 		//ガード時も入ってくるので注意
+		BMvTbl.SetPP(def_PP_ComboConcentrationCounter,0); // コンボ中のコンセ時間をリセット
 		
 		if( isVorpal && info.type & _HitType_Damage )
 		{
@@ -1389,6 +1436,17 @@ Battle_Std.AttackImpact_StdFunc <- function(info)
 	if( Def_Dbg_LocalDebugScriptPath )
 	{
 		Battle_Std.DebugFunc.CallAttackImpactScript( info );
+	}
+	
+	if( _DevWindows )
+	{
+		local isMyStopTime = BMvEff.IsMyStopTime();
+		if( isMyStopTime )
+		{
+			local mess = "★★★時間停止中に攻撃がヒットしています！★★★";
+			debugfontL.draw_message( mess );
+			_dpn(mess);
+		}
 	}
 }
 
@@ -2235,7 +2293,7 @@ Battle_Std.GRDBreak_Attack <- function( param={} )
 			// でもGRDブレイクしてるので火力は10%アップする
 			if( !NoHosei )
 			{
-				_dpn("　->補正を入れる");
+				_dpn("　->補正を入れる:"+def_HOSEI_BreakFatalThrow );
 				BMvEff.ComboView_Set( { val=def_HOSEI_BreakFatalThrow, type=1 } ); // 乗算
 			}
 		}
@@ -2243,6 +2301,18 @@ Battle_Std.GRDBreak_Attack <- function( param={} )
 		// 投げだとしたら相手は投げ抜け不能にする
 		// これがないと、投げ抜け失敗Fが終わると投げ抜けを受け付けてしまう
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_EnemyTechImpossible );//投げ抜け不可にする
+	}
+	
+	// ブレイク時に補整をキツくする予約のあったMV
+	if( Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_GRDBreak_WeakDmgHosei ) )
+	{
+		local hosei = BMvTbl.GetPP(def_PP_WeakBreakDamageHosei); // 予約のあったダメージ補整値
+		if( hosei )
+		{
+			BMvEff.ComboView_Set( { val=hosei, type=1 } ); // 乗算
+			_dpn(" ->ブレイク時の補整をキツくする:"+hosei );
+		}
+		BMvTbl.SetPP(def_PP_WeakBreakDamageHosei,0); // 使ったので初期化
 	}
 	
 	// 割れるエフェクトの表示位置
@@ -2773,6 +2843,22 @@ Battle_Std.InitIWExistSkill <- function()
 			BMvTbl.SetMuki( _Direction_Auto ); //相手方向を向く
 			
 			Battle_Std.RecoverDoubleExHohoHosei(); // EX>EXの保証補正低下を少し戻す
+			
+			// 240415 EX>IWEで繋いだらVOスカ相当の最低保障補整をかける
+			local comboUsedExSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseExSkill );
+			if( comboUsedExSkill )
+			{
+				_dpn("EXの保証補正");
+				Battle_Std.SetSpHosyoHosei( { type="VO" } );// EX>IWで繋いだらVOスカ相当の補正をかける
+			}
+			
+			// 240415 IW>IWEで繋いだらIW>IW相当の最低保障補整をかける
+			local comboUsedSpSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseSpSkill );
+			if( comboUsedSpSkill )
+			{
+				_dpn("SPの保証補正");
+				Battle_Std.SetSpHosyoHosei( { type="SP" } );//２回目の補正をかける
+			}
 		}
 		BMvCore.PopCharaData(); //	
 	}
@@ -2857,6 +2943,7 @@ Battle_Std.FinalizeIWExistSkill <- function()
 {
 	// これは念のため表示を上書きする
 	BMvEff.Cockpit_SetView( { mode=1 } ); //ゲージ類の表示設定　mode 0:非表示 1:表示
+	BMvEff.CutInProc_SetResourceView( { mode=1 } ); // 謎空間の非表示を念の為戻す
 	
 	if( BMvTbl.GetPP( def_PP_IWEXS_ChgVO_Hit ) )
 	{
@@ -3011,7 +3098,8 @@ Battle_Std.CallAntenStopObject <- function()
 }
 
 //EX技を出した（暗転まで進んだor途中でつぶされた）ら絶対にやらないといけないもの
-Battle_Std.StartExSkill <- function()
+//_Blocked = 1:途中で潰された時で入ってきた
+Battle_Std.StartExSkill <- function( _Blocked = 0 )
 {
 	Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_PaySkillCost );
 
@@ -3032,7 +3120,22 @@ Battle_Std.StartExSkill <- function()
 	
 	//デメリット
 	BMvEff.SpGauge_SetLimitCombo( { val=25, time=def_FL_EXSLimit_EXSkill } ); //ゲージ増加制限
-	BMvEff.SetSpGauge( { mode=_SpGauge_UseBuffer } ); //ＳＰゲージ予約分を消費
+	if( Def_Sys_FixUseExSkillSpCost_KoTiming && _Blocked && Battle_Std.CharaisKO() )
+	{
+		// KOされるとバッファーは消えてしまうが、このタイミングだとギリギリまだ残っている
+		// 正直固定値をマイナスするだけでもいい気はするが…
+		local spUseBuffer = BCMDTbl.GetSpUseBufferTmp();
+		// _dpn("ゲージ消費予約を取得:"+spUseBuffer);
+
+		// どんな値が入ってるかよくわからないかもなので丸め込む
+		if( spUseBuffer < 0 ) spUseBuffer = 0;
+		if( spUseBuffer > 20000 ) spUseBuffer = 20000; // EXしかないのでもっとシビアにしてもいいかもだが…
+		BMvEff.SetSpGauge( { value=-spUseBuffer } ); // バッファーはプラスの値なので引く
+	}
+	else
+	{
+		BMvEff.SetSpGauge( { mode=_SpGauge_UseBuffer } ); //ＳＰゲージ予約分を消費
+	}
 }
 
 
@@ -3893,6 +3996,10 @@ Battle_Std.SetThrowHitFinalize <- function(code=0, gouin_code=-1, combo_code=-1,
 							if( enemy.push() )
 							{
 								BMvEff.AddSkillCount( _SkillCount_Throw ); // 履歴カウンタを加算
+								if( Def_Sys_NoPunishSkillGouinNage )
+								{
+									Battle_Std.PP_DelFlag(def_PP_ImpactAnnounce,def_PP_IA_Punish ); // パニッシュ予約があったら消す
+								}
 								
 								enemy.pop();
 							}
@@ -3936,7 +4043,10 @@ Battle_Std.SetThrowHitFinalize <- function(code=0, gouin_code=-1, combo_code=-1,
 						if( enemy.push() )
 						{
 							BMvEff.AddSkillCount( _SkillCount_Throw ); // 履歴カウンタを加算
-							
+							if( Def_Sys_NoPunishSkillGouinNage )
+							{
+								Battle_Std.PP_DelFlag(def_PP_ImpactAnnounce,def_PP_IA_Punish ); // パニッシュ予約があったら消す
+							}
 							enemy.pop();
 						}
 					}
@@ -4044,8 +4154,10 @@ local func_kirimomi_kaiten = function( mvs )
 	}	
 }
 
+// BoundInit()とMv_Bound_CaptureのInitで呼ばれる
 Battle_Std.DrawPunishAnnounce <- function( anno_flags )
 {
+	//_dpn("DrawPunishAnnounce()");
 	//やられアナウンス処理
 	//だったけど、色々ごちゃごちゃになってきている
 	local enemy = BMvCore.GetEnemyCharaData();
@@ -4100,7 +4212,7 @@ Battle_Std.DrawPunishAnnounce <- function( anno_flags )
 //ベクトル移行でなっちゃうからバウンドの時とかも入ってくるから注意
 Battle_Std.BoundInit <- function() : (func_kirimomi_kaiten)
 {
-	// _dm("BoundInit");
+	//_dpn("[BoundInit]");
 	local anno_flags = BMvTbl.GetPP(def_PP_ImpactAnnounce);
 	BMvTbl.SetPP(def_PP_ImpactAnnounce,0);//すぐ初期化
 	
@@ -4263,6 +4375,7 @@ Battle_Std.BoundInit <- function() : (func_kirimomi_kaiten)
 			local enemy = BMvCore.GetLastDamageCharaData( 0 );//最後に殴られたキャラ
 			if( enemy.push() )
 			{
+				BMvTbl.SetPP(def_PP_WeakBreakDamageHosei,0); // 保険で初期化
 				isSidou = Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_SidouHitSkill ); // 始動であてた技
 				if( Battle_Std.MoveCodeEx.CheckFlag( 5, def_MC5_FromSidouAddSkill ) )
 				{
@@ -4498,7 +4611,7 @@ Battle_Std.VanishFireBallStatus <- function()
 //飛び道具ステータスを取得
 Battle_Std.GetFireBallStatus <- function()
 {
-	local isSousaiYarareObject = Battle_Std.MoveCodeEx.CheckFlag( 6, def_MC6_CheckSousaiYarareObject );
+	local isSousaiYarareObject = Battle_Std.MoveCodeEx.CheckFlag( 6, def_MC6_CheckSousaiYarareObject ); // 飛び道具と相殺する壊せるオブジェクト
 	local tbl = {};
 	local mvtype = BMvTbl.GetLPEx(1,def_LP1_MvType);
 	tbl.isFireBall <- (mvtype == def_MvType_Ball); //自分が飛び道具かどうか
@@ -4507,6 +4620,8 @@ Battle_Std.GetFireBallStatus <- function()
 	tbl.isSousaiSubHited <- Battle_Std.GetFireBallFlags(def_BallFlags_SousaiSubHited); //相殺したよフラグがたっているかどうか
 	tbl.MvCode <- BMvTbl.GetMoveCode();
 	tbl.isBeforeFireBallInit <- !Battle_Std.MoveCode.CheckFlag( def_MC_FireBall ); // 行動コード(飛び道具) // Init通過後かどうか
+
+	tbl.isGamenGai <- Battle_Std.CheckGamenGai( 100*128 ); // 画面外にある　少しマージンあり
 	
 	// 未指定でも１発は相殺する
 	if( tbl.HitCount == 0 && tbl.isYarareObject ) tbl.HitCount = 1;
@@ -4640,12 +4755,30 @@ function Battle_Std::GetVector_FromAngle( t )
 // 相殺新仕様（相殺したい、されたいオブジェクトからは全部これが呼ばれる）
 // 自分と相手同じ処理になっていないとダメ（１Ｐ、２Ｐどっちが先でもおかしくならないように）
 // 相殺に対して何かする場合は、　def_MC_Sousai_EnemySubSuccess　をチェックする
+// 壊せる設置物の場合は　def_MC2_YarareObject_AnySousai　を見て処理をしている（ヒット数減算しないタイプでも消滅処理をするため）
 // なのでこの関数は何も返さない（戻り値を見て処理する＝処理が対等でない）
 // 時々相殺に失敗する（ベクトルが巨大なオブジェクトだったりするとそうなる）
 // 攻撃判定同士でしか相殺できないが、試しに特殊判定３（飛び道具判定）とも相殺するようにした
+
+// 相殺関係の仕様まとめ（CheckSousaiが呼ばれるもの）
+// 飛び道具（FireBall）　攻撃判定のみ
+// 本体飛び道具（トナム236X）　攻撃判定のみ
+// 飛び道具相殺技（ワレンのJC/エンキ4C）　飛び道具判定と攻撃判定　発生前とかに飛び道具判定がついている
+// 壊せる設置物（シデウス/蜘蛛罠）　やられ判定＋飛び道具判定　飛び道具との相殺のためだけに飛び道具判定がついている
+
+// エンキ4C＋壊せる設置物
+// 攻撃判定/飛び道具判定　＋　飛び道具判定/やられ判定
+// 攻撃判定がやられに触れると、設置物は壊れる
+// 飛び道具判定が、飛び道具判定に触れると…何もおきてほしくないので除外する
+
 Battle_Std.CheckSousai <- function()
 {
 	// _dpn("CheckSousai():"+BMvTbl.GetPlayerSide() );
+	// A x A
+	// A x E
+	// E x A
+	// E x E = NG
+	// 相殺判定のみでは何もしない
 	
 	// 相手の何らかのオブジェクトの攻撃判定と触れているか
 	local enemy = BMvEff.CheckHantei2( { src=[ [ _Hantei_Attack , 0, -1 ], [ _Hantei_Etc , 3, 1 ] ], dst=[ [ _Hantei_Attack , 0, -1 ], [ _Hantei_Etc , 3, 1 ] ], flags=_HC_EnemyPc|_HC_EnemyObj } );
@@ -4660,6 +4793,8 @@ Battle_Std.CheckSousai <- function()
 
 		local pts = Battle_Std.GetFireBallStatus(); //飛び道具ステータス取得
 		
+		// _dpn("CheckSousai():"+BMvTbl.GetPlayerSide() );
+		
 		local play_se = 0; // 相殺でＳＥを再生するかどうか
 		
 		// お互い相殺されるだけの存在は処理をしない
@@ -4667,7 +4802,29 @@ Battle_Std.CheckSousai <- function()
 		{
 			return;
 		}
-
+		
+		// どちらかが相殺されるだけの存在
+		if( pts.isYarareObject || ets.isYarareObject )
+		{
+			if( pts.isGamenGai || ets.isGamenGai )
+			{
+				_dpn(" 相殺されるオブジェクトが絡むときは画面外で処理をしない")
+				return;
+			}
+		}
+		
+		// 飛び道具判定同士では何も起こさない
+		// 今までよくこれなくて大丈夫だったな…というかダメだった
+		local sousai_type0 = BMvEff.CheckHantei( { src=[ _Hantei_Attack , 0, -1 ], dst=[ _Hantei_Attack , 0, -1 ], flags=_HC_EnemyPc|_HC_EnemyObj } );
+		local sousai_type1 = BMvEff.CheckHantei( { src=[ _Hantei_Attack , 0, -1 ], dst=[ _Hantei_Etc , 3, 1 ], flags=_HC_EnemyPc|_HC_EnemyObj } );
+		local sousai_type2 = BMvEff.CheckHantei( { src=[ _Hantei_Etc , 3, 1 ], dst=[ _Hantei_Attack , 0, -1 ], flags=_HC_EnemyPc|_HC_EnemyObj } );
+		if( !sousai_type0.isdone() && !sousai_type1.isdone() && !sousai_type2.isdone() )
+		{
+			_dpn(" 飛び道具判定同士なので処理をしない");
+			return;
+		}
+		
+		
 		// def_MC_Sousai　同士で触れていて、かつヒット数が残っていたら相殺する
 		
 		// _dpn( format("pts:"+pts.isFireBall+" "+(pts.MvCode&def_MC_Sousai)+" "+pts.isYarareObject+" "+pts.HitCount+" B:"+pts.isBeforeFireBallInit ) );
@@ -4677,17 +4834,19 @@ Battle_Std.CheckSousai <- function()
 		( (ets.MvCode&def_MC_Sousai || ets.isYarareObject ) && pts.HitCount>0 ) &&
 		( (pts.MvCode&def_MC_Sousai || pts.isYarareObject ) && ets.HitCount>0 ) ) //相殺するオブジェクト同士で触れた
 		{
-			// _dpn("自分側の処理");
-			if( (pts.MvCode&def_MC_Sousai_NoSubHitCount)==0 ) // 相殺時にヒット数減算しない、ではない
+			// _dpn(" 自分側の処理");
+			if( (pts.MvCode&def_MC_Sousai_NoSubHitCount)==0 ) // 相殺時に自分のヒット数を減算しない、ではない
 			{
-				play_se = 1;
-				BMvTbl.CalcHitValue(-ets.HitCount); //相手の飛び道具ヒット数分、ヒット数を減らす
+				local init_hitcount = BMvTbl.CalcHitValue(0); // 相殺前の残りヒット数
+				local left_hitcount = BMvTbl.CalcHitValue(-ets.HitCount); //相手の飛び道具ヒット数分、ヒット数を減らす
 				Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_Sousai_MySubSuccess ); // 相殺で自分のヒット数減算に成功した
+				
+				if( init_hitcount != left_hitcount ) play_se = 1; // 相殺で残りヒット数が変化した=何か相殺した
 				
 				if( pts.isFireBall ) //飛び道具なら自動で消滅フラグまで立てる
 				{
 					Battle_Std.SetFireBallFlags(def_BallFlags_SousaiSubHited); //相殺でヒット数が減ったことを記憶
-					if( BMvTbl.CalcHitValue(0) <=0 )
+					if( left_hitcount <=0 )
 					{
 						// _dpn("次回ファイナライズ予約");
 						Battle_Std.SetFireBallFlags(def_BallFlags_Finalize); //次回ファイナライズしてね
@@ -4697,47 +4856,77 @@ Battle_Std.CheckSousai <- function()
 				// 相手側
 				if( enemy.push() )
 				{
+					// _dpn("  相殺でヒット数減算に成功");
 					Battle_Std.MoveCode.AddFlag( def_MC_Sousai_EnemySubSuccess ); // 相殺で相手のヒット数減算に成功した
+					if( ets.isYarareObject )
+					{
+						Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_YarareObject_AnySousai ); // 雑に相殺してる
+					}
+					
+					enemy.pop();
+				}
+			}
+			else if( ets.isYarareObject )
+			{
+				// 相手がやられオブジェクトの場合は、def_MC_Sousai_NoSubHitCountがあっても、設置が消えて欲しいので処理を追加
+				if( enemy.push() )
+				{
+					// _dpn("  雑には相殺してそう");
+					Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_YarareObject_AnySousai ); // 雑に相殺してる
 					
 					enemy.pop();
 				}
 			}
 			
-			//_dpn("相手側の処理");
-			if( (ets.MvCode&def_MC_Sousai_NoSubHitCount)==0 ) // 相殺時にヒット数減算しない、ではない
+			// _dpn(" 相手側の処理");
+			if( (ets.MvCode&def_MC_Sousai_NoSubHitCount)==0 ) // 相殺時に自分のヒット数を減算しない、ではない
 			{
-				play_se = 1;
 				if( enemy.push() )
 				{
-					BMvTbl.CalcHitValue(-pts.HitCount); //自分のヒット数分、ヒット数を減らす
+					local init_hitcount = BMvTbl.CalcHitValue(0); // 相殺前の残りヒット数
+					local left_hitcount = BMvTbl.CalcHitValue(-pts.HitCount); //自分のヒット数分、ヒット数を減らす
 					Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_Sousai_MySubSuccess ); // 相殺で自分のヒット数減算に成功した
+					
+					if( init_hitcount != left_hitcount ) play_se = 1; // 相殺で残りヒット数が変化した=何か相殺した
 					
 					if( ets.isFireBall ) //飛び道具なら自動で消滅フラグまで立てる
 					{
 						Battle_Std.SetFireBallFlags(def_BallFlags_SousaiSubHited); //相殺でヒット数が減ったことを記憶
-						if( BMvTbl.CalcHitValue(0) <=0 )
+						if( left_hitcount <=0 )
 						{
 							//_dpn("次回ファイナライズ予約");
 							Battle_Std.SetFireBallFlags(def_BallFlags_Finalize); //次回ファイナライズしてね
 						}
 					}
 					enemy.pop();
+				}
 
-					// 自分側
+				// 自分側
+				{
+					// _dpn("  相殺でヒット数減算に成功");
+					Battle_Std.MoveCode.AddFlag( def_MC_Sousai_EnemySubSuccess ); // 相殺成功フラグをたてる
+					if( pts.isYarareObject )
 					{
-						Battle_Std.MoveCode.AddFlag( def_MC_Sousai_EnemySubSuccess ); // 相殺成功フラグをたてる
+						Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_YarareObject_AnySousai ); // 雑に相殺してる
 					}
 				}
 			}
-			
-			// 二重に再生されるけど気にしない
+			else if( pts.isYarareObject )
+			{
+				// 相手がやられオブジェクトの場合は、def_MC_Sousai_NoSubHitCountがあっても、設置が消えて欲しいので処理を追加
+				{
+					// _dpn("  雑には相殺してそう");
+					Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_YarareObject_AnySousai ); // 雑に相殺してる
+				}
+			}			
+			// 二重に再生されるけど気にしない　※二重にならなくなったかも？
 			if( play_se )
 			{
 				BSound.SE_Play( { type=_SeType_Normal, num=195 } );
 			}
 		}
+		// _dpn("CheckSousai End");
 	}
-	// _dpn("end");
 }
 
 //Mvでよく使う関数登録
@@ -5112,11 +5301,12 @@ Battle_Std.AddToolShift_NoSurinuke <- function(plus_x=0, flag=0)
 }
 
 //画面外チェック
-function Battle_Std::CheckGamenGai()
+//margin_x : 少し余計に見るX距離（画面の外と見るところからマイナスされる）
+function Battle_Std::CheckGamenGai( margin_x=0 )
 {
 	local tp = BMvTbl.GetPosition( 0 ); //現在座標
 	local pos = BMvEff.GetCameraRect( { flags=_GetPos_TrueCamera } );
-	if(tp.x > (pos.ex+def_POS_GamenGaiYuuyoX) || tp.x < (pos.sx-def_POS_GamenGaiYuuyoX) )
+	if(tp.x > (pos.ex+def_POS_GamenGaiYuuyoX+margin_x) || tp.x < (pos.sx-def_POS_GamenGaiYuuyoX-margin_x) )
 	{
 		//_dm("CheckGamenGai:画面外");
 		return 1;
@@ -5451,6 +5641,7 @@ Battle_Std.JumpFrameID_NoHoldButton_MaskCheck <- function( tbl, buttonMaskCheck=
 	local flags = ("flags" in tbl)? tbl.flags : 0;
 	local noCheckNgTiming = ( (flags&(1<<0)) != 0 )? 1 : 0;//1:NGチェックをしない　Def_JFIDNHB_NoCheckNgTiming
 	local holdForever = ( (flags&Def_JFIDNHB_HoldForever) != 0 )? 1 : 0;
+	local objectHoldCheck = ( (flags&Def_JFIDNHB_ObjectHoldCheck) != 0 )? 1 : 0; // holdForeverのチェックをplayerでやらない
 	
 	// 先にホールド状態を取得
 	local player = BMvCore.GetPlayerCharaData(); // プレイヤーの情報を得る
@@ -5469,18 +5660,37 @@ Battle_Std.JumpFrameID_NoHoldButton_MaskCheck <- function( tbl, buttonMaskCheck=
 			}
 		}
 		
-		if( !hold )
+		local onceReleased = 0;
+
+		if( !objectHoldCheck ) // 通常はプレイヤーに対して処理
 		{
-			//離してしまったことを記憶しておく
-			if( !isExtended )
+			if( !hold )
 			{
-				//エクステンド確定後は設定しない
-				Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NotHoldForever );
+				//離してしまったことを記憶しておく
+				if( !isExtended )
+				{
+					//エクステンド確定後は設定しない
+					Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NotHoldForever );
+				}
 			}
+			onceReleased = Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_NotHoldForever ); // すでに一度離しているかどうか
 		}
-		local onceReleased = Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_NotHoldForever ); // すでに一度離しているかどうか
 		
 		player.pop();
+		
+		if( objectHoldCheck ) // 設置オブジェクトなどはこっちでやる
+		{
+			if( !hold )
+			{
+				//離してしまったことを記憶しておく
+				if( !isExtended )
+				{
+					//エクステンド確定後は設定しない
+					Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NotHoldForever );
+				}
+			}
+			onceReleased = Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_NotHoldForever ); // すでに一度離しているかどうか
+		}
 		
 		local use_hold = hold;
 		if( holdForever && onceReleased ) use_hold = 0;
@@ -5544,8 +5754,6 @@ Battle_Std.JumpFrameID_NoHoldButton_MaskCheck <- function( tbl, buttonMaskCheck=
 		// _dp("\n def_MC2_CheckEndExtendAction:"+Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_CheckEndExtendAction ) );
 		if( !hitCheckId && Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_CheckStartExtendAction ) && !Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_CheckEndExtendAction ) )
 		{
-			// _dp("\n エクステンドチェックの後、どうなったかな？");
-			
 			local noExtendJumped = 0;
 			if( typeof tbl.jumpid=="array" )
 			{
@@ -5945,7 +6153,7 @@ Battle_Std.SetPosition_DamageHanteiRect <- function( tbl={} )
 // flags (1<<3) : 相手が地上で(1<<2)のときに、X座標無効
 // flags (1<<4) : 相手が地上で(1<<2)のときに、Y座標無効
 // flags (1<<5) : つかみ中でも処理
-// flags (1<<6) : 重なりが合わさった時のズラし処理を新仕様にする（MEMO:そのうち廃止、この仕様のみにする）
+// flags (1<<6) : 重なりが合わさった時のズラし処理を新仕様にする（廃止。かならず有効）
 Battle_Std.MoveEnemyEtcRect <- function( power, _flags=0 )
 {
 	// local rc = Battle_Std.GetHanteiRect_Player( { check=[ _Hantei_Etc, 0 ], flags=0 } );
@@ -6022,7 +6230,7 @@ Battle_Std.MoveEnemyEtcRect <- function( power, _flags=0 )
 				}
 				
 				
-				local newkasanariShift = (_flags&(1<<6));//重なりあったとき、特殊判定の方に動かすのを優先する
+				local newkasanariShift = 1; // (_flags&(1<<6));//重なりあったとき、特殊判定の方に動かすのを優先する
 				
 				//重なり判定があるけど、重なりチェックをしない吹き飛びのとき、不用に処理をしてしまうことがある
 				//古い処理だと、画面端で重なりの長さに差がある相手のとき、向きが逆になることがある
@@ -6570,6 +6778,7 @@ Battle_Std.NoCansel_NoAttackHit <- function( tbl={} )
 	local hosei_uwagaki = ("上書き補正" in tbl)? tbl["上書き補正"] : 80; //デフォルト上書き補正
 	local hosei_zyozan = ("乗算補正" in tbl)? tbl["乗算補正"] : 90; //デフォルト乗算補正
 	local no_atk_hit = ("noattackhit" in tbl)? tbl.noattackhit : 1; //追撃不能にするかどうか　デフォは1
+	local no_zurasi_hosei = ("no_zurasi_hosei" in tbl)? tbl.no_zurasi_hosei : 0;
 
 	//NoAttackHit
 	if( Battle_Std.CheckNoCansel() ) //キャンセルしないでFinalizeした
@@ -6585,9 +6794,16 @@ Battle_Std.NoCansel_NoAttackHit <- function( tbl={} )
 	{
 		// _dm("NoCansel_NoAttackHit キャンセルした");
 		//レインコンボもここなのがやや怖いので強制的に基底＋乗算補正をかける
-		BMvEff.StdCall( { type=6, no=112, param=[ hosei_uwagaki,0,0,0,0, 0,0,0,0,0, 0,0 ]} ); //上書き８０
-		BMvEff.StdCall( { type=6, no=112, param=[ hosei_zyozan,1,0,0,0, 0,0,0,0,0, 0,0 ]} ); //乗算９０
-		
+		if( no_zurasi_hosei && BMvTbl.GetMvStatus().MvCount <=2 )
+		{
+			// _dpn("ズラし押しっぽいので補正処理をしない");
+		}
+		else
+		{
+			// _dpn("キャンセル時の抜け補正");
+			BMvEff.StdCall( { type=6, no=112, param=[ hosei_uwagaki,0,0,0,0, 0,0,0,0,0, 0,0 ]} ); //上書き８０
+			BMvEff.StdCall( { type=6, no=112, param=[ hosei_zyozan,1,0,0,0, 0,0,0,0,0, 0,0 ]} ); //乗算９０
+		}
 		// レインコンボのみの取得はできない（LastUpdateで被ダメかどうかを検知できない）
 	}
 }
@@ -6656,6 +6872,10 @@ Battle_Std.SetStatus_AirAtkStatus <- function()
 {
 	BMvTbl.SetPP(def_PP_AirAtkStatus,0); //ジャンプ攻撃ステータス初期化
 	
+	// この処理は一旦オフにしておく（あってもなくても低空アサルトの性能に差が出なかったので）
+	// def_MC3_EnableJumpFramePPはジャンプのMVでだけ有効だが、ジャンプからジャンプ攻撃をズラし押ししてアサルトだしたときも使いたいので記憶しておく
+	// Battle_Std.PassBeforeMoveCodeEx( 3, def_MC3_EnableJumpFramePP ); // JumpFrameが有効なMVであることの引継ぎ
+	
 	Battle_Std.MoveCode.AddFlag( def_MC_EnableAirAtkStatus ); // AirAtkStatusが有効なMvとする
 	
 	//アサルトから飛んできたらフラグを立てる	
@@ -6669,7 +6889,7 @@ Battle_Std.SetStatus_AirAtkStatus <- function()
 		
 		local isAirAssult = Battle_Std.ChangeMoveCodeEx_CheckFlag( 7, def_MC7_AirAssult )? 1 : 0;
 		
-		//MEMO:LPの指定はもういらないと思うけど、念の為残している
+		//MEMO:LPの指定はもういらないと思うけど、念の為残している　※ケイアスで使ってたのも消した
 		local type = BMvTbl.GetLP(1); //アサルトのmvからなら設定されているはず
 		if( type==1 || isAirAssult ) //空中アサルトだったら
 		{
@@ -7186,24 +7406,6 @@ Battle_Std.GetHPBalance <- function()
 		}
 	}
 	return 0;
-}
-
-// コンボポイントを乗算
-Battle_Std.ComboPoint_Multi <- function( _par )
-{
-	local cp = BMvTbl.ComboPoint_Calc( { num=0 } );
-
-	local calccp = cp * _par / 100;
-	if( calccp < 0 ) calccp = 0; // 下限
-	if( calccp > 100 ) calccp = 100; // 上限
-
-	local addcp = calccp - cp;
-	if( addcp < -100 || addcp > 100 ) return 0; // 失敗
-	
-	BMvTbl.ComboPoint_Calc( { num=addcp } );
-	
-	// _dp("\n CPM計算:"+cp+" -> "+calccp +" (x"+ _par+"%)" );
-	return 1;
 }
 
 Battle_Std.SoundStatus_CheckFlag <- function( _flag )
@@ -8044,15 +8246,16 @@ Battle_Std.JumpStatus.Check <- function( flag )
 Battle_Std.CheckObjectisYarare <- function( param={} )
 {
 	local ret_flags = 0;
-	local subed = Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess );
+	local subed = Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_YarareObject_AnySousai );
 	if( !subed )
 	{
-		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_CheckSousaiYarareObject ); // 毎フレーム設定する意味はないが影響範囲を狭めた
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_CheckSousaiYarareObject ); // 飛び道具と相殺する壊せるオブジェクト 毎フレーム設定する意味はないが影響範囲を狭めた
 		Battle_Std.CheckSousai(); // ここでフラグ付与して下の処理にいく
 	}
-	if( Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
+	if( Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_YarareObject_AnySousai ) )
 	{
-		Battle_Std.MoveCode.DelFlag( def_MC_Sousai_EnemySubSuccess ); // 相手側からしかフラグが立たないこともある
+		// 相手側からしかフラグが立たないこともある
+		Battle_Std.MoveCodeEx.DelFlag( 2, def_MC2_YarareObject_AnySousai )
 		
 		ret_flags = Battle_Std.Val_AddFlag(ret_flags,(1<<1)); // 相殺成功
 	}
@@ -8071,8 +8274,10 @@ Battle_Std.CheckObjectHanteiCross <- function( _hantei, param={} )
 {
 	local stoptime = ("stoptime" in param)? param.stoptime : 0;
 	local pride = ("pride" in param)? param.pride : 0;
+	local checkflag = ("checkflag" in param)? param.checkflag : _HC_EnemyPc|_HC_EnemyObj|_HC_WithoutNoHanteiFlagObj;
+	local retcore = ("retcore" in param)? param.retcore : 0;
 
-	local enemy = BMvEff.CheckHantei( { src=[ _hantei, 0, -1 ], dst=[ _Hantei_Attack, 0, -1 ], flags=_HC_EnemyPc|_HC_EnemyObj|_HC_WithoutNoHanteiFlagObj } );
+	local enemy = BMvEff.CheckHantei( { src=[ _hantei, 0, -1 ], dst=[ _Hantei_Attack, 0, -1 ], flags=checkflag } );
 	if( enemy.push() )
 	{
 		// 攻撃出現チェック
@@ -8152,7 +8357,7 @@ Battle_Std.CheckObjectHanteiCross <- function( _hantei, param={} )
 			// _dpn("まだInit通過していないので当たってないことにする");
 			return 0;
 		}
-		
+		if( retcore ) return enemy;
 		return 1;
 	}
 	return 0;
@@ -8201,6 +8406,11 @@ Battle_Std.CheckDamageTiming <- function()
 	{
 		return 1;
 	}
+	return 0;
+}
+
+Battle_Std.CheckDamageTiming_OnlyPartner <- function( _check_strict = 0 )
+{
 	return 0;
 }
 
@@ -9515,7 +9725,17 @@ Battle_Std.SetSpHosyoHosei <- function( param = {} ) : ( hosyoParams )
 	
 	local useparam = hosyoParams[ param.type ];
 	hosyoParam.flag = useparam.flag;
-	hosyoParam.hosei = ( isDying && vpcombo )? useparam.dyinghosei : ( isDying )? useparam.suddundyinghosei : useparam.hosei;
+	
+	if( Def_Sys_DyingVeilOffHosei ) // UNI2 1.04
+	{
+		// 瀕死時は最低保障補整が緩く。初めからVPだったなら更に最低保障補整が緩くなる
+		hosyoParam.hosei = ( isDying && vpcombo )? useparam.dyinghosei : ( isDying )? useparam.suddundyinghosei : useparam.hosei;
+	}
+	else
+	{
+		// 常に最低保障補整を緩めにする（瀕死時に緩くする仕様を廃止）
+		hosyoParam.hosei = useparam.dyinghosei;
+	}
 	
 	_dp("\n ■SetSpHosyoHosei:"+param.type+" 補正:"+hosyoParam.hosei+"%" );
 
@@ -10018,6 +10238,7 @@ Battle_Std.PassHitMoveCodes <- function()
 Battle_Std.PassLandMoveCodes <- function()
 {
 	Battle_Std.PassBeforeMoveCodeEx( 0, def_MC_Atk );
+	// Battle_Std.PassBeforeMoveCodeEx( 0, def_MC_BCAction ); // ※FFの着地でMVを変えるときは呼び出すこと
 	Battle_Std.PassBeforeMoveCodeEx( 1, def_MC1_AtkJump );
 
 	Battle_Std.PassBeforeMoveCodeEx( 1, def_MC1_SidouHitSkill ); // 始動技であることの引継ぎ
@@ -10205,6 +10426,62 @@ Battle_Std.DrawInActiveEffect <- function()
 	}
 	Battle_Std.CreateObjectEX( { x=0, y=sety, datatype=1, pat="sternness", flags=_Position_ToolShift,
 	objectflags=_ObjFlags_MoveTimeStopAll } );
+}
+
+//何が何でも相手の方を向く、振り向く
+Battle_Std.SetMukiAuto <- function( param={} )
+{
+	local ppos = BMvTbl.GetPosition();
+
+	local epos = Battle_Std.GetEnemyPosition();
+
+	if( "CheckEnemyVector" in param && param.CheckEnemyVector )
+	{
+		local evec = Battle_Std.GetEnemyVector( { flags=_Vector_Bound|_VecFlag_NoMuki } );
+		
+		// 相手がやられ中のときはやられベクトルも計算に含める
+		// 色々調べてみたが、PAT重なりの有無は関係なく、ベクトルの有無でのズレがあるのみだった
+		if( Battle_Std.CheckEnemyisBound() )
+		{
+			_dpn("相手のやられベクトルも考慮して厳密に振り向く");
+			epos.x += evec.x;
+		}
+	}
+
+	
+	if( ppos.x >  def_POS_GamenHajiX ) ppos.x =  def_POS_GamenHajiX;
+	if( ppos.x < -def_POS_GamenHajiX ) ppos.x = -def_POS_GamenHajiX;
+	if( epos.x >  def_POS_GamenHajiX ) epos.x =  def_POS_GamenHajiX;
+	if( epos.x < -def_POS_GamenHajiX ) epos.x = -def_POS_GamenHajiX;
+	
+	if( ppos.x < epos.x )
+	{
+		BMvTbl.SetMuki( _Direction_Right );
+		return;
+	}
+	else if( ppos.x > epos.x )
+	{
+		BMvTbl.SetMuki( _Direction_Left );
+		return;		
+	}
+	else
+	{
+		BMvTbl.SetMuki( _Direction_Auto );		
+	}
+	return;
+	//BMvEff.GetPointStatusを使うと壁めり込み押し戻し処理前なのでうまくいかねぇっす
+}
+
+// PATの1F目にベクトルがあって向きをAutoしたいとき用の関数
+// addxには未対応
+Battle_Std.SetMukiAuto_RevAutoVec <- function()
+{
+	local vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+	if( BMvTbl.CheckFurimuki() )
+	{
+		BMvTbl.SetVector( { x=-vec.x, flags=_Vector_Normal } );
+	}
+	BMvTbl.SetMuki(_Direction_Auto);
 }
 
 Battle_Std.ExtendTiming <- function()
@@ -10451,8 +10728,9 @@ Battle_Std.ClearHitStatus_SetChangeMv <- function()
 	BMvTbl.CalcHitValue(-10000);  // 攻撃回数情報のクリア
 }
 
-Battle_Std.Play_SubtitleVoice <- function( _se, _delay=120 )
+Battle_Std.Play_SubtitleVoice <- function( _se, _delay=120, _timelinetype=0 )
 {
+	// _dpn("_timelinetype:"+_timelinetype);
 	local use_delay = _delay;
 	local tag = format("battlevoice_chr%03d_%03d",BMvTbl.GetMvStatus().CharaNo,_se );
 	local string = sqfunc.GetExStringText( tag );
@@ -10464,7 +10742,7 @@ Battle_Std.Play_SubtitleVoice <- function( _se, _delay=120 )
 	local file_size = BSound.SE_GetBufferSize( { type=_SeType_Player, num=_se } );
 	local calc_frame = ((file_size / (48 * 2))*60)/1000;
 
-	local debug_str = ("BT:"+tag+" "+use_delay+"F「"+string+"」Num:"+_se+" Calc:"+calc_frame+"F");
+	local debug_str = ("BT:"+tag+" "+use_delay+"F Num:"+_se+" Calc:"+calc_frame+"F「"+string+"」");
 	_dpn( debug_str );
 	
 	if( abs(param-calc_frame) > 1 )
@@ -10476,7 +10754,24 @@ Battle_Std.Play_SubtitleVoice <- function( _se, _delay=120 )
 	//未定義のときは*が入るのでそこでチェック
 	if( string != "*" )
 	{
-		BMvEff.Chara_SetMessage( 640, 640, string, use_delay, _se );
+		if( _timelinetype == 0 ) // common
+		{
+			// 1Pと2Pが同時にしゃべるとき
+			// 話者を表示する必要あり
+			local pside = BMvTbl.GetPlayerSide();
+			if( pside == 0 )
+			{
+				BMvEff.Chara_SetMessage( 640, 640-20, string, use_delay, _se );
+			}
+			else
+			{
+				BMvEff.Chara_SetMessage( 640, 640+10, string, use_delay, _se );
+			}
+		}
+		else
+		{
+			BMvEff.Chara_SetMessage( 640, 640, string, use_delay, _se );
+		}
 	}
 	else
 	{
@@ -10744,7 +11039,7 @@ Battle_Std.SetSkillMvChipDamage <- function()
 {
 	//※攻撃力を1/8した値に削り係数が適用される
 	//value=100でデフォルト
-	BMvTbl.SetChipDamStatus( { type=0, value=100, time=255, flag=_ClearFlag_ChangeMv } ); // 必殺技の削り値
+	BMvTbl.SetChipDamStatus( { type=0, value=100, time=9999, flag=_ClearFlag_ChangeMv } ); // 必殺技の削り値
 }
 
 
@@ -10937,8 +11232,6 @@ Battle_Std.RecoverDoubleExHohoHosei <- function()
 
 Battle_Std.InitRecover <- function()
 {
-	_dpn("InitRecover");
-	
 	BMvEff.AttackInfoString_Set({ word=def_AISW_Recover,} );
 	
 	Battle_Std.GRD_AddValue({ val=def_GRD_Recover }); //受身で増加	
@@ -10975,45 +11268,6 @@ Battle_Std.CallSystemHereYouAre <- function()
 		local eff = BMvEff.CreateObject( { datatype=1, start_pat="sys_you", mvname="Mv_SystemHereYouAre" } );
 	}
 }
-
-Battle_Std.Play_SubtitleVoice <- function( _se, _delay=120 )
-{
-	if( typeof _se != "integer" ) return; // tableでのメッセージ形式には対応していない
-	
-	local use_delay = _delay;
-	
-	local tag = format("battlevoice_chr%03d_%03d",BMvTbl.GetMvStatus().CharaNo,_se );
-	local string = sqfunc.GetExStringText( tag );
-	
-	if( Def_Dbg_LocalDebugMode )
-	{
-		// 音声のフレーム数と指定時間に差があるときは警告を出したりする
-		// 音声実装時の目安にも使う
-		local param = BSound.SE_GetUserParam( { type=_SeType_Player, num=_se, } );//音声のフレーム数を取得
-
-		local file_size = BSound.SE_GetBufferSize( { type=_SeType_Player, num=_se } );
-		local calc_frame = ((file_size / (48 * 2))*60)/1000;
-
-		local debug_str = ("BT:"+tag+" "+use_delay+"F「"+string+"」Num:"+_se+" Calc:"+calc_frame+"F");
-		_dpn( debug_str );
-		
-		if( abs(param-calc_frame) > 1 )
-		{
-			// debugfontL.draw_message( debug_str );
-		}
-	}
-	
-	//未定義のときは*が入るのでそこでチェック
-	if( string != "*" )
-	{
-		BMvEff.Chara_SetMessage( 640, 640, string, use_delay, _se );
-	}
-	else
-	{
-		BSound.SE_Play( { type=_SeType_Player, num=_se } );
-	}
-}
-
 
 //事前にみつけたEX暗転マーク箇所にエフェクトをよびつつ暗転する
 Battle_Std.CallEXSkillAntenEffect <- function( param={} )
@@ -11477,6 +11731,95 @@ Battle_Std.CheckChargeCommandActivation_Assault <- function()
 		{
 			return 1; // タメ分割で漏れそう
 		}
+	}
+	return 0;
+}
+
+// 相手がガードシールド中で攻撃判定が触れてたらガード中空振りのフラグを消す
+Battle_Std.EnemyGuardShield_ThroughRemoveBound <- function( param={} )
+{
+	Battle_Std.MoveCodeEx.DelFlag( 2, def_MC2_GRDBreak_WeakDmgHosei ); // まず初期化
+	BMvTbl.SetPP(def_PP_WeakBreakDamageHosei,0); // 基本的に毎フレーム初期化
+	
+	local mvs = BMvTbl.GetMvStatus();
+	// _dpn("フラグ:"+BMvTbl.GetMvStatus().Param1+" flag:"+param.Param1+" ?"+BMvTbl.GetFrameParam( 1 )+" mvs:"+mvs.Param1 );
+	if( "Param1" in param && mvs.Param1&param.Param1 )
+	{
+		// このタイミングで処理する
+	}
+	else
+	{
+		return 0;
+	}
+	local damageHosei = ("Hosei" in param)? param.Hosei : 0; // 0は補整なし
+	
+	// この検知だと移動ベクトルは考慮されておらず、1F前の座標で見てるので少し問題がある
+	// とはいえあたってもないのにフラグをかけるのはまずいので、一旦は現象ので仕様としておく（ほぼ問題はないはず）
+	local leftHitCount = BMvTbl.CalcHitValue(0);
+	local enemy = BMvEff.CheckHantei( { src=[ _Hantei_Attack , 0, -1 ], dst=[ _Hantei_Kurai, 0, -1 ], flags=_HC_EnemyPc } );
+	if( leftHitCount > 0 && enemy.push() )
+	{
+		local bs = BtlMvStd.GetBoundStatus();
+		local isGuardShield = ( bs.isDone && bs.isBound == 2 && BMvEff.GuardSP_Get() )? 1 : 0;
+		// local isGuardShieldFlag = Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_GuardShiled ); // 見なくて良さそう
+		enemy.pop();
+		
+		if( isGuardShield )
+		{
+			_dpn("★ガードシールド中なので掴む");
+			
+			// BMvTbl.SetAtkGuardFlag( { guard=_GuardFlag_ThroughRemoveBound, time=1, flag=_ClearFlag_ChangeMv|_ClearFlag_ChangeFrame } );
+			BMvTbl.SetAtkGuardFlag( { guard=_GuardFlag_ThroughRemoveGuardBound, time=1, flag=_ClearFlag_ChangeMv|_ClearFlag_ChangeFrame } );
+			
+			if( damageHosei )
+			{
+				Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_GRDBreak_WeakDmgHosei );
+				BMvTbl.SetPP(def_PP_WeakBreakDamageHosei,damageHosei);
+			}
+			return 1;
+		}
+	}
+	return 0;
+}
+
+// ステアエンダーのあとだけ受け付けるコマンド範囲のチェック
+Battle_Std.CheckSSRelayAtkExCancel <- function( check_cmd_pos )
+{
+	local cmd_pos = BCMDTbl.GetSuccessButtonPos();
+	if( cmd_pos >= check_cmd_pos )
+	{
+		local cancel = BCMDTbl.CheckCancel(_SkillType_ExSpecial );
+		if( Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_SSRelayAtk ) && !Battle_Std.CharaisKO() && cancel!=255 && cancel!=0 )
+		{
+			_dpn("SS技っぽいので受付めっちゃ長い1");
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	return 1; // cmdposが手前なら成功
+}
+
+// かなり簡易的な演出系の検知
+Battle_Std.EasyCheckSPActionProduction <- function()
+{
+	local player = BMvCore.GetPlayerCharaData();
+	if( player.push() )
+	{
+		local mva = BMvTbl.GetMvAction();
+		player.pop();
+		
+		if( mva == def_MVA_LASkill ) return 1;
+	}
+	local eneny = BMvCore.GetEnemyCharaData();
+	if( eneny.push() )
+	{
+		local mva = BMvTbl.GetMvAction();
+		eneny.pop();
+
+		if( mva == def_MVA_LASkill ) return 1;
 	}
 	return 0;
 }

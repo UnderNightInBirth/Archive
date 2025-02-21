@@ -45,6 +45,7 @@ const Def_ChrNo_Wag		= 16;
 const Def_ChrNo_Enk		= 17;
 const Def_ChrNo_Lnd		= 18;
 const Def_ChrNo_Tsu		= 19;
+const Def_ChrNo_Udu		= 20;
 const Def_ChrNo_Mik		= 21;
 const Def_ChrNo_Kag		= 22;
 const Def_ChrNo_Kuo		= 23;
@@ -100,6 +101,7 @@ const def_PP_Set_214Input			= 2; //214派生の先行入力用
 const def_PP_Set_214SakeStatus		= 3; //214で技を回避したら1
 
 const def_PP_Set_CreateBlackHole		= 4; //ブラックホールが生成されているか
+const def_PP_Set_BlackShotPowStatus			= 5; //セグメントがFFで強化されているか（設置～発射中のみ有効） 1:FFでの強化弾 2:icFFでの強化弾
 
 const def_PP_Hil_3CCommand			= 0; //2C入力時に3C入力だったかどうか
 const def_PP_Hil_HoldLv			= 1; //ホールド剣のタメレベル 0:LV1 1:LV2
@@ -111,6 +113,7 @@ const def_PP_Elt_ReloadTmp1		= 3; //リロード用テンポラリ
 const def_PP_Elt_AerialStatus		= 5; //エリアルジャンプ中は1 着地で0
 const def_PP_Elt_CuttingSinkCount	= 6; //コンボ中421Bを何回入れたか　コンボ終了で0
 const def_PP_Elt_FreeMotionType = 7; // フリーモーションParam記憶
+const def_PP_Elt_SkillAddReload = 8; // 特定の技からの追加リロード受付
 
 const def_PP_Aka_KouseiSuccess		= 0; //こうせいせいこうフラグ
 const def_PP_Aka_StdBandCType		= 1; //こうせい 0:奇数回 1:遇数回
@@ -168,6 +171,21 @@ const def_PP_Kag_4Command = 0; // レバーを4入れで入力した（4CとB_4Bで使用）
 const def_PP_Kag_Cancel3C = 1; // キャンセルで出した3C
 
 const CDef_Tsu_PP_FFKeep = 0; // 構え中1になっていて、Dを押すと0になる
+
+const def_PP_Udu_ThrowItem = 0; // 投げたアイテムの数（ローテ用）
+const def_PP_Udu_FFKeep = 1; // 構え中1になっていて、Dを押すと0になる
+const def_PP_Udu_OnCoffinType = 3;
+const def_PP_Udu_CoffinType = 5;
+// 棺を出せるかどうか　　：　棺は画面に１つだけ
+// 棺の種類が何なのか　　：　横・縦の２つ？
+const def_PP_Udu_CanRideCoffin = 6;
+// 棺に乗れる状態かどうか：　棺の絵が乗れそうな状態になるまで待機
+
+const def_PP_Udu_GusDamageStatus = 7;
+// 毒ガス状態　状態の取得の他、0にすると毒状態を初期化できる
+
+const def_PP_Udu_AirDiveCoffinLimit = 8;
+
 
 //-----------------------------------------------------------------------------
 //キャラ固有ゲージ設定 defcg_***

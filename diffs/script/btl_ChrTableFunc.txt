@@ -1026,11 +1026,12 @@ function Battle_Std::MakeMoveTmpl( t, mvlist, _ChrNum )
 			local isBC = find.BC;//n“®ŠÖŒW‚È‚­SPˆµ‚¢‚©‚Ç‚¤‚©
 			local isSS = find.SSRelay;//n“®ŠÖŒW‚È‚­SSˆµ‚¢‚©‚Ç‚¤‚©@¦’è‹`‚Í‚µ‚Ä‚¢‚é‚ªŠî–{‚ÍEX‹Zˆµ‚¢
 			
-			if( Def_Sys_SSRelayType )
+			if( Def_Sys_SSRelayType == 1 )
 			{
 				if( find.SSRelay )
 				{
 					// EXˆµ‚¢‚É‚È‚Á‚Ä’´‹Z‚âCS‚µ‚©‚Å‚«‚È‚­‚È‚é
+					// EX‹Zˆµ‚¢‚È‚Ì‚ÅÅ’á•ÛØ•â³‚È‚Ç‚à‚©‚©‚é‚Ì‚Å’ˆÓi•Ê‚ÌêŠ‚Å’e‚¢‚Ä‚¢‚éj
 					isEX = 1;
 				}
 			}
@@ -1230,6 +1231,11 @@ function Battle_Std::MakeMoveTmpl( t, mvlist, _ChrNum )
 						// _dpn("šEX");
 						BMvTbl.SetMvAction( def_MVA_EXSkill );
 					}
+					else if( preParam.isSS )
+					{
+						_dpn("šSS");
+						BMvTbl.SetMvAction( def_MVA_SSSkill );
+					}
 					else if( preParam.isSP )
 					{
 						// _dpn("šSP");
@@ -1313,6 +1319,11 @@ function Battle_Std::MakeMoveTmpl( t, mvlist, _ChrNum )
 						// SS‚à‚±‚±
 						BMvTbl.SetMvAction( def_MVA_EXSkill );
 					}
+					else if( preParam.isSS )
+					{
+						_dpn("šSS");
+						BMvTbl.SetMvAction( def_MVA_SSSkill );
+					}
 					else if( preParam.isSP )
 					{
 						// _dpn("šSP");
@@ -1349,7 +1360,15 @@ function Battle_Std::MakeMoveTmpl( t, mvlist, _ChrNum )
 					if( preParam.isGround )
 					{
 						if( !preParam.noClearVector ) Battle_Std.InitCharaVector(); //Šµ«‚ğc‚µ‚½ƒxƒNƒgƒ‹‰Šú‰»
-						if( preParam.furimuki ) BMvTbl.SetMuki(_Direction_Auto); //ƒqƒbƒgó‘ÔˆÚs‚©’Ç‰ÁƒRƒ}ƒ“ƒhˆÈŠO‚È‚çU‚èŒü‚­
+						if( preParam.furimuki )
+						{
+							BMvTbl.SetMuki(_Direction_Auto); //ƒqƒbƒgó‘ÔˆÚs‚©’Ç‰ÁƒRƒ}ƒ“ƒhˆÈŠO‚È‚çU‚èŒü‚­
+							
+							if( Battle_Std.ChangeMoveCodeEx_CheckFlag( 5, def_MC5_StrictFurimukiCheckNextMv ) )
+							{
+								Battle_Std.SetMukiAuto( { CheckEnemyVector=1 } ); // ‘Šè‚Ì‚â‚ç‚êƒxƒNƒgƒ‹‚àl—¶‚µ‚ÄŒµ–§‚É‚â‚é
+							}
+						}
 					}
 					else
 					{
@@ -1627,7 +1646,7 @@ function Battle_Std::MakeMoveTmpl( t, mvlist, _ChrNum )
 							}
 							else if( preParam.isEX_Init )
 							{
-								Battle_Std.StartExSkill(); //ƒRƒXƒgÁ”ï
+								Battle_Std.StartExSkill( 1 ); //ƒRƒXƒgÁ”ï 1:‚â‚ç‚ê‚Å‚Ì”²‚¯
 							}
 						}
 					}
@@ -2205,6 +2224,7 @@ function Battle_Std::MakeMoveTmpl( t, mvlist, _ChrNum )
 							Battle_Std.AddFireBallFlags( def_BallFlags_NoSousaiVanish ); // ƒqƒbƒg”0‚É‚È‚Á‚Ä‘ŠE‚ÅÁ‚¦‚éˆ—‚ğ‚µ‚È‚¢
 							// BMvTbl.SetFinalize(def_FC_FireBallDamage);
 						}
+						/*
 						else if( Battle_Std.CheckDamageTiming_OnlyPartner() )
 						{
 							//ƒp[ƒgƒi[‚Éƒqƒbƒg‚µ‚½Aƒqƒbƒgˆ—‚ğ‚·‚é‚Æ‚½‚¢‚Ä‚¢‚¨‚©‚µ‚­‚È‚é‚Ì‚ÅƒK[ƒhˆ—‚É”ò‚Ô‚æ‚¤‚É‚·‚é
@@ -2219,6 +2239,7 @@ function Battle_Std::MakeMoveTmpl( t, mvlist, _ChrNum )
 								Battle_Std.AddFireBallFlags( def_BallFlags_NoSousaiVanish ); // ƒqƒbƒg”0‚É‚È‚Á‚Ä‘ŠE‚ÅÁ‚¦‚éˆ—‚ğ‚µ‚È‚¢
 							}
 						}
+						*/
 					}
 					if( fb_params.GuardTiming )
 					{
@@ -2823,6 +2844,7 @@ function Battle_Std::MakeStdCombo( cmdtmpl, ar, type=0 /*0:—§‚¿ 1:‚µ‚á‚ª‚İ 2:‹ó’
 //		cmdtmpl[cmdname] <- {};
 
 		local tmplcmd_name = (v.UpdateMoveName).slice(3);
+		local command_name = "Cmd_"+cmdname; // name‚Ì’l
 		
 		local tCmdCheck = {};
 		local tCmdPosState = _PosState_Ground;
@@ -2874,6 +2896,7 @@ function Battle_Std::MakeStdCombo( cmdtmpl, ar, type=0 /*0:—§‚¿ 1:‚µ‚á‚ª‚İ 2:‹ó’
 		cmdtmpl[cmdname] <-
 		{
 			cmdtmplflags = Def_SCT_Common,
+			name = command_name,
 			num = use_commannum,
 			command = use_cmdar, // [ "0+A","4+A","6+A" ],
 			flags = [ "lastdelay" ], //1F‘‰Á
@@ -2891,7 +2914,7 @@ function Battle_Std::MakeStdCombo( cmdtmpl, ar, type=0 /*0:—§‚¿ 1:‚µ‚á‚ª‚İ 2:‹ó’
 						local cancel = BCMDTbl.CheckCancel(_SkillType_ExSpecial );
 						if( Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_SSRelayAtk ) && !Battle_Std.CharaisKO() && cancel!=255 && cancel!=0 )
 						{
-							_dpn("SS‹Z‚Á‚Û‚¢‚Ì‚Åó•t‚ß‚Á‚¿‚á’·‚¢");
+							_dpn("ƒXƒ}[ƒgƒXƒeƒA:SS‹Z‚Á‚Û‚¢‚Ì‚Åó•t‚ß‚Á‚¿‚á’·‚¢");
 						}
 						else
 						{

@@ -61,6 +61,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 4;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 4;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 4;
+	chrparam.Param[type][Def_ChrNo_Udu] = 5;
 }
 
 {	// ƒ_ƒbƒVƒ…’â~•s”\‚e
@@ -96,6 +97,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 4;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 4;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 7;
+	chrparam.Param[type][Def_ChrNo_Udu] = 9;
 }
 
 {	//ƒ_ƒbƒVƒ…’â~‚âMv”²‚¯‚Ì‚Æ‚«‚ÌƒxƒNƒgƒ‹ŒW”
@@ -126,6 +128,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = [100,10,2700,200];
 	chrparam.Param[type][Def_ChrNo_Tsu] = [100,10,2700,200];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [100,10,2700,200];
+	chrparam.Param[type][Def_ChrNo_Udu] = [100,10,2700,200];
 }
 
 {	//ƒ_ƒbƒVƒ…ƒWƒƒƒ“ƒv‚ÌŠµ«
@@ -156,6 +159,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 17;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 17;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 17;
+	chrparam.Param[type][Def_ChrNo_Udu] = 17;
 }
 
 
@@ -187,6 +191,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 8;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 8;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 8;
+	chrparam.Param[type][Def_ChrNo_Udu] = 8;
 }
 
 {	// ƒoƒNƒXƒe‚Ì“Š‚°–³“GƒtƒŒ[ƒ€
@@ -216,6 +221,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 10;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 10;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 10;
+	chrparam.Param[type][Def_ChrNo_Udu] = 10;
 }
 
 //•à‚«‚âƒ_ƒbƒVƒ…‚Ì‘«‰¹‚r‚d’è‹`
@@ -259,6 +265,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[typeA][Def_ChrNo_Kag] = _FSST_Heels;
 	chrparam.Param[typeA][Def_ChrNo_Tsu] = _FSST_Shoes;
 	chrparam.Param[typeA][Def_ChrNo_Kuo] = -1;
+	chrparam.Param[typeA][Def_ChrNo_Udu] = -1;
 
 	local typeB = "‘«‰¹‚a_‚r‚d”Ô†";
 	
@@ -287,6 +294,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[typeB][Def_ChrNo_Kag] = _FSST_Heels+1;
 	chrparam.Param[typeB][Def_ChrNo_Tsu] = _FSST_Shoes+1;
 	chrparam.Param[typeB][Def_ChrNo_Kuo] = -1;
+	chrparam.Param[typeB][Def_ChrNo_Udu] = -1;
 }
 
 {
@@ -316,6 +324,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 1;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 1;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 1;
+	chrparam.Param[type][Def_ChrNo_Udu] = 1;
 }
 
 {
@@ -345,6 +354,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 0;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 0;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 0;
+	chrparam.Param[type][Def_ChrNo_Udu] = 0;
 }
 
 {
@@ -374,6 +384,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 1;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 1;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 1;
+	chrparam.Param[type][Def_ChrNo_Udu] = 1;
 }
 
 {
@@ -403,6 +414,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = 0;
 	chrparam.Param[type][Def_ChrNo_Tsu] = 0;
 	chrparam.Param[type][Def_ChrNo_Kuo] = 0;
+	chrparam.Param[type][Def_ChrNo_Udu] = 0;
 }
 
 {
@@ -432,6 +444,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = [100,100];
 	chrparam.Param[type][Def_ChrNo_Tsu] = [100,100];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [100,100];
+	chrparam.Param[type][Def_ChrNo_Udu] = [100,100];
 }
 
 {
@@ -464,6 +477,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = [-1,-1,-1];
 	chrparam.Param[type][Def_ChrNo_Tsu] = [-1,-1,-1];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [9,-1,11];
+	chrparam.Param[type][Def_ChrNo_Udu] = [-1,-1,-1];
 }
 
 {
@@ -496,6 +510,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = [-1,7,-1];
 	chrparam.Param[type][Def_ChrNo_Tsu] = [-1,-1,-1];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [8,-1,-1];
+	chrparam.Param[type][Def_ChrNo_Udu] = [-1,-1,-1];
 }
 
 {
@@ -526,6 +541,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = [5,4];
 	chrparam.Param[type][Def_ChrNo_Tsu] = [5,4];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [5,4];
+	chrparam.Param[type][Def_ChrNo_Udu] = [5,4];
 }
 
 {	// •à‚«ƒxƒNƒgƒ‹’è‹`
@@ -556,6 +572,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = [512, 1100, -512,  -970]; // [512,  900, -512,  -800];
 	chrparam.Param[type][Def_ChrNo_Tsu] = [512, 1100, -512,  -860]; // [512,  800, -700,  -600];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [512, 1100, -512,  -910]; // [512, 1100, -512,  -800];
+	chrparam.Param[type][Def_ChrNo_Udu] = [512, 1050, -512,  -940];
 }
 
 {	// ˜AƒLƒƒƒ“ƒ_ƒ[ƒW•â³
@@ -586,6 +603,7 @@ chrparam.Get <- function( tbl={} ) //chrparam.Param‚©‚çì¬’†‚ÌƒLƒƒƒ‰”Ô†‚Ì’l‚ğ
 	chrparam.Param[type][Def_ChrNo_Kag] = [98,97];
 	chrparam.Param[type][Def_ChrNo_Tsu] = [98,98];
 	chrparam.Param[type][Def_ChrNo_Kuo] = [98,97];
+	chrparam.Param[type][Def_ChrNo_Udu] = [98,97];
 }
 local rapidAtkAHoseiAr = chrparam.Get( { type="˜AƒLƒƒƒ“ƒ_ƒ[ƒW•â³", chrnum=_ChrNo } );
 
@@ -599,38 +617,39 @@ local rapidAtkAHoseiAr = chrparam.Get( { type="˜AƒLƒƒƒ“ƒ_ƒ[ƒW•â³", chrnum=_Ch
 //E‘½’i‚Ì”ò‚Ñ“¹‹ï‚©‚çƒLƒƒƒ“ƒZƒ‹‚·‚é‚Í”ò‚Ñ“¹‹ï‚Ì“ñ’i–ÚˆÈ~‚Éƒ{[ƒiƒX•â³‚ªæ‚ç‚È‚¢‚æ‚¤‚É•â³‚ğ‚©‚¯‚éƒtƒŒ[ƒ€‚ğ’x‚ç‚¹‚é
 {
 	local type = "ƒXƒ}[ƒgƒXƒeƒA•â³";
-	chrparam.Param[type] <- array(CHRMAX, [100,0, 1,0,0] ); // ƒ_ƒ[ƒW•â³,CP,•â³‚ğ‚©‚¯‚éƒtƒŒ[ƒ€,MvˆÚs‚·‚é‹Z‚©‚Ç‚¤‚©,‰ÁZ‚·‚éŠÔ’â~F
-	chrparam.Param[type][Def_ChrNo_Hyd] = [110,0, 8,0,0];
-	chrparam.Param[type][Def_ChrNo_Lin] = [ 91,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Wal] = [110,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Car] = [130,0, 1,0,0];// ‘Ì—ÍÁ”ï‚·‚é‚Ì‚ÅˆÓ}“I‚Éƒ_ƒ[ƒW‚¿‚å‚¢‚‚ß‚É‚È‚Á‚Ä‚é
-	chrparam.Param[type][Def_ChrNo_Ori] = [150,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Gor] = [115,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Mer] = [108,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Vat] = [128,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Set] = [145,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Yuz] = [150,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Hil] = [133,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Elt] = [135,0, 1,1,0];
-	chrparam.Param[type][Def_ChrNo_Nan] = [145,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Bya] = [168,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Aka] = [153,0, 1,0,4];
-	chrparam.Param[type][Def_ChrNo_Cha] = [135,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Wag] = [138,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Enk] = [138,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Lnd] = [155,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Tsu] = [157,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Mik] = [146,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Kag] = [168,0, 1,0,0];
-	chrparam.Param[type][Def_ChrNo_Kuo] = [153,0,10,0,0];
-	chrparam.Param[type][Def_ChrNo_Pho] = [150,0, 1,0,0];
+	chrparam.Param[type] <- array(CHRMAX, [100,0, 1,0] ); // ƒ_ƒ[ƒW•â³,CP,•â³‚ğ‚©‚¯‚éƒtƒŒ[ƒ€,MvˆÚs‚·‚é‹Z‚©‚Ç‚¤‚©
+	chrparam.Param[type][Def_ChrNo_Hyd] = [110,0, 8,0];
+	chrparam.Param[type][Def_ChrNo_Lin] = [ 91,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Wal] = [110,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Car] = [130,0, 1,0];// ‘Ì—ÍÁ”ï‚·‚é‚Ì‚ÅˆÓ}“I‚Éƒ_ƒ[ƒW‚¿‚å‚¢‚‚ß‚É‚È‚Á‚Ä‚é
+	chrparam.Param[type][Def_ChrNo_Ori] = [150,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Gor] = [115,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Mer] = [108,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Vat] = [128,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Set] = [145,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Yuz] = [150,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Hil] = [133,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Elt] = [135,0, 1,1];
+	chrparam.Param[type][Def_ChrNo_Nan] = [145,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Bya] = [168,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Aka] = [153,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Cha] = [135,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Wag] = [138,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Enk] = [138,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Lnd] = [155,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Tsu] = [157,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Mik] = [146,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Kag] = [168,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Kuo] = [153,0,10,0];
+	chrparam.Param[type][Def_ChrNo_Pho] = [150,0, 1,0];
+	chrparam.Param[type][Def_ChrNo_Udu] = [120,0, 1,0];
 }
 local SS_ratio = chrparam.Get( { type="ƒXƒ}[ƒgƒXƒeƒA•â³", chrnum=_ChrNo } );
 
 {
-	local type = "ƒXƒ}[ƒgƒXƒeƒA”¼ƒƒbƒNˆø‚«Šñ‚¹";
+	local type = "ƒXƒeƒAƒGƒ“ƒ_[”¼ƒƒbƒNˆø‚«Šñ‚¹";
 	chrparam.Param[type] <- array(CHRMAX, { power=35 });
-	chrparam.Param[type][Def_ChrNo_Hyd] = { power=35 };
+	chrparam.Param[type][Def_ChrNo_Hyd] = { power=35, flags=(1<<6) };
 	chrparam.Param[type][Def_ChrNo_Lin] = { power=35 };
 	chrparam.Param[type][Def_ChrNo_Wal] = { power=35 };
 	chrparam.Param[type][Def_ChrNo_Car] = 0; // ƒIƒuƒWƒFƒNƒg
@@ -644,18 +663,50 @@ local SS_ratio = chrparam.Get( { type="ƒXƒ}[ƒgƒXƒeƒA•â³", chrnum=_ChrNo } );
 	chrparam.Param[type][Def_ChrNo_Elt] = { power=50 };
 	chrparam.Param[type][Def_ChrNo_Nan] = { power=35 };
 	chrparam.Param[type][Def_ChrNo_Bya] = { power=35 };
-	chrparam.Param[type][Def_ChrNo_Aka] = { power=35 };
-	chrparam.Param[type][Def_ChrNo_Cha] = { power=35 };
+	chrparam.Param[type][Def_ChrNo_Aka] = { [100]={ power=35 }, [200]={ power=35, flags=(1<<0) } } ; // “ñ’i–ÚXÀ•W–³Œø
+	chrparam.Param[type][Def_ChrNo_Cha] = { power=35, flags=(1<<6) }; // ‚‚ß‚Ì‘Šè‚Ì— ‚É‚¢‚©‚È‚¢‚æ‚¤‚É
 	chrparam.Param[type][Def_ChrNo_Wag] = { power=35 };
 	chrparam.Param[type][Def_ChrNo_Enk] = { power=50 };
 	chrparam.Param[type][Def_ChrNo_Lnd] = { power=65 };
 	chrparam.Param[type][Def_ChrNo_Tsu] = { power=50 };
+	chrparam.Param[type][Def_ChrNo_Udu] = { power=35, flags=(1<<6) };
 	chrparam.Param[type][Def_ChrNo_Mik] = { power=35 };
 	chrparam.Param[type][Def_ChrNo_Kag] = { power=35 };
 	chrparam.Param[type][Def_ChrNo_Kuo] = { power=50 };
 	chrparam.Param[type][Def_ChrNo_Pho] = { power=50 };
 }
-local SS_DamageLockParams = chrparam.Get( { type="ƒXƒ}[ƒgƒXƒeƒA”¼ƒƒbƒNˆø‚«Šñ‚¹", chrnum=_ChrNo } );
+local SS_DamageLockParams = chrparam.Get( { type="ƒXƒeƒAƒGƒ“ƒ_[”¼ƒƒbƒNˆø‚«Šñ‚¹", chrnum=_ChrNo } );
+
+{
+	local type = "ƒXƒeƒAƒGƒ“ƒ_[ŠÔ’â~F";
+	chrparam.Param[type] <- array(CHRMAX, [6,10] ); // ’Êí,ƒXƒ}[ƒgƒXƒeƒA
+	chrparam.Param[type][Def_ChrNo_Hyd] = [6, 9];
+	chrparam.Param[type][Def_ChrNo_Lin] = [6, 9];
+	chrparam.Param[type][Def_ChrNo_Wal] = [6, 9];
+	chrparam.Param[type][Def_ChrNo_Car] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Ori] = [6, 7];
+	chrparam.Param[type][Def_ChrNo_Gor] = [6, 7];
+	chrparam.Param[type][Def_ChrNo_Mer] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Vat] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Set] = [6, 7];
+	chrparam.Param[type][Def_ChrNo_Yuz] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Hil] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Elt] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Nan] = [6, 9];
+	chrparam.Param[type][Def_ChrNo_Bya] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Aka] = [10,14];
+	chrparam.Param[type][Def_ChrNo_Cha] = [6, 7];
+	chrparam.Param[type][Def_ChrNo_Wag] = [6, 7];
+	chrparam.Param[type][Def_ChrNo_Enk] = [6, 8];
+	chrparam.Param[type][Def_ChrNo_Lnd] = [6, 9];
+	chrparam.Param[type][Def_ChrNo_Tsu] = [6, 9];
+	chrparam.Param[type][Def_ChrNo_Udu] = [6, 9];
+	chrparam.Param[type][Def_ChrNo_Mik] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Kag] = [6, 9];
+	chrparam.Param[type][Def_ChrNo_Kuo] = [6,10];
+	chrparam.Param[type][Def_ChrNo_Pho] = [6, 8];
+}
+local SteerEnderStoptime = chrparam.Get( { type="ƒXƒeƒAƒGƒ“ƒ_[ŠÔ’â~F", chrnum=_ChrNo } );
 
 //ƒpƒ^[ƒ“’è‹`
 {	// ‹ó’†ƒK[ƒh‚©‚ç‚Ì–ß‚èƒpƒ^[ƒ“
@@ -1122,8 +1173,8 @@ CommonStandbyParams[8] =
 		duet_timeline =
 		[
 			// ‘ÎƒNƒIƒ“
-			{ PL=0, delay=240, SE=124, }, //u‚±‚Ì‚Æ‚«‚ğA‘Ò‚¿Œ“‚Ë‚½‚¼ccw‰i…xIviƒNƒIƒ“u–l‚à‚¾B–ğÒ‚ª‘µ‚¤A‚±‚ÌuŠÔ‚ğ‚Ëccvj
-			{ PL=1, PAT=901, delay=248, SE=108, }, // iƒZƒgu‚±‚Ì‚Æ‚«‚ğA‘Ò‚¿Œ“‚Ë‚½‚¼ccw‰i…xIvju–l‚à‚¾B–ğÒ‚ª‘µ‚¤A‚±‚ÌuŠÔ‚ğ‚Ëccv
+			{ PL=0, delay=222, SE=124, }, //u‚±‚Ì‚Æ‚«‚ğA‘Ò‚¿Œ“‚Ë‚½‚¼ccw‰i…xIviƒNƒIƒ“u–l‚à‚¾B–ğÒ‚ª‘µ‚¤A‚±‚ÌuŠÔ‚ğ‚Ëccvj
+			{ PL=1, PAT=901, delay=255, SE=108, }, // iƒZƒgu‚±‚Ì‚Æ‚«‚ğA‘Ò‚¿Œ“‚Ë‚½‚¼ccw‰i…xIvju–l‚à‚¾B–ğÒ‚ª‘µ‚¤A‚±‚ÌuŠÔ‚ğ‚Ëccv
 		],
 	},
 ];
@@ -1213,8 +1264,8 @@ CommonStandbyParams[10] =
 
 CommonStandbyParams[11] =
 [
-	{ WaitPAT = 50, timeline = [ { delay=195, SE=100, time=195 }, ], }, // u‚¨d’u‚«‚ÌŠÔ‚Å‚·Bv
-	{ WaitPAT = 50, timeline = [ { delay=195, SE=101, time=195 }, ], }, // uŒ©‚¹‚Ä‚ ‚°‚Ü‚µ‚å‚¤A”N‹G‚Ìˆá‚¢‚ğBv
+	{ WaitPAT = 50, timeline = [ { delay=195, SE=100, time=95 }, ], }, // u‚¨d’u‚«‚ÌŠÔ‚Å‚·Bv
+	{ WaitPAT = 50, timeline = [ { delay=195, SE=101, time=167 }, ], }, // uŒ©‚¹‚Ä‚ ‚°‚Ü‚µ‚å‚¤A”N‹G‚Ìˆá‚¢‚ğBv
 
 	{
 		Enemy=[14], WaitPAT = [50,900],
@@ -1249,19 +1300,19 @@ CommonStandbyParams[12] =
 // ‚ ‚Ì‚±A‚ ‚Ì‚Ğ‚ÆA‚Ì•ªŠò—p
 // —ƒLƒƒƒ‰‚É‚Íu‚ ‚ÌqvA‚»‚êˆÈŠO‚Íu‚ ‚Ìlv
 // ƒqƒ‹ƒ_‚Íu‚ ‚Ìlv
-local girl_chara_list = [1,4,7,9,11,12,16,21,22,24];
+local girl_chara_list = [1,4,7,9,11,12,16,20,21,22,24];
 
 CommonStandbyParams[13] =
 [
-	{ WaitPAT = 900, timeline = [ { SE=80, time=130, delay=110 }, { PAT=901, delay=100, SE=101, time=100 }, ], }, // uŒã‚Í‚¨Šè‚¢‚ËAƒrƒƒƒNƒ„vu”C‚¹‚Ä‚æo‚³‚ñ io‚ÖŒü‚¯‚Äjv
-	{ WaitPAT = 900, timeline = [ { SE=80, time=130, delay=120 }, { PAT=901, delay= 84, SE=104, time= 84 }, ], }, // uŒã‚Í‚¨Šè‚¢‚ËAƒrƒƒƒNƒ„vu‚âA‚±‚ñ‚Î‚ñ‚Í i‘Šè‚É‘Î‚µ‚Äjv
-	{ WaitPAT = 900, timeline = [ { SE=80, time=130, delay= 90 }, { PAT=901, delay=103, SE=106, time=103 }, ], }, // uŒã‚Í‚¨Šè‚¢‚ËAƒrƒƒƒNƒ„vu’¦‚è‚È‚¢‚Ë`ƒzƒ“ƒgio‚ÖŒü‚¯‚Äjv
+	{ WaitPAT = 900, timeline = [ { SE=80, time=130, delay=130 }, { PAT=901, delay=100, SE=101, time=100 }, ], }, // uŒã‚Í‚¨Šè‚¢‚ËAƒrƒƒƒNƒ„vu”C‚¹‚Ä‚æo‚³‚ñ io‚ÖŒü‚¯‚Äjv
+	{ WaitPAT = 900, timeline = [ { SE=80, time=130, delay=130 }, { PAT=901, delay= 84, SE=104, time= 84 }, ], }, // uŒã‚Í‚¨Šè‚¢‚ËAƒrƒƒƒNƒ„vu‚âA‚±‚ñ‚Î‚ñ‚Í i‘Šè‚É‘Î‚µ‚Äjv
+	{ WaitPAT = 900, timeline = [ { SE=80, time=130, delay=130 }, { PAT=901, delay=103, SE=106, time=103 }, ], }, // uŒã‚Í‚¨Šè‚¢‚ËAƒrƒƒƒNƒ„vu’¦‚è‚È‚¢‚Ë`ƒzƒ“ƒgio‚ÖŒü‚¯‚Äjv
 
-	{ ExcludeEnemy=girl_chara_list, WaitPAT = 900, timeline = [ { SE=81, time=134, delay=120 }, { PAT=901, delay=205, SE=105, time=205 }, ], }, // u‚µ‚Â‚±‚¢‚í‚ËA‚ ‚Ìlccvu‘‘¬‚Å‚í‚é‚¢‚ñ‚¾‚¯‚ÇBÁ‚¦‚Ä‚à‚ç‚¤‚æv
-	{ ExcludeEnemy=girl_chara_list, WaitPAT = 900, timeline = [ { SE=81, time=134, delay=70 }, { PAT=901, delay=110, SE=107, time=110 }, ], }, // u‚µ‚Â‚±‚¢‚í‚ËA‚ ‚Ìlccvu‚âA‚Ü‚½‰ï‚Á‚½‚Ë i‘Šè‚É‘Î‚µ‚Äjv
+	{ ExcludeEnemy=girl_chara_list, WaitPAT = 900, timeline = [ { SE=81, time=134, delay=134 }, { PAT=901, delay=205, SE=105, time=205 }, ], }, // u‚µ‚Â‚±‚¢‚í‚ËA‚ ‚Ìlccvu‘‘¬‚Å‚í‚é‚¢‚ñ‚¾‚¯‚ÇBÁ‚¦‚Ä‚à‚ç‚¤‚æv
+	{ ExcludeEnemy=girl_chara_list, WaitPAT = 900, timeline = [ { SE=81, time=134, delay=134 }, { PAT=901, delay=110, SE=107, time=110 }, ], }, // u‚µ‚Â‚±‚¢‚í‚ËA‚ ‚Ìlccvu‚âA‚Ü‚½‰ï‚Á‚½‚Ë i‘Šè‚É‘Î‚µ‚Äjv
 
-	{ Enemy=girl_chara_list, WaitPAT = 900, timeline = [ { SE=82, time=130, delay=120 }, { PAT=901, delay=205, SE=105, time=205 }, ], }, // u‚µ‚Â‚±‚¢‚í‚ËA‚ ‚Ìqccvu‘‘¬‚Å‚í‚é‚¢‚ñ‚¾‚¯‚ÇBÁ‚¦‚Ä‚à‚ç‚¤‚æv
-	{ Enemy=girl_chara_list, WaitPAT = 900, timeline = [ { SE=82, time=134, delay=70 }, { PAT=901, delay=110, SE=107, time=110 }, ], }, // u‚µ‚Â‚±‚¢‚í‚ËA‚ ‚Ìqccvu‚âA‚Ü‚½‰ï‚Á‚½‚Ë i‘Šè‚É‘Î‚µ‚Äjv
+	{ Enemy=girl_chara_list, WaitPAT = 900, timeline = [ { SE=82, time=130, delay=130 }, { PAT=901, delay=205, SE=105, time=205 }, ], }, // u‚µ‚Â‚±‚¢‚í‚ËA‚ ‚Ìqccvu‘‘¬‚Å‚í‚é‚¢‚ñ‚¾‚¯‚ÇBÁ‚¦‚Ä‚à‚ç‚¤‚æv
+	{ Enemy=girl_chara_list, WaitPAT = 900, timeline = [ { SE=82, time=130, delay=130 }, { PAT=901, delay=110, SE=107, time=110 }, ], }, // u‚µ‚Â‚±‚¢‚í‚ËA‚ ‚Ìqccvu‚âA‚Ü‚½‰ï‚Á‚½‚Ë i‘Šè‚É‘Î‚µ‚Äjv
 	{ WaitPAT = 900, timeline = [ { SE=83, delay=189}, { PAT=901, delay=137, SE=109, time=137 }, ], }, // u‰ä‚ª’íƒrƒƒƒNƒ„‚ª‚ ‚È‚½‚ğ‹ò‚ç‚¢‚É—ˆ‚½‚ívu–l‚Ì–¼‚ÅƒPƒ“ƒJ”„‚é‚Ì‚â‚ß‚ÄHv
 	
 	{
@@ -1269,11 +1320,12 @@ CommonStandbyParams[13] =
 		duet_timeline =
 		[
 			// ‘ÎƒJƒOƒ„
-			{ PL=0, delay=  0, SE=118, }, //u‚»‚ÌÎŠçAÁ‚µ‚Ä‚İ‚¹‚æ‚¤iŸ‚É‘±‚­jv152
-			{ PL=1, delay=151, SE=106, }, //u‚»‚ÌÎŠçAÁ‚µ‚Ä‚İ‚¹‚Ü‚µ‚å‚¤iŸ‚É‘±‚­jv151
+			// “¯‚É‚µ‚á‚×‚é‚Ì‚Åš–‹ˆÊ’u’²®
+			{ PL=0, delay=  0, SE=118, time=152, flags=(1<<0) }, //u‚»‚ÌÎŠçAÁ‚µ‚Ä‚İ‚¹‚æ‚¤iŸ‚É‘±‚­jv152
+			{ PL=1, delay=151, SE=106, time=151, flags=(1<<0) }, //u‚»‚ÌÎŠçAÁ‚µ‚Ä‚İ‚¹‚Ü‚µ‚å‚¤iŸ‚É‘±‚­jv151
 
 			{ PL=0, delay= 87, SE=120, }, //ucc”í‚ç‚¹‚È‚¢‚Å‚æv¦ã‚Ì‚Æ‡”Ô‚ÉÄ¶‚·‚é
-			{ PL=1, PAT=911, delay=112, SE=107, }, //ucc‹M•û‚Ì•û‚±‚»v
+			{ PL=1, PAT=911, delay=112, SE=107, time=103 }, //ucc‹M•û‚Ì•û‚±‚»v
 		],
 	},
 ];
@@ -1298,8 +1350,8 @@ CommonStandbyParams[15] =
 		duet_timeline =
 		[
 			// ‘ÎƒNƒIƒ“
-			{ PL=0, delay=180, SE=115, }, //u–l‚ªŸ‚Á‚½‚çcA‰ğ‚Á‚Ä‚é‚¾‚ëHv
-			{ PL=1, PAT=901, delay=130, SE=130, }, // iƒPƒCƒAƒXu–l‚ªŸ‚Á‚½‚çcA‰ğ‚Á‚Ä‚é‚¾‚ëHvju–Ü˜_‚³Aó‚¯“ü‚ê‚æ‚¤‘S‚Ä‚ğv
+			{ PL=0, delay=170, SE=115, }, //u–l‚ªŸ‚Á‚½‚çcA‰ğ‚Á‚Ä‚é‚¾‚ëHv
+			{ PL=1, PAT=901, delay=213, SE=130, }, // iƒPƒCƒAƒXu–l‚ªŸ‚Á‚½‚çcA‰ğ‚Á‚Ä‚é‚¾‚ëHvju–Ü˜_‚³Aó‚¯“ü‚ê‚æ‚¤‘S‚Ä‚ğv
 		],
 	},
 ];
@@ -1333,7 +1385,6 @@ CommonStandbyParams[17] =
 	// { Enemy=[10], WaitPAT = 50, timeline = [ { PAT=50, delay=183, SE=114, time=183 }, ], }, //u‚Ü‚Î‚ä‚«ˆÅ‚æA‚¢‚´Ÿ•‰‚ÁIv
 
 	// ‘ÎƒPƒCƒAƒX
-	// { Enemy=[15], WaitPAT = 50, timeline = [ { PAT=50, delay=142, SE=118, time=146 }, ], }, //u¬“×‚Ì‚à‚Ì‚æA‚¢‚´Ÿ•‰‚ÁIv
 	{ Enemy=[15], WaitPAT = 50, timeline = [ { delay=142, SE=119, time=142 }, ], }, //u¬“×‚Ì‚à‚Ì‚æA‚¢‚´Ÿ•‰‚ÁIv
 
 	
@@ -1342,8 +1393,8 @@ CommonStandbyParams[17] =
 		duet_timeline =
 		[
 			//‘ÎƒNƒIƒ“
-			{ PL=0, delay=180, SE=121, }, //u‚¨‘O‚È‚çŒ©‚¹‚Ä‚­‚ê‚é‚Í‚¸‚¾A“š‚¦‚ğviƒNƒIƒ“ul‚Ìg‚Ì‚Ü‚ÜA‚±‚Ì—Ìˆæ‚Ö“¥‚İ‚Ş‚©cvj
-			{ PL=1, PAT=901, delay=215, SE=135, }, // iƒGƒ“ƒLu‚¨‘O‚È‚çŒ©‚¹‚Ä‚­‚ê‚é‚Í‚¸‚¾A“š‚¦‚ğvjul‚Ìg‚Ì‚Ü‚ÜA‚±‚Ì—Ìˆæ‚Ö“¥‚İ‚Ş‚©cv
+			{ PL=0, delay=187, SE=121, }, //u‚¨‘O‚È‚çŒ©‚¹‚Ä‚­‚ê‚é‚Í‚¸‚¾A“š‚¦‚ğviƒNƒIƒ“ul‚Ìg‚Ì‚Ü‚ÜA‚±‚Ì—Ìˆæ‚Ö“¥‚İ‚Ş‚©cvj
+			{ PL=1, PAT=901, delay=213, SE=135, }, // iƒGƒ“ƒLu‚¨‘O‚È‚çŒ©‚¹‚Ä‚­‚ê‚é‚Í‚¸‚¾A“š‚¦‚ğvjul‚Ìg‚Ì‚Ü‚ÜA‚±‚Ì—Ìˆæ‚Ö“¥‚İ‚Ş‚©cv
 		],
 	},
 ];
@@ -1449,6 +1500,206 @@ CommonStandbyParams[24] =
 	{ WaitPAT = 50, timeline = [ { delay=179, SE=105, time=179 }, ], }, //u‚¿cŒŒ‚Ì‰Øcç‚©‚¹‚Ä‚â‚év
 	{ WaitPAT = 50, timeline = [ { delay=156, SE=106, time=156 }, ], }, //u‚©‚Á‚½‚é‚¢‚¯‚ÇA‚â‚é‚µ‚©‚È‚¢‚Èv
 ];
+
+CommonStandbyParams[20] =
+[
+	{ WaitPAT = 50, timeline = [ { delay=150, SE=100, time=150 }, ], }, //u×–‚‚·‚ñ‚È‚çÁ‚µ‚¿‚Ü‚¤‚º‚¥Iv
+	{ WaitPAT = 50, timeline = [ { delay=164, SE=101, time=164 }, ], }, //u|‚»‚¤‚ÈwŒ°Œ»(ƒCƒOƒWƒX)x‚¾‚È‚Ÿ‚¨‚¢Iv
+	{ WaitPAT = 901, timeline = [ { delay=242, SE=102, time=242 }, ], }, //uƒIƒ[‚É‚àŒ©‚¹‚Ä‚â‚ë‚¤‚©H’n–‚Á‚Ä‚â‚Â‚ğ‚æ‚§Iv
+	{ WaitPAT = 901, timeline = [ { delay=205, SE=103, time= 205 }, ], }, //uƒIƒŒ—l‚É•Œü‚©‚Á‚Ä–³–‚ÅÏ‚Ş‚Æv‚¤‚È‚æ‚§Iv
+	
+	{
+		Enemy=[4], WaitPAT = [900,900],
+		duet_timeline =
+		[
+			{ PL=1, delay=167, SE=172 }, //u‚±‚ê‚ªA€‚ğ˜A‚ê“Y‚¤ÒccIv
+			{ PL=0, delay=160, time=183, SE=108, PAT=901 }, //u¸—ç‚ÈA‚±‚¢‚Â‚ç‚Íƒgƒ‚ƒ_ƒ`‚¾‚æv
+			{ PL=1, delay= 24, PAT=921 },
+		],
+	},
+	{
+		Enemy=[0], WaitPAT = [900,902],
+		duet_timeline =
+		[
+			{ PL=1, delay=284, SE=138, PAT=911 }, //u•|‚¥‚ÈBŒ`‚¾‚¯‚ÍlŠÔ‚È‚Ì‚ª®X‚¾Bv
+			{ PL=0, delay=293, SE=111, PAT=901 }, //uƒqƒbƒqƒbƒqA‚¨‘O‚Ì°‚à‚»‚ÌŠí‚©‚ç‰ğ•ú‚µ‚Ä‚â‚ë‚¤v
+		],
+	},
+	{
+		Enemy=[23], WaitPAT = [900,50],
+		duet_timeline =
+		[
+			{ PL=1, delay=120, SE=137, }, //uŠy‚µ‚ñ‚Å–á‚¦‚é‚æ‚¤A“w‚ß‚é‚æv
+			{ PL=0, delay=176, SE=114, PAT=50 }, //u‚»‚è‚áAƒeƒƒF‚Ì”ß–ÂŸ‘æ‚¾‚È‚Ÿv
+		],
+	},
+	{
+		Enemy=[10], WaitPAT = [50,50],
+		duet_timeline =
+		[
+			{ PL=0, delay=187, SE=117, }, //u‚ÈH@‚±‚¤‚È‚é‚Ì‚Í‰^–½‚È‚ñ‚¾‚æv
+			{ PL=1, delay=159, SE=116, }, //u‹M•û‚ª”s‚ê‚é‚Æ‚±‚ë‚Ü‚Å‚ªA‚Ëv
+		],
+	},
+	{
+		Enemy=[17], WaitPAT = [900,50],
+		duet_timeline =
+		[
+			{ PL=1, delay=201, SE=123, }, //u¡‚Ì‰´‚ª‘Šè‚È‚çA™é‚ß‚éÒ‚à‚È‚©‚ë‚¤v
+			{ PL=0, delay=152, SE=120, PAT=50 }, //u‚ñ‚Èƒ‚ƒ“AÅ‰‚©‚ç‚Ë‚¥‚æv
+		],
+	},
+	{
+		Enemy=[15], WaitPAT = [900,900],
+		duet_timeline =
+		[
+			{ PL=0, delay=235, SE=123, PAT=901 }, //u‰B‚µ–AŠé‚İ–cAŒ™‚¢‚¶‚á‚Ë‚¥‚ª‚Èv
+			{ PL=1, delay=210, SE=117, PAT=901 }, //u“¯Š´‚¾A–l‚àƒLƒ~‚Ì‚±‚Æ‚ÍŒ™‚¢‚¶‚á‚È‚¢v
+		],
+	},	
+];
+
+//CommonStandbyParams‚ÌƒGƒ‰[ƒ`ƒFƒbƒNˆ—
+//time‚æ‚è‚à‹É’[‚Édelay‚ª­‚È‚¢‚Æš–‹‚ª‚©‚Ô‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å‚»‚ê‚ğ’²‚×‚é
+//time‚Æparam‚Ì·‚à’²‚×‚é
+if( 0 && Def_Dbg_LocalDebugMode ){
+	local limit_sa = 0;//10;
+	local chr_mvs = BMvTbl.GetMvStatus();
+	foreach( slot, val in CommonStandbyParams )
+	{
+		//slot = P0ƒLƒƒƒ‰”Ô†
+		//
+		//val = ”z—ñ?
+		if( typeof val == "array" )
+		{
+			_dpn("ƒLƒƒƒ‰:"+slot+" chr_mvs:"+chr_mvs.CharaNo);
+			local check_voice_len = ( slot == chr_mvs.CharaNo)? 1 : 0; // ©ƒLƒƒƒ‰‚µ‚©æ“¾‚Å‚«‚È‚¢‚ñ‚Å‚Ë
+			
+			for( local i=0; i<val.len(); i++ )
+			{
+				if( "timeline" in val[i] )
+				{
+					local tl = val[i].timeline;
+					_dpn("TL["+i+"]");
+					if( typeof tl != "array" ) break;
+					
+					local time = [0,0]; // ‰¹ºÄ¶ŠÔ
+					local delay = [0,0]; // ƒAƒjƒƒfƒBƒŒƒCŠÔ
+					for( local j=0; j<tl.len(); j++ )
+					{
+						local id = ( "TAG" in tl[j] )? tl[j].TAG : 0;
+						if( "delay" in tl[j] ) delay[id] += tl[j].delay;
+						if( "time" in tl[j] ) time[id] += tl[j].time;
+						local se = ( "SE" in tl[j] )? tl[j].SE : 0;
+						
+						if( check_voice_len && se )
+						{
+							local param = BSound.SE_GetUserParam( { type=_SeType_Player, num=se, } );//‰¹º‚ÌƒtƒŒ[ƒ€”‚ğæ“¾
+							local file_size = BSound.SE_GetBufferSize( { type=_SeType_Player, num=se } );
+							local calc_frame = ((file_size / (48 * 2))*60)/1000;
+							
+							_dpn("se:"+se+" param:"+param+" -> "+calc_frame);
+							
+							if( abs(param-calc_frame) > 1 )
+							{
+								_dpn("ƒGƒ‰[[[");
+							}
+						}
+					}
+
+					//HHHpl1‚Á‚Ä‚ ‚éH
+					for( local pl=0; pl<2; pl++ )
+					{
+						local sa = time[pl]+limit_sa - delay[pl];
+						if( time[pl] > 0 && sa > 0 )
+						{
+							_dpn(" š"+pl+1+"PŠÔ:"+delay[pl]+" -> "+time[pl]+" ŠÔ•s‘«:"+sa );
+						}
+					}
+				}
+				if( "duet_timeline" in val[i] )
+				{
+					local tl = val[i].duet_timeline;
+					local enemy_num = val[i].Enemy; // ‚È‚º‚©”z—ñ
+					if( typeof enemy_num == "array" ) enemy_num = enemy_num[0]; // ‚Ä‚«‚Æ‚¤
+					local check_enemy_voice_len = ( enemy_num == chr_mvs.CharaNo)? 1 : 0; // ©ƒLƒƒƒ‰‚µ‚©æ“¾‚Å‚«‚È‚¢‚ñ‚Å‚Ë
+					
+					_dpn("DTL["+i+"]");
+					if( typeof tl != "array" ) break;
+					
+					local time = [0,0]; // ‰¹ºÄ¶ŠÔ
+					local delay = [0,0]; // ƒAƒjƒƒfƒBƒŒƒCŠÔ
+					for( local j=0; j<tl.len(); j++ )
+					{
+						local id = ( "PL" in tl[j] )? tl[j].PL : 0;
+						if( "delay" in tl[j] ) delay[id] += tl[j].delay;
+						if( "time" in tl[j] ) time[id] += tl[j].time;
+
+						local time = ( "time" in tl[j] )? tl[j].time : 0;
+						local delay = ( "delay" in tl[j] )? tl[j].delay : 0;
+						if( time == 0 )
+						{
+							time = delay;
+						}
+						
+						local se = ( "SE" in tl[j] )? tl[j].SE : 0;
+						
+						if( check_voice_len && se && id == 0 )
+						{
+							local param = BSound.SE_GetUserParam( { type=_SeType_Player, num=se, } );//‰¹º‚ÌƒtƒŒ[ƒ€”‚ğæ“¾
+							local file_size = BSound.SE_GetBufferSize( { type=_SeType_Player, num=se } );
+							local calc_frame = ((file_size / (48 * 2))*60)/1000;
+							
+							_dpn("se:"+se+" param:"+param+" -> "+calc_frame+" time:"+time);
+							
+							if( abs(param-calc_frame) > 1 )
+							{
+								_dpn("ššššššššššššššššššššƒGƒ‰[[[1");
+							}
+							if( abs(time-param) > 1 )
+							{
+								_dpn("ššššššššššššššššššššƒGƒ‰[[[2");
+							}
+						}
+						if( check_enemy_voice_len && id == 1 && se )
+						{
+							local param = BSound.SE_GetUserParam( { type=_SeType_Player, num=se, } );//‰¹º‚ÌƒtƒŒ[ƒ€”‚ğæ“¾
+							local file_size = BSound.SE_GetBufferSize( { type=_SeType_Player, num=se } );
+							local calc_frame = ((file_size / (48 * 2))*60)/1000;
+							
+							_dpn("XX se:"+se+" param:"+param+" -> "+calc_frame+" time:"+time);
+							
+							if( abs(param-calc_frame) > 1 )
+							{
+								_dpn("šššššššššššššššššššššƒGƒ‰[[[3");
+							}
+							if( abs(time-param) > 1 )
+							{
+								_dpn("ššššššššššššššššššššƒGƒ‰[[[4");
+							}							
+						}
+					}
+					for( local pl=0; pl<2; pl++ )
+					{
+						local sa = time[pl]+limit_sa - delay[pl];
+						if( time[pl] > 0 && sa > 0 )
+						{
+							_dpn(" š"+pl+1+"PŠÔ:"+delay[pl]+" -> "+time[pl]+" ŠÔ•s‘«:"+sa );
+						}
+					}				
+				}
+			}
+			_dpn("");
+		}
+		else
+		{
+			// –¢’è‹`ƒLƒƒƒ‰‚¾‚Æ0‚ª“ü‚Á‚Ä‚¢‚é‚Ì‚Å‚±‚±‚É‚­‚é
+			// _dpn("ƒ^ƒCƒv:"+typeof val+" : "+slot+" -> "+val );
+		}
+	}
+}
+
+
 
 // ----------------------------------------------------------------------------
 // Std_MoveTableì¬
@@ -2234,7 +2485,24 @@ Std_MoveTable.Mv_ConvertCharge <- 	//ƒRƒ“ƒo[ƒg
 				}
 			}
 			
+			local enemyBoundAirUkemiOk = 0; // “G‚ª‹ó’†óg‰Â”\‚©‚Ç‚¤‚©i‚â‚ç‚ê‚©‚Ç‚¤‚©‚Í•Ê‚É’²‚×‚é•K—v‚ ‚èj
+			local enemy = BMvCore.GetEnemyCharaData();
+			if( enemy.push() )
+			{
+				local ebs = BtlMvStd.GetBoundStatus();
+				enemy.pop();
+				
+				enemyBoundAirUkemiOk = ebs.AirUkemi;
+			}
+			local enemyIsDamage = Battle_Std.CheckEnemyisDamage();
 			
+			local useDamageGRD = (enemyIsDamage && !enemyBoundAirUkemiOk)? 1 : 0; // ƒ_ƒ[ƒW‚ÌGRD‘‰Á‚ğQÆ‚·‚é‚©‚Ç‚¤‚©
+
+			local comboConcentrationFrame = 0;
+			if( Def_Sys_Concentration_EnemyDamageCheck && useDamageGRD )
+			{
+				comboConcentrationFrame = BMvTbl.AddPP(def_PP_ComboConcentrationCounter,1); // ”­“®‚µ‚½ŠÔ‚ğ‹L‰¯‚µ‚Ä‚¢‚­
+			}
 			
 			if( BMvEff.Liberate_Get()!=_SpGaugeMode_Normal ) //ƒ”ƒF[ƒ‹ƒIƒt’†
 			{
@@ -2252,10 +2520,45 @@ Std_MoveTable.Mv_ConvertCharge <- 	//ƒRƒ“ƒo[ƒg
 				mGRDAddVal = def_GRD_Convert_Frame_NoEXS;
 				eGRDAddVal = def_GRD_Convert_Frame_NoEXS_Enemy;		
 			}
-			else if( Battle_Std.CheckEnemyisDamage() )  //‘Šè‚ª‚â‚ç‚ê‚Ì‚Æ‚«
+			else if( enemyIsDamage ) // ‹Œd—l
 			{
 				mGRDAddVal = def_GRD_Convert_Frame_EnemyisDamage;
-				eGRDAddVal = def_GRD_Convert_Frame_EnemyisDamage_Enemy;		
+				eGRDAddVal = def_GRD_Convert_Frame_EnemyisDamage_Enemy;
+			}
+
+			// ƒ_ƒ[ƒW‚Í—Dæ“x‚ğÅ‘å‚Åƒ`ƒFƒbƒN‚µ‚ÄA¡‚Ì‚â‚Â‚Æ”äŠr‚µ‚Äˆ«‚¢•û‚ğ‘I‚Ô
+			if( useDamageGRD && Def_Sys_Concentration_EnemyDamageCheck )  //‘Šè‚ª‚â‚ç‚ê•ó‚¯g•s‰Â”\‚È‚Æ‚«
+			{
+				local mGRDAddVal_Damage = mGRDAddVal;
+				local eGRDAddVal_Damage = eGRDAddVal;
+
+				// _dpn("comboConcentrationFrame:"+comboConcentrationFrame);
+				
+				// ƒRƒ“ƒ{’†‚Ì‘ƒRƒ“ƒZŠÔ‚ªˆê’è’l‚ğ‰z‚¦‚½‚ç‚Ç‚ñ‚Ç‚ñŒø‰Ê‚ªŒ¸‚Á‚Ä‚¢‚­
+				local limitFrame = 25;
+				local maxFrame = 70;
+				if( comboConcentrationFrame >= limitFrame )
+				{
+					if( comboConcentrationFrame > maxFrame ) comboConcentrationFrame = maxFrame;
+					comboConcentrationFrame = comboConcentrationFrame - limitFrame; // 0`60(90-60)
+					local conceFramePar = comboConcentrationFrame * 100 / (maxFrame-limitFrame); // ’·‚¢‚Æ”’l‚ª‘‚¦‚é
+					// _dpn("conceFramePar:"+conceFramePar);
+
+					mGRDAddVal_Damage = def_GRD_Convert_Frame_EnemyisDamage - (def_GRD_Convert_Frame_EnemyisDamage*80/100)*conceFramePar/100;
+					eGRDAddVal_Damage = def_GRD_Convert_Frame_EnemyisDamage_Enemy - (def_GRD_Convert_Frame_EnemyisDamage_Enemy*80/100)*conceFramePar/100;
+				}
+				else
+				{
+					mGRDAddVal_Damage = def_GRD_Convert_Frame_EnemyisDamage;
+					eGRDAddVal_Damage = def_GRD_Convert_Frame_EnemyisDamage_Enemy;
+				}
+				
+				// ˆ«‚¢•û‚ğ‘I‚Ô
+				// _dpn(" mGRDAddVal Damage:"+mGRDAddVal_Damage+" "+mGRDAddVal);
+				// _dpn(" mGRDAddVal Damage:"+eGRDAddVal_Damage+" "+eGRDAddVal);
+				
+				if( mGRDAddVal > mGRDAddVal_Damage ) mGRDAddVal = mGRDAddVal_Damage;
+				if( eGRDAddVal < eGRDAddVal_Damage ) eGRDAddVal = eGRDAddVal_Damage; // ‚±‚Á‚¿‚Íƒ}ƒCƒiƒX‚È‚Ì‚Å•„†‹t
 			}
 			
 			if( s.MvCount<def_FL_Shield_SPCostStartFrame )
@@ -2286,7 +2589,30 @@ Std_MoveTable.Mv_ConvertCharge <- 	//ƒRƒ“ƒo[ƒg
 				
 				local apart_par = apart_kyori * 100 / 640; // 0`100 ŒvZ—p‚Ì‚Ç‚ê‚¾‚¯—£‚ê‚Ä‚¢‚é‚©
 				// Å’á‚Å30%‚Ü‚Å—‚¿‚é
-				local calc_par = 100 - (70 * apart_par / 100);
+				
+				if( Def_Sys_Concentration_CheckEnemyKyoriWithGRDStock )
+				{
+					local grd_stock = BMvEff.GRD_CheckStock( { val=-1 } ); // ¡‰½ŒÂ‚ ‚éH
+					// if( grd_stock>11 ) grd_stock = 11; //Å‘å
+					if( grd_stock>6 ) grd_stock = 6; //Å‘å6ŒÂ”»’è‚Ål‚¦‚é
+					
+					// GRDŒÂ”‚É‚æ‚é‰e‹¿“xiGRD‚ª­‚È‚¢‚Æ‚«‚Í‹——£•â®‚Ì‰e‹¿‚ğó‚¯‚É‚­‚¢j
+					local stock_par_ar =[
+					20, // 0
+					40, // 1
+					60, // 2
+					80, // 3
+					100, // 4
+					100, // 5
+					100, // 6
+					];
+					local stock_par = stock_par_ar [ grd_stock%stock_par_ar.len() ];
+					// _dpn("grd_stock:"+grd_stock+" stock_par:"+stock_par+" apart_par:"+apart_par);
+					apart_par = apart_par * stock_par / 100;
+					// _dp(" -> "+apart_par);
+				}
+				
+				local calc_par = 100 - 70 * apart_par / 100
 				// _dpn("GRD1:"+mGRDAddVal+", "+eGRDAddVal);
 				mGRDAddVal = mGRDAddVal * calc_par / 100;
 				eGRDAddVal = eGRDAddVal * calc_par / 100;
@@ -2296,6 +2622,7 @@ Std_MoveTable.Mv_ConvertCharge <- 	//ƒRƒ“ƒo[ƒg
 			}
 			
 			// _dpn("ŒvZŒã:"+mGRDAddVal+" / "+eGRDAddVal+" time_bonus_val:"+time_bonus_val );
+			// _dpn("mGRDAddVal:"+mGRDAddVal+" eGRDAddVal:"+eGRDAddVal);
 			
 			Battle_Std.GRD_AddValue({ val=Battle_Std.GetGRD_AddValue(mGRDAddVal), pressure=0 }); //©•ª‚Ì‘‰Á
 			Battle_Std.GRD_AddValue({ val=Battle_Std.GetGRD_AddValue(eGRDAddVal), pressure=0, target=1 }); //‘Šè‚ÌŒ¸­
@@ -3707,6 +4034,7 @@ local func_JumpFlightInit = function()
 	BMvTbl.SetHitCheckFlag( { type=0, val=Def_HitCheckFlag_LightLegs, time=255, flag=_ClearFlag_ChangeMv } ); // ¬‘«–³“G‚ÉƒXƒJ‚é
 	
 	BMvTbl.SetPP(def_PP_JumpFrame,0);//—£—¤‚©‚ç‰½ƒtƒŒ[ƒ€‚©‚ğ‹L‰¯‚·‚é
+	Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_EnableJumpFramePP ); // def_PP_JumpFrame‚ª—LŒø‚ÈMV
 }
 
 //“ñ’iƒWƒƒƒ“ƒv‚Å•‚‚¢‚½‚Æ‚«‚Ì‹¤’Êˆ—
@@ -4496,7 +4824,7 @@ Std_MoveTable.Mv_Atk_AirA_Land <-
 {
 	function Init_Std() : (set_AirAtk_LandMoveableFrame)
 	{
-		Battle_Std.PassLandMoveCodes(); // ’…’n‚Ìs“®ƒR[ƒhˆø‚«Œp‚¬
+		Battle_Std.InitAitAtkLand();
 		
 		set_AirAtk_LandMoveableFrame(			//’…’nd’¼‚ğİ’è
 		def_FL_AtkAirA_LandRecovery,			//‹óU‚è‚µ‚½
@@ -4558,7 +4886,7 @@ Std_MoveTable.Mv_Atk_AirB_Land <-
 {
 	function Init_Std() : (set_AirAtk_LandMoveableFrame)
 	{
-		Battle_Std.PassLandMoveCodes(); // ’…’n‚Ìs“®ƒR[ƒhˆø‚«Œp‚¬
+		Battle_Std.InitAitAtkLand();
 		
 		set_AirAtk_LandMoveableFrame(			//’…’nd’¼‚ğİ’è
 		def_FL_AtkAirB_LandRecovery,			//‹óU‚è‚µ‚½
@@ -4620,7 +4948,7 @@ Std_MoveTable.Mv_Atk_AirC_Land <-
 {
 	function Init_Std() : (set_AirAtk_LandMoveableFrame)
 	{
-		Battle_Std.PassLandMoveCodes(); // ’…’n‚Ìs“®ƒR[ƒhˆø‚«Œp‚¬
+		Battle_Std.InitAitAtkLand();
 		
 		set_AirAtk_LandMoveableFrame(			//’…’nd’¼‚ğİ’è
 		def_FL_AtkAirC_LandRecovery,			//‹óU‚è‚µ‚½
@@ -4812,10 +5140,15 @@ Std_MoveTable.Mv_Skill_SSRelayAtk <-
 		// Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel ); // ‹óU‚èEX‚âCS‚ğ•s‰Â@¦•ÛŒ¯ˆ—@‚±‚ê‚ª‚ ‚é‚ÆCVO‚ªo‚È‚¢
 		// Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_ShieldSteady ); // ƒV[ƒ‹ƒh‚³‚ê‚Ä‚àŒ„‚ª‘‚¦‚É‚­‚¢‹Z
 		
+		// XXX:EX‹Zˆµ‚¢‚É‚µ‚Ä‚¢‚é‚¹‚¢‚ÅEX‹Z‚Ì“¯‹Z•â³‚Ì§ŒÀ‚ğó‚¯‚Ä‚µ‚Ü‚¤‚Ì‚ğ‰‹}‘[’u“I‚É‘Î‰
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_NoSetUseExSkillFlag ); // EX‹Zˆµ‚¢‚¾‚ªEX‹Z‚Ì•ÛØ•â³§ŒÀ‚Í‚©‚¯‚È‚¢
+		
 		BMvTbl.SetLPEx(1,0,0); // •â³‚ğ“K—pÏ‚İ‚©‚Ç‚¤‚©
 		BMvTbl.SetLPEx(1,1,isDirectSS); // AB‚Å’¼Úo‚µ‚½‚©‚Ç‚¤‚©@¦ƒLƒƒƒ‰•Ê‚ÅQÆ‚µ‚Ä‚é‚±‚Æ‚à‚ ‚é‚Ì‚Å•ÏX•s‰Â
+		
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=31, time=255, flag=_ClearFlag_ChangeMv } );
 	}
-	function Start_Before() : (SS_ratio) // Skill‚È‚Ì‚ÅBefore
+	function Start_Before() : (SS_ratio, SteerEnderStoptime) // Skill‚È‚Ì‚ÅBefore
 	{
 		// Init‚ÅˆÃ“]ˆ—‚ğ‚µ‚Ä‚µ‚Ü‚¤‚Æ“¯‰Ÿ‚µ‚Ì—P—\‚ª‚È‚­‚È‚Á‚Ä‚µ‚Ü‚¤
 		
@@ -4831,12 +5164,9 @@ Std_MoveTable.Mv_Skill_SSRelayAtk <-
 		//‘Šè‚ÉAˆÃ“]Œã“®‚¯‚é‚æ‚¤‚É‚È‚é‚ÆÁ‚¦‚éƒIƒuƒWƒFƒNƒg‚ğŒÄ‚Ô
 		Battle_Std.CallAntenStopObject();
 		
-		local stoptime = ( isDirectSS )? 6 : 10; //ˆÃ“]’â~ŠÔ
+		local stoptime = ( isDirectSS )? SteerEnderStoptime[0] : SteerEnderStoptime[1]; //ˆÃ“]’â~ŠÔ
 		if( stoptime > 0 )
 		{
-			local add_stoptime = SS_ratio[4]; // ‰ÁZ‚·‚éŠÔ’â~F
-			stoptime = stoptime + add_stoptime;
-			
 			BMvEff.SetStopTime( { time=stoptime } ); //ŠÔ’â~
 			BMvEff.CutInProc_Set({ time=[3,stoptime+4,10], cutin_mv="",erasetype=0, bgtype=1 }); // ‚¿‚å‚¢’·‚ß‚Å‰‰o‹­‰»
 		}
@@ -4995,8 +5325,15 @@ Std_MoveTable.Mv_Skill_SSRelayAtk <-
 				// _dpn("ƒqƒbƒg‚Ì‘ŠèÀ•W:"+point.x/128+", "+point.y/128);
 			}
 			*/
-			
-			Battle_Std.SetPosition_DamageHanteiRect( SS_DamageLockParams );
+			local frameID = BMvTbl.GetMvStatus().FrameID;
+			if( frameID in SS_DamageLockParams && SS_DamageLockParams[frameID] )
+			{
+				Battle_Std.SetPosition_DamageHanteiRect( SS_DamageLockParams[frameID] );
+			}
+			else
+			{
+				Battle_Std.SetPosition_DamageHanteiRect( SS_DamageLockParams );
+			}
 		}
 	}
 	function LastUpdate_Before() : (SS_ratio) // Skill‚È‚Ì‚ÅBefore
@@ -5006,7 +5343,7 @@ Std_MoveTable.Mv_Skill_SSRelayAtk <-
 		if( !is_mvchange )
 		{
 			// MvˆÚs‚µ‚È‚¢‹Z‚È‚ç’ÇŒ‚•s”\‚É‚·‚é(ˆÚs‚·‚é‹Z‚ÍŒÂ•Ê‚É‘Î‰)
-			Battle_Std.NoCansel_NoAttackHit(); //‰½‚©‚ÅƒLƒƒƒ“ƒZƒ‹‚µ‚È‚©‚Á‚½ê‡’ÇŒ‚•s”\‚É‚·‚é
+			Battle_Std.NoCansel_NoAttackHit( { no_zurasi_hosei = 1 } ); //‰½‚©‚ÅƒLƒƒƒ“ƒZƒ‹‚µ‚È‚©‚Á‚½ê‡’ÇŒ‚•s”\‚É‚·‚é
 		}
 		
 		/*
@@ -5136,9 +5473,32 @@ Std_MoveTable.Mv_Null_CheckDashStickHold <-
 		BMvTbl.SetPosition( {y=1024, flags=_Position_CaptureShift } );
 		
 		Battle_Std.GS_DelFlag( def_PP_GS_DashStickHoldEnd );
+		
+		BMvTbl.SetLP(0,0); // ‚±‚ÌMV‚ª¶‚Ü‚ê‚Ä‚©‚ç‚Ì0606‚ğŒŸ’m‚·‚é—p@100:0606‚ğŒŸ’m‚µ‚½
+		BMvTbl.SetLP(1,0); // ƒRƒ}ƒ“ƒh‚Ìó•tŠÔ
+	}
+	function Update_Std()
+	{
+		if( Def_Sys_EasyDashAtkCommandAfterDash )
+		{
+			if( BMvTbl.GetLP(0)!=100 )
+			{
+				if( BMvTbl.GetLP(1)>0 )
+				{
+					BMvTbl.AddLP(1,-1);
+				}
+				else
+				{
+					BMvTbl.SetLP(0,0); // ƒRƒ}ƒ“ƒh‰Šúó‘Ô‚Ö
+					BMvTbl.SetLP(1,0); // ˆê‰‰Šú‰»
+				}
+			}
+		}
 	}
 	function FrameUpdate_Std()
 	{
+		local dashCmdStatus = BMvTbl.GetLP(0); // 0606‚ÌŒŸ’m—p
+		
 		local player = BMvCore.GetPlayerCharaData();
 		if( player.push() )
 		{
@@ -5146,9 +5506,52 @@ Std_MoveTable.Mv_Null_CheckDashStickHold <-
 			
 			if( !BMvTbl.CheckStickHold( (1<<6) | (1<<3) ) )	// 6‚©3‚É‚Í‚¢‚Á‚Ä‚¢‚È‚©‚Á‚½‚ç
 			{
-				Battle_Std.GS_AddFlag( def_PP_GS_DashStickHoldEnd );
+				if( dashCmdStatus != 100 ) // ‚à‚¤0606ŒŸ’m‚Á‚Û‚©‚Á‚½‚ç‚â‚ç‚È‚¢
+				{
+					Battle_Std.GS_AddFlag( def_PP_GS_DashStickHoldEnd );
+				}
 			}
+			local stick = BMvTbl.GetStickHold();
+			
 			player.pop();
+			
+			
+			if( Def_Sys_EasyDashAtkCommandAfterDash )
+			{
+				// ƒ_ƒbƒVƒ…ŒãN‚É“ü‚é‚Æƒ_ƒbƒVƒ…UŒ‚‚ª•s‰Â”\‚É‚È‚é‚ªA0606‚Á‚Û‚¢‘€ì‚ğÄ“xŒŸ’m‚µ‚½ê‡‚Í‚»‚Ìƒtƒ‰ƒO‚ğÁ‚·
+				// ƒ_ƒbƒVƒ…>66B‚İ‚½‚¢‚È‘€ì‚ğ‚µ‚½‚Æ‚«A“à•”“I‚É‚Íƒ_ƒbƒVƒ…ŒãN‚ğ“ü‚ê‚Ä‚é‚Ì‚Åƒ_ƒbƒVƒ…UŒ‚‚ªo‚È‚¢
+				// CLR‚ÉŠñ‚¹‚é‚½‚ß‚±‚¤‚¢‚¤ˆ—‚ğ’Ç‰Á‚µ‚½
+				switch( BMvTbl.GetLP(0) )
+				{
+				case 0:
+					if( stick == 0 )
+					{
+						// _dpn("0");
+						BMvTbl.SetLP(0,10);
+						BMvTbl.SetLP(1,8); // ƒRƒ}ƒ“ƒh‚Ìó•tŠÔ
+					}
+					break;
+				case 10:
+					if( stick == 6 )
+					{
+						// _dpn("06");
+						BMvTbl.SetLP(0,20);
+						BMvTbl.SetLP(1,8); // ƒRƒ}ƒ“ƒh‚Ìó•tŠÔ
+					}
+					break;
+				case 20:
+					if( stick == 0 )
+					{
+						// 0606‚Ü‚ÅŒŸ’m‚·‚é‚ÆA0606+B‚ğƒrƒ^‚Å‚â‚Á‚½‚Æ‚«‘Ê–Ú‚È‚Ì‚Å‚±‚¤‚µ‚½
+						// _dpn("060@c@‚à‚¤ƒ_ƒbƒVƒ…UŒ‚‚É‚·‚é");
+						BMvTbl.SetLP(0,100);
+						Battle_Std.GS_DelFlag( def_PP_GS_DashStickHoldEnd ); // ƒtƒ‰ƒO‚ğÁ‚·
+					}
+					break;
+				case 100:
+					break;
+				}
+			}
 			
 			if( !mvcheck ) BMvTbl.SetFinalize( 0 ); // Á‚¦‚é
 		}
@@ -6056,8 +6459,8 @@ Std_MoveTable.Mv_Assault_Air <-
 				// –Ú•W‚Ì‚‚³‚Æ‚µ‚Ä‚Í]—ˆ‚ÌƒxƒNƒgƒ‹‚ğŠî€‚É‚µ‚È‚¢‚ÆACLR‚Æ«”\‚ª•Ï‚í‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å’²®
 				
 				local delay_f = 0;
-				local jumpF = BMvTbl.GetPP(def_PP_JumpFrame);
-				if( jumpF != 0 ) delay_f = -1; // 0FŒo—R‚ÌƒYƒŒ‘Îô
+				local jumpF = ( Battle_Std.ChangeMoveCodeEx_CheckFlag( 3, def_MC3_EnableJumpFramePP ) )? BMvTbl.GetPP(def_PP_JumpFrame) : 0;
+				if( jumpF != 0 ) delay_f = -1; // 0FŒo—R‚ÌƒYƒŒ‘Îô(‚±‚Ìd—l‚È‚ñ‚È‚Ì‚©‚æ‚­Šo‚¦‚Ä‚È‚¢‚ªA‘½•ªCLR‚Æ‘µ‚¦‚Ä‚¢‚é)
 				
 				/*
 				local mvs = BMvTbl.GetMvStatus();
@@ -6202,8 +6605,7 @@ Std_MoveTable.Mv_ForwardShift <-
 		BMvTbl.SetLPEx(1,2,0); // ƒRƒXƒg‚ğÁ”ï‚µ‚½‚©
 		BMvTbl.SetLPEx(1,3,0); // d’¼‚Ü‚Åi‚ñ‚¾
 		BMvTbl.SetLPEx(1,4,0); // Œ¸‚ç‚·d’¼ƒtƒŒ[ƒ€ 0`4
-		BMvTbl.SetLPEx(1,5,0); // d’¼ŒyŒ¸ˆ—‚ğ‚â‚Á‚½‚©
-		
+		BMvTbl.SetLPEx(1,5,BMvTbl.GetMuki()); // ŠJn‚ÌŒü‚«
 
 		if( DBGM_ForwardShift )
 		{
@@ -6255,6 +6657,43 @@ Std_MoveTable.Mv_ForwardShift <-
 		BMvEff.SetCharaFlash( { color = 0x4444FF, type = 0, time = 10 } );
 		Battle_Std.PcAfterImage_DoudgeInit(); //c‘œƒZƒbƒg
 		Battle_Std.TypeSE_Play({ type="‘O•û‰ñ”ğ" });//ƒ{ƒCƒXÄ¶
+	}
+	function Update_Std()
+	{
+		// «”\‚ğ‘SƒLƒƒƒ‰‚Å‘µ‚¦‚é
+		// ˆÚ“®—Ê‚Æd‚È‚è‚ÌÁ‚·ƒ^ƒCƒ~ƒ“ƒO‚ğ“ˆê(‹ŒƒnƒCƒh‚È‚Ç‚Æ“¯‚¶«”\)
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.MvCount==11 )
+		{
+			BMvTbl.SetVector( { x=700, addx=400, flags=_Vector_Normal } );
+
+			BMvEff.SetExist( { level=_Exist_NoKasanariHantei, mode=_ExistMode_Add } ); //d‚È‚è”»’è–³‚µ
+		}
+		if( mvs.MvCount==15 )
+		{
+			BMvTbl.SetVector( { x=5800, addx=-400, flags=_Vector_Normal } );
+			BMvTbl.SetVector_MaxX( 1500 );
+		}
+		if( mvs.MvCount==21 )
+		{
+			BMvEff.SetExist( { level=_Exist_NoKasanariHantei, mode=_ExistMode_Erase } ); //d‚È‚è”»’è–ß‚µ
+		}
+		if( mvs.MvCount==26 )
+		{
+			Battle_Std.InitCharaVector();
+
+			// ˆÈ‰º‚Ìˆ—‚ğ“ü‚ê‚È‚¢‚Æ“r’†‚ÅŒü‚«‚ª•Ï‚í‚éƒLƒƒƒ‰‚ÅƒxƒNƒgƒ‹û‘©‚ÌMaxX‚ª‚¤‚Ü‚­“®‚©‚È‚¢
+			local muki = BMvTbl.GetMuki();
+			local start_muki = BMvTbl.GetLPEx(1,5); // ŠJn‚ÌŒü‚«
+			local muki_change = (muki!=start_muki)? -1 : 1;
+			
+			BMvTbl.SetVector( { x=1500*muki_change, flags=_Vector_Normal } );
+			BMvTbl.SetVector_MaxX(0);
+		}
+		if( mvs.MvCount==31 )
+		{
+			Battle_Std.InitCharaVector();
+		}
 	}
 	function FrameUpdate_Std()
 	{
@@ -6321,6 +6760,9 @@ Std_MoveTable.Mv_ForwardShift <-
 			if( sousai_count > 0 )
 			{
 				BMvTbl.SetAsFlag( { as_flags=_AsFlag_GuardRev, time=64, flag=_ClearFlag_ChangeMv } );
+				
+				Battle_Std.MoveCodeEx.DelFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒK[ƒh‚Å‚«‚é‚Ì‚ÅƒpƒjƒbƒVƒ…‚ªo‚és“®‚È‚Ì‚ğ‰ğœ
+				
 
 				_dpn("Œ¸‘¬...");
 				BMvTbl.SetVector( { x=-640, addx=64, flags=_Vector_DivKeep } ); // Œ¸‘¬
@@ -6329,24 +6771,6 @@ Std_MoveTable.Mv_ForwardShift <-
 			{
 				_dpn("‰Á‘¬!");
 				BMvTbl.SetVector( { x=1280, addx=-128, flags=_Vector_DivKeep } ); // ‰Á‘¬
-			}
-		}
-		
-		if( Def_Sys_ForwardShiftMinusDelay && BMvTbl.GetLPEx(1,3)==1 )
-		{
-			if( BMvTbl.GetLPEx(1,5) == 0 ) // ˆ—‚ğ‚â‚Á‚½‚©
-			{
-				// d’¼’†
-				local delayMinusFrame = BMvTbl.GetLPEx(1,4);
-				
-				if( 42 - mvcount < delayMinusFrame )
-				{
-					BMvTbl.SetLPEx(1,5,1); // ‚â‚Á‚½
-
-					_dpn("d’¼‚ğs“®‰Â”\‚É@—\–ñF:"+delayMinusFrame);
-					BMvTbl.SetMoveableFlag( { move=1, time=254, flag=_ClearFlag_ChangeMv } ); // Mv’†s“®‰Â”\‚É‚·‚é
-					BMvTbl.SetAsFlag( { as_flags=_AsFlag_GuardRev, time=0, flag=_ClearFlag_ChangeMv } ); // ƒK[ƒh”½“]–ß‚·
-				}
 			}
 		}
 		
@@ -6627,16 +7051,21 @@ Std_MoveTable.Mv_Throw_F <-
 		local enemy = BMvCore.GetNearEnemyCharaData(); // “Gî•ñ‚ğ“¾‚é
 		
 		local isBoundOrMutekiCapture = false;//‹à“Š‚°
+		local enemyIsGuardShield = false; // ƒK[ƒhƒV[ƒ‹ƒh
 		
 		if( enemy.push() )
 		{
 			local bs = BtlMvStd.GetBoundStatus();
 			isBoundOrMutekiCapture = ((bs.isCapture&(1<<1))!=0); //Bound or Muteki Capture
-			//print("\nhs.isCapture"+bs.isCapture+" isBoundOrMutekiCapture:"+isBoundOrMutekiCapture);	
-			
+			if( Def_Sys_GuardShieldThrow_NoGouinNageHosei && isBoundOrMutekiCapture && BMvEff.GuardSP_Get() )
+			{
+				// ‹à“Š‚°”»’è‚É‚È‚Á‚½‚Æ‚«A‘Šè‚ªƒV[ƒ‹ƒhó‘Ô‚Å‚ ‚é‚È‚çƒK[ƒhƒV[ƒ‹ƒh”»’è‚Æ‚µ‚Ä•â³‚ğ‚©‚¯‚È‚¢
+				enemyIsGuardShield = true;
+			}
+			//print("\nhs.isCapture"+bs.isCapture+" isBoundOrMutekiCapture:"+isBoundOrMutekiCapture);
 			enemy.pop();
 		}
-		if( isBoundOrMutekiCapture ) //BM’Í‚İi‹à“Š‚°j‚©‚Ç‚¤‚©
+		if( isBoundOrMutekiCapture && !enemyIsGuardShield ) //BM’Í‚İi‹à“Š‚°j‚©‚Ç‚¤‚©
 		{
 			// _dm("Bound‚©“Š‚°–³“G’†‚ğ‚Â‚©‚ñ‚¾‚Ì‚Å•â³‚ğ‚©‚¯‚Ü‚·");
 
@@ -7232,10 +7661,12 @@ Std_MoveTable.Mv_Throw_F_Hit <- //“Š‚°¬—§iˆÈ~‚Í“Š‚°”²‚¯•s‰Âj
 	}
 	function Finalize_Std() // 
 	{
+		// ƒ†ƒYƒŠƒn‚Å•ªŠò‚ ‚è‚È‚Ì‚Å—]Œv‚È‚±‚Æ‚Í‚µ‚È‚¢‚±‚Æ
 		BMvTbl.SetNextMoveTable( "Mv_Neutral" );
 	}
 	function LastUpdate_Std() // 
 	{
+		// ƒ†ƒYƒŠƒn‚Å•ªŠò‚ ‚è‚È‚Ì‚Å—]Œv‚È‚±‚Æ‚Í‚µ‚È‚¢‚±‚Æ
 		BMvEff.SetPlayerTimer( { muteki_nage=0, muteki_dage=0 } );		
 		
 		//’Êí“Š‚°n“®‚ÍÅ’á•ÛØ‚É§ŒÀ‚ğ‚©‚¯‚é
@@ -8691,6 +9122,21 @@ Std_MoveTable.Mv_SystemHereYouAreTraining <-
 //”Ä—p“oê
 Std_MoveTable.Mv_Standby <- //“oê‰‰o1P
 {
+	function CheckEnemyisEnd()
+	{
+		local enemy = BMvCore.GetEnemyCharaData();
+		if( enemy.push() )
+		{
+			local emv = BMvTbl.GetMvName();
+			enemy.pop();
+			
+			if( emv == "Mv_Neutral" )
+			{
+				return 1;
+			}
+		}
+		return 0;
+	}
 	function Init_Std() // 
 	{
 		BMvTbl.SetMoveableFlag( { move=0, time=900, flag=_ClearFlag_ChangeMv } ); //Mv’†‚Ís“®•s”\‚É
@@ -8747,12 +9193,22 @@ Std_MoveTable.Mv_Standby <- //“oê‰‰o1P
 				//ƒ‹[ƒv
 				BMvTbl.SetPattern(0);//—§‚¿ƒ|[ƒY‚ÖˆÚ“®‚¾‚¯‚·‚é
 				// BMvTbl.SetRoundStart(); //í“¬ŠJn‰Â”\ó‘Ô‚É‚·‚é
+				
+				if( CheckEnemyisEnd() )
+				{
+					BMvEff.Chara_ClearMessageAll();
+				}
 			}
 		}
 		else
 		{
 			_dpn("Finalize‚Åƒjƒ…[ƒgƒ‰ƒ‹‚Ö");
 			BMvTbl.SetNextMoveTable( "Mv_Neutral" );
+			
+			if( CheckEnemyisEnd() )
+			{
+				BMvEff.Chara_ClearMessageAll();
+			}
 		}
 	}
 }
@@ -9077,6 +9533,7 @@ Std_MoveTable.Mv_Null_StandbyCommonManager <- //“oê‰‰oŠÇ—ƒ}ƒl[ƒWƒƒ 2P‘¤‚©‚çŒ
 		// now_pl_side : 1P‚ÌƒZƒŠƒt’†:0 2P‚ÌƒZƒŠƒt’†:1
 		// local step = BMvTbl.GetLP(2);
 		local step = BMvTbl.GetLPEx(1,1+now_pl_side);
+		local timeline_type = BMvTbl.GetLP(4);// QÆ‚·‚éƒ^ƒCƒ€ƒ‰ƒCƒ“‚Ìí—Ş@0:common 1:duet 2:”½“]duet
 		// _dpn("UpdateNormalTimeline:"+now_pl_side+" step:"+step+" delay:"+BMvTbl.GetLPEx(1,3+now_pl_side) );
 
 		if( !use_timeline || step >= use_timeline.len() )
@@ -9130,12 +9587,19 @@ Std_MoveTable.Mv_Null_StandbyCommonManager <- //“oê‰‰oŠÇ—ƒ}ƒl[ƒWƒƒ 2P‘¤‚©‚çŒ
 						
 						local voice_time = ("time" in use_timeline[step])? use_timeline[step].time : delay;
 						local camera_time = ("camera_time" in use_timeline[step])? use_timeline[step].camera_time : voice_time;
+
+						local se_flags = ("flags" in use_timeline[step])? use_timeline[step].flags : 0;
 						//_dpn("camera_time:"+camera_time);
 						
 						// š–‹‚Í‚Â‚¯‚È‚¢
 						if(1)
 						{
-							Battle_Std.Play_SubtitleVoice( use_timeline[step].SE, voice_time );
+							local use_timeline_type = timeline_type;
+							if( se_flags&(1<<0) )
+							{
+								use_timeline_type = 0;
+							}
+							Battle_Std.Play_SubtitleVoice( use_timeline[step].SE, voice_time, use_timeline_type );
 						}
 						else
 						{
@@ -9259,12 +9723,18 @@ Std_MoveTable.Mv_Null_StandbyCommonManager <- //“oê‰‰oŠÇ—ƒ}ƒl[ƒWƒƒ 2P‘¤‚©‚çŒ
 						
 						local voice_time = ("time" in use_timeline[step])? use_timeline[step].time : delay;
 						local camera_time = ("camera_time" in use_timeline[step])? use_timeline[step].camera_time : voice_time;
+						local se_flags = ("flags" in use_timeline[step])? use_timeline[step].flags : 0;
 						//_dpn("camera_time:"+camera_time);
 						
 						// š–‹‚Í‚Â‚¯‚È‚¢
 						if(1)
 						{
-							Battle_Std.Play_SubtitleVoice( use_timeline[step].SE, voice_time );
+							local use_timeline_type = timeline_type;
+							if( se_flags&(1<<0) )
+							{
+								use_timeline_type = 0;
+							}
+							Battle_Std.Play_SubtitleVoice( use_timeline[step].SE, voice_time, use_timeline_type );
 						}
 						else
 						{
@@ -9334,6 +9804,34 @@ Std_MoveTable.Mv_Null_StandbyCommonManager <- //“oê‰‰oŠÇ—ƒ}ƒl[ƒWƒƒ 2P‘¤‚©‚çŒ
 
 	function Update_Std()
 	{
+		//ƒfƒoƒbƒOî•ñ•\¦
+		if( _DevWindows && Def_Dbg_LocalDebugMode )
+		{
+			local pos = { x=250, y=150 };
+			pos.ret <- function() { y+=20 };
+			// debugfont.setcolor(color);
+			debugfontL.draw(pos.x,pos.y,format("’Š‘I‚µ‚½‚s‚k”Ô† 1P:%d 2P:%d",BMvTbl.GetLP(0), BMvTbl.GetLP(1)));
+			pos.ret();
+			debugfontL.draw(pos.x,pos.y,format("DUETƒXƒeƒbƒv:%d ‘Ò‹@:%3d Duet‚©?:%d",BMvTbl.GetLP(2), BMvTbl.GetLP(3), BMvTbl.GetLP(4) ));
+			pos.ret();
+			debugfontL.draw(pos.x,pos.y,format("QÆæ 1P:%d %d 2P:%d %d ‚Ç‚Á‚¿‚ÌƒZƒŠƒtH:%d",BMvTbl.GetLP(5), BMvTbl.GetLP(7), BMvTbl.GetLP(6), BMvTbl.GetLP(8), BMvTbl.GetLP(9) ));
+			pos.ret();
+			debugfontL.draw(pos.x,pos.y,format("’ÊíƒXƒeƒbƒv 1P:%d %3d 2P:%d %3d",BMvTbl.GetLPEx(1,1), BMvTbl.GetLPEx(1,3), BMvTbl.GetLPEx(1,2), BMvTbl.GetLPEx(1,4) ));
+			pos.ret();
+			
+			// ‚Ü‚¾is’†‚È‚Ì‚ÉƒQ[ƒ€‚ªn‚Ü‚é‚Æ‚Ü‚¸‚¢(ƒXƒLƒbƒv‚Éš–‹‚¾‚¯c‚éBPAT‚ÉEff6-254‚ª‚ ‚é‚Æ“ü‚Á‚Ä‚µ‚Ü‚¤)
+			/*
+			local rs = BMvTbl.GetMvRoundStatus();
+			if( rs.CharaMoveMode != _CharaMoveMode_Disable )
+			{
+				debugfontL.draw_message( "ƒƒbƒZ[ƒW‚É‘Î‚µ‚ÄPAT‚ªI‚í‚é‚Ì‚ª‘‚·‚¬‚é" );
+				_dpn("ƒƒbƒZ[ƒW‚É‘Î‚µ‚ÄPAT‚ªI‚í‚é‚Ì‚ª‘‚·‚¬‚é:"+rs.CharaMoveMode);
+				// BMvTbl.SetFinalize();
+				// return;
+			}
+			*/
+		}
+		
 		local mvs = BMvTbl.GetMvStatus();
 		if( mvs.MvCount <= 10 )
 		{
@@ -9345,7 +9843,7 @@ Std_MoveTable.Mv_Null_StandbyCommonManager <- //“oê‰‰oŠÇ—ƒ}ƒl[ƒWƒƒ 2P‘¤‚©‚çŒ
 		switch( timeline_type )
 		{
 		case 0://common
-			// _dpn("”Ä—p");
+			// _dpn("common");
 			// 1P‚Æ2P‚ğ“¯‚Éi‚ß‚é
 			local use_timeline = GetTimeline( 0, "timeline" );
 			local update_1p_tl = UpdateNormalTimeline( use_timeline, 0 );
@@ -9362,6 +9860,7 @@ Std_MoveTable.Mv_Null_StandbyCommonManager <- //“oê‰‰oŠÇ—ƒ}ƒl[ƒWƒƒ 2P‘¤‚©‚çŒ
 			}
 			break;
 		case 1://duet
+			// _dpn("duet");
 			local use_timeline = GetTimeline( 0, "duet_timeline" );
 			local update_duet_tl = UpdateDuetTimeline( use_timeline );
 			if( !update_duet_tl )
@@ -9370,6 +9869,7 @@ Std_MoveTable.Mv_Null_StandbyCommonManager <- //“oê‰‰oŠÇ—ƒ}ƒl[ƒWƒƒ 2P‘¤‚©‚çŒ
 			}
 			break;
 		case 2://”½“]duet
+			// _dpn("rev duet");
 			local use_timeline = GetTimeline( 1, "duet_timeline" );
 			local update_duet_tl = UpdateDuetTimeline( use_timeline );
 			if( !update_duet_tl )
@@ -9399,6 +9899,7 @@ Std_MoveTable.Mv_Null_StandbyCommonManager <- //“oê‰‰oŠÇ—ƒ}ƒl[ƒWƒƒ 2P‘¤‚©‚çŒ
 			enemy.pop();
 		}
 		BMvEff.SetCamera_Focus( { time=[0,0,0] } );//ƒJƒƒ‰ŒÅ’è‚ğƒŠƒZƒbƒg
+		BMvEff.Chara_ClearMessageAll();//ƒgƒŒƒ‚‚Æ‚©‚Å‚ÌŸ—˜š–‹‚Ì‰Šú‰»
 	}
 }
 // ‚Ç‚ñ‚ÈŸ—˜‚È‚Ì‚©‚ğæ“¾
@@ -9771,6 +10272,7 @@ Std_MoveTable.Mv_Obj_DelayPlaySE <-
 		//LP0 ƒfƒBƒŒƒC
 		//LP1 Ä¶‚·‚é”Ô†
 		//LP2 Ä¶ƒtƒ‰ƒO
+		//LP3 ‰¹º‚Ì’·‚³@¦š–‹–³‚µ‚Ì‚Æ‚«‚Í0‚ª“ü‚Á‚Ä‚¢‚é
 	}
 	function Update_Std() //Update‚¶‚á‚È‚¢‚Æ“Š‚°ŠÖŒW‚Å•s‹ï‡‚Å‚é
 	{
@@ -9805,9 +10307,24 @@ Std_MoveTable.Mv_Obj_DelayPlaySE <-
 			//Ä¶
 			local num = BMvTbl.GetLP(1);
 			local flags = BMvTbl.GetLP(2);
+			local frame = BMvTbl.GetLP(3);
+			
+			// _dpn("frame:"+frame);
 			
 			_vdm(format("PlaySE [%3d] -- Delay",num));
-			Battle_Std.PlayerSE_Play( num, flags ); //_SeType_Player‚Ìnum‚ğÄ¶‚µ‚Ä‹L‰¯
+			if( frame != 0 )
+			{
+				local player = BMvCore.GetPlayerCharaData();
+				if( player.push() )
+				{
+					Battle_Std.Play_SubtitleVoice( num, frame+10 ); // 10Fƒ}[ƒWƒ“
+					player.pop();
+				}
+			}
+			else
+			{
+				Battle_Std.PlayerSE_Play( num, flags ); //_SeType_Player‚Ìnum‚ğÄ¶‚µ‚Ä‹L‰¯
+			}
 			BMvTbl.SetFinalize(0);
 		}
 	}
@@ -9829,6 +10346,7 @@ Std_MoveTable.Mv_Obj_DelayParam0PlaySE <-
 		//LP0 ‚Ü‚ÂParam0
 		//LP1 Ä¶‚·‚é”Ô†
 		//LP2 Ä¶ƒtƒ‰ƒO
+		//LP3 ‰¹º‚Ì’·‚³@¦š–‹–³‚µ‚Ì‚Æ‚«‚Í0‚ª“ü‚Á‚Ä‚¢‚é
 	}
 	function Update_Std() //Update‚¶‚á‚È‚¢‚Æ“Š‚°ŠÖŒW‚Å•s‹ï‡‚Å‚é
 	{
@@ -9841,9 +10359,23 @@ Std_MoveTable.Mv_Obj_DelayParam0PlaySE <-
 			//Ä¶
 			local num = BMvTbl.GetLP(1);
 			local flags = BMvTbl.GetLP(2);
+			local frame = BMvTbl.GetLP(3);
 			
 			_vdm(format("PlaySE [%3d] -- DelayParam0",num));
-			Battle_Std.PlayerSE_Play( num, flags ); //_SeType_Player‚Ìnum‚ğÄ¶‚µ‚Ä‹L‰¯
+			if( frame != 0 )
+			{
+				local player = BMvCore.GetPlayerCharaData();
+				if( player.push() )
+				{
+					Battle_Std.Play_SubtitleVoice( num, frame+10 ); // 10Fƒ}[ƒWƒ“
+					player.pop();
+				}
+			}
+			else
+			{
+				Battle_Std.PlayerSE_Play( num, flags ); //_SeType_Player‚Ìnum‚ğÄ¶‚µ‚Ä‹L‰¯
+			}
+			
 			BMvTbl.SetFinalize(0);
 		}
 	}
@@ -10112,6 +10644,18 @@ Std_MoveTable.Mv_DyingIWEAtk <-
 		Battle_Std.Reversal.CheckTime_DrawInfo(); // ƒŠƒo[ƒTƒ‹‚È‚ç•¶š•\¦
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //ƒpƒjƒbƒVƒ…‚ªo‚és“®
 		
+		BMvEff.Liberate_End(); // VO‚ğI—¹‚³‚¹‚é
+		
+		if( Def_Sys_FixSetHosyoHosei_IWtoIWE )
+		{
+			local comboUsedSpSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseSpSkill );
+			if( comboUsedSpSkill )
+			{
+				_dpn("IWE:SP‚Ì•ÛØ•â³");
+				Battle_Std.SetSpHosyoHosei( { type="SP" } );//‚Q‰ñ–Ú‚Ì•â³‚ğ‚©‚¯‚é
+			}
+		}
+
 		//”­“®‚ÉGRD‚Í‹ó‚É‚È‚è‚Ü‚·
 		local isVorpal = (BMvEff.GRD_GetJudgeResult()>0);
 		
@@ -10585,9 +11129,14 @@ Std_MoveTable.Mv_Liberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 				
 				Battle_Std.SetSpHosyoHosei( { type="VO" } );
 				
-				BMvEff.Liberate_Set(); // ƒ”ƒF[ƒ‹ƒIƒtó‘Ô‚ğƒZƒbƒg
-				BMvEff.Liberate_SetType( _LiberateType_Normal ); // ’Êíƒ”ƒF[ƒ‹ƒIƒt
-				BMvEff.Liberate_SetMinusValue( def_NormalVO_MinusValue );
+				// ƒ^ƒCƒ€ƒAƒbƒv‚ÍÁ”ï‚·‚éiŠÔ‰Ò‚¬‚Ég‚¦‚é‚Ì‚Åj
+				if( !Battle_Std.CharaisKO() ) // KOŒã‚É”­“®‚·‚é‚ÆŸ‚Ìƒ‰ƒEƒ“ƒh‚ÅƒQ[ƒW‚ª‹ó‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å’e‚­
+				{
+					BMvEff.Liberate_Set(); // ƒ”ƒF[ƒ‹ƒIƒtó‘Ô‚ğƒZƒbƒg
+					BMvEff.Liberate_SetType( _LiberateType_Normal ); // ’Êíƒ”ƒF[ƒ‹ƒIƒt
+					BMvEff.Liberate_SetMinusValue( def_NormalVO_MinusValue );
+				}
+				
 				// ƒ”ƒF[ƒ‹ƒIƒt‚É‚È‚Á‚½‚Ìƒ{[ƒiƒX
 				if( Def_Sys_VeilOff_GRDBonus )
 				{
@@ -10885,8 +11434,11 @@ Std_MoveTable.Mv_ComboLiberate <- 	//ƒŠƒxƒŒ[ƒg@ƒ”ƒF[ƒ‹ƒIƒt
 				local usepat = ( isDying )? 103 : 102;
 				local eff = BMvEff.CreateObject( { datatype=1, mvname="Mv_ComboVO_HitEffect", start_pat=usepat, x=0, y=-200*128 } );
 				
-				BMvEff.Liberate_Set(); // ƒ”ƒF[ƒ‹ƒIƒtó‘Ô‚ğƒZƒbƒg
-				BMvEff.Liberate_SetType( _LiberateType_Combo ); // ƒRƒ“ƒ{ƒ”ƒF[ƒ‹ƒIƒt
+				if( !Battle_Std.RoundisEnd() ) // KO‚âƒ^ƒCƒ€ƒAƒbƒvŒã‚É”­“®‚·‚é‚ÆŸ‚Ìƒ‰ƒEƒ“ƒh‚ÅƒQ[ƒW‚ª‹ó‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å’e‚­
+				{
+					BMvEff.Liberate_Set(); // ƒ”ƒF[ƒ‹ƒIƒtó‘Ô‚ğƒZƒbƒg
+					BMvEff.Liberate_SetType( _LiberateType_Combo ); // ƒRƒ“ƒ{ƒ”ƒF[ƒ‹ƒIƒt
+				}
 				
 				// def_DyingComboVO_MinusValue ‚à def_ComboVO_MinusValue ‚à140‚È‚Ì‚ÅˆÓ–¡‚ª‚È‚¢
 				// local useVal = ( isDying )? def_DyingComboVO_MinusValue : def_ComboVO_MinusValue;
@@ -11116,9 +11668,13 @@ Std_MoveTable.Mv_MaxLiberate <-
 				
 				Battle_Std.SetSpHosyoHosei( { type="VO" } );
 			
-				BMvEff.Liberate_Set(); // ƒ”ƒF[ƒ‹ƒIƒtó‘Ô‚ğƒZƒbƒg
-				BMvEff.Liberate_SetType( _LiberateType_Max ); // Å‘åƒ^ƒƒ”ƒF[ƒ‹ƒIƒt
-				BMvEff.Liberate_SetMinusValue( def_MaxVO_MinusValue );
+				// ƒ^ƒCƒ€ƒAƒbƒv‚ÍÁ”ï‚·‚éiŠÔ‰Ò‚¬‚Ég‚¦‚é‚Ì‚Åj
+				if( !Battle_Std.CharaisKO() ) // KOŒã‚É”­“®‚·‚é‚ÆŸ‚Ìƒ‰ƒEƒ“ƒh‚ÅƒQ[ƒW‚ª‹ó‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å’e‚­
+				{
+					BMvEff.Liberate_Set(); // ƒ”ƒF[ƒ‹ƒIƒtó‘Ô‚ğƒZƒbƒg
+					BMvEff.Liberate_SetType( _LiberateType_Max ); // Å‘åƒ^ƒƒ”ƒF[ƒ‹ƒIƒt
+					BMvEff.Liberate_SetMinusValue( def_MaxVO_MinusValue );
+				}
 				
 				// ƒ”ƒF[ƒ‹ƒIƒt‚É‚È‚Á‚½‚Ìƒ{[ƒiƒX
 				if( Def_Sys_VeilOff_GRDBonus )
@@ -11250,6 +11806,22 @@ Std_MoveTable.Mv_Liberate_Eff <-
 					if( BMvEff.GRD_GetBreak( 1 ) == 0 ) // 0 ƒuƒŒƒCƒN‚µ‚Ä‚¢‚È‚¢ 1 ƒuƒŒƒCƒN 100 ƒ`ƒFƒCƒ“ƒVƒtƒg’† 255 ƒI[ƒo[ƒuƒŒƒCƒN
 					{
 						BMvEff.GRD_ClearVorpal( 1 ); // ƒ”ƒH[ƒpƒ‹‚ğ‰ğœ‚·‚é
+					}
+				}
+				
+				// VO‚ªƒqƒbƒg‚µ‚½‚çVO‚ÌŠÔ‚ğ­‚µ’Z‚­‚·‚éiØ‚è‘Ö‚¦‚¹‚½‚Ì‚Å\•ªj
+				if( Def_Sys_StartHitVO_MinusTime )
+				{
+					local player = BMvCore.GetPlayerCharaData();
+					if( player.push() )
+					{
+						local gauge_status = BMvEff.Liberate_Get();
+						if( gauge_status != 0 )
+						{
+							_dpn("VOŠÔ‚ğŒ¸‚ç‚·:"+Def_Sys_StartHitVO_MinusTime);
+							BMvEff.Liberate_Calc( { value=Def_Sys_StartHitVO_MinusTime, mode=0 } );
+						}
+						player.pop();
 					}
 				}
 				
@@ -12193,7 +12765,7 @@ Std_MoveTable.Mv_Neppa <- // ƒ_ƒEƒ“‚©‚ç‚ÌQ‚Á‚Ï‚È‚µó‘Ô@Ÿ‚É‹N‚«ã‚ª‚è‚ÖˆÚs
 		
 		// 0`10 ƒ{ƒ^ƒ“ó‚¯gó•t 11`29:Q‚Ä‚é 30:‹N‚«ã‚ª‚é
 		local mask = (1<<0)|(1<<1)|(1<<2)|(1<<3); // D‚àŠÜ‚Ş
-		local push_button = BMvTbl.CheckButtonHold( mask );
+		local push_button = ( BMvTbl.IsCpu()==0 )? BMvTbl.CheckButtonHoldFrame( mask, 2 ) : BMvTbl.CheckButtonHold( mask ); // ƒvƒŒƒCƒ„[‚Ì‚İ2F‘O‚Ì“ü—Í‚ğŒ©‚éiƒ[ƒ‹ƒoƒbƒN‘Îôj
 		if( mvs.MvCount >= 20 )
 		{
 			BMvTbl.SetFinalize(0); // ‹N‚«ã‚ª‚è‚Öi‚Ş
@@ -13931,7 +14503,7 @@ local Add_EXAtks = function( stdmv ) : (set_AirAtkLandStatus, set_AirAtk_LandMov
 		case "A":
 			retmv.Init_Std <- function() : (set_AirAtk_LandMoveableFrame)
 			{
-				Battle_Std.PassLandMoveCodes(); // ’…’n‚Ìs“®ƒR[ƒhˆø‚«Œp‚¬
+				Battle_Std.InitAitAtkLand();
 				
 				set_AirAtk_LandMoveableFrame(			//’…’nd’¼‚ğİ’è
 				def_FL_AtkAirA_LandRecovery,			//‹óU‚è‚µ‚½
@@ -13948,7 +14520,7 @@ local Add_EXAtks = function( stdmv ) : (set_AirAtkLandStatus, set_AirAtk_LandMov
 		case "B":
 			retmv.Init_Std <- function() : (set_AirAtk_LandMoveableFrame)
 			{
-				Battle_Std.PassLandMoveCodes(); // ’…’n‚Ìs“®ƒR[ƒhˆø‚«Œp‚¬
+				Battle_Std.InitAitAtkLand();
 				
 				set_AirAtk_LandMoveableFrame(			//’…’nd’¼‚ğİ’è
 				def_FL_AtkAirB_LandRecovery,			//‹óU‚è‚µ‚½
@@ -13965,7 +14537,7 @@ local Add_EXAtks = function( stdmv ) : (set_AirAtkLandStatus, set_AirAtk_LandMov
 		case "C":
 			retmv.Init_Std <- function() : (set_AirAtk_LandMoveableFrame)
 			{
-				Battle_Std.PassLandMoveCodes(); // ’…’n‚Ìs“®ƒR[ƒhˆø‚«Œp‚¬
+				Battle_Std.InitAitAtkLand();
 				
 				set_AirAtk_LandMoveableFrame(			//’…’nd’¼‚ğİ’è
 				def_FL_AtkAirC_LandRecovery,			//‹óU‚è‚µ‚½
@@ -14156,12 +14728,21 @@ Std_MoveTable.Mv_Atk_AirAandB <-
 	function FrameUpdate_Std()
 	{
 		Battle_Std.TypeSE_Play({ type="Mv_Atk_AirAandB_FU" });
+		
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.isLanding )
+		{
+			// ’…’n‚Å‘®«–³“G‚ğíœ
+			Battle_Std.MoveCodeEx.DelFlag( 7, def_MC7_LightLegsMuteki );//¬‘«‘®«‚Ö‹óU‚è—\’è‚ÌMV
+			BMvTbl.SetHitCheckFlag( { type=0, val=Def_HitCheckFlag_LightLegs, time=0, flag=_ClearFlag_ChangeMv } ); // ¬‘«–³“G‚ÉƒXƒJ‚é‚ğíœ
+		}
 	}	
 	function Finalize() // 
 	{
 		BMvTbl.SetNextMoveTable( "Mv_Neutral" );
 	}	
 }
+
 
 local grd_action_init = function()
 {
@@ -14336,6 +14917,14 @@ Std_MoveTable.Mv_Atk_AirBandC <-
 		Battle_Std.TypeSE_Play({ type="Mv_Atk_AirBandC_FU" });
 		
 		grd_action_update();
+		
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.isLanding )
+		{
+			// ’…’n‚Å‘®«–³“G‚ğíœ
+			Battle_Std.MoveCodeEx.DelFlag( 7, def_MC7_LightLegsMuteki );//¬‘«‘®«‚Ö‹óU‚è—\’è‚ÌMV
+			BMvTbl.SetHitCheckFlag( { type=0, val=Def_HitCheckFlag_LightLegs, time=0, flag=_ClearFlag_ChangeMv } ); // ¬‘«–³“G‚ÉƒXƒJ‚é‚ğíœ
+		}
 	}
 	function Finalize() // 
 	{
@@ -14812,25 +15401,39 @@ local makemv_recover = function( type=0 /* 0:ƒjƒ…[ƒgƒ‰ƒ‹ 1:‘O 2:Œã‚ë */, landmv
 		
 		if( val_RecoverBarrierType == 0 )
 		{
+			local barrier_pos = { x=0, y=-250 };
 			local rc = BMvEff.GetHanteiRect( { check=[ _Hantei_Etc, 0 ], flags=_HanteiFlag_NoMukiChange | _HanteiFlag_Tool  } );
-			if( rc.sx != _Hantei_Error ) // ‘¶İ‚·‚é‚©
+			if( rc.sx != _Hantei_Error )
 			{
-				BMvEff.CreateObject( { x=rc.sx, y=rc.sy, mvname="", datatype=1, start_pat=6, flags=_Position_ToolShift } );
+				barrier_pos.x = rc.sx;
+				barrier_pos.y = rc.sy;
 			}
+			else
+			{
+				_dpn("šššó‚¯g—p‚Ì“Áê”»’è‚ª–¢İ’è‚Pššš");
+			}
+			BMvEff.CreateObject( { x=barrier_pos.x, y=barrier_pos.y, mvname="", datatype=1, start_pat=6, flags=_Position_ToolShift } );
 		}
 		else
 		{
+			local barrier_pos = { x=0, y=-250 };
 			local rc = BMvEff.GetHanteiRect( { check=[ _Hantei_Etc, 0 ], flags=_HanteiFlag_NoMukiChange | _HanteiFlag_Tool  } );
-			if( rc.sx != _Hantei_Error ) // ‘¶İ‚·‚é‚©
+			if( rc.sx != _Hantei_Error )
 			{
-				BMvEff.CreateObject( { x=rc.sx, y=rc.sy, mvname="", datatype=1, start_pat=6, flags=_Position_ToolShift } );
-				local eff = BMvEff.CreateObject( { x=rc.sx, y=rc.sy, mvname="Mv_RecoverBarrier", datatype=1, start_pat="RecoverBarrier", flags=_Position_ToolShift } );
-				if( eff.push() )
-				{
-					BMvEff.SetObjectFlags( { flags=_ObjFlags_ParentMove|_ObjFlags_EraseParentDamage } );
-					eff.pop();
-				}
-			}		
+				barrier_pos.x = rc.sx;
+				barrier_pos.y = rc.sy;
+			}
+			else
+			{
+				_dpn("šššó‚¯g—p‚Ì“Áê”»’è‚ª–¢İ’è‚Qššš");
+			}
+			BMvEff.CreateObject( { x=barrier_pos.x, y=barrier_pos.y, mvname="", datatype=1, start_pat=6, flags=_Position_ToolShift } );
+			local eff = BMvEff.CreateObject( { x=rc.sx, y=rc.sy, mvname="Mv_RecoverBarrier", datatype=1, start_pat="RecoverBarrier", flags=_Position_ToolShift } );
+			if( eff.push() )
+			{
+				BMvEff.SetObjectFlags( { flags=_ObjFlags_ParentMove|_ObjFlags_EraseParentDamage } );
+				eff.pop();
+			}
 		}		
 	}
 	
@@ -14928,9 +15531,19 @@ Std_MoveTable.Mv_GroundRecover <-
 		// _dp("\n Mv_GroundRecover:Stick:"+rst.Stick+" Type:"+rst.Type );
 		
 		// rst.Stick ‚Í ‘O‰ñ‚Ì’nãóg‚Ì‚ª“ü‚Á‚Ä‚¢‚éBƒgƒŒƒ‚‚Ì‚Í‰½‚Æ‚È‚­ƒŒƒo[‚ª“ü‚Á‚Ä‚¢‚é‚ç‚µ‚¢B
-		if( BMvTbl.CheckStickHold( (1<<4) ) || ( rst.Stick == 4 ) ) // ƒŒƒo[Œã‚ë‚È‚ç‚Ü‚¸¬Œ÷iƒvƒŒƒCƒ„[or‹Ù‹}óg‚Í‚±‚êjAStick‚ª4‚Å‚à¬Œ÷iCOM‚Ì’nãóg‚Ìİ’èj
-		// if( rst.Stick == 4 || BMvTbl.CheckStickHold( (1<<4) ) ) // Œã‚ë ¦‚±‚ê‚¾‚ÆƒNƒCƒbƒNƒŠƒJƒoƒŠ[‚Å“ü‚Á‚Ä‚±‚È‚¢iQ‚Ä‚éMv‚©‚ç’¼Ú”ò‚Ô‚©‚ç‚»‚è‚á‚»‚¤‚¾Š´j
-		// if( BMvTbl.CheckStickHold( (1<<4) ) ) // Œã‚ë
+		// ƒvƒŒƒCƒ„[‚Ì‚İ2F‘O‚Ì“ü—Í‚ğŒ©‚éiƒ[ƒ‹ƒoƒbƒN‘Îôj
+		local stick_is_back = 0;
+		if( BMvTbl.IsCpu()==0 )
+		{
+			local muki = BMvTbl.GetMuki();
+			local mask = ( muki == 1 )? (1<<4) : (1<<6);
+			stick_is_back = BMvTbl.CheckStickHoldFrameKeyBuffer( mask, 2 ); // ‚±‚ÌŠÖ”‚ÍƒL[ƒoƒbƒtƒ@‚©‚ç‚Ìæ“¾‚Ì‚½‚ßŒü‚«‚ğl—¶‚µ‚Ä‚­‚ê‚È‚¢
+		}
+		else
+		{
+			stick_is_back = BMvTbl.CheckStickHold( (1<<4) );
+		}
+		if( stick_is_back || ( rst.Stick == 4 ) ) // ƒŒƒo[Œã‚ë‚È‚ç‚Ü‚¸¬Œ÷iƒvƒŒƒCƒ„[or‹Ù‹}óg‚Í‚±‚êjAStick‚ª4‚Å‚à¬Œ÷iCOM‚Ì’nãóg‚Ìİ’èj
 		{
 			BMvTbl.SetLP(0,1); // ó‚¯gƒ^ƒCƒv‹L‰¯
 			BMvTbl.SetVector( { x=-1800, y=-2400, addx=0, addy=200, flags=_Vector_Normal } );
@@ -15494,13 +16107,11 @@ Std_MoveTable.Mv_Null_CSHoseiChecker <-
 
 //ˆÃ“]‚³‚ê‚é‚Æ¶¬‚³‚ê‚ÄA©•ª‚ªˆÃ“]Œã“®‚¯‚é‚æ‚¤‚É‚È‚é‚ÆÁ‚¦‚éƒIƒuƒWƒFƒNƒg
 //‘Šè‚©‚ç¶¬‚ğŒÄ‚Î‚ê‚é‚Ì‚Å’ˆÓ
+//ŒÄ‚Ño‚µƒ^ƒCƒ~ƒ“ƒOŸ‘æ‚Å‚ÍA‘Šè‚Ìs“®‚ª‘z’è‚ÆˆÙ‚È‚é‚±‚Æ‚ª‚ ‚é‚Ì‚ÅA‰½“x‚©ˆ—‚ğ‚·‚é•K—v‚ª‚ ‚é
 Std_MoveTable.Mv_Null_AntenStopObject <-
 {
-	function Init_Std()
+	function SetEnemyAntenFlags() // ”íˆÃ“]ƒtƒ‰ƒO‚ğ—§‚Ä‚½‚è‚·‚é
 	{
-		BMvEff.SetObjectFlags( { flags=_ObjFlags_NoRender } );
-		BMvEff.SetExist( { level = _Exist_NoHantei } );
-		
 		//‰º‚Ìˆ—‚ª‚È‚¢‚Æ‘ŠE‚ÅŒÄ‚Î‚ê‚é‚Æ‚«‚É‚¤‚Ü‚­“®‚©‚È‚¢
 		local player = BMvCore.GetPlayerCharaData();
 		if( player.push() )
@@ -15543,47 +16154,41 @@ Std_MoveTable.Mv_Null_AntenStopObject <-
 		{
 			Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_Anten );
 			enemy.pop();
-		}
+		}		
+		
 	}
-	function FrameUpdate_Std()
+	function DelEnemyAntenFlags()
 	{
-		local anten_stop = 1;
-		
-		local mvs = BMvTbl.GetMvStatus();
-		if( mvs.MvCount >= 2 )
-		{
-			anten_stop = 0; // ‚±‚ÌƒtƒŒ[ƒ€‚Ü‚Å‚«‚½‚ç‚à‚¤ˆÃ“]I‚í‚Á‚Ä‚é
-		}
-		
 		local player = BMvCore.GetPlayerCharaData();
 		if( player.push() )
 		{
-			if( anten_stop )
-			{
-				Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_EnemyAntenStop );
-			}
-			else
-			{
-				Battle_Std.MoveCodeEx.DelFlag( 2, def_MC2_EnemyAntenStop );
-			}
+			Battle_Std.MoveCodeEx.DelFlag( 2, def_MC2_EnemyAntenStop );
 			player.pop();
 		}
 		local enemy = BMvCore.GetEnemyCharaData();
 		if( enemy.push() )
 		{
-			if( anten_stop )
-			{
-				Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_Anten );
-			}
-			else
-			{
-				Battle_Std.MoveCodeEx.DelFlag( 3, def_MC3_Anten );
-				
-			}
+			Battle_Std.MoveCodeEx.DelFlag( 3, def_MC3_Anten );
 			enemy.pop();
 		}
-		if( anten_stop != 1 )
+	}
+	function Init_Std()
+	{
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_NoRender } );
+		BMvEff.SetExist( { level = _Exist_NoHantei } );
+		
+		SetEnemyAntenFlags();
+	}
+	function Update_Std()
+	{
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.MvCount < 3 )
 		{
+			SetEnemyAntenFlags(); // ‰½“x‚©ˆ—‚ğ‚µ‚È‚¢‚Æ1F‚ÌƒYƒŒ‚É‘Î‰‚Å‚«‚È‚¢
+		}
+		else
+		{
+			DelEnemyAntenFlags(); // LastUpdate‚¾‚Æ’x‚¢‚Ì‚Å‚±‚±H
 			BMvTbl.SetFinalize(0);
 		}
 	}
@@ -15855,6 +16460,83 @@ Std_MoveTable.Mv_Null_DelSousaiMutekiFlag <-
 			
 			player.pop();
 		}
+	}
+}
+
+
+// “Š‚°ƒRƒ}ƒ“ƒh‚ğ“ü‚ê‚½A2ƒOƒ‰‚Æ3ƒOƒ‰ˆÈŠO‚ğ–h‚¢‚Å‚¢‚é‚ªAƒŠƒo[ƒTƒ‹ƒ^ƒCƒ~ƒ“ƒO‚Ì‚Æ‚«‚É˜R‚ê‚â‚·‚¢‚Ì‚ÅFX‘Î‰‚·‚é
+// FX‰e‹¿‚ª‚ ‚è‚»‚¤‚È‚Ì‚ÅƒK[ƒhƒŠƒo[ƒTƒ‹‚Ì‚Æ‚«‚¾‚¯–h‚®‚à‚Ì‚Æ‚µ‚Äì¬
+Std_MoveTable.Mv_Null_GuardReversalThrowBouhatsuChecker <-
+{
+	function Init_Std()
+	{
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_NoRender } );
+		BMvEff.SetExist( { level = _Exist_NoHantei } );
+		BMvTbl.SetPosition( {y=1024, flags=_Position_CaptureShift } );
+		
+		BMvTbl.SetLP(0,0); // A+D‚ğ—£‚µ‚ÄÄ“x‰Ÿ‚µ‚½‚è‚Æ‚©‚Ìƒ`ƒFƒbƒN—p
+		_dpn("¶¬");
+	}
+	function FrameUpdate_Std()
+	{
+		local button_hold = 0;
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
+		{
+			button_hold = BMvTbl.CheckButtonHold( (1<<0)|(1<<3) );
+			// _dpn("button_hold:"+button_hold);
+			
+			player.pop();
+		}
+		
+		// 3ACD‚ğ‚â‚Á‚½‚ ‚ÆƒŒƒo[‚ğ2‚Æ‚©1‚É‚µ‚ÄƒK[ƒhƒŠƒo[ƒTƒ‹‚É‚È‚é‚ÆA3C‚Å‚Í‚È‚­“Š‚°‚ª˜R‚ê‚é
+		// ‚»‚Ì‘Îô‚ÅSetCommandFailTime‚ğ‰„’·‚·‚é
+		// ‚½‚¾A•’Ê‚É‚â‚é‚ÆA3ACD‚Ì‚ ‚Æ‚ÉÄ“xA+D‚ğ˜A‘Å‚µ‚Ä‚àƒŠƒoƒT‚Å“Š‚°‚ªo‚¹‚È‚­‚È‚é‚Ì‚Å
+		// ‚Ü‚½“ü—Í‚³‚ê‚½‚Á‚Û‚¢•µˆÍ‹C‚ğŠ´‚¶‚½‚çI‚í‚é‚æ‚¤‚É‚µ‚½
+		
+		switch( BMvTbl.GetLP(0) )
+		{
+		case 0: // A+D‚ğ—£‚·‚Ü‚Å
+			if( button_hold == 0 )
+			{
+				BMvTbl.SetLP(0,1); // Ÿ‚Ö
+			}
+			break;
+		case 1: // A+D‚ğ—£‚µ‚Ä‚©‚çÄ“x‰Ÿ‚·‚Ü‚Å
+			if( button_hold )
+			{
+				BMvTbl.SetLP(0,2); // I‚í‚è
+			}
+			break;
+		case 2:
+			break;
+		}
+		
+		
+		// ƒK[ƒhd’¼’†‚Ì‚İ—LŒø
+		// ‚ ‚ñ‚Ü‚è’·‚¢ƒK[ƒh‚Í–³‹
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.MvCount > 90 || !Battle_Std.CheckPlayerisGuard() || BMvTbl.CheckMvUniqueID( { datatype=_DataType_Player } )==0 || BMvTbl.GetLP(0)>=2 )
+		{
+			BMvTbl.SetCommandFailTime( { command=def_CN_Throw_F, time=0 } );
+			BMvTbl.SetFinalize();
+		}
+		else
+		{
+			
+			if( player.push() )
+			{
+				_dpn("–\”­‚ğ–h‚®");
+				BMvTbl.SetCommandFailTime( { command=def_CN_Throw_F, time=1 } );
+				
+				player.pop();
+			}
+		}
+	}
+	function Finalize_Std()
+	{
+		_dpn("I‚í‚è");
+		BMvTbl.SetDeleteMoveTable();
 	}
 }
 
