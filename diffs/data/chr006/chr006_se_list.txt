@@ -1,0 +1,350 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr006/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(650); // てきとう
+local st = SeList_Table.Status; // 登録しやすいように
+
+st[0] = { volumetype=0, path=2, file="SE_CuttingDing", type=0, category=3, }; 
+
+st[3] = { volumetype=0, path=2, file="SE_BigBomb_Short", type=1, category=-1, }; //41236EX最後の爆発
+
+st[10] = { volumetype=0, path=0, file="SE202_BladeC", type=0, category=3, }; //IWE用のかみつき音
+st[11] = { volumetype=0, path=2, file="SE_BloodFallDown", type=1, category=-1, }; //IWE用のかみつきの血がビシャッ
+st[15] = { volumetype=0, path=0, file="SE048_LongSwingC", type=0, category=-1 }; // はばたき音
+st[16] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWEとどめ赤くなるところ
+
+
+// 登場
+st[100] = { volumetype=1, path=1, file="mer_010_b_2000", type=0, category=1, }; //「ギョッギョッギョー！（空から着陸しつつ）」
+st[101] = { volumetype=1, path=1, file="mer_010_b_2001", type=0, category=1, }; //「ギュオオーッ！（戦い前の雄叫び）」
+st[102] = { volumetype=1, path=1, file="mer_010_b_2002", type=0, category=1, }; //「存分に味わわせてもらおう」
+st[103] = { volumetype=1, path=1, file="mer_010_b_2003", type=0, category=1, }; //「キュエー！」
+st[104] = { volumetype=1, path=1, file="mer_010_b_2004", type=0, category=1, }; //「キュオァアアアアアアッ（戦い前の雄叫び）」
+
+// 登場 特殊
+// 対オリエ
+st[109] = { volumetype=1, path=1, file="mer_010_b_2012", type=0, category=1, }; //「それは思い上がりというものだ、小娘……」
+
+// 対ロンドレキア
+st[112] = { volumetype=1, path=1, file="mer_010_b_2016", type=0, category=1, }; //「あぁ、そのようなもの元より存在せぬ」
+
+// 対クオン
+st[115] = { volumetype=1, path=1, file="mer_010_b_2019", type=0, category=1, }; //「この世界を食らうのは我だ……っ！」
+
+// ラウンド勝利
+st[125] = { volumetype=1, path=1, file="mer_010_b_2100", type=0, category=1, }; //「キュラアアアァ！！！！」
+st[126] = { volumetype=1, path=1, file="mer_010_b_2101", type=0, category=1, }; //「キイィーォオオオオオオオオオッ！」
+st[127] = { volumetype=1, path=1, file="mer_010_b_2102", type=0, category=1, }; //「昂ぶりが抑えられぬわ！」
+
+// 決着勝利 汎用
+st[130] = { volumetype=1, path=1, file="mer_010_b_2111", type=0, category=1, }; //「グアァ…ガァー、ガァー！ガァー、ガァー！」
+st[131] = { volumetype=1, path=1, file="mer_010_b_2112", type=0, category=1, }; //「享受であったぞ、人の子よ」
+
+// 決着勝利 辛勝
+st[134] = { volumetype=1, path=1, file="mer_010_b_2120", type=0, category=1, }; //「楽しませてもらったぞ」
+
+// 決着勝利 楽勝
+st[138] = { volumetype=1, path=1, file="mer_010_b_2123", type=0, category=1, }; //「他愛もない」
+
+// 決着勝利 掛け合い
+// 対ロンドレキア
+st[143] = { volumetype=1, path=1, file="mer_010_b_2127", type=0, category=1, }; //「貴様の魂、我が力としてありがたくいただこう」
+
+// 対クオン
+st[145] = { volumetype=1, path=1, file="mer_010_b_2130", type=0, category=1, }; //「貴様も世界も我が飲み込んでくれよう…」
+
+// タイムアップ判定負け
+st[148] = { volumetype=1, path=1, file="mer_010_b_2200", type=0, category=1, }; //「キュウー」
+st[149] = { volumetype=1, path=1, file="mer_010_b_2201", type=0, category=1, }; //「我としたことが、時を忘れるほど専心するとは」
+st[150] = { volumetype=1, path=1, file="mer_010_b_2202", type=0, category=1, }; //「時の流れとは無常であるな」
+
+// 弱攻撃
+st[200] = { volumetype=1, path=1, file="mer_010_b_2300_a", type=0, category=1, }; //「は」
+st[201] = { volumetype=1, path=1, file="mer_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[202] = { volumetype=1, path=1, file="mer_010_b_2302_a", type=0, category=1, }; //「や」
+st[203] = { volumetype=1, path=1, file="mer_010_b_2303_a", type=0, category=1, }; //「し」
+st[204] = { volumetype=1, path=1, file="mer_010_b_2300_b", type=0, category=1, }; //「は」
+st[205] = { volumetype=1, path=1, file="mer_010_b_2301_b", type=0, category=1, }; //「ふ」
+st[206] = { volumetype=1, path=1, file="mer_010_b_2302_b", type=0, category=1, }; //「や」
+st[207] = { volumetype=1, path=1, file="mer_010_b_2303_b", type=0, category=1, }; //「し」
+
+// 中攻撃
+st[223] = { volumetype=1, path=1, file="mer_010_b_2403_a", type=0, category=1, }; //「キュアラァ！」
+st[224] = { volumetype=1, path=1, file="mer_010_b_2404_a", type=0, category=1, }; //「ガウッ」
+st[226] = { volumetype=1, path=1, file="mer_010_b_2406_a", type=0, category=1, }; //「突(とつ)！」
+st[229] = { volumetype=1, path=1, file="mer_010_b_2401_b", type=0, category=1, }; //「シャオ！」
+st[230] = { volumetype=1, path=1, file="mer_010_b_2402_b", type=0, category=1, }; //「ジャア！」
+st[231] = { volumetype=1, path=1, file="mer_010_b_2403_b", type=0, category=1, }; //「キュアラァ！」
+st[232] = { volumetype=1, path=1, file="mer_010_b_2404_b", type=0, category=1, }; //「ガウッ」
+st[233] = { volumetype=1, path=1, file="mer_010_b_2405_b", type=0, category=1, }; //「キュパーン！」
+st[235] = { volumetype=1, path=1, file="mer_010_b_2407_b", type=0, category=1, }; //「噛(ごう)！」
+
+// 強攻撃
+st[240] = { volumetype=1, path=1, file="mer_010_b_2500_a", type=0, category=1, }; //「キュエェ！」
+st[241] = { volumetype=1, path=1, file="mer_010_b_2501_a", type=0, category=1, }; //「ギュヲォン！」
+st[242] = { volumetype=1, path=1, file="mer_010_b_2502_a", type=0, category=1, }; //「ギャボッ！」
+st[243] = { volumetype=1, path=1, file="mer_010_b_2503_a", type=0, category=1, }; //「キィーオッ！」
+st[244] = { volumetype=1, path=1, file="mer_010_b_2504_a", type=0, category=1, }; //「シェアアア！」
+st[245] = { volumetype=1, path=1, file="mer_010_b_2505_a", type=0, category=1, }; //「これならどうだ？」
+st[246] = { volumetype=1, path=1, file="mer_010_b_2500_b", type=0, category=1, }; //「キュエェ！」
+st[247] = { volumetype=1, path=1, file="mer_010_b_2501_b", type=0, category=1, }; //「ギュヲォン！」
+st[248] = { volumetype=1, path=1, file="mer_010_b_2502_b", type=0, category=1, }; //「ギャボッ！」
+st[249] = { volumetype=1, path=1, file="mer_010_b_2503_b", type=0, category=1, }; //「キィーオッ！」
+st[250] = { volumetype=1, path=1, file="mer_010_b_2504_b", type=0, category=1, }; //「シェアアア！」
+
+// 吹き飛ばし攻撃
+st[261] = { volumetype=1, path=1, file="mer_010_b_2601", type=0, category=1, }; //「昇天！」
+
+// 回避困難な攻撃
+st[266] = { volumetype=1, path=1, file="mer_010_b_2604", type=0, category=1, }; //「不可避だ！」
+st[267] = { volumetype=1, path=1, file="mer_010_b_2605", type=0, category=1, }; //「躱(かわ)せまい！」
+
+// その他特殊攻撃
+st[273] = { volumetype=1, path=1, file="mer_010_b_2607", type=0, category=1, }; //「挟(きょう)！」
+st[274] = { volumetype=1, path=1, file="mer_010_b_2608", type=0, category=1, }; //「グォイギン！」
+st[275] = { volumetype=1, path=1, file="mer_010_b_2609", type=0, category=1, }; //「キュラキュラ！」
+st[276] = { volumetype=1, path=1, file="mer_010_b_2610", type=0, category=1, }; //「肘だ」
+st[277] = { volumetype=1, path=1, file="mer_010_b_2611", type=0, category=1, }; //「襲！」
+st[279] = { volumetype=1, path=1, file="mer_010_b_2613", type=0, category=1, }; //「穿(せん)！」
+st[280] = { volumetype=1, path=1, file="mer_010_b_2614", type=0, category=1, }; //「連突(れんとつ)！」
+st[281] = { volumetype=1, path=1, file="mer_010_b_2615", type=0, category=1, }; //「キシャアアア！」
+
+st[282] = { volumetype=1, path=1, file="mer_010_b_2612", type=0, category=1, }; //
+st[283] = { volumetype=1, path=1, file="mer_010_b_2405_a", type=0, category=1, }; //
+st[284] = { volumetype=1, path=1, file="mer_010_b_2702_a", type=0, category=1, }; //
+
+// 投げ成功
+st[300] = { volumetype=1, path=1, file="mer_010_b_2700_b0", type=0, category=1, }; //「ギョイ！ギョイ！ギョイ！（次に続く）」
+st[301] = { volumetype=1, path=1, file="mer_010_b_2700_b1", type=0, category=1, }; //「ギョイ！ギョイ！ギョイ！（次に続く）」
+st[302] = { volumetype=1, path=1, file="mer_010_b_2700_b2", type=0, category=1, }; //「ギョイ！ギョイ！ギョイ！（次に続く）」
+st[303] = { volumetype=1, path=1, file="mer_010_b_2701", type=0, category=1, }; //「ギョワァー！」
+st[304] = { volumetype=1, path=1, file="mer_010_b_2702_b0", type=0, category=1, }; //「キョア！キョア！キョア！（次に続く）」
+st[305] = { volumetype=1, path=1, file="mer_010_b_2702_b1", type=0, category=1, }; //「キョア！キョア！キョア！（次に続く）」
+st[306] = { volumetype=1, path=1, file="mer_010_b_2702_b2", type=0, category=1, }; //「キョア！キョア！キョア！（次に続く）」
+st[307] = { volumetype=1, path=1, file="mer_010_b_2703", type=0, category=1, }; //「キュオアーッ！」
+
+// 投げ失敗
+st[307] = { volumetype=1, path=1, file="mer_010_b_2800", type=0, category=1, }; //「ガァッ？」
+st[308] = { volumetype=1, path=1, file="mer_010_b_2801", type=0, category=1, }; //「ぬう…」
+
+// 敵の投げ技を回避
+st[311] = { volumetype=1, path=1, file="mer_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「無駄よ」
+st[312] = { volumetype=1, path=1, file="mer_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「しゃらくさい」
+
+// ガードキャンセル攻撃
+st[315] = { volumetype=1, path=1, file="mer_010_b_2950", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「煩わしい」
+
+// 振り向き
+st[318] = { volumetype=1, path=1, file="mer_010_b_3000", type=0, prio=Def_SEP_Furimuki, }; //「そちらか」
+
+// 待機モーション
+st[321] = { volumetype=1, path=1, file="mer_010_b_3100", type=0, category=1, }; //「退屈なものよ」
+
+// 前方回避
+st[324] = { volumetype=1, path=1, file="mer_010_b_3200", type=0, category=1, }; //「我避(われさ)ける」
+st[325] = { volumetype=1, path=1, file="mer_010_b_3201", type=0, category=1, }; //「シュアァ！」
+
+// ダッシュ
+st[329] = { volumetype=1, path=1, file="mer_010_b_3300", type=0, category=1, }; //「シャーッ！」
+st[330] = { volumetype=1, path=1, file="mer_010_b_3301", type=0, category=1, }; //「キシャーッ！」
+st[331] = { volumetype=1, path=1, file="mer_010_b_3302", type=0, category=1, }; //「シュオ！」
+
+// アサルト
+st[334] = { volumetype=1, path=1, file="mer_010_b_3310", type=0, category=1, }; //「トリィ！」
+st[335] = { volumetype=1, path=1, file="mer_010_b_3311", type=0, category=1, }; //「ディ！」
+st[336] = { volumetype=1, path=1, file="mer_010_b_3312", type=0, category=1, }; //「跳(ちょう)！」
+
+// バックステップ
+st[339] = { volumetype=1, path=1, file="mer_010_b_3400", type=0, category=1, }; //「グググ…」
+st[341] = { volumetype=1, path=1, file="mer_010_b_3402", type=0, category=1, }; //「シャアアッ」
+
+// 弱攻撃ガード
+st[344] = { volumetype=1, path=1, file="mer_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ガ」
+st[345] = { volumetype=1, path=1, file="mer_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「クァァ」
+st[346] = { volumetype=1, path=1, file="mer_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ふむ」
+
+// 中攻撃ガード
+st[350] = { volumetype=1, path=1, file="mer_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「ガッ」
+st[351] = { volumetype=1, path=1, file="mer_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「ガガッ」
+st[352] = { volumetype=1, path=1, file="mer_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「ほう…」
+
+// 強攻撃ガード
+st[355] = { volumetype=1, path=1, file="mer_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「グガァ」
+st[356] = { volumetype=1, path=1, file="mer_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「ピギィ」
+st[357] = { volumetype=1, path=1, file="mer_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「なかなかの強打」
+st[358] = { volumetype=1, path=1, file="mer_010_b_3703", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「届かぬ」
+st[359] = { volumetype=1, path=1, file="mer_010_b_3704", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「効かぬ」
+
+// 攻撃を見切り余裕でガード
+st[362] = { volumetype=1, path=1, file="mer_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「キュ？」
+st[363] = { volumetype=1, path=1, file="mer_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「キュウ？」
+st[364] = { volumetype=1, path=1, file="mer_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「くだらん」
+st[365] = { volumetype=1, path=1, file="mer_010_b_3803", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「退屈だ」
+
+// ガード失敗ダメージ
+st[368] = { volumetype=1, path=1, file="mer_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「ギュエエ！？」
+st[369] = { volumetype=1, path=1, file="mer_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「ギュエッ」
+
+// 受け身
+st[372] = { volumetype=1, path=1, file="mer_010_b_4000", type=0, category=1, prio=Def_SEP_Recover, }; //「ただでは倒れぬ」
+st[373] = { volumetype=1, path=1, file="mer_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; //「そうでなくてはな」
+
+// シールド発動
+st[376] = { volumetype=1, path=1, file="mer_010_b_4100", type=0, category=1, }; //「フォォー…」
+st[377] = { volumetype=1, path=1, file="mer_010_b_4101", type=0, category=1, }; //「くるがいい」
+st[378] = { volumetype=1, path=1, file="mer_010_b_4102", type=0, category=1, }; //「シュアアア…」
+
+// シールド成功
+st[381] = { volumetype=1, path=1, file="mer_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「グアグア！」
+st[382] = { volumetype=1, path=1, file="mer_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「あまいわ！」
+st[383] = { volumetype=1, path=1, file="mer_010_b_4202", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「予測どおりよ！」
+
+// 弱攻撃ダメージ
+st[386] = { volumetype=1, path=1, file="mer_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「グ」
+st[387] = { volumetype=1, path=1, file="mer_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「ガ」
+st[388] = { volumetype=1, path=1, file="mer_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「ギィ」
+st[389] = { volumetype=1, path=1, file="mer_010_b_4303", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「キュゥ」
+st[390] = { volumetype=1, path=1, file="mer_010_b_4304", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「クキィッ」
+
+// 中攻撃ダメージ
+st[394] = { volumetype=1, path=1, file="mer_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「グゲェ」
+st[395] = { volumetype=1, path=1, file="mer_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「グゴォ」
+st[396] = { volumetype=1, path=1, file="mer_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「ぐっ…」
+st[397] = { volumetype=1, path=1, file="mer_010_b_4403", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「なんと！」
+
+// 強攻撃ダメージ
+st[400] = { volumetype=1, path=1, file="mer_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「ギャッ！」
+st[401] = { volumetype=1, path=1, file="mer_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「ギュアウッ！」
+st[402] = { volumetype=1, path=1, file="mer_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「貴様！」
+st[403] = { volumetype=1, path=1, file="mer_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「許さぬ！」
+
+// ダウン
+st[407] = { volumetype=1, path=1, file="mer_010_b_4600", type=0, category=1, prio=Def_SEP_KO, }; //「ギー！ギギー！」
+st[408] = { volumetype=1, path=1, file="mer_010_b_4601_b", type=0, category=1, prio=Def_SEP_KO, }; //「キュアアアアアアッ！　」
+st[409] = { volumetype=1, path=1, file="mer_010_b_4602_b", type=0, category=1, prio=Def_SEP_KO, }; //「なかなかのものよ…」
+
+// ラウンド敗北
+st[413] = { volumetype=1, path=1, file="mer_010_b_4650", type=0, category=1, prio=Def_SEP_KO, }; //「見事だ…」
+st[414] = { volumetype=1, path=1, file="mer_010_b_4651", type=0, category=1, prio=Def_SEP_KO, }; //「もう止まらぬ…」
+
+// ダウン・ノックアウト
+st[418] = { volumetype=1, path=1, file="mer_010_b_4700", type=0, category=1, prio=Def_SEP_KO, }; //「ギュェェェエェエェェ！！」
+st[419] = { volumetype=1, path=1, file="mer_010_b_4701", type=0, category=1, prio=Def_SEP_KO, }; //「キュアオオオオオオッ…」
+
+// 起き上がり
+st[422] = { volumetype=1, path=1, file="mer_010_b_4800", type=0, category=1, }; //「やるな」
+st[423] = { volumetype=1, path=1, file="mer_010_b_4801", type=0, category=1, }; //「…惜しかったな」
+
+// 起き上がり・瀕死
+st[426] = { volumetype=1, path=1, file="mer_010_b_4900", type=0, category=1, }; //「これほどとは…」
+st[427] = { volumetype=1, path=1, file="mer_010_b_4901", type=0, category=1, }; //「グホッ」
+
+// ヴェールオフ
+st[430] = { volumetype=1, path=1, file="mer_010_b_5000", type=0, category=3, }; //「キュゥウゥアアッ！」
+st[431] = { volumetype=1, path=1, file="mer_010_b_5001", type=0, category=3, }; //「終わりの始まりだ」
+
+// チェインシフト
+st[434] = { volumetype=1, path=1, file="mer_010_b_5100", type=0, category=1, }; //「ギュエエッ！」
+st[435] = { volumetype=1, path=1, file="mer_010_b_5101", type=0, category=1, }; //「収束」
+
+// コンセントレーション
+st[438] = { volumetype=1, path=1, file="mer_010_b_5200", type=0, category=1, }; //「キュゥゥゥゥゥ…」
+st[439] = { volumetype=1, path=1, file="mer_010_b_5201", type=0, category=1, }; //「昂ぶるぞ……」
+
+// ヴォーパル
+st[443] = { volumetype=1, path=1, file="mer_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「満たされる…！」
+st[444] = { volumetype=1, path=1, file="mer_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; //「甘美なり」
+
+// ヴォーパル・瀕死
+st[448] = { volumetype=1, path=1, file="mer_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; //「たぎるぞ…」
+
+// 必殺技
+st[500] = { volumetype=1, path=1, file="mer_010_b_6001", type=0, category=1, }; //「ギュララァ！」
+st[501] = { volumetype=1, path=1, file="mer_010_b_6002", type=0, category=1, }; //「蛇突(じゃとつ)」
+st[502] = { volumetype=1, path=1, file="mer_010_b_6003", type=0, category=1, }; //「キュララアッ」
+st[503] = { volumetype=1, path=1, file="mer_010_b_6004", type=0, category=1, }; //「キョアアッ！」
+st[504] = { volumetype=1, path=1, file="mer_010_b_6005", type=0, category=1, }; //「ギュラララァ！」
+
+st[507] = { volumetype=1, path=1, file="mer_010_b_6008", type=0, category=1, }; //「我、穿つ」
+st[508] = { volumetype=1, path=1, file="mer_010_b_6009", type=0, category=1, }; //「ギシャーッ！！」
+
+st[510] = { volumetype=1, path=1, file="mer_010_b_6014", type=0, category=1, }; //「捕らえる」
+st[511] = { volumetype=1, path=1, file="mer_010_b_6015", type=0, category=1, }; //「捕獲する」
+st[517] = { volumetype=1, path=1, file="mer_010_b_6019", type=0, category=1, }; //「（噛みつきフィニッシュ）ギャアッーーー！」
+
+st[519] = { volumetype=1, path=1, file="mer_010_b_6024", type=0, category=1, }; //「逃がさぬ」
+st[520] = { volumetype=1, path=1, file="mer_010_b_6025_b", type=0, category=1, }; //「捕獲して喰らう」
+st[522] = { volumetype=1, path=1, file="mer_010_b_6026", type=0, category=1, }; //「（噛みつきフィニッシュ）馳走であった」
+st[523] = { volumetype=1, path=1, file="mer_010_b_6027", type=0, category=1, }; //「（噛みつきフィニッシュ）これは格別」
+
+st[525] = { volumetype=1, path=1, file="mer_010_b_6029", type=0, category=1, }; //「ギャァー！！」
+st[526] = { volumetype=1, path=1, file="mer_010_b_6030", type=0, category=1, }; //「ギャオー！！」
+st[527] = { volumetype=1, path=1, file="mer_010_b_6031", type=0, category=1, }; //「クゥウアッ！」
+st[528] = { volumetype=1, path=1, file="mer_010_b_6032", type=0, category=1, }; //「コォアッ！」
+st[529] = { volumetype=1, path=1, file="mer_010_b_6033", type=0, category=1, }; //「息吹く！」
+
+st[531] = { volumetype=1, path=1, file="mer_010_b_6036", type=0, category=1, }; //「キュアッ！　キュアアッ！」
+st[532] = { volumetype=1, path=1, file="mer_010_b_6037", type=0, category=1, }; //「我、息吹く！」
+
+st[535] = { volumetype=1, path=1, file="mer_010_b_6040", type=0, category=1, }; //「シュララァ！」
+st[536] = { volumetype=1, path=1, file="mer_010_b_6041", type=0, category=1, }; //「貫く！」
+st[537] = { volumetype=1, path=1, file="mer_010_b_6042", type=0, category=1, }; //「シュラララアッ」
+
+st[539] = { volumetype=1, path=1, file="mer_010_b_6045", type=0, category=1, }; //「シャアアアアッ！」
+st[540] = { volumetype=1, path=1, file="mer_010_b_6046", type=0, category=1, }; //「穹窿を貫く！」
+
+st[542] = { volumetype=1, path=1, file="mer_010_b_6050", type=0, category=1, }; //「取り囲め」
+st[543] = { volumetype=1, path=1, file="mer_010_b_6051", type=0, category=1, }; //「抑留(よくりゅう)せよ」
+st[544] = { volumetype=1, path=1, file="mer_010_b_6052", type=0, category=1, }; //「喰らうが良(よ)い」
+st[545] = { volumetype=1, path=1, file="mer_010_b_6053", type=0, category=1, }; //「クアオ！」
+st[546] = { volumetype=1, path=1, file="mer_010_b_6054", type=0, category=1, }; //「取り押さえよ」
+
+st[548] = { volumetype=1, path=1, file="mer_010_b_6058", type=0, category=1, }; //「我、執拗に纏わり付く…」
+st[549] = { volumetype=1, path=1, file="mer_010_b_6059", type=0, category=1, }; //「逃がしはせん！」
+st[550] = { volumetype=1, path=1, file="mer_010_b_6060", type=0, category=1, }; //「蛇奪(じゃだつ)！」
+
+st[553] = { volumetype=1, path=1, file="mer_010_b_6063", type=0, category=1, }; //「（飛び掛る）キュエェェェ！！（次に続く）」
+st[554] = { volumetype=1, path=1, file="mer_010_b_6064", type=0, category=1, }; //「（引きずる）ガーッガッガッ！（次に続く）」
+st[555] = { volumetype=1, path=1, file="mer_010_b_6065", type=0, category=1, }; //「（叩き付け）ギャオ！」
+st[557] = { volumetype=1, path=1, file="mer_010_b_6066", type=0, category=1, }; //「（飛び掛る）キョアァ！（次に続く）」
+st[558] = { volumetype=1, path=1, file="mer_010_b_6067", type=0, category=1, }; //「（引きずる）クィオオオオオ……（次に続く）」
+st[559] = { volumetype=1, path=1, file="mer_010_b_6068", type=0, category=1, }; //「（叩き付け）ギュラ！」
+st[561] = { volumetype=1, path=1, file="mer_010_b_6069", type=0, category=1, }; //「（飛び掛る）屈服せよ（次に続く）」
+st[562] = { volumetype=1, path=1, file="mer_010_b_6070", type=0, category=1, }; //「（引きずる）仕上げだ（次に続く）」
+st[563] = { volumetype=1, path=1, file="mer_010_b_6071", type=0, category=1, }; //「（叩き付け）我、跳梁する」
+
+st[565] = { volumetype=1, path=1, file="mer_010_b_6075", type=0, category=1, }; //「翔る！」
+st[566] = { volumetype=1, path=1, file="mer_010_b_6076", type=0, category=1, }; //「ジェアッ！」
+st[567] = { volumetype=1, path=1, file="mer_010_b_6077", type=0, category=1, }; //「シュアー」
+
+st[570] = { volumetype=1, path=1, file="mer_010_b_6081", type=0, category=1, }; //「獲物は逃がさぬ」
+st[571] = { volumetype=1, path=1, file="mer_010_b_6082", type=0, category=1, }; //「宙(ちゅう)を廻(めぐ)れ」
+st[572] = { volumetype=1, path=1, file="mer_010_b_6083", type=0, category=1, }; //「我、攪拌する」
+st[573] = { volumetype=1, path=1, file="mer_010_b_6084", type=0, category=1, }; //「回天衝！」
+
+st[575] = { volumetype=1, path=1, file="mer_010_b_6086", type=0, category=1, }; //「躍(やく)！」
+st[576] = { volumetype=1, path=1, file="mer_010_b_6087", type=0, category=1, }; //「隔(かく)！」
+
+st[587] = { volumetype=1, path=1, file="mer_010_b_6101", type=0, category=1, }; //「更に高く」
+st[588] = { volumetype=1, path=1, file="mer_010_b_6102", type=0, category=1, }; //「我、天を躍る」
+
+// 超必殺技
+st[597] = { volumetype=1, path=1, file="mer_010_b_6501", type=0, category=1, }; //「貴様を滅する！（次に続く）」
+st[598] = { volumetype=1, path=1, file="mer_010_b_6502", type=0, category=1, }; //「ギュラアアアアアアアッ！」
+st[600] = { volumetype=1, path=1, file="mer_010_b_6503", type=0, category=1, }; //「我、憤る！（次に続く）」
+st[601] = { volumetype=1, path=1, file="mer_010_b_6504", type=0, category=1, }; //「グァララララララララアッ！」
+
+st[603] = { volumetype=1, path=1, file="mer_010_b_6515", type=0, category=1, }; //「この身の獣よ！（次に続く）」
+st[604] = { volumetype=1, path=1, file="mer_010_b_6516", type=0, category=1, }; //「生きて喰われる恐怖におののくが良い！（次に続く）」
+st[605] = { volumetype=1, path=1, file="mer_010_b_6517", type=0, category=1, }; //「これはそう、『蹂躙』だ……っ！我、蹂躙せん！」

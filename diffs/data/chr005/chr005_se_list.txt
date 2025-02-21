@@ -1,0 +1,435 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 2, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr005/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+// SeFunc.GetParam( 0-31 );
+// param[0] ---> ランダム値
+// param[29] ---> ステージ、VSだと-1
+// param[30] ---> 相手キャラ番号
+// param[31] ---> 固定要求テーブル、-1だったら抽選
+
+local tblnum = SeFunc.GetParam(31);
+if( tblnum == -1 )
+{
+	// 抽選要求
+	local enemy = SeFunc.GetParam(30);
+
+	// 対ワーグナーの時だけ変える
+	if( enemy == 16 )
+	{
+		// print("ゴルドー【対ワーグナーセット】");
+		SeList_Table.UseTable = 1;
+	}
+	else
+	{
+		SeList_Table.UseTable = 0;
+	}
+}
+else
+{
+	// SE TESTでの指定再生時の処理
+    // 一応 SeList_Table.TableNum の上限チェックもする
+	//print("\n SE TEST★★★:"+tblnum);
+    if( tblnum >= 0  &&  SeList_Table.TableNum > tblnum )
+    {
+        SeList_Table.UseTable = tblnum;
+    }
+}
+
+local GetTableFileName = function( nametbl ) //>name -- テーブル
+{
+	local retname = 0;
+	local usetable = SeList_Table.UseTable;
+
+	if( usetable < 0 ) usetable = 0;
+
+	if( type( nametbl )=="array" )
+	{
+		// テーブルだった
+		if( nametbl.len() > 0 )
+		{
+			if( nametbl.len() <= usetable )  usetable = 0; // はみ出ていた
+			retname = nametbl[ usetable ];
+		}
+	}
+	else
+	{
+		retname = nametbl;
+	}
+	if( type( retname )!="string" )  retname = ""; // 文字列じゃない
+
+	return retname;
+}
+
+SeList_Table.Status.resize(720); // てきとう
+local st = SeList_Table.Status; // 登録しやすいように
+
+st[5] = { volumetype=0, path=2, file="SE_Bomb", type=1, category=-1, }; //IWとどめ
+st[6] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IW とどめヒット
+
+st[50] = { volumetype=0, path=0, file="SE073_GroundBreak", type=1, category=-1, }; //IWX 吸収
+st[51] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWX 大鎌の一閃
+st[52] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, }; //IWX地震
+
+st[53] = { volumetype=0, path=2, file="SE_ChargeUpEXLoop", type=1, category=-1, }; //IWX力タメループ
+st[54] = { volumetype=0, path=2, file="SE_Drain", type=1, category=-1, }; //IWXすいこみループ
+
+st[55] = { volumetype=0, path=2, file="SE_ChargeUpEXEndEcho", type=1, category=-1, }; //IWX力タメループ抜け
+st[56] = { volumetype=0, path=2, file="SE_Drain", type=1, category=-1, }; //IWXすいこみループ抜け
+
+st[57] = { volumetype=0, path=0, file="SE060_BoundMetal", type=1, category=-1, }; //IWXどっこいしょもつとこ
+
+
+// 登場
+st[100] = { volumetype=1, path=1, file="gor_010_b_2000", type=0, category=1, }; //「風が騒がしいな」
+st[101] = { volumetype=1, path=1, file="gor_010_b_2001", type=0, category=1, }; //「ようやくお出ましかい」
+st[102] = { volumetype=1, path=1, file="gor_010_b_2002", type=0, category=1, }; //「手短に終わらせようか」
+st[103] = { volumetype=1, path=1, file="gor_010_b_2003", type=0, category=1, }; //「退屈しないで済みそうだ」
+
+// 登場 特殊
+// 対ケイアス
+st[108] = { volumetype=1, path=1, file="gor_010_b_2012", type=0, category=1, }; //「お前さんが出向いてくるたぁ珍しい」
+
+// 対カーマイン
+st[111] = { volumetype=1, path=1, file="gor_010_b_2021", type=0, category=1, }; //「顔色悪いな。大丈夫か？」
+
+// 対ヒルダ
+st[114] = { volumetype=1, path=1, file="gor_010_b_2027", type=0, category=1, }; //「踏み込みすぎると、大ケガするぜ？」
+
+// 対エンキドゥ
+st[117] = { volumetype=1, path=1, file="gor_010_b_2030", type=0, category=1, }; //「お眼鏡に叶う者は見つかったかい？」
+
+// 対ワーグナー
+st[120] = { volumetype=1, path=1, file="gor_wag_010_b_2016", type=0, category=1, }; //「ようやく出会えたな、紅騎士(あかきし)よ。」
+st[121] = { volumetype=1, path=1, file="gor_wag_010_b_2017", type=0, category=1, }; //「ま、少しばかりつきあえよ」」（ワーグナーいいだろう、全力で来い。）
+
+st[123] = { volumetype=1, path=1, file="gor_wag_010_b_2018", type=0, category=1, }; //「何も変わらねぇことは解ってるんだがな…」（ワーグナー「御託はいいから来たらどうだ？」）
+
+// ラウンド勝利
+st[132] = { volumetype=1, path=1, file="gor_010_b_2100", type=0, category=1, }; //「アマちゃんだな」
+st[133] = { volumetype=1, path=1, file="gor_010_b_2101", type=0, category=1, }; //「運が悪いのはお互い様だ」
+
+// ラウンド勝利 掛け合い
+
+// 対ケイアス
+st[138] = { volumetype=1, path=1, file="gor_010_b_2109", type=0, category=1, }; //「随分と勘が鈍ってるみたいだな」
+st[139] = { volumetype=1, path=1, file="gor_010_b_2110", type=0, category=1, }; //「おいおい、手加減で勝たせて貰っても嬉しくないぜぇ？」
+
+// 対ワーグナー
+st[142] = { volumetype=1, path=1, file="gor_wag_010_b_2106", type=0, category=1, }; //「おい、立てよ……。」
+st[143] = { volumetype=1, path=1, file="gor_wag_010_b_2107", type=0, category=1, }; //「これが赤騎士か……？」
+
+// 決着勝利 汎用
+st[147] = { volumetype=1, path=1, file="gor_010_b_2111", type=0, category=1, }; //「相手が悪かったな」
+st[148] = { volumetype=1, path=1, file="gor_010_b_2112", type=0, category=1, }; //「お前さんの腕も悪くはなかったんだがな」
+
+// 決着勝利 辛勝
+st[152] = { volumetype=1, path=1, file="gor_010_b_2120", type=0, category=1, }; //「これだから『夜』ってぇのは、おっかない……」
+
+// 決着勝利 楽勝
+st[155] = { volumetype=1, path=1, file="gor_010_b_2123", type=0, category=1, }; //「強すぎるってのも考えもんだな」
+
+// 決着勝利 掛け合い
+
+// 対ヒルダ
+st[160] = { volumetype=1, path=1, file="gor_010_b_2127", type=0, category=1, }; //「ったく。手間のかかるやつだよ、お前さんは」
+
+// 対ケイアス
+st[162] = { volumetype=1, path=1, file="gor_010_b_2130", type=0, category=1, }; //「さすがは我が友、そして最大の強敵。見事だったぜ」
+st[163] = { volumetype=1, path=1, file="gor_010_b_2131", type=0, category=1, }; //「たのしいねぇ。これだからお前さんの相手は やめられないんだ」
+
+// 対ワーグナー
+st[166] = { volumetype=1, path=1, file="gor_wag_010_b_2127", type=0, category=1, }; //「拍子抜けだ……」
+st[167] = { volumetype=1, path=1, file="gor_wag_010_b_2128", type=0, category=1, }; //「なにも……、変わらないがな」
+
+// タイムアップ判定負け
+st[171] = { volumetype=1, path=1, file="gor_010_b_2200", type=0, category=1, }; //「ちょこまかと…」
+st[172] = { volumetype=1, path=1, file="gor_010_b_2201", type=0, category=1, }; //「ちーっと甘く見すぎたなぁ」
+
+// 対ワーグナー
+st[175] = { volumetype=1, path=1, file="gor_wag_010_b_2200", type=0, category=1, }; //「クソッ」
+st[176] = { volumetype=1, path=1, file="gor_wag_010_b_2201", type=0, category=1, }; //「そうこなくちゃな……」
+
+// 弱攻撃
+st[200] = { volumetype=1, path=1, file="gor_010_b_2300_a", type=0, category=1, }; //「は」
+st[201] = { volumetype=1, path=1, file="gor_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[202] = { volumetype=1, path=1, file="gor_010_b_2302_a", type=0, category=1, }; //「や」
+st[203] = { volumetype=1, path=1, file="gor_010_b_2303_a", type=0, category=1, }; //「し」
+st[204] = { volumetype=1, path=1, file="gor_010_b_2300_b", type=0, category=1, }; //「は」
+st[205] = { volumetype=1, path=1, file="gor_010_b_2301_b", type=0, category=1, }; //「ふ」
+
+// 中攻撃
+st[220] = { volumetype=1, path=1, file="gor_010_b_2400_a", type=0, category=1, }; //「どうだ」
+st[221] = { volumetype=1, path=1, file="gor_010_b_2401_a", type=0, category=1, }; //「せいっ」
+st[223] = { volumetype=1, path=1, file="gor_010_b_2403_a", type=0, category=1, }; //「ふん！」
+st[224] = { volumetype=1, path=1, file="gor_010_b_2400_b", type=0, category=1, }; //「どうだ」
+st[225] = { volumetype=1, path=1, file="gor_010_b_2401_b", type=0, category=1, }; //「せいっ」
+st[226] = { volumetype=1, path=1, file="gor_010_b_2402_b", type=0, category=1, }; //「はっ！」
+st[227] = { volumetype=1, path=1, file="gor_010_b_2403_b", type=0, category=1, }; //「ふん！」
+
+// 強攻撃
+st[240] = { volumetype=1, path=1, file="gor_010_b_2500_a", type=0, category=1, }; //「オラッ！」
+st[241] = { volumetype=1, path=1, file="gor_010_b_2501_a", type=0, category=1, }; //「ほらよっ！」
+st[241].file = GetTableFileName( [ "gor_010_b_2501_a", "gor_wag_010_b_2501_a" ] );
+st[242] = { volumetype=1, path=1, file="gor_010_b_2502_a", type=0, category=1, }; //「そこだ！」
+st[242].file = GetTableFileName( [ "gor_010_b_2502_a", "gor_wag_010_b_2502_a" ] );
+st[243] = { volumetype=1, path=1, file="gor_010_b_2503_a", type=0, category=1, }; //「ぜぇい！」
+st[243].file = GetTableFileName( [ "gor_010_b_2503_a", "gor_wag_010_b_2503_a" ] );
+st[244] = { volumetype=1, path=1, file="gor_010_b_2504_a", type=0, category=1, }; //「食らいな」
+st[244].file = GetTableFileName( [ "gor_010_b_2504_a", "gor_wag_010_b_2504_a" ] );
+st[245] = { volumetype=1, path=1, file="gor_010_b_2505_a", type=0, category=1, }; //「でぇぇぇーやぁ！」
+st[246] = { volumetype=1, path=1, file="gor_010_b_2506_a", type=0, category=1, }; //「おぅりゃぁぁぁ！」
+st[248] = { volumetype=1, path=1, file="gor_010_b_2501_b", type=0, category=1, }; //「ほらよっ！」
+st[248].file = GetTableFileName( [ "gor_010_b_2501_b", "gor_wag_010_b_2501_b" ] );
+st[249] = { volumetype=1, path=1, file="gor_010_b_2502_b", type=0, category=1, }; //「そこだ！」
+st[249].file = GetTableFileName( [ "gor_010_b_2502_b", "gor_wag_010_b_2502_b" ] );
+st[253] = { volumetype=1, path=1, file="gor_010_b_2506_b", type=0, category=1, }; //「おぅりゃぁぁぁ！」
+
+// 吹き飛ばし攻撃
+st[271] = { volumetype=1, path=1, file="gor_010_b_2601", type=0, category=1, }; //「吹き飛べぇっ！」
+
+// その他特殊攻撃
+st[286] = { volumetype=1, path=1, file="gor_010_b_2607", type=0, category=1, }; //「沈め！」
+st[287] = { volumetype=1, path=1, file="gor_010_b_2608", type=0, category=1, }; //「切り崩す！」
+st[288] = { volumetype=1, path=1, file="gor_010_b_2609", type=0, category=1, }; //「足元がお留守だぜ？」
+st[288].file = GetTableFileName( [ "gor_010_b_2609", "gor_wag_010_b_2609" ] );
+st[289] = { volumetype=1, path=1, file="gor_010_b_2610", type=0, category=1, }; //「ちょいと失礼！」
+st[289].file = GetTableFileName( [ "gor_010_b_2610", "gor_wag_010_b_2610" ] );
+st[290] = { volumetype=1, path=1, file="gor_010_b_2611", type=0, category=1, }; //「そいや！」
+
+st[291] = { volumetype=1, path=1, file="gor_010_b_2504_b", type=0, category=1, }; //
+st[292] = { volumetype=1, path=1, file="gor_010_b_2602", type=0, category=1, }; //
+
+// 投げ成功
+st[296] = { volumetype=1, path=1, file="gor_010_b_2700", type=0, category=1, }; //「おら……、よっとォ！」
+st[297] = { volumetype=1, path=1, file="gor_010_b_2701", type=0, category=1, }; //「捕まえたぜぇ」
+
+// 投げ失敗
+st[300] = { volumetype=1, path=1, file="gor_010_b_2800", type=0, category=1, }; //「なにぃ？」
+st[300].file = GetTableFileName( [ "gor_010_b_2800", "gor_wag_010_b_2800" ] );
+st[301] = { volumetype=1, path=1, file="gor_010_b_2801", type=0, category=1, }; //「避けんなよオイ」
+st[301].file = GetTableFileName( [ "gor_010_b_2801", "gor_wag_010_b_2801" ] );
+
+// 敵の投げ技を回避
+st[307] = { volumetype=1, path=1, file="gor_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「甘い」
+st[308] = { volumetype=1, path=1, file="gor_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「遅い」
+
+// ガードキャンセル攻撃
+st[311] = { volumetype=1, path=1, file="gor_010_b_2950", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「おっとぉ…ごめんよ？」
+
+// 振り向き
+st[314] = { volumetype=1, path=1, file="gor_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki, }; //「こっちか」
+
+// 待機モーション
+st[317] = { volumetype=1, path=1, file="gor_010_b_3100", type=0, category=1, }; //「どぉしたぁ？　怖いのか？」
+st[318] = { volumetype=1, path=1, file="gor_010_b_3101", type=0, category=1, }; //「このまま終わる気かぁ？」
+
+// 前方回避
+st[322] = { volumetype=1, path=1, file="gor_010_b_3200", type=0, category=1, }; //「危ないねぇ」
+st[323] = { volumetype=1, path=1, file="gor_010_b_3201", type=0, category=1, }; //「詰める」
+
+// ダッシュ
+st[326] = { volumetype=1, path=1, file="gor_010_b_3300", type=0, category=1, }; //「ふん」
+st[327] = { volumetype=1, path=1, file="gor_010_b_3301", type=0, category=1, }; //「いくぜぇ」
+
+// アサルト
+st[330] = { volumetype=1, path=1, file="gor_010_b_3310", type=0, category=1, }; //「ほっ」
+st[331] = { volumetype=1, path=1, file="gor_010_b_3311", type=0, category=1, }; //「たっ」
+
+// バックステップ
+st[334] = { volumetype=1, path=1, file="gor_010_b_3400", type=0, category=1, }; //「こっちだ」
+st[334].file = GetTableFileName( [ "gor_010_b_3400", "gor_wag_010_b_3400" ] );
+st[335] = { volumetype=1, path=1, file="gor_010_b_3401", type=0, category=1, }; //「おっと」
+
+// 弱攻撃ガード
+st[340] = { volumetype=1, path=1, file="gor_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ふん」
+st[341] = { volumetype=1, path=1, file="gor_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ん～？」
+
+// 中攻撃ガード
+st[344] = { volumetype=1, path=1, file="gor_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 }; //「おいおい…」
+st[344].file = GetTableFileName( [ "gor_010_b_3600", "gor_wag_010_b_3600" ] );
+st[345] = { volumetype=1, path=1, file="gor_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 }; //「どうしたどうしたぁ」
+st[345].file = GetTableFileName( [ "gor_010_b_3601", "gor_wag_010_b_3601" ] );
+
+// 強攻撃ガード
+st[351] = { volumetype=1, path=1, file="gor_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「ほう！」
+st[351].file = GetTableFileName( [ "gor_010_b_3700", "gor_wag_010_b_3700" ] );
+st[352] = { volumetype=1, path=1, file="gor_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「やるな」
+st[352].file = GetTableFileName( [ "gor_010_b_3701", "gor_wag_010_b_3701" ] );
+st[353] = { volumetype=1, path=1, file="gor_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「なかなかだ」
+
+// 攻撃を見切り余裕でガード
+st[359] = { volumetype=1, path=1, file="gor_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「見え見えだな」
+st[359].file = GetTableFileName( [ "gor_010_b_3800", "gor_wag_010_b_3800" ] );
+st[360] = { volumetype=1, path=1, file="gor_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「わかりやすいぜ」
+st[360].file = GetTableFileName( [ "gor_010_b_3801", "gor_wag_010_b_3801" ] );
+
+// ガード失敗ダメージ
+st[366] = { volumetype=1, path=1, file="gor_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「何！？」
+st[367] = { volumetype=1, path=1, file="gor_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「見誤った！」
+st[368] = { volumetype=1, path=1, file="gor_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「グッ…オオオッ！」
+
+// 受け身
+st[371] = { volumetype=1, path=1, file="gor_010_b_4000", type=0, category=1, prio=Def_SEP_Recover, }; //「それで終わりか？」
+st[371].file = GetTableFileName( [ "gor_010_b_4000", "gor_wag_010_b_4000" ] );
+st[372] = { volumetype=1, path=1, file="gor_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; //「まくし立てるな」
+st[372].file = GetTableFileName( [ "gor_010_b_4001", "gor_wag_010_b_4001" ] );
+st[373] = { volumetype=1, path=1, file="gor_010_b_4002", type=0, category=1, prio=Def_SEP_Recover, }; //「今のは惜しかったな」
+st[373].file = GetTableFileName( [ "gor_010_b_4002", "gor_wag_010_b_4002" ] );
+
+// シールド発動
+st[380] = { volumetype=1, path=1, file="gor_010_b_4100", type=0, category=1, }; //「来いよ」
+st[380].file = GetTableFileName( [ "gor_010_b_4100", "gor_wag_010_b_4100" ] );
+st[381] = { volumetype=1, path=1, file="gor_010_b_4101", type=0, category=1, }; //「防ぐ」
+st[382] = { volumetype=1, path=1, file="gor_010_b_4102", type=0, category=1, }; //「ここだ」
+st[382].file = GetTableFileName( [ "gor_010_b_4102", "gor_wag_010_b_4102" ] );
+
+// シールド成功
+st[388] = { volumetype=1, path=1, file="gor_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「力みすぎだ」
+st[388].file = GetTableFileName( [ "gor_010_b_4200", "gor_wag_010_b_4200" ] );
+st[389] = { volumetype=1, path=1, file="gor_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「焦りが出てるぜ」
+
+// 弱攻撃ダメージ
+st[394] = { volumetype=1, path=1, file="gor_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「くっ」
+st[395] = { volumetype=1, path=1, file="gor_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「ちっ」
+
+// 中攻撃ダメージ
+st[398] = { volumetype=1, path=1, file="gor_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「ぐっ！」
+st[399] = { volumetype=1, path=1, file="gor_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「かはっ」
+
+// 強攻撃ダメージ
+st[402] = { volumetype=1, path=1, file="gor_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「てめぇ！」
+st[403] = { volumetype=1, path=1, file="gor_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「ぶはァッ！」
+st[404] = { volumetype=1, path=1, file="gor_010_b_4502_b", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「強烈だぜ！」
+st[404].file = GetTableFileName( [ "gor_010_b_4502_b", "gor_wag_010_b_4502" ] );
+st[405] = { volumetype=1, path=1, file="gor_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「ぐっ…ハ！」
+
+// ダウン
+st[411] = { volumetype=1, path=1, file="gor_010_b_4600", type=0, category=1, prio=Def_SEP_KO, }; //「ぐはあっ！」
+st[411].file = GetTableFileName( [ "gor_010_b_4600", "gor_wag_010_b_4600" ] );
+st[412] = { volumetype=1, path=1, file="gor_010_b_4601", type=0, category=1, prio=Def_SEP_KO, }; //「ぐっ…思ったよりやるじゃねぇか」
+st[412].file = GetTableFileName( [ "gor_010_b_4601", "gor_wag_010_b_4601" ] );
+
+// ラウンド敗北
+st[419] = { volumetype=1, path=1, file="gor_010_b_4650", type=0, category=1, prio=Def_SEP_KO, }; //「上等だぜ…！」
+
+// 対ケイアス
+st[421] = { volumetype=1, path=1, file="gor_010_b_4652", type=0, category=1, prio=Def_SEP_KO, }; //「相変わらず手厳しいな」
+st[422] = { volumetype=1, path=1, file="gor_010_b_4653", type=0, category=1, prio=Def_SEP_KO, }; //「ったく、やりにくいねぇ……」
+
+// 対ワーグナー
+st[423] = { volumetype=1, path=1, file="gor_wag_010_b_4650", type=0, category=1, }; //「おわらねーぞ」
+
+// ダウン・ノックアウト
+st[428] = { volumetype=1, path=1, file="gor_010_b_4700", type=0, category=1, prio=Def_SEP_KO, }; //「なんだとーーー！」
+st[429] = { volumetype=1, path=1, file="gor_010_b_4701", type=0, category=1, prio=Def_SEP_KO, }; //「うおおおおおおおおおっ！
+st[430] = { volumetype=1, path=1, file="gor_010_b_4702", type=0, category=1, prio=Def_SEP_KO, }; //「こいつぁ…ぬかったぜ…」
+
+st[431] = { volumetype=1, path=1, file="gor_wag_010_b_4700", type=0, category=1, }; //「なんだとーーー！」
+st[432] = { volumetype=1, path=1, file="gor_wag_010_b_4701", type=0, category=1, }; //「うおおおおおおおおおっ！」
+
+// 起き上がり
+st[436] = { volumetype=1, path=1, file="gor_010_b_4800", type=0, category=1, }; //「面白くなってきた」
+st[436].file = GetTableFileName( [ "gor_010_b_4800", "gor_wag_010_b_4800" ] );
+st[437] = { volumetype=1, path=1, file="gor_010_b_4801", type=0, category=1, }; //「はっはっはー」
+st[437].file = GetTableFileName( [ "gor_010_b_4801", "gor_wag_010_b_4801" ] );
+
+// 起き上がり・瀕死
+st[443] = { volumetype=1, path=1, file="gor_010_b_4900", type=0, category=1, }; //「かーっ効いたぜ」
+st[443].file = GetTableFileName( [ "gor_010_b_4900", "gor_wag_010_b_4900" ] );
+st[445] = { volumetype=1, path=1, file="gor_010_b_4902", type=0, category=1, }; //「まだまだだぜ…！」
+st[445].file = GetTableFileName( [ "gor_010_b_4902", "gor_wag_010_b_4902" ] );
+
+// ヴェールオフ
+st[451] = { volumetype=1, path=1, file="gor_010_b_5000", type=0, category=3, }; //「本気にさせたな！」
+st[451].file = GetTableFileName( [ "gor_010_b_5000", "gor_wag_010_b_5000" ] );
+st[452] = { volumetype=1, path=1, file="gor_010_b_5001", type=0, category=3, }; //「手加減なしだ！」
+st[452].file = GetTableFileName( [ "gor_010_b_5001", "gor_wag_010_b_5001" ] );
+
+// チェインシフト
+st[458] = { volumetype=1, path=1, file="gor_010_b_5100", type=0, category=1, }; //「おわらねぇ！」
+st[459] = { volumetype=1, path=1, file="gor_010_b_5101", type=0, category=1, }; //「つづくぜぇ」
+
+// コンセントレーション
+st[462] = { volumetype=1, path=1, file="gor_010_b_5200", type=0, category=1, }; //「ふんっ…！」
+st[463] = { volumetype=1, path=1, file="gor_010_b_5201", type=0, category=1, }; //「ハァァァアアアアーーーーッ」
+
+// ヴォーパル
+st[467] = { volumetype=1, path=1, file="gor_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「そろそろ頃合いかね」
+st[468] = { volumetype=1, path=1, file="gor_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; //「楽しいねぇ」
+
+// ヴォーパル・瀕死
+st[472] = { volumetype=1, path=1, file="gor_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; //「さて、どう出るか…」
+
+// 必殺技
+st[500] = { volumetype=1, path=1, file="gor_010_b_6001", type=0, category=1, }; //「モータルスライド！」
+st[503] = { volumetype=1, path=1, file="gor_010_b_6006", type=0, category=1, }; //「ハーベスト！」
+st[504] = { volumetype=1, path=1, file="gor_010_b_6007", type=0, category=1, }; //「よっと！」
+st[506] = { volumetype=1, path=1, file="gor_010_b_6011", type=0, category=1, }; //「捕まえたぜ…」
+st[507] = { volumetype=1, path=1, file="gor_010_b_6012", type=0, category=1, }; //「もらった！」
+st[509] = { volumetype=1, path=1, file="gor_010_b_6015", type=0, category=1, }; //「死線(しせん)滑走(かっそう)！（次に続く）」
+st[509].file = GetTableFileName( [ "gor_010_b_6015", "gor_wag_010_b_6015" ] );
+st[510] = { volumetype=1, path=1, file="gor_010_b_6016", type=0, category=1, }; //「刈り取るっ！（次に続く）」
+st[510].file = GetTableFileName( [ "gor_010_b_6016", "gor_wag_010_b_6016" ] );
+st[511] = { volumetype=1, path=1, file="gor_010_b_6017", type=0, category=1, }; //「オマケだっ！」
+st[511].file = GetTableFileName( [ "gor_010_b_6017", "gor_wag_010_b_6017" ] );
+
+st[522] = { volumetype=1, path=1, file="gor_010_b_6033", type=0, category=1, }; //「かわせるかい？」
+st[522].file = GetTableFileName( [ "gor_010_b_6033", "gor_wag_010_b_6033" ] );
+st[524] = { volumetype=1, path=1, file="gor_010_b_6034", type=0, category=1, }; //「避(よ)けてみな！」
+
+st[526] = { volumetype=1, path=1, file="gor_010_b_6038", type=0, category=1, }; //「薙ぎ払う！」
+st[528] = { volumetype=1, path=1, file="gor_010_b_6044", type=0, category=1, }; //「グリムリーパー！」
+st[529] = { volumetype=1, path=1, file="gor_010_b_6045", type=0, category=1, }; //「邪魔だ！」
+st[531] = { volumetype=1, path=1, file="gor_010_b_6049", type=0, category=1, }; //「裁断分離(さいだんぶんり)！」
+st[533] = { volumetype=1, path=1, file="gor_010_b_6055", type=0, category=1, }; //「切り裂け！」
+st[534] = { volumetype=1, path=1, file="gor_010_b_6056", type=0, category=1, }; //「ダウンクローズ！」
+st[536] = { volumetype=1, path=1, file="gor_010_b_6059", type=0, category=1, }; //「アシミレイション！」
+st[537] = { volumetype=1, path=1, file="gor_010_b_6060", type=0, category=1, }; //「おっと、残念」
+st[537].file = GetTableFileName( [ "gor_010_b_6060", "gor_wag_010_b_6060" ] );
+
+st[539] = { volumetype=1, path=1, file="gor_010_b_6061", type=0, category=1, }; //「いただきだ」
+st[541] = { volumetype=1, path=1, file="gor_010_b_6065", type=0, category=1, }; //「覚悟しな！」
+st[542] = { volumetype=1, path=1, file="gor_010_b_6066", type=0, category=1, }; //「オレの一部となれ」
+st[543] = { volumetype=1, path=1, file="gor_010_b_6067", type=0, category=1, }; //「つかみ損ねたか」
+st[543].file = GetTableFileName( [ "gor_010_b_6067", "gor_wag_010_b_6067" ] );
+
+st[547] = { volumetype=1, path=1, file="gor_010_b_6070", type=0, category=1, }; //「エイミング！」
+st[548] = { volumetype=1, path=1, file="gor_010_b_6071", type=0, category=1, }; //「エイムオーペニング！」
+st[549] = { volumetype=1, path=1, file="gor_010_b_6072", type=0, category=1, }; //「狙いを定める！」
+st[550] = { volumetype=1, path=1, file="gor_010_b_6073", type=0, category=1, }; //「この間合いだ」
+st[552] = { volumetype=1, path=1, file="gor_010_b_6076", type=0, category=1, }; //「空裂割狭(くうれつかっさ)！」
+st[554] = { volumetype=1, path=1, file="gor_010_b_6079", type=0, category=1, }; //「よっと」
+st[554].file = GetTableFileName( [ "gor_010_b_6079", "gor_wag_010_b_6079" ] );
+st[556] = { volumetype=1, path=1, file="gor_010_b_6080", type=0, category=1, }; //「真っ二つだ！」
+st[558] = { volumetype=1, path=1, file="gor_010_b_6084", type=0, category=1, }; //「こいつは危ないぜぇ？」
+st[560] = { volumetype=1, path=1, file="gor_010_b_6088", type=0, category=1, }; //「そこだ」
+st[561] = { volumetype=1, path=1, file="gor_010_b_6089_a", type=0, category=1, }; //「ラスティネイル！」
+
+st[570] = { volumetype=1, path=1, file="gor_010_b_6099", type=0, category=1, }; //「ザックリいくぜ？」
+st[571] = { volumetype=1, path=1, file="gor_010_b_6100", type=0, category=1, }; //「ビヘッドトリム！」
+
+// 超必殺技
+st[577] = { volumetype=1, path=1, file="gor_010_b_6501", type=0, category=1, }; //「タービュランス！（次に続く）」
+st[577].file = GetTableFileName( [ "gor_010_b_6501", "gor_wag_010_b_6501" ] );
+st[578] = { volumetype=1, path=1, file="gor_010_b_6502", type=0, category=1, }; //「そらそらそらぁ！（次に続く）」
+st[578].file = GetTableFileName( [ "gor_010_b_6502", "gor_wag_010_b_6502" ] );
+st[579] = { volumetype=1, path=1, file="gor_010_b_6503", type=0, category=1, }; //「夢路を辿れ…」
+st[579].file = GetTableFileName( [ "gor_010_b_6503", "gor_wag_010_b_6503" ] );
+
+st[585] = { volumetype=1, path=1, file="gor_010_b_6515", type=0, category=1, }; //「い、く、ぜぇ！（次に続く）」
+st[585].file = GetTableFileName( [ "gor_010_b_6515", "gor_wag_010_b_6515" ] );
+st[586] = { volumetype=1, path=1, file="gor_010_b_6516", type=0, category=1, }; //「こっからは遊びじゃぁなくなるぜぇ……（次に続く）」
+st[586].file = GetTableFileName( [ "gor_010_b_6516", "gor_wag_010_b_6516" ] );
+st[587] = { volumetype=1, path=1, file="gor_010_b_6517", type=0, category=1, }; //「ディバウアー、ソウルヴァニッシュ！その魂ごと飲み込んで、消し飛ばしちまえぇ！」
+st[587].file = GetTableFileName( [ "gor_010_b_6517", "gor_wag_010_b_6517" ] );

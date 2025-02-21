@@ -1,0 +1,338 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr009/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(500); // てきとう
+local st = SeList_Table.Status; // 登録しやすいように
+
+st[0] = { volumetype=0, path=2, file="SE_ClothesSwing1", type=0, category=2, }; 
+st[1] = { volumetype=0, path=2, file="SE_ClothesSwing2", type=0, category=2, }; 
+
+st[10] = { volumetype=0, path=2, file="SE_DrawnSword", type=0, category=2, };  //抜刀
+st[11] = { volumetype=0, path=2, file="SE_SheatheSword", type=0, category=2, };  //納刀
+
+st[20] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, };  //IWX最後のフラッシュ
+st[21] = { volumetype=0, path=2, file="SE_VanishVit", type=1, category=-1, };  //IWX 目が光る
+st[22] = { volumetype=0, path=2, file="SE_ClothesSwing2", type=1, category=-1, }; //おいてくる反物
+
+st[23] = { volumetype=0, path=2, file="SE_CoilRound", type=1, category=-1, }; //★反物が相手を拘束する時 ：しゅるしゅるという衣擦れの音 
+st[24] = { volumetype=0, path=2, file="SE_DrawnSword", type=1, category=-1, }; //★斬りエフェクトが出たとき ：シャキンという斬撃音
+st[25] = { volumetype=0, path=2, file="SE_ClothesSwing2", type=1, category=-1, }; //切った後の風
+
+// 登場
+st[100] = { volumetype=1, path=1, file="yuz_010_b_2000", type=0, category=1, }; // 「よぉーし、覚悟なさーい！」
+st[101] = { volumetype=1, path=1, file="yuz_010_b_2001", type=0, category=1, }; // 「お相手……願いましょうか！」
+st[102] = { volumetype=1, path=1, file="yuz_010_b_2002", type=0, category=1, }; // 「やれやれ……楽には勝たせてもらえなさそうだ」
+st[103] = { volumetype=1, path=1, file="yuz_010_b_2003", type=0, category=1, }; // 「いい目してるねぇ…、オーケーはじめましょう！」
+st[104] = { volumetype=1, path=1, file="yuz_010_b_2004", type=0, category=1, }; // 「迷いなんてものは、もう捨てたからね」
+
+// 登場 特殊
+// 対セト
+st[108] = { volumetype=1, path=1, file="yuz_010_b_2012", type=0, category=1, }; // 「迷い、消えたみたいだね」
+
+// 対ワーグナー
+st[110] = { volumetype=1, path=1, file="yuz_010_b_2015", type=0, category=1, }; // 「よろしい、受けて立ちましょう！」
+
+// 対ツルギ
+st[112] = { volumetype=1, path=1, file="yuz_010_b_2018", type=0, category=1, }; // 「パワーと防御…か。こりゃ苦労しそうだ（心の声のようにつぶやくイメージです）」
+
+// 対クオン
+st[114] = { volumetype=1, path=1, file="yuz_010_b_2021", type=0, category=1, }; // 「だから変える、アンタの運命も」
+
+// ラウンド勝利
+st[122] = { volumetype=1, path=1, file="yuz_010_b_2100", type=0, category=1, }; // 「らっくしょう～！（楽勝）」
+st[123] = { volumetype=1, path=1, file="yuz_010_b_2101", type=0, category=1, }; // 「かくして！　闇は消え去ったのであった！」
+st[124] = { volumetype=1, path=1, file="yuz_010_b_2102", type=0, category=1, }; // 「よっし、絶好調！」
+st[125] = { volumetype=1, path=1, file="yuz_010_b_2103", type=0, category=1, }; // 「ま、こーんなところよねぇ～」
+st[126] = { volumetype=1, path=1, file="yuz_010_b_2104", type=0, category=1, }; // 「身の程を知るが良い…！　なーんちゃって☆」
+
+// 決着勝利 汎用
+st[129] = { volumetype=1, path=1, file="yuz_010_b_2111", type=0, category=1, }; // 「おーい、生きてるー？」
+st[130] = { volumetype=1, path=1, file="yuz_010_b_2112", type=0, category=1, }; // 「これに懲りたら、もうやめときなよ？」
+
+// 決着勝利 辛勝
+st[133] = { volumetype=1, path=1, file="yuz_010_b_2120", type=0, category=1, }; // 「結構がんばった方かな～」
+
+// 決着勝利 楽勝
+st[136] = { volumetype=1, path=1, file="yuz_010_b_2123", type=0, category=1, }; // 「や、やりすぎちゃったかしら……」
+
+// 決着勝利 掛け合い
+// 対ハイド
+st[140] = { volumetype=1, path=1, file="yuz_010_b_2127", type=0, category=1, }; // 「うんうん、立派になったねえ。お姉さん嬉しいっ！」
+
+// 対リンネ/セト
+st[142] = { volumetype=1, path=1, file="yuz_010_b_2129", type=0, category=1, }; // 「あとはあたしにどーんと任せなさいっ！」
+
+// タイムアップ判定負け
+st[145] = { volumetype=1, path=1, file="yuz_010_b_2200", type=0, category=1, }; // 「が・く・り」
+st[146] = { volumetype=1, path=1, file="yuz_010_b_2201", type=0, category=1, }; // 「ありゃ、やっちゃった…」
+st[147] = { volumetype=1, path=1, file="yuz_010_b_2202", type=0, category=1, }; // 「トホホホホ……」
+ 
+// 弱攻撃
+st[150] = { volumetype=1, path=1, file="yuz_010_b_2300_a", type=0, category=1, }; // 「は」
+st[151] = { volumetype=1, path=1, file="yuz_010_b_2301_a", type=0, category=1, }; // 「ふ」
+st[153] = { volumetype=1, path=1, file="yuz_010_b_2303_a", type=0, category=1, }; // 「し」
+st[155] = { volumetype=1, path=1, file="yuz_010_b_2301_b", type=0, category=1, }; // 「ふ」
+st[156] = { volumetype=1, path=1, file="yuz_010_b_2302_b", type=0, category=1, }; // 「や」
+st[160] = { volumetype=1, path=1, file="yuz_010_b_2302_c", type=0, category=1, }; // 「や」
+
+// 中攻撃
+st[164] = { volumetype=1, path=1, file="yuz_010_b_2400_a", type=0, category=1, }; // 「ひゅっ！」
+st[165] = { volumetype=1, path=1, file="yuz_010_b_2401_a", type=0, category=1, }; // 「斬！」
+st[167] = { volumetype=1, path=1, file="yuz_010_b_2403_a", type=0, category=1, }; // 「せい！」
+st[168] = { volumetype=1, path=1, file="yuz_010_b_2404_a", type=0, category=1, }; // 「ほいっ」
+st[169] = { volumetype=1, path=1, file="yuz_010_b_2400_b", type=0, category=1, }; // 「ひゅっ！」
+st[172] = { volumetype=1, path=1, file="yuz_010_b_2403_b", type=0, category=1, }; // 「せい！」
+
+// 強攻撃
+st[176] = { volumetype=1, path=1, file="yuz_010_b_2500_a", type=0, category=1, }; // 「でえい！」
+st[177] = { volumetype=1, path=1, file="yuz_010_b_2501_a", type=0, category=1, }; // 「はぁっ！」
+st[179] = { volumetype=1, path=1, file="yuz_010_b_2503_a", type=0, category=1, }; // 「しゃきーん！」
+st[181] = { volumetype=1, path=1, file="yuz_010_b_2505_a", type=0, category=1, }; // 「うりゃ！」
+st[184] = { volumetype=1, path=1, file="yuz_010_b_2500_b", type=0, category=1, }; // 「でえい！」
+st[185] = { volumetype=1, path=1, file="yuz_010_b_2501_b", type=0, category=1, }; // 「はぁっ！」
+st[186] = { volumetype=1, path=1, file="yuz_010_b_2502_b", type=0, category=1, }; // 「それっ！」
+st[191] = { volumetype=1, path=1, file="yuz_010_b_2507_b", type=0, category=1, }; // 「とおーりゃ！」
+st[200] = { volumetype=1, path=1, file="yuz_010_b_2505_c", type=0, category=1, }; // 「うりゃ！」 //4B成功
+
+// 吹き飛ばし攻撃
+st[213] = { volumetype=1, path=1, file="yuz_010_b_2600", type=0, category=1, }; // 「成敗！」
+st[214] = { volumetype=1, path=1, file="yuz_010_b_2601", type=0, category=1, }; // 「ちょいやー！」
+ 
+// 回避困難な攻撃
+st[217] = { volumetype=1, path=1, file="yuz_010_b_2604", type=0, category=1, }; // 「見切れるかな～？」	// IWで使用
+st[218] = { volumetype=1, path=1, file="yuz_010_b_2605", type=0, category=1, }; // 「一刀両断！」
+
+// その他特殊攻撃
+st[222] = { volumetype=1, path=1, file="yuz_010_b_2607", type=0, category=1, }; // 「そいやっ！」
+st[224] = { volumetype=1, path=1, file="yuz_010_b_2609", type=0, category=1, }; // 「チェストー！」
+st[226] = { volumetype=1, path=1, file="yuz_010_b_2611", type=0, category=1, }; // 「ほれほれ！」
+st[227] = { volumetype=1, path=1, file="yuz_010_b_2612", type=0, category=1, }; // 「見切った！」
+st[228] = { volumetype=1, path=1, file="yuz_010_b_2613", type=0, category=1, }; // 「でよよーっ！」
+st[229] = { volumetype=1, path=1, file="yuz_010_b_2614", type=0, category=1, }; // 「ずばばーん！」
+st[230] = { volumetype=1, path=1, file="yuz_010_b_2615", type=0, category=1, }; // 「エルボー☆」
+
+st[231] = { volumetype=1, path=1, file="yuz_010_b_6057", type=0, category=1, }; // 
+st[232] = { volumetype=1, path=1, file="yuz_010_b_6056", type=0, category=1, }; // 
+
+// 投げ成功
+st[234] = { volumetype=1, path=1, file="yuz_010_b_2700", type=0, category=1, }; // 「つかまえ、た！！」
+st[235] = { volumetype=1, path=1, file="yuz_010_b_2701", type=0, category=1, }; // 「よい、しょ、っとぉ！！」
+
+// 対ハイド
+st[237] = { volumetype=1, path=1, file="yuz_010_b_2703", type=0, category=1, }; // 「あんたって子は！」
+
+// 投げ失敗
+st[240] = { volumetype=1, path=1, file="yuz_010_b_2800", type=0, category=1, }; // 「ありゃりゃ？」
+st[241] = { volumetype=1, path=1, file="yuz_010_b_2801", type=0, category=1, }; // 「およよよよぉ？」
+
+// 敵の投げ技を回避
+st[244] = { volumetype=1, path=1, file="yuz_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; // 「ダメダメ～」
+st[245] = { volumetype=1, path=1, file="yuz_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; // 「どこ掴んでんのぉ！」
+
+// ガードキャンセル攻撃
+st[248] = { volumetype=1, path=1, file="yuz_010_b_2950", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; // 「おさわり厳禁！」
+
+// 振り向き
+st[251] = { volumetype=1, path=1, file="yuz_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki, }; // 「そっちかな」
+
+// 待機モーション
+st[254] = { volumetype=1, path=1, file="yuz_010_b_3100", type=0, category=1, }; // 「どうしたどうした～」
+st[255] = { volumetype=1, path=1, file="yuz_010_b_3101", type=0, category=1, }; // 「かかってきなさい～！」
+
+// 前方回避
+st[258] = { volumetype=1, path=1, file="yuz_010_b_3200", type=0, category=1, }; // 「こっちこっち」
+st[259] = { volumetype=1, path=1, file="yuz_010_b_3201", type=0, category=1, }; // 「幅寄(はばよ)せ！」
+
+// ダッシュ
+st[262] = { volumetype=1, path=1, file="yuz_010_b_3300", type=0, category=1, }; // 「いっくよー！」
+st[263] = { volumetype=1, path=1, file="yuz_010_b_3301", type=0, category=1, }; // 「いまだ！」
+st[264] = { volumetype=1, path=1, file="yuz_010_b_3302", type=0, category=1, }; // 「サッとね！」
+
+// アサルト
+st[267] = { volumetype=1, path=1, file="yuz_010_b_3310", type=0, category=1, }; // 「いよっ」
+st[268] = { volumetype=1, path=1, file="yuz_010_b_3311", type=0, category=1, }; // 「ほらほら！」
+
+// バックステップ
+st[271] = { volumetype=1, path=1, file="yuz_010_b_3400", type=0, category=1, }; // 「よっと」
+st[272] = { volumetype=1, path=1, file="yuz_010_b_3401", type=0, category=1, }; // 「怖い怖い」
+
+// 弱攻撃ガード
+st[275] = { volumetype=1, path=1, file="yuz_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; // 「おっ」
+st[276] = { volumetype=1, path=1, file="yuz_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; // 「およ」
+st[277] = { volumetype=1, path=1, file="yuz_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; // 「ふん」
+
+// 中攻撃ガード
+st[280] = { volumetype=1, path=1, file="yuz_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; // 「ほうほう」
+st[281] = { volumetype=1, path=1, file="yuz_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; // 「それで？」
+st[282] = { volumetype=1, path=1, file="yuz_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; // 「この程度」
+
+// 強攻撃ガード
+st[285] = { volumetype=1, path=1, file="yuz_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; // 「いい攻撃！」
+st[286] = { volumetype=1, path=1, file="yuz_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; // 「よくやるぅ！」
+st[287] = { volumetype=1, path=1, file="yuz_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; // 「く～っ！」
+
+// 攻撃を見切り余裕でガード
+st[290] = { volumetype=1, path=1, file="yuz_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; // 「だが甘い！」
+st[291] = { volumetype=1, path=1, file="yuz_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; // 「わっかりやすぅ～（分かりやすい攻撃だ）」
+st[292] = { volumetype=1, path=1, file="yuz_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; // 「読めてますぞぉ」
+ 
+// ガード失敗ダメージ
+st[295] = { volumetype=1, path=1, file="yuz_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; // 「そうきたかー」
+st[296] = { volumetype=1, path=1, file="yuz_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; // 「うそ、しっぱい！？」
+st[297] = { volumetype=1, path=1, file="yuz_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; // 「おーのー（Oh!  No!）」
+
+// 受け身
+st[300] = { volumetype=1, path=1, file="yuz_010_b_4000", type=0, category=1, prio=Def_SEP_Recover, }; // 「それで終わり？」
+st[301] = { volumetype=1, path=1, file="yuz_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; // 「ひらりっ！」
+st[302] = { volumetype=1, path=1, file="yuz_010_b_4002", type=0, category=1, prio=Def_SEP_Recover, }; // 「高く付くかんね～（この借りは高くつくからね）」
+
+// シールド発動
+st[305] = { volumetype=1, path=1, file="yuz_010_b_4100", type=0, category=1, }; // 「ほい」
+st[306] = { volumetype=1, path=1, file="yuz_010_b_4101", type=0, category=1, }; // 「どう来るのかな～」
+st[307] = { volumetype=1, path=1, file="yuz_010_b_4102", type=0, category=1, }; // 「来てみなさいよ」
+
+// シールド成功
+st[310] = { volumetype=1, path=1, file="yuz_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; // 「お見事！」
+st[311] = { volumetype=1, path=1, file="yuz_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; // 「残念！」
+st[312] = { volumetype=1, path=1, file="yuz_010_b_4202", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; // 「予想通り！」
+st[313] = { volumetype=1, path=1, file="yuz_010_b_4203", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; // 「見えております！」
+
+// 弱攻撃ダメージ
+st[316] = { volumetype=1, path=1, file="yuz_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1, }; // 「あっ」
+st[317] = { volumetype=1, path=1, file="yuz_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1, }; // 「うっ」
+st[318] = { volumetype=1, path=1, file="yuz_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1, }; // 「くっ」
+
+// 中攻撃ダメージ
+st[321] = { volumetype=1, path=1, file="yuz_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; // 「にゃっ」
+st[322] = { volumetype=1, path=1, file="yuz_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; // 「かはっ」
+st[323] = { volumetype=1, path=1, file="yuz_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; // 「あいやー」
+st[324] = { volumetype=1, path=1, file="yuz_010_b_4403", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; // 「おうふ！」
+
+// 強攻撃ダメージ
+st[327] = { volumetype=1, path=1, file="yuz_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「きいたぁ」
+st[328] = { volumetype=1, path=1, file="yuz_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「いたー！」
+st[329] = { volumetype=1, path=1, file="yuz_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「どはっ！」
+st[330] = { volumetype=1, path=1, file="yuz_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「ぐへ～！」
+st[331] = { volumetype=1, path=1, file="yuz_010_b_4504", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「あうち！」
+
+// ダウン
+st[334] = { volumetype=1, path=1, file="yuz_010_b_4600", type=0, category=1, prio=Def_SEP_KO, }; // 「こんなことってぇ！」
+st[335] = { volumetype=1, path=1, file="yuz_010_b_4601", type=0, category=1, prio=Def_SEP_KO, }; // 「（膝崩れ）こんな…ことって……」
+st[336] = { volumetype=1, path=1, file="yuz_010_b_4602", type=0, category=1, prio=Def_SEP_KO, }; // 「しくじっちゃったー」
+
+// ラウンド敗北
+st[339] = { volumetype=1, path=1, file="yuz_010_b_4650", type=0, category=1, prio=Def_SEP_KO, }; // 「なかなかやるなぁ…」
+st[340] = { volumetype=1, path=1, file="yuz_010_b_4651", type=0, category=1, prio=Def_SEP_KO, }; // 「ごめん、ちょっと侮ってた…」
+st[341] = { volumetype=1, path=1, file="yuz_010_b_4652", type=0, category=1, prio=Def_SEP_KO, }; // 「なんなの今の…」
+
+// ダウン・ノックアウト
+st[344] = { volumetype=1, path=1, file="yuz_010_b_4700", type=0, category=1, prio=Def_SEP_KO, }; // 「きゃああぁぁぁーーーーーー」
+st[345] = { volumetype=1, path=1, file="yuz_010_b_4701", type=0, category=1, prio=Def_SEP_KO, }; // 「すいませんでしたー！」
+st[346] = { volumetype=1, path=1, file="yuz_010_b_4702", type=0, category=1, prio=Def_SEP_KO, }; // 「ちょ、調子にのってました……」
+st[347] = { volumetype=1, path=1, file="yuz_010_b_4703", type=0, category=1, prio=Def_SEP_KO, }; // 「い、一生の不覚……がくっ」
+st[348] = { volumetype=1, path=1, file="yuz_010_b_4704", type=0, category=1, prio=Def_SEP_KO, }; // 「ちょっと迷っちゃいました…」
+
+// 起き上がり
+st[351] = { volumetype=1, path=1, file="yuz_010_b_4800", type=0, category=1, }; // 「いたたた」
+st[352] = { volumetype=1, path=1, file="yuz_010_b_4801", type=0, category=1, }; // 「目が覚めたっ」
+st[353] = { volumetype=1, path=1, file="yuz_010_b_4802", type=0, category=1, }; // 「んよいしょぉー！」
+
+// 起き上がり・瀕死
+st[356] = { volumetype=1, path=1, file="yuz_010_b_4900", type=0, category=1, }; // 「いっつーっ」
+st[357] = { volumetype=1, path=1, file="yuz_010_b_4901", type=0, category=1, }; // 「絶対に許さないんだから」
+st[358] = { volumetype=1, path=1, file="yuz_010_b_4902", type=0, category=1, }; // 「楽しませてくれるね」
+st[359] = { volumetype=1, path=1, file="yuz_010_b_4903", type=0, category=1, }; // 「やってくれるわねっ……！」
+
+// ヴェールオフ
+st[362] = { volumetype=1, path=1, file="yuz_010_b_5000", type=0, category=3, }; // 「カチンときた！」
+st[363] = { volumetype=1, path=1, file="yuz_010_b_5001", type=0, category=3, }; // 「どぉーーっせい！」
+st[364] = { volumetype=1, path=1, file="yuz_010_b_5002", type=0, category=3, }; // 「いかずちのごとく！」
+
+// チェインシフト
+st[367] = { volumetype=1, path=1, file="yuz_010_b_5100", type=0, category=1, }; // 「きゅぴーん！」
+st[368] = { volumetype=1, path=1, file="yuz_010_b_5101", type=0, category=1, }; // 「終わらないよ」
+st[369] = { volumetype=1, path=1, file="yuz_010_b_5102", type=0, category=1, }; // 「そこだぁ！」
+st[370] = { volumetype=1, path=1, file="yuz_010_b_5103", type=0, category=1, }; // 「行雲流水(こううんりゅうすい)！」
+
+// コンセントレーション
+st[373] = { volumetype=1, path=1, file="yuz_010_b_5200", type=0, category=1, }; // 「はぁぁぁあ！」
+st[374] = { volumetype=1, path=1, file="yuz_010_b_5201", type=0, category=1, }; // 「集中だよッ！」
+st[375] = { volumetype=1, path=1, file="yuz_010_b_5202", type=0, category=1, }; // 「心は水面(みなも)…」
+
+// ヴォーパル
+st[378] = { volumetype=1, path=1, file="yuz_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; // 「良い感じ」
+st[379] = { volumetype=1, path=1, file="yuz_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; // 「一気に行くよ」
+ 
+// ヴォーパル・瀕死
+st[382] = { volumetype=1, path=1, file="yuz_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; // 「これってピンチってやつぅ？！」
+
+// 必殺技
+st[386] = { volumetype=1, path=1, file="yuz_010_b_6001", type=0, category=1, }; // 「しゅっ！」
+st[387] = { volumetype=1, path=1, file="yuz_010_b_6002", type=0, category=1, }; // 「シッ」
+st[388] = { volumetype=1, path=1, file="yuz_010_b_6003", type=0, category=1, }; // 「そこっ」
+st[389] = { volumetype=1, path=1, file="yuz_010_b_6004", type=0, category=1, }; // 「ひゅっ！」
+st[390] = { volumetype=1, path=1, file="yuz_010_b_6005", type=0, category=1, }; // 「ハッ」
+st[391] = { volumetype=1, path=1, file="yuz_010_b_6006", type=0, category=1, }; // 「っしょ！」
+st[392] = { volumetype=1, path=1, file="yuz_010_b_6007", type=0, category=1, }; // 「フッ」
+st[393] = { volumetype=1, path=1, file="yuz_010_b_6008", type=0, category=1, }; // 「桐(きり)！」
+ 
+st[396] = { volumetype=1, path=1, file="yuz_010_b_6010", type=0, category=1, }; // 「斬っ！（ざぁん！　くらい力強く）」
+st[397] = { volumetype=1, path=1, file="yuz_010_b_6011", type=0, category=1, }; // 「音速」
+st[398] = { volumetype=1, path=1, file="yuz_010_b_6012", type=0, category=1, }; // 「瞬速」
+st[399] = { volumetype=1, path=1, file="yuz_010_b_6013", type=0, category=1, }; // 「上(うえ)！」
+st[400] = { volumetype=1, path=1, file="yuz_010_b_6014", type=0, category=1, }; // 「下(した)！」
+
+st[404] = { volumetype=1, path=1, file="yuz_010_b_6017", type=0, category=1, }; // 「見切れる？」
+st[405] = { volumetype=1, path=1, file="yuz_010_b_6016_a", type=0, category=1, }; // 「弐之型(にのかた)」
+st[406] = { volumetype=1, path=1, file="yuz_010_b_6016_b", type=0, category=1, }; // 「咲(さき)！」
+
+st[407] = { volumetype=1, path=1, file="yuz_010_b_6020", type=0, category=1, }; // 「いただきぃ！」
+st[408] = { volumetype=1, path=1, file="yuz_010_b_6021", type=0, category=1, }; // 「乱れ咲け！」
+st[409] = { volumetype=1, path=1, file="yuz_010_b_6022", type=0, category=1, }; // 「もらったぁ！」
+st[410] = { volumetype=1, path=1, file="yuz_010_b_6023", type=0, category=1, }; // 「隙ありぃ！」
+
+st[413] = { volumetype=1, path=1, file="yuz_010_b_6027", type=0, category=1, }; // 「今ね（次に続く）」
+st[414] = { volumetype=1, path=1, file="yuz_010_b_6028", type=0, category=1, }; // 「八重一輪(やえいちりん)！」
+
+st[416] = { volumetype=1, path=1, file="yuz_010_b_6029", type=0, category=1, }; // 「覚悟！（次に続く）」
+st[417] = { volumetype=1, path=1, file="yuz_010_b_6030", type=0, category=1, }; // 「どおりゃあああ！」
+ 
+st[420] = { volumetype=1, path=1, file="yuz_010_b_6032", type=0, category=1, }; // 「こっちだよー！」
+st[421] = { volumetype=1, path=1, file="yuz_010_b_6033", type=0, category=1, }; // 「こっちこっちぃ！」
+st[422] = { volumetype=1, path=1, file="yuz_010_b_6034", type=0, category=1, }; // 「こっち！」
+st[425] = { volumetype=1, path=1, file="yuz_010_b_6037", type=0, category=1, }; // 「こっちだよぉ？」
+
+st[428] = { volumetype=1, path=1, file="yuz_010_b_6040", type=0, category=1, }; // 「はっ…」
+st[429] = { volumetype=1, path=1, file="yuz_010_b_6041", type=0, category=1, }; // 「ふっ…」
+st[430] = { volumetype=1, path=1, file="yuz_010_b_6042", type=0, category=1, }; // 「流漣(さざなみ)」
+
+st[433] = { volumetype=1, path=1, file="yuz_010_b_6044", type=0, category=1, }; // 「うん！」
+st[434] = { volumetype=1, path=1, file="yuz_010_b_6045", type=0, category=1, }; // 「しゅたっ！」
+st[435] = { volumetype=1, path=1, file="yuz_010_b_6046", type=0, category=1, }; // 「移徙(わたまし)」
+
+st[438] = { volumetype=1, path=1, file="yuz_010_b_6048", type=0, category=1, }; // 「研ぎ澄ます……」
+st[439] = { volumetype=1, path=1, file="yuz_010_b_6049", type=0, category=1, }; // 「せぇい！」
+st[440] = { volumetype=1, path=1, file="yuz_010_b_6050", type=0, category=1, }; // 「ていやぁ！」
+st[441] = { volumetype=1, path=1, file="yuz_010_b_6051", type=0, category=1, }; // 「そいやっ！」
+st[442] = { volumetype=1, path=1, file="yuz_010_b_6053", type=0, category=1, }; // 「参之型(さんのかた)……（次に続く）」
+st[443] = { volumetype=1, path=1, file="yuz_010_b_6054", type=0, category=1, }; // 「截(たち)！」
+
+// 超必殺技
+st[473] = { volumetype=1, path=1, file="yuz_010_b_6501", type=0, category=1, }; // 「いくよーあやめちゃん！（次に続く）」
+st[474] = { volumetype=1, path=1, file="yuz_010_b_6502", type=0, category=1, }; // 「悪・即・ざぁ～ん（斬）」
+
+st[476] = { volumetype=1, path=1, file="yuz_010_b_6503", type=0, category=1, }; // 「双月一刀流奥義！（次に続く）」
+st[477] = { volumetype=1, path=1, file="yuz_010_b_6504", type=0, category=1, }; // 「華生！」
+st[479] = { volumetype=1, path=1, file="yuz_010_b_6515", type=0, category=1, }; // 「幽微なり…（次に続く）」
+st[480] = { volumetype=1, path=1, file="yuz_010_b_6516", type=0, category=1, }; // 「双月一刀流抜刀術(そうげついっとうりゅうばっとうじゅつ) 零之型(ぜろのかた) 、秘奥義(ひおうぎ)、命紅(いのちくれない)……！」

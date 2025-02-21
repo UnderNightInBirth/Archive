@@ -1,0 +1,332 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr004/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(800); // てきとう
+local st = SeList_Table.Status; // 登録しやすいように
+
+st[20] = { volumetype=0, path=2, file="SE_HolyVoiceShort", type=1, category=-1, }; //タナトス消滅ＳＥ
+
+st[50] = { volumetype=0, path=2, file="SE_AppearInsulator", type=1, category=-1, }; //22のタナトス生成
+st[70] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWXばくはつ 相手に剣が刺さった時
+
+st[71] = { volumetype=0, path=2, file="SE_HolyVoice", type=1, category=-1, }; //★剣が光に包まれる時 ：キラーンというか
+st[72] = { volumetype=0, path=2, file="SE_ShotSpecialHoly", type=1, category=-1, }; //★剣を射出するとき ：シュンという風切り音
+st[73] = { volumetype=0, path=0, file="SE071_KO", type=1, category=-1, }; //相手に剣が刺さった時　：ヒット音の派手なもの。KO音とか。
+
+//登場
+st[100] = { volumetype=1, path=1, file="ori_010_b_2000", type=0, category=1, }; //「正義の名の下に、貴方を救済します」
+st[102] = { volumetype=1, path=1, file="ori_010_b_2001_b", type=0, category=1, }; //「貴方にはここで引いていただきます」
+st[103] = { volumetype=1, path=1, file="ori_010_b_2002", type=0, category=1, }; //「定めに従い光の鉄槌を」
+
+//登場 特殊
+
+//対ワーグナー
+st[108] = { volumetype=1, path=1, file="ori_010_b_2012", type=0, category=1, }; //（ワーグナー「謀らずとも機は熟したようだな」）「えぇ、少し不本意だけれどね」
+
+//対ハイド
+st[110] = { volumetype=1, path=1, file="ori_010_b_2015", type=0, category=1, }; //「今すぐ立ち去りなさい…さもなければ…」
+st[111] = { volumetype=1, path=1, file="ori_010_b_2016", type=0, category=1, }; //「これも定め…なのかな」
+st[113] = { volumetype=1, path=1, file="ori_010_b_2017", type=0, category=1, }; //（ハイド「……黙って退いちゃくれねぇか？）「出来ません、貴方もそうであるように」
+
+//対リンネ
+st[115] = { volumetype=1, path=1, file="ori_010_b_2019", type=0, category=1, }; //「あなたを糾(ただ)さねばなりません」
+
+//対ミカ
+st[117] = { volumetype=1, path=1, file="ori_010_b_2023", type=0, category=1, }; //（ミカ「へっ、お前ばかりに良いかっこはさせられねぇ！」）「その気持ちだけで十分だよ、ミカ」
+
+//対メルカヴァ
+st[120] = { volumetype=1, path=1, file="ori_010_b_2026", type=0, category=1, }; //「貴方の中にある想いも、ここで潰えましょう」（メルカヴァ「それは思い上がりというものだ、小娘……）
+
+//対クオン
+st[122] = { volumetype=1, path=1, file="ori_010_b_2029", type=0, category=1, }; //「リヒトクライスの名において貴方を！」（クオン「止められるかい、僕を……」）
+
+//対カグヤ
+st[124] = { volumetype=1, path=1, file="ori_010_b_2032", type=0, category=1, }; //（カグヤ「ここから先は汚れ仕事。私に任せておきなさい」）「いつまでも、貴女に甘えていられないから」
+
+//ラウンド勝利
+st[140] = { volumetype=1, path=1, file="ori_010_b_2100", type=0, category=1, }; //「立ちなさい！まだ終わってはいません！」
+st[141] = { volumetype=1, path=1, file="ori_010_b_2101", type=0, category=1, }; //「勝敗は決しました」
+
+//決着勝利 汎用
+st[150] = { volumetype=1, path=1, file="ori_010_b_2111", type=0, category=1, }; //「これで…良かったのよね」
+st[151] = { volumetype=1, path=1, file="ori_010_b_2112", type=0, category=1, }; //「この戦いに意味はあったのでしょうか」
+
+//決着勝利 辛勝
+st[154] = { volumetype=1, path=1, file="ori_010_b_2120", type=0, category=1, }; //「あ、あっぶなかったぁ…」
+
+//決着勝利 楽勝
+st[158] = { volumetype=1, path=1, file="ori_010_b_2123_b", type=0, category=1, }; //「これが背負うものの差です…」
+
+//決着勝利 掛け合い
+//対ハイド
+st[164] = { volumetype=1, path=1, file="ori_010_b_2127_a", type=0, category=1, }; //「私は私の使命を果たします…」
+st[165] = { volumetype=1, path=1, file="ori_010_b_2127_b", type=0, category=1, }; //「ごめんね、城戸くん…」
+
+//対ワーグナー
+st[167] = { volumetype=1, path=1, file="ori_010_b_2130", type=0, category=1, }; //「ごめんね、エリカ。ここから先は私に任せて。」
+
+//対メルカヴァ
+st[170] = { volumetype=1, path=1, file="ori_010_b_2133_b", type=0, category=1, }; //「これで…本当に良かったのかな…」
+
+//タイムアップ判定負け
+st[180] = { volumetype=1, path=1, file="ori_010_b_2200", type=0, category=1, }; //「嘘…」
+st[181] = { volumetype=1, path=1, file="ori_010_b_2201", type=0, category=1, }; //「私としたことが…！」
+
+//弱攻撃
+st[200] = { volumetype=1, path=1, file="ori_010_b_2300_a", type=0, category=1, }; //「は」
+st[201] = { volumetype=1, path=1, file="ori_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[202] = { volumetype=1, path=1, file="ori_010_b_2302_a", type=0, category=1, }; //「や」
+st[203] = { volumetype=1, path=1, file="ori_010_b_2303_a", type=0, category=1, }; //「し」
+st[204] = { volumetype=1, path=1, file="ori_010_b_2300_b", type=0, category=1, }; //「は」
+st[205] = { volumetype=1, path=1, file="ori_010_b_2301_b", type=0, category=1, }; //「ふ」
+st[208] = { volumetype=1, path=1, file="ori_010_b_2300_c", type=0, category=1, }; //「た」
+
+//中攻撃
+st[220] = { volumetype=1, path=1, file="ori_010_b_2400_a", type=0, category=1, }; //「えい」
+st[225] = { volumetype=1, path=1, file="ori_010_b_2405_a", type=0, category=1, }; //「ほっ」
+st[228] = { volumetype=1, path=1, file="ori_010_b_2402_b", type=0, category=1, }; //「てあっ」
+st[229] = { volumetype=1, path=1, file="ori_010_b_2403_b", type=0, category=1, }; //「しっ」
+st[230] = { volumetype=1, path=1, file="ori_010_b_2404_b", type=0, category=1, }; //「はっ」
+st[231] = { volumetype=1, path=1, file="ori_010_b_2405_b", type=0, category=1, }; //「ほっ」
+st[232] = { volumetype=1, path=1, file="ori_010_b_2400_c", type=0, category=1, }; //「えい」
+st[234] = { volumetype=1, path=1, file="ori_010_b_2402_c", type=0, category=1, }; //「てあっ」
+
+//強攻撃
+st[250] = { volumetype=1, path=1, file="ori_010_b_2500_a", type=0, category=1, }; //「はいっ！」
+st[251] = { volumetype=1, path=1, file="ori_010_b_2501_a", type=0, category=1, }; //「てぇーい！」
+st[252] = { volumetype=1, path=1, file="ori_010_b_2502_a", type=0, category=1, }; //「いぃ…やっ！」
+st[253] = { volumetype=1, path=1, file="ori_010_b_2503_a", type=0, category=1, }; //「そこです！」
+st[255] = { volumetype=1, path=1, file="ori_010_b_2500_b", type=0, category=1, }; //「はいっ！」
+st[256] = { volumetype=1, path=1, file="ori_010_b_2501_b", type=0, category=1, }; //「てぇーい！」
+st[259] = { volumetype=1, path=1, file="ori_010_b_2504_b", type=0, category=1, }; //「隙あり！」
+
+st[265] = { volumetype=1, path=1, file="ori_010_b_2504_a", type=0, category=1, }; //
+st[266] = { volumetype=1, path=1, file="ori_010_b_5000_a", type=0, category=1, }; //
+
+//吹き飛ばし攻撃
+st[270] = { volumetype=1, path=1, file="ori_010_b_2600", type=0, category=1, }; //「いっけぇ！」
+st[271] = { volumetype=1, path=1, file="ori_010_b_2601", type=0, category=1, }; //「はああぁっ！」
+
+//回避困難な攻撃
+st[281] = { volumetype=1, path=1, file="ori_010_b_2604_b", type=0, category=1, }; //「逃(にが)さない！」
+st[282] = { volumetype=1, path=1, file="ori_010_b_2605", type=0, category=1, }; //「捉えました」
+
+//その他特殊攻撃
+st[290] = { volumetype=1, path=1, file="ori_010_b_2607", type=0, category=1, }; //「ちょいや！」
+st[291] = { volumetype=1, path=1, file="ori_010_b_2608", type=0, category=1, }; //「失礼！」
+st[294] = { volumetype=1, path=1, file="ori_010_b_2610_b", type=0, category=1, }; //「これならどうです？」
+st[296] = { volumetype=1, path=1, file="ori_010_b_2611_b", type=0, category=1, }; //「足元がお留守です」
+st[298] = { volumetype=1, path=1, file="ori_010_b_2609_b", type=0, category=1, }; //「やあっ！」
+
+
+
+//投げ成功
+st[300] = { volumetype=1, path=1, file="ori_010_b_2700", type=0, category=1, }; //「油断しましたね！」
+st[301] = { volumetype=1, path=1, file="ori_010_b_2701", type=0, category=1, }; //「フッ、タァーー！」
+
+//投げ失敗
+st[310] = { volumetype=1, path=1, file="ori_010_b_2800", type=0, category=1, }; //「あれ？」
+st[311] = { volumetype=1, path=1, file="ori_010_b_2801", type=0, category=1, }; //「おっと！」
+
+//敵の投げ技を回避
+st[320] = { volumetype=1, path=1, file="ori_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「離しなさい！」
+st[321] = { volumetype=1, path=1, file="ori_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「触らないで！」
+
+//ガードキャンセル攻撃
+st[331] = { volumetype=1, path=1, file="ori_010_b_2950_b", type=0, category=1, }; //「無駄です！」
+
+//振り向き
+st[340] = { volumetype=1, path=1, file="ori_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki }; //「こっち」
+
+//待機モーション
+st[351] = { volumetype=1, path=1, file="ori_010_b_3100_b", type=0, category=1, }; //「来なさい！」
+
+//前方回避
+st[360] = { volumetype=1, path=1, file="ori_010_b_3200", type=0, category=1, }; //「回避」
+st[361] = { volumetype=1, path=1, file="ori_010_b_3201", type=0, category=1, }; //「前へ」
+
+//ダッシュ
+st[370] = { volumetype=1, path=1, file="ori_010_b_3300", type=0, category=1, }; //「いきます」
+st[371] = { volumetype=1, path=1, file="ori_010_b_3301", type=0, category=1, }; //「ふっ」
+st[372] = { volumetype=1, path=1, file="ori_010_b_3302", type=0, category=1, }; //「詰めます」
+
+//アサルト
+st[380] = { volumetype=1, path=1, file="ori_010_b_3310", type=0, category=1, }; //「はっ」
+st[381] = { volumetype=1, path=1, file="ori_010_b_3311", type=0, category=1, }; //「たっ」
+
+//バックステップ
+st[390] = { volumetype=1, path=1, file="ori_010_b_3400", type=0, category=1, }; //「はっ！（次に続く）」
+st[391] = { volumetype=1, path=1, file="ori_010_b_3401", type=0, category=1, }; //「…っと！」
+
+st[393] = { volumetype=1, path=1, file="ori_010_b_3402", type=0, category=1, }; //「トッ！（次に続く）」
+st[394] = { volumetype=1, path=1, file="ori_010_b_3403", type=0, category=1, }; //「ハッ！」
+
+//弱攻撃ガード
+st[400] = { volumetype=1, path=1, file="ori_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「軽い」
+st[401] = { volumetype=1, path=1, file="ori_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「はっ」
+st[402] = { volumetype=1, path=1, file="ori_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「んっ」
+
+//中攻撃ガード
+st[410] = { volumetype=1, path=1, file="ori_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「耐えます」
+st[412] = { volumetype=1, path=1, file="ori_010_b_3601_b", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「ガード」
+st[413] = { volumetype=1, path=1, file="ori_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「その程度ですか！」
+
+//強攻撃ガード
+st[420] = { volumetype=1, path=1, file="ori_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「これしき…！」
+st[421] = { volumetype=1, path=1, file="ori_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「耐えてみせる…っ！」
+st[422] = { volumetype=1, path=1, file="ori_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「なんて重さ…っ！」
+
+//攻撃を見切り余裕でガード
+st[430] = { volumetype=1, path=1, file="ori_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「無駄です！」
+st[431] = { volumetype=1, path=1, file="ori_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「惜しいですね！」
+st[432] = { volumetype=1, path=1, file="ori_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「こうかな！？」
+
+//ガード失敗ダメージ
+st[440] = { volumetype=1, path=1, file="ori_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「きゃっ！？」
+st[441] = { volumetype=1, path=1, file="ori_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「そんな！？」
+
+//受け身
+st[451] = { volumetype=1, path=1, file="ori_010_b_4000_b", type=0, category=1, prio=Def_SEP_Recover, }; //「はっ」 
+st[452] = { volumetype=1, path=1, file="ori_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; //「油断した…」
+st[453] = { volumetype=1, path=1, file="ori_010_b_4002", type=0, category=1, prio=Def_SEP_Recover, }; //「やりますね！」
+
+//シールド発動
+st[460] = { volumetype=1, path=1, file="ori_010_b_4100", type=0, category=1, }; //「防御を」
+st[461] = { volumetype=1, path=1, file="ori_010_b_4101", type=0, category=1, }; //「弾く…！」
+st[463] = { volumetype=1, path=1, file="ori_010_b_4102_b", type=0, category=1, }; //「無効化する…！」
+
+//シールド成功
+st[470] = { volumetype=1, path=1, file="ori_010_b_4200_a", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「はいっ」
+st[473] = { volumetype=1, path=1, file="ori_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「見切りました」
+st[474] = { volumetype=1, path=1, file="ori_010_b_4202", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「読めてます！」
+
+//弱攻撃ダメージ
+st[480] = { volumetype=1, path=1, file="ori_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「あっ」
+st[481] = { volumetype=1, path=1, file="ori_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「うっ」
+st[482] = { volumetype=1, path=1, file="ori_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「くっ」
+
+//中攻撃ダメージ
+st[490] = { volumetype=1, path=1, file="ori_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「いたっ」
+st[491] = { volumetype=1, path=1, file="ori_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「くはっ」
+st[492] = { volumetype=1, path=1, file="ori_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「くうっ」
+st[493] = { volumetype=1, path=1, file="ori_010_b_4403", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「いやっ」
+
+//強攻撃ダメージ
+st[500] = { volumetype=1, path=1, file="ori_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「ああっ！」
+st[501] = { volumetype=1, path=1, file="ori_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「ダメ…！」
+st[502] = { volumetype=1, path=1, file="ori_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「きゃあぁ！」
+st[503] = { volumetype=1, path=1, file="ori_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「しまっ」
+st[504] = { volumetype=1, path=1, file="ori_010_b_4504", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「そんなっ！」
+
+//ダウン
+st[510] = { volumetype=1, path=1, file="ori_010_b_4600", type=0, category=1, prio=Def_SEP_KO }; //「どうして…」
+
+//ラウンド敗北
+st[520] = { volumetype=1, path=1, file="ori_010_b_4650", type=0, category=1, }; //「私としたことが…」
+st[521] = { volumetype=1, path=1, file="ori_010_b_4651", type=0, category=1, }; //「くっ…、手ごわい」
+st[523] = { volumetype=1, path=1, file="ori_010_b_4652_b", type=0, category=1, }; //「次はこうはいきません！」 気持ち短め
+
+//ダウン・ノックアウト
+st[531] = { volumetype=1, path=1, file="ori_010_b_4700_b", type=0, category=1, prio=Def_SEP_KO }; //「きゃあああーーー！」
+
+//対メルカヴァ
+st[540] = { volumetype=1, path=1, file="ori_010_b_4702", type=0, category=1, prio=Def_SEP_KO }; //「ようやく…見つけた…のに…（親の仇を）」
+st[541] = { volumetype=1, path=1, file="ori_010_b_4703", type=0, category=1, prio=Def_SEP_KO }; //「おとうさん…おかあ…さん…」
+
+//起き上がり
+st[550] = { volumetype=1, path=1, file="ori_010_b_4800", type=0, category=1, }; //「まだまだ」
+st[551] = { volumetype=1, path=1, file="ori_010_b_4801", type=0, category=1, }; //「ここからです」
+st[552] = { volumetype=1, path=1, file="ori_010_b_4802", type=0, category=1, }; //「やりますね」
+
+//起き上がり・瀕死
+st[560] = { volumetype=1, path=1, file="ori_010_b_4900", type=0, category=1, }; //「まだ…いけます！」
+st[561] = { volumetype=1, path=1, file="ori_010_b_4901", type=0, category=1, }; //「最後までわかりませんよ！」
+st[562] = { volumetype=1, path=1, file="ori_010_b_4902", type=0, category=1, }; //「負けられない理由(わけ)がある！」
+
+//ヴェールオフ
+st[571] = { volumetype=1, path=1, file="ori_010_b_5000_b", type=0, category=3, }; //「はああぁぁぁ！」 少し強め
+st[572] = { volumetype=1, path=1, file="ori_010_b_5001", type=0, category=3, }; //「ヴェールオフ！」
+
+//チェインシフト
+st[580] = { volumetype=1, path=1, file="ori_010_b_5100", type=0, category=1, }; //「見せてあげます…！」
+st[582] = { volumetype=1, path=1, file="ori_010_b_5101_b", type=0, category=1, }; //「チェインシフト！」
+
+//コンセントレーション
+st[590] = { volumetype=1, path=1, file="ori_010_b_5200", type=0, category=1, }; //「はぁぁぁぁ……！」
+st[591] = { volumetype=1, path=1, file="ori_010_b_5201", type=0, category=1, }; //「祈りを……」
+
+//ヴォーパル
+st[600] = { volumetype=1, path=1, file="ori_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「ヴォーパル…！」
+st[602] = { volumetype=1, path=1, file="ori_010_b_5301_b", type=0, category=1, prio=Def_SEP_Vorpal, }; //「（こんな戦い）もう終わりにしましょう」
+
+//ヴォーパル・瀕死
+st[610] = { volumetype=1, path=1, file="ori_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; //「どうにか突破口を…」
+
+//必殺技
+st[622] = { volumetype=1, path=1, file="ori_010_b_6001_c", type=0, category=1, }; //「ディバインスラスト！」
+st[623] = { volumetype=1, path=1, file="ori_010_b_6002", type=0, category=1, }; //「おそいです！」
+st[624] = { volumetype=1, path=1, file="ori_010_b_6003", type=0, category=1, }; //「射抜く！」
+st[625] = { volumetype=1, path=1, file="ori_010_b_6004", type=0, category=1, }; //「貫く！」
+st[627] = { volumetype=1, path=1, file="ori_010_b_6007", type=0, category=1, }; //「仕留める！」
+st[628] = { volumetype=1, path=1, file="ori_010_b_6008", type=0, category=1, }; //「見切れますか！？」
+st[630] = { volumetype=1, path=1, file="ori_010_b_6012", type=0, category=1, }; //「剣閃(けんせん)！」
+st[631] = { volumetype=1, path=1, file="ori_010_b_6013", type=0, category=1, }; //「断罪！」
+
+st[634] = { volumetype=1, path=1, file="ori_010_b_6019", type=0, category=1, }; //「シックアンドファースト！」
+st[635] = { volumetype=1, path=1, file="ori_010_b_6020", type=0, category=1, }; //「旋回！」
+st[637] = { volumetype=1, path=1, file="ori_010_b_6023", type=0, category=1, }; //「舞い上がれ」
+st[638] = { volumetype=1, path=1, file="ori_010_b_6024", type=0, category=1, }; //「サクセッション！」
+st[640] = { volumetype=1, path=1, file="ori_010_b_6027", type=0, category=1, }; //「タナトス」
+st[642] = { volumetype=1, path=1, file="ori_010_b_6029", type=0, category=1, }; //「そこです！（次に続く）」
+st[643] = { volumetype=1, path=1, file="ori_010_b_6030", type=0, category=1, }; //「オブリークスエッジ！」
+st[644] = { volumetype=1, path=1, file="ori_010_b_6031", type=0, category=1, }; //「バーティカルエッジ！」
+st[650] = { volumetype=1, path=1, file="ori_010_b_6033", type=0, category=1, }; //「祓(はら)え」
+st[651] = { volumetype=1, path=1, file="ori_010_b_6034", type=0, category=1, }; //「堕ちなさい」
+st[653] = { volumetype=1, path=1, file="ori_010_b_6038", type=0, category=1, }; //「薙ぎ払え！」
+st[660] = { volumetype=1, path=1, file="ori_010_b_6042", type=0, category=1, }; //「奇襲を」
+st[661] = { volumetype=1, path=1, file="ori_010_b_6043", type=0, category=1, }; //「行きなさい」
+st[663] = { volumetype=1, path=1, file="ori_010_b_6047", type=0, category=1, }; //「続けなさい」
+st[665] = { volumetype=1, path=1, file="ori_010_b_6048_b", type=0, category=1, }; //「シーリングホプロン！」
+st[671] = { volumetype=1, path=1, file="ori_010_b_6051_b", type=0, category=1, }; //「たぁー！」 語尾が下がる　cl-rはこっち気味
+st[672] = { volumetype=1, path=1, file="ori_010_b_6052", type=0, category=1, }; //「上です！」
+st[673] = { volumetype=1, path=1, file="ori_010_b_6053_a", type=0, category=1, }; //「セイクリッドアロー！」
+st[674] = { volumetype=1, path=1, file="ori_010_b_6053_b", type=0, category=1, }; //「セイクリッドアロー！」
+st[676] = { volumetype=1, path=1, file="ori_010_b_6057", type=0, category=1, }; //「セイクリッドアローッ！（通常版よりも強く）」
+
+st[680] = { volumetype=1, path=1, file="ori_010_b_6060", type=0, category=1, }; //「見えました！（次に続く）」
+st[681] = { volumetype=1, path=1, file="ori_010_b_6061", type=0, category=1, }; //「セイクリッドスパイア！」
+
+st[684] = { volumetype=1, path=1, file="ori_010_b_6062", type=0, category=1, }; //「正義を執行します！（次に続く）」
+st[685] = { volumetype=1, path=1, file="ori_010_b_6063", type=0, category=1, }; //「お別れです！」
+
+st[701] = { volumetype=1, path=1, file="ori_010_b_6071_b", type=0, category=1, }; //「エヴァージョン！」
+st[705] = { volumetype=1, path=1, file="ori_010_b_6073", type=0, category=1, }; //「エアリアル！」
+
+st[730] = { volumetype=1, path=1, file="ori_010_b_6084", type=0, category=1, }; //「虚空より出でよ！（次に続く）」
+st[731] = { volumetype=1, path=1, file="ori_010_b_6085", type=0, category=1, }; //「光の尖塔！」
+
+st[733] = { volumetype=1, path=1, file="ori_010_b_6086", type=0, category=1, }; //「彼の者を貫け！（次に続く）」
+st[734] = { volumetype=1, path=1, file="ori_010_b_6087", type=0, category=1, }; //「レヴァリーーオベリスク！」
+
+//超必殺技
+st[750] = { volumetype=1, path=1, file="ori_010_b_6501", type=0, category=1, }; //「消え去りなさい（次に続く）」
+st[751] = { volumetype=1, path=1, file="ori_010_b_6502", type=0, category=1, }; //「ルミナスエンブレイス！」
+//
+st[753] = { volumetype=1, path=1, file="ori_010_b_6503", type=0, category=1, }; //「これで最後です！（次に続く）」
+st[754] = { volumetype=1, path=1, file="ori_010_b_6504", type=0, category=1, }; //「裁きの旋律よ…！」
+st[770] = { volumetype=1, path=1, file="ori_010_b_6515", type=0, category=1, }; //「終わらせます！（次に続く）」
+st[771] = { volumetype=1, path=1, file="ori_010_b_6516", type=0, category=1, }; //「リヒトクライスの名の下、この戦いに終止符を打ちましょう（次に続く）」
+st[777] = { volumetype=1, path=1, file="ori_010_b_6517_e", type=0, category=1, }; //「レストインピース！」 
+
+

@@ -1,0 +1,578 @@
+//攻撃Init共通関数
+
+// 地上の通常技
+Battle_Std.InitGroundAtk <- function( param={} )
+{
+	local flags = ( "flags" in param )? param.flags : 0;
+	local type = ( "type" in param )? param.type : 0;
+	// _dpn("InitGroundAtk type:"+type);
+	
+	// local cmdParam = BMvTbl.GetCmdParam(0);
+	if( flags&(1<<0) )
+	{
+		//追加派生（B>BとかC>Cとか）
+		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_AddMv );
+	}
+	else
+	{
+		//通常技・特殊技
+		BMvTbl.SetMuki(_Direction_Auto);
+	}
+	Battle_Std.InitCharaVector() //慣性を残したベクトル初期化
+	Battle_Std.ClearHitStatus_SetChangeMv(); // ヒット情報のクリア
+	
+	Battle_Std.MoveCode.AddFlag( def_MC_Atk ); // 行動コード(通常技)を設定
+	Battle_Std.InitAtkSkillMv(); // 通常技や必殺技の共通初期化
+	if( !Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
+	
+	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Body, time=255, flag=_ClearFlag_ChangeMv } ); // 体無敵にスカる
+	
+	switch( type )
+	{
+	case "A":
+		BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+		break;
+	case "B":
+		BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=7, time=255, flag=_ClearFlag_ChangeMv } );
+		break;
+	case "C":
+		BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=11, time=255, flag=_ClearFlag_ChangeMv } );
+		break;
+	case "FF":
+		break;
+	}
+
+	Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // 同時押しで他の行動に移れる行動
+	
+	Battle_Std.PassBeforeMoveCodeEx( 2, def_MC2_DashKansei ); // ダッシュ慣性フラグを引き継ぐ
+
+	// コマンドステータスチェック
+	local cmdst = BMvTbl.GetPP(def_PP_CmdStatus);
+	
+	// リバースビートのアナウンス追加
+	if( Def_Sys_ReverseBeatAnnounce )
+	{
+		if( cmdst&def_PP_CS_ReverseBeat )
+		{
+			BMvEff.AttackInfoString_Set( { word=def_AISW_ReverseBeat } );		
+		}
+	}
+	
+	if( Def_Dbg_LocalDebugScriptPath ) //ローカル環境でのデバッグ時
+	{
+		Battle_Std.DebugFunc.CallAtkInitScript();
+	}
+	
+	/*
+	//XXX
+	local cmdParam = BMvTbl.GetCmdParam(0);
+	if( cmdParam&Def_CMDP_CallComboChainMv )
+	{
+		// _dpn("連打");
+	}
+	else
+	{
+		BMvTbl.SetMuki(_Direction_Auto);
+	}
+
+	Battle_Std.InitCharaVector() //慣性を残したベクトル初期化
+	Battle_Std.ClearHitStatus_SetChangeMv(); // ヒット情報のクリア
+	
+	Battle_Std.MoveCode.AddFlag( def_MC_Atk ); // 行動コード(通常技)を設定
+	Battle_Std.InitAtkSkillMv(); // 通常技や必殺技の共通初期化
+	if( !Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
+	
+	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Body, time=255, flag=_ClearFlag_ChangeMv } ); // 体無敵にスカる
+	Battle_Std.Sousai.Init(); //相殺情報を初期化
+	
+	BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+
+	Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // 同時押しで他の行動に移れる行動
+	
+	if( Def_Dbg_LocalDebugScriptPath ) //ローカル環境でのデバッグ時
+	{
+		Battle_Std.DebugFunc.CallAtkInitScript();
+	}
+	*/
+	
+	if( Def_Sys_CmdShortAtkInit )
+	{
+		BMvTbl.SetCommandShortDelay(Def_Sys_CmdShortAtkInit);
+	}
+}
+
+Battle_Std.StartGroundAtk <- function()
+{
+	// _dpn("StartGroundAtk");
+	if( Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
+}
+
+// 空中の通常技
+Battle_Std.InitAirAtk <- function( param={} )
+{
+	local flags = ( "flags" in param )? param.flags : 0;
+	local type = ( "type" in param )? param.type : 0;
+	// _dpn("InitAirAtk type:"+type);
+
+	Battle_Std.ClearHitStatus_SetChangeMv(); // ヒット情報のクリア
+	
+	Battle_Std.MoveCode.AddFlag( def_MC_Atk ); // 行動コード(通常技)を設定
+	Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_AtkJump ); // ジャンプ攻撃
+	Battle_Std.InitAtkSkillMv(); // 通常技や必殺技の共通初期化
+	if( !Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
+
+	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Head, time=255, flag=_ClearFlag_ChangeMv } ); // 頭無敵にスカる
+	
+	switch( type )
+	{
+	case "A":
+		BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+		break;
+	case "B":
+		BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=6, time=255, flag=_ClearFlag_ChangeMv } );
+		break;
+	case "C":
+		BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=8, time=255, flag=_ClearFlag_ChangeMv } );
+		break;
+	case "FF":
+		break;
+	default:
+		BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+		break;
+	}
+	
+	Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // 同時押しで他の行動に移れる行動
+	Battle_Std.PassBeforeMoveCodeEx( 2, def_MC2_DashKansei ); // ダッシュ慣性フラグを引き継ぐ
+	
+	Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_LightLegsMuteki );//小足属性へ空振り予定のMV
+	BMvTbl.SetHitCheckFlag( { type=0, val=Def_HitCheckFlag_LightLegs, time=255, flag=_ClearFlag_ChangeMv } ); // 小足無敵にスカる
+	
+	// コマンドステータスチェック
+	local cmdst = BMvTbl.GetPP(def_PP_CmdStatus);
+	
+	// リバースビートのアナウンス追加
+	if( Def_Sys_ReverseBeatAnnounce )
+	{
+		if( cmdst&def_PP_CS_ReverseBeat )
+		{
+			BMvEff.AttackInfoString_Set( { word=def_AISW_ReverseBeat } );		
+		}
+	}
+	
+	//最後のコマンドチェック時に行動可能だった
+	// local info0 = BCMDTbl.GetCmdInfoEx(0);
+	// info0.GetCancel( _SkillType_None );
+	// print("\n BCMDTbl.CheckCancel( _SkillType_None ):"+BCMDTbl.CheckCancel( _SkillType_None ) );
+	
+	// CSの後とかちょっと違うみたいだけどまぁいいよね
+	// if( Def_Dbg_LocalDebugMode )
+	// {
+		// local b_old = (cmdst&def_PP_CS_MoveAble)? 1 : 0;
+		// local b_new = (BCMDTbl.CheckCancel( _SkillType_None ))? 1 : 0;
+		// if( b_old != b_new )
+		// {
+			// _dm("★★★結果に違いが！！★★★");
+		// }
+	// }
+
+	// if( cmdst&def_PP_CS_MoveAble )
+	// if( info0.GetCancel( _SkillType_None ) )
+	// キャンセルからだしかたどうか調べる
+	local isCanseled = 0;
+
+	//前のMvが行動可能だったかどうか、ってので見るべきじゃない？
+	//
+	local nowPat = BMvTbl.GetMvStatus().DataPattern;
+	local isFromAssault = ( nowPat == def_PAT_Mv_Assault_Dodge || nowPat == def_PAT_Mv_Assault_Std || nowPat == def_PAT_Mv_Assault_Air )? 1 : 0;
+	
+	// if( !BCMDTbl.CheckCancel( _SkillType_None ) && !BMvTbl.GetMvCancel( _SkillType_None ) )
+	if( !BCMDTbl.CheckCancel( _SkillType_None ) && !isFromAssault )
+	{
+		// print("\n 今行動不能！"+BMvTbl.GetMvName()+" pat:"+BMvTbl.GetMvStatus().DataPattern );
+		// 行動不能
+		// 前の行動が1Fだけで、その行動出す時が行動可能だったら、ズラし押しなんじゃないかな？
+		// ボタン２つ押しも一応調べる
+		
+		local info0 = BCMDTbl.GetCmdInfoEx(0);
+		// local info1 = BCMDTbl.GetCmdInfoEx(1);
+
+		// 同時押しボタンのチェックはちゃんと入らない（initなので）のでチェックしないでいいよ多分
+		// print("\n f:"+info0.GetFrame()+" DJ:"+Battle_Std.CheckDoujiButton( info0 ) +" none:"+info0.GetCancel( _SkillType_None ) +" MV:"+Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_CmdLvDZ_OK ));
+		
+		if( info0.GetFrame() <= 2 )
+		{
+			if( !( info0.GetCancel( _SkillType_None ) && Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_CmdLvDZ_OK ) ) ) isCanseled = 1;
+		}
+		else
+		{
+			// 同時押し猶予切れ
+			isCanseled = 1;
+		}
+	}
+	else
+	{
+		isCanseled = 0;
+	}
+	
+	if( isCanseled == 0 )
+	{
+		// print("\n 行動可能から！");
+	}
+	else // 行動不能だった＝キャンセルで出した　※同時押しのズラしで成立したＢ＋Ｃとかにも適用されるから処理を調整
+	{
+		// print("\n キャンセルで出した！");
+		// しゃがみガード可能にする　＋　空中ガード可能にする
+		// BMvTbl.SetAtkGuardFlag( {  guard=_GuardFlag_GuardCrouch|_GuardFlag_GuardAir, time=254, flag=_ClearFlag_ChangeMv })
+
+		if( Def_Sys_CancelAirAtk_GuardCrouch == 1 ) // キャンセルで出したジャンプ攻撃は屈ガード可能にする
+		{
+			// しゃがみガード可能にする
+			BMvTbl.SetAtkGuardFlag( {  guard=_GuardFlag_GuardCrouch, time=254, flag=_ClearFlag_ChangeMv })
+		}
+		else if( Def_Sys_CancelAirAtk_GuardCrouch == 2 ) // ガードはそのままだけど特殊な補正をかける予約を入れる
+		{
+			Battle_Std.MoveCode.AddFlag( def_MC_ExDamageHosei ); // 行動コード(特殊な補正予約)を設定
+		}
+		else
+		{
+			// 何もしない
+		}
+	}
+	
+	if( Def_Dbg_LocalDebugScriptPath ) //ローカル環境でのデバッグ時
+	{
+		Battle_Std.DebugFunc.CallAtkInitScript();
+	}
+	
+	/*
+	Battle_Std.ClearHitStatus_SetChangeMv(); // ヒット情報のクリア
+	
+	Battle_Std.MoveCode.AddFlag( def_MC_Atk ); // 行動コード(通常技)を設定
+	Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_AtkJump ); // ジャンプ攻撃
+	
+	Battle_Std.InitAtkSkillMv(); // 通常技や必殺技の共通初期化
+	
+	if( !Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
+
+	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Head, time=255, flag=_ClearFlag_ChangeMv } ); // 頭無敵にスカる
+	Battle_Std.Sousai.Init(); //相殺情報を初期化
+	
+	if( Battle_Std.GS_CheckFlag( def_PP_GS_AerialStatus ) && Def_Sys_AerialAirAtkUkemiTimeLimit )
+	{
+		// _dpn("エリアルジャンプ攻撃");
+	}
+	else
+	{
+		// _dpn("通常ジャンプ攻撃");
+		BMvTbl.SetNoUkemiTimeLimitFlag( { val=1, time=255, flag=_ClearFlag_ChangeMv } ); // 受け身不可時間の下限を1/2より下げる
+	}
+	
+	Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // 同時押しで他の行動に移れる行動
+	
+	// リバースビートとかは地上でのみ検知するようにする
+	// システムアナウンスも地上でしか表示しない（混乱しないように）
+
+	// キャンセルからだしかたどうか調べる
+	local isCanseled = 0;
+	
+	if( !BMvTbl.GetMvCancel( _SkillType_None ) )
+	{
+		// 行動不能
+		// 前の行動が1Fだけで、その行動出す時が行動可能だったら、ズラし押しなんじゃないかな？
+		// ボタン２つ押しも一応調べる
+		
+		local info0 = BCMDTbl.GetCmdInfoEx(0);
+		// local info1 = BCMDTbl.GetCmdInfoEx(1);
+
+		// 同時押しボタンのチェックはちゃんと入らない（initなので）のでチェックしないでいいよ多分
+		// print("\n f:"+info0.GetFrame()+" DJ:"+Battle_Std.CheckDoujiButton( info0 ) +" none:"+info0.GetCancel( _SkillType_None ) +" MV:"+Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_CmdLvDZ_OK ));
+		
+		if( info0.GetFrame() <= 2 )
+		{
+			if( !( info0.GetCancel( _SkillType_None ) && Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_CmdLvDZ_OK ) ) ) isCanseled = 1;
+		}
+		else
+		{
+			// 同時押し猶予切れ
+			isCanseled = 1;
+		}
+	}
+	else
+	{
+		isCanseled = 0;
+	}
+	
+	if( isCanseled == 0 )
+	{
+		// print("\n 行動可能から！");
+	}
+	else // 行動不能だった＝キャンセルで出した　※同時押しのズラしで成立したＢ＋Ｃとかにも適用されるから処理を調整
+	{
+		// print("\n キャンセルで出した！");
+		// しゃがみガード可能にする　＋　空中ガード可能にする
+		// BMvTbl.SetAtkGuardFlag( {  guard=_GuardFlag_GuardCrouch|_GuardFlag_GuardAir, time=254, flag=_ClearFlag_ChangeMv })
+
+		if( Def_Sys_CancelAirAtk_GuardCrouch == 1 ) // キャンセルで出したジャンプ攻撃は屈ガード可能にする
+		{
+			// しゃがみガード可能にする
+			BMvTbl.SetAtkGuardFlag( {  guard=_GuardFlag_GuardCrouch, time=254, flag=_ClearFlag_ChangeMv })
+		}
+		else if( Def_Sys_CancelAirAtk_GuardCrouch == 2 ) // ガードはそのままだけど特殊な補正をかける予約を入れる
+		{
+			Battle_Std.MoveCode.AddFlag( def_MC_ExDamageHosei ); // 行動コード(特殊な補正予約)を設定
+		}
+		else
+		{
+			// 何もしない
+		}
+	}
+	
+	if( Def_Dbg_LocalDebugScriptPath ) //ローカル環境でのデバッグ時
+	{
+		Battle_Std.DebugFunc.CallAtkInitScript();
+	}
+	
+	if( Def_Sys_AirAtkXVecLimit ) // 1.2X:3500
+	{
+		//ジャンプ攻撃のベクトル制限
+		Battle_Std.SetNormalXVecLimit(Def_Sys_AirAtkXVecLimit);
+	}
+	*/
+	
+	if( Def_Sys_CmdShortAtkInit )
+	{
+		BMvTbl.SetCommandShortDelay(Def_Sys_CmdShortAtkInit);
+	}
+}
+
+Battle_Std.StartAirAtk <- function()
+{
+	// _dpn("StartAirAtk");
+	if( Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
+}
+
+// 通常技や必殺技のInitで呼ばれる（地上・空中両方含む）
+// 影響範囲が大きいので扱いには注意する
+// 地上投げ・空中投げも追加
+Battle_Std.InitAtkSkillMv <- function()
+{
+	Battle_Std.SmartSteer.ClearCheck();
+	Battle_Std.SetComboChainMvParam();
+	
+	Battle_Std.SetFromNoCancelFlag();//生出しフラグをたてる
+	Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_EnablePanishAnnounce ); //パニッシュが出る行動
+	BMvEff.ClearAttackHitNum(); //オブジェクト内ヒットカウントの初期化
+	
+	/*
+	if( Def_Sys_SetActionID )
+	{
+		local action_id = BMvTbl.GetPP(def_PP_ActionID);
+		action_id ++;
+		//0～31
+		if( action_id >= 31 )
+		{
+			action_id = 0;
+		}
+		BMvTbl.SetPP(def_PP_ActionID,action_id);
+		// _dpn("action_idD:"+action_id);
+	}
+	*/
+}
+
+//ダッシュ攻撃Init共通処理
+Battle_Std.InitDashAtk <- function( setpattern=1 )
+{
+	BMvEff.CreateObject( { x=0, y=0, mvname="", datatype=1, start_pat=241, flags=_Position_ToolShift } );
+	Battle_Std.PcAfterImage_DashAtkInit(); //残像セット
+
+	BMvTbl.SetComboLimit(DEF_BS_CL_DASHCROA);
+	BMvTbl.SetVector( { x=0, addx=0, flags=_Vector_DivKeep } );
+	local nowvec = BMvTbl.GetVector(0); // 現在のベクトルを得る（パターン変更後だと初期化されてるかも）
+	if (nowvec.x<2000) nowvec.x = 2000; //最低値 1.0:2500
+	if (nowvec.x>2500) nowvec.x = 2500; //最大値 1.0:3000
+	
+	Battle_Std.InitCharaVector();		
+	BMvTbl.SetMuki(_Direction_Auto);
+	BMvTbl.SetPattern (setpattern ); // パターン変更
+	
+	BMvTbl.SetVector( { x=nowvec.x, addx=(-nowvec.x/20), flags=_Vector_Div } ); //20Fで収束ベクトルを登録
+	//BMvTbl.SetMuki(_Direction_Auto); //振り向いちゃダメだよ
+	
+	Battle_Std.GRD_AddValue({ val=def_GRD_DashAtk_Init, pressure=0, boundplus=1 }); //ダッシュ攻撃での増加
+
+	Battle_Std.ClearHitStatus_SetChangeMv(); // ヒット情報のクリア
+	
+	Battle_Std.MoveCode.AddFlag( def_MC_Atk ); // 行動コード(通常技)を設定
+	Battle_Std.InitAtkSkillMv(); // 通常技や必殺技の共通初期化
+	if( !Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
+	
+	Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK ); // 同時押しで他の行動に移れる行動
+	
+	Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_NoAtkCansel ); // 通常Ｃから通常技へのキャンセルを除外する
+	
+	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Body, time=255, flag=_ClearFlag_ChangeMv } ); // 体無敵にスカる
+	
+	if( Def_Dbg_LocalDebugScriptPath ) //ローカル環境でのデバッグ時
+	{
+		Battle_Std.DebugFunc.CallAtkInitScript();
+	}
+}
+
+Battle_Std.StartDashAtk <- function()
+{
+	// _dpn("StartAirAtk");
+	if( Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
+}
+
+//自動生成された必殺技MVのInitで呼ばれる
+Battle_Std.InitSkillMv <- function()
+{
+	//必殺技は必ず削りあり
+	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Body, time=255, flag=_ClearFlag_ChangeMv } ); // 体無敵にスカる
+	Battle_Std.SetSkillMvChipDamage(); // 必殺技としての削りダメージを適用
+}
+
+//自動生成された通常技MVのInitで呼ばれる
+Battle_Std.InitAtkMv <- function()
+{
+	//あんまりない
+	//特殊技だけ
+	Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_UniqAttack );
+
+	Battle_Std.SetFromNoCancelFlag();//生出しフラグをたてる
+}
+
+//連打コンボ特有攻撃共通
+Battle_Std.InitRapidMv <- function()
+{
+	Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_RapidActionMv );
+}
+
+// 飛び道具の最初
+// 飛び道具側のInitなので注意
+// 個別に呼ばれることもある
+Battle_Std.InitFireBall <- function()
+{
+	BMvEff.ObjType_Set( { type=_ObjType_FireBall } ); //デバッグ出力用オブジェクトタイプ指定
+	Battle_Std.MoveCode.AddFlag( def_MC_FireBall ); // 行動コード(飛び道具)を設定
+	BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
+
+	Battle_Std.PassPlayerToFireBallMvCode();// 親から引き継ぐコード
+	if( Battle_Std.CheckParentIsSkill() )
+	{
+		Battle_Std.SetSkillMvChipDamage(); // 必殺技としての削りダメージを適用
+	}
+}
+
+//超技開始処理
+//アークドライブ
+Battle_Std.InitWorthSkill <- function( _spcutinmv = "Mv_CutinGrp" )
+{
+	BMvEff.AddSkillCount( _SkillCount_SpIFW ); // 履歴カウンタを加算
+
+	local player = BMvCore.GetPlayerCharaData(); // 操作親の情報を得る
+	if( player.push() )
+	{
+		//相手に、暗転後動けるようになると消えるオブジェクトを呼ぶ
+		Battle_Std.CallAntenStopObject();
+	
+		local rc = BMvEff.GetHanteiRect( { check=[ _Hantei_Etc, 0 ], flags=_HanteiFlag_NoMukiChange | _HanteiFlag_Tool } );
+		
+		if( rc.sx != _Hantei_Error ) // 存在するか
+		{
+			BMvEff.SetPlayerTimer( {
+				muteki_nage=def_FL_SPCutinStopTime+def_FL_WorthSkill_NageMutekiFrame,
+				muteki_dage=def_FL_SPCutinStopTime,
+				muteki_nageX=def_FL_SPCutinStopTime+def_FL_WorthSkill_NageMutekiFrame,
+				muteki_dageX=def_FL_SPCutinStopTime } );
+
+			BMvEff.SetStopTime( { time=def_FL_SPCutinStopTime } ); //時間停止
+			
+			BMvEff.CutInProc_Set({ time=[10,999,10], cutin_mv=_spcutinmv,erasetype=1 }); //カットイングラフィックとか呼び
+
+		
+			BMvEff.CreateObject( { x=rc.sx, y=rc.sy, mvname="", datatype=1, start_pat=43, flags=_Position_ToolShift } );
+			BMvEff.SetCamera_Focus( { charapos=1, zoom=1.25, time=[30,def_FL_SPCutinStopTime-40,10], type_in=3, type_out=1 } ); //カメラ集中テスト
+
+
+		}
+	
+
+		//カットインが入るIW技の場合ゲージ増加制限をかける
+		BMvEff.SpGauge_SetLimitCombo( { val=25, time=def_FL_EXSLimit_IWSkill } ); //ゲージ増加制限
+		// BMvEff.SpGauge_SetLimit( { time=def_FL_EXSLimit_IWSkill } ); //一定時間ゲージ増加に制限をかける
+		
+		BMvEff.SetSpGauge( { mode=_SpGauge_UseBuffer } ); //ＳＰゲージ予約分を消費
+		
+		Battle_Std.RecoverDoubleExHohoHosei(); // EX>EXの保証補正低下を少し戻す
+		
+		// CheckAliveを行うならここで処理する
+		// 開放中なら開放を終了する
+		// BMvEff.Liberate_End();
+		
+		local comboUsedSpSkill = Battle_Std.EnemyDamageFlag_Check( def_DF_UseSpSkill );
+		if( comboUsedSpSkill )
+		{
+			_dpn("SPの保証補正");
+			Battle_Std.SetSpHosyoHosei( { type="SP" } );//２回目の補正をかける
+		}
+		
+		BMvEff.CreateObject( { mvname="Mv_SPAfterImage_KanriObject", flags=0 } );//超技中持続するオブジェクト
+		
+		player.pop();
+	}
+	
+}
+
+
+//飛び道具生成時や設置技の攻撃判定発生タイミングで呼ばれる
+//プレイヤーや飛び道具の親から呼ぶこと
+Battle_Std.InitPlayerCreateAtkObject <- function()
+{
+	if( Def_Sys_TrapFireBall_SkillBonusBugFix )
+	{
+		//飛び道具とか設置タイミングでも更新する
+		//あまりにも時間差な技は攻撃判定を出すタイミングで再度スキルボーナスをチェックする
+		//操作親に判定がある技は問題がないが、飛び道具は時間差なので色々とダメなことが多い
+		if( !Battle_Std.EnemyDamageFlag_Check( def_DF_SkillVecAdded ) )
+		{
+			// _dpn("InitPlayerCreateAtkObject 特別更新");
+			Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_NoDFSkillVecAdded );// Init時点では初回だったMv扱いとする
+		}
+	}
+}
+
+
+//FF系
+//実際のFFではこの処理は使わず、FF属性の必殺技なんかで使う
+Battle_Std.InitFFSkill <- function()
+{
+	BMvTbl.SetMvAction(def_MVA_EXAtk);
+	Battle_Std.MoveCode.AddFlag( def_MC_BCAction ); // BC技
+}
+
+Battle_Std.StartFFSkill <- function()
+{
+	local is_vp = (BMvEff.GRD_GetJudgeResult() > 0)? 1 : 0;
+
+	if( is_vp )
+	{
+		// １つ無くてもＯＫで、自分が0.5減る
+		Battle_Std.GRD_AddValue( { val= -5000, boundplus=1 } );
+
+		Battle_Std.PP_AddFlag( def_PP_GRDAction_UseGRD, def_PP_GAU_Used ); // 減らしたフラグを追加
+		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_PaySkillCost ); // コスト消費済み
+	}
+	else
+	{
+		// １つ減って、１つ無いと相手が１つ増える
+		Battle_Std.UseGRDStock( 1, 10000 ); // 消費GRD数, 相手増加GRD値(単位違注意)
+
+		Battle_Std.PP_AddFlag( def_PP_GRDAction_UseGRD, def_PP_GAU_Used ); // 減らしたフラグを追加
+		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_PaySkillCost ); // コスト消費済み
+	}
+}

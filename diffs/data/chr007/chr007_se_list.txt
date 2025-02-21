@@ -1,0 +1,313 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr007/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(910); // てきとう
+local st = SeList_Table.Status; // 登録しやすいように
+
+st[0] = { volumetype=0, path=2, file="SE_MagicExist", type=0, category=2, }; 
+st[1] = { volumetype=0, path=2, file="SE_LightBall", type=0, category=2, }; 
+st[2] = { volumetype=0, path=2, file="SE_LaserBeam", type=0, category=2, }; 
+st[3] = { volumetype=0, path=2, file="SE_AppearBit", type=0, category=2, }; 
+st[4] = { volumetype=0, path=2, file="SE_VanishVit", type=0, category=2, }; 
+st[5] = { volumetype=0, path=2, file="SE_ScratchDash", type=0, category=2, }; 
+st[6] = { volumetype=0, path=2, file="SE_SpecialLaserBeam", type=0, category=2, }; 
+
+st[7] = { volumetype=0, path=2, file="SE_AppearBit", type=0, category=2, }; //B+Cの発射音
+st[8] = { volumetype=0, path=2, file="SE_SwingLightSword", type=1, category=-1, }; //ブレード飛ばし系の通常攻撃(立ちBやしゃがみBやC)のブレードSE
+
+st[9] = { volumetype=0, path=2, file="SE_BombEnergy", type=1, category=-1, }; //飛び道具ヒットＳＥ
+
+st[10] = { volumetype=0, path=2, file="SE_LaserBeam", type=1, category=-1, }; //IWX 羽発射音
+st[11] = { volumetype=0, path=2, file="SE_MagicExist", type=1, category=-1, }; //IWX 魔方陣展開音
+st[12] = { volumetype=0, path=2, file="SE_LaserBeam", type=1, category=-1, }; //IWX 羽ささる音
+st[14] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, }; //IWX最後前のゆれ
+st[15] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWX最後の爆発
+st[16] = { volumetype=0, path=2, file="SE_LaserBeam", type=0, category=2, }; //IWXとびだすところ
+
+
+//登場
+st[100] = { volumetype=1, path=1, file="vat_010_b_2000", type=0, category=1, }; //「能力の調査確認を開始」
+st[101] = { volumetype=1, path=1, file="vat_010_b_2001", type=0, category=1, }; //「オブリテレート タスクへ移行」
+st[102] = { volumetype=1, path=1, file="vat_010_b_2002", type=0, category=1, }; //「掃討を開始します」
+
+//登場 特殊
+//対ハイド
+st[105] = { volumetype=1, path=1, file="vat_010_b_2015", type=0, category=1, }; //「貴方を倒し先へ進む、これは私自身の意思……」（ハイド「一番やりにくい相手だな、こりゃ」）
+
+//対クオン
+st[107] = { volumetype=1, path=1, file="vat_010_b_2018", type=0, category=1, }; //（クオン「彼の時は世話になったな、天の御使(みつか)い」）「廻(めぐ)る縁(えにし)。今は相対する者」
+
+//ラウンド勝利
+st[114] = { volumetype=1, path=1, file="vat_010_b_2100", type=0, category=1, }; //「コンプリート アン アサインド ア タスク…。余裕余裕…」
+st[116] = { volumetype=1, path=1, file="vat_010_b_2101_b", type=0, category=1, }; //「対象の評価を下方修正」
+
+//決着勝利 汎用
+st[118] = { volumetype=1, path=1, file="vat_010_b_2111", type=0, category=1, }; //「ふわあぁ～…　ねむねむ」
+st[119] = { volumetype=1, path=1, file="vat_010_b_2112", type=0, category=1, }; //「タスクの完遂を確認。通常モードへ移行します」
+
+//決着勝利 辛勝
+st[121] = { volumetype=1, path=1, file="vat_010_b_2120", type=0, category=1, }; //「掃討を完了しました。損傷軽微です」
+
+//決着勝利 楽勝
+st[123] = { volumetype=1, path=1, file="vat_010_b_2123", type=0, category=1, }; //「ふぁぁぁ…あふ（あくびです）」
+
+//決着勝利 掛け合い
+//対ハイド
+st[127] = { volumetype=1, path=1, file="vat_010_b_2127", type=0, category=1, }; //「戦力測定終了。やはり貴方をこの先へと向かわせるのは危険」
+
+//タイムアップ判定負け
+st[130] = { volumetype=1, path=1, file="vat_010_b_2200", type=0, category=1, }; //「タイムアウト…」
+st[131] = { volumetype=1, path=1, file="vat_010_b_2201", type=0, category=1, }; //「アンフォーシーン エラー…」
+st[132] = { volumetype=1, path=1, file="vat_010_b_2202", type=0, category=1, }; //「推進プログラムを更新…」
+
+//弱攻撃
+st[200] = { volumetype=1, path=1, file="vat_010_b_2300_a", type=0, category=1, }; //「は」
+st[201] = { volumetype=1, path=1, file="vat_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[202] = { volumetype=1, path=1, file="vat_010_b_2302_a", type=0, category=1, }; //「や」
+st[203] = { volumetype=1, path=1, file="vat_010_b_2303_a", type=0, category=1, }; //「し」
+st[208] = { volumetype=1, path=1, file="vat_010_b_2300_c", type=0, category=1, }; //「は」
+st[209] = { volumetype=1, path=1, file="vat_010_b_2301_c", type=0, category=1, }; //「ふ」
+st[218] = { volumetype=1, path=1, file="vat_010_b_2302_b", type=0, category=1, }; //「や」
+st[227] = { volumetype=1, path=1, file="vat_010_b_2300_j", type=0, category=1, }; //「は」
+
+//中攻撃
+st[246] = { volumetype=1, path=1, file="vat_010_b_2400_b", type=0, category=1, }; //「やっ」
+st[247] = { volumetype=1, path=1, file="vat_010_b_2401_b", type=0, category=1, }; //「たっ」
+st[250] = { volumetype=1, path=1, file="vat_010_b_2404_b", type=0, category=1, }; //「まわーる…」
+st[252] = { volumetype=1, path=1, file="vat_010_b_2400_c", type=0, category=1, }; //「やっ」
+st[254] = { volumetype=1, path=1, file="vat_010_b_2402_c", type=0, category=1, }; //「ブロー」
+st[255] = { volumetype=1, path=1, file="vat_010_b_2403_c", type=0, category=1, }; //「ホイール」
+st[257] = { volumetype=1, path=1, file="vat_010_b_2405_c", type=0, category=1, }; //「縦回転」
+
+//強攻撃
+st[293] = { volumetype=1, path=1, file="vat_010_b_2503_a", type=0, category=1, }; //「んしょっ…と」
+st[304] = { volumetype=1, path=1, file="vat_010_b_2500_c", type=0, category=1, }; //「アタック」
+st[308] = { volumetype=1, path=1, file="vat_010_b_2504_c", type=0, category=1, }; //「ローテーション」
+st[313] = { volumetype=1, path=1, file="vat_010_b_2502_d", type=0, category=1, }; //「転がれ」
+st[319] = { volumetype=1, path=1, file="vat_010_b_2501_e", type=0, category=1, }; //「正面」
+st[323] = { volumetype=1, path=1, file="vat_010_b_2505_e", type=0, category=1, }; //「くるくる～」
+st[324] = { volumetype=1, path=1, file="vat_010_b_2506_e", type=0, category=1, }; //「タンブル」
+
+//吹き飛ばし攻撃
+st[351] = { volumetype=1, path=1, file="vat_010_b_2600_b", type=0, category=1, }; //「どどーん」
+st[352] = { volumetype=1, path=1, file="vat_010_b_2601", type=0, category=1, }; //「どっかーん」
+st[353] = { volumetype=1, path=1, file="vat_010_b_2602", type=0, category=1, }; //「衝撃」
+
+//その他特殊攻撃
+st[370] = { volumetype=1, path=1, file="vat_010_b_2607", type=0, category=1, }; //「チャージ」
+st[372] = { volumetype=1, path=1, file="vat_010_b_2609", type=0, category=1, }; //「ぐるぐるぐる～」
+st[373] = { volumetype=1, path=1, file="vat_010_b_2610", type=0, category=1, }; //「フラットスピン」
+st[376] = { volumetype=1, path=1, file="vat_010_b_2611_c", type=0, category=1, }; //「更にまわ～る…」
+st[381] = { volumetype=1, path=1, file="vat_010_b_2612_b", type=0, category=1, }; //「もっとくるくる～」
+
+st[382] = { volumetype=1, path=1, file="vat_010_b_2605", type=0, category=1, }; //
+st[383] = { volumetype=1, path=1, file="vat_010_b_6027", type=0, category=1, }; //
+
+//投げ成功
+st[390] = { volumetype=1, path=1, file="vat_010_b_2700_a", type=0, category=1, }; //「離れて」
+st[392] = { volumetype=1, path=1, file="vat_010_b_2701_a", type=0, category=1, }; //「寄らないで」
+
+//投げ失敗
+st[401] = { volumetype=1, path=1, file="vat_010_b_2800_b", type=0, category=1, }; //「失敗…」
+st[402] = { volumetype=1, path=1, file="vat_010_b_2801", type=0, category=1, }; //「あや」
+
+//敵の投げ技を回避
+st[412] = { volumetype=1, path=1, file="vat_010_b_2900_c", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「掴むなどと」
+st[414] = { volumetype=1, path=1, file="vat_010_b_2901_b", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「接近戦は苦手」
+
+//ガードキャンセル攻撃
+st[421] = { volumetype=1, path=1, file="vat_010_b_2950_b", type=0, category=1, }; //「立ち入らないで」
+
+//振り向き
+st[432] = { volumetype=1, path=1, file="vat_010_b_3000_c", type=0, category=1, prio=Def_SEP_Furimuki }; //「こっち」
+
+//待機モーション
+st[440] = { volumetype=1, path=1, file="vat_010_b_3100", type=0, category=1, }; //「（背伸び）ふぅっ…んん～…」
+st[441] = { volumetype=1, path=1, file="vat_010_b_3101", type=0, category=1, }; //「どうしたのかな…」
+
+//前方回避
+st[450] = { volumetype=1, path=1, file="vat_010_b_3200", type=0, category=1, }; //「前方回避」
+st[452] = { volumetype=1, path=1, file="vat_010_b_3201_b", type=0, category=1, }; //「アプローチ」
+
+//ダッシュ
+st[460] = { volumetype=1, path=1, file="vat_010_b_3300", type=0, category=1, }; //「近づく」
+st[461] = { volumetype=1, path=1, file="vat_010_b_3301", type=0, category=1, }; //「接近を」
+
+//アサルト
+st[470] = { volumetype=1, path=1, file="vat_010_b_3310", type=0, category=1, }; //「はっ」
+st[471] = { volumetype=1, path=1, file="vat_010_b_3311", type=0, category=1, }; //「とっ」
+
+//バックステップ
+st[480] = { volumetype=1, path=1, file="vat_010_b_3400", type=0, category=1, }; //「離れる」
+st[481] = { volumetype=1, path=1, file="vat_010_b_3401", type=0, category=1, }; //「緊急回避」
+
+//弱攻撃ガード
+st[490] = { volumetype=1, path=1, file="vat_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ん」
+st[491] = { volumetype=1, path=1, file="vat_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「警戒…」
+st[493] = { volumetype=1, path=1, file="vat_010_b_3502_b", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「無駄」
+
+//中攻撃ガード
+st[501] = { volumetype=1, path=1, file="vat_010_b_3600_b", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「防御する」
+st[503] = { volumetype=1, path=1, file="vat_010_b_3601_b", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「守る」
+st[504] = { volumetype=1, path=1, file="vat_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「防衛」
+
+//強攻撃ガード
+st[510] = { volumetype=1, path=1, file="vat_010_b_3700", type=0, category=1,  prio=Def_SEP_GuardLv3, check=1, }; //「障壁をっ」
+st[511] = { volumetype=1, path=1, file="vat_010_b_3701", type=0, category=1,  prio=Def_SEP_GuardLv3, check=1, }; //「耐えるっ」
+st[513] = { volumetype=1, path=1, file="vat_010_b_3702_b", type=0, category=1,  prio=Def_SEP_GuardLv3, check=1, }; //「だめ…」
+
+//攻撃を見切り余裕でガード
+st[520] = { volumetype=1, path=1, file="vat_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「想定通り」
+st[521] = { volumetype=1, path=1, file="vat_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「効かない」
+st[523] = { volumetype=1, path=1, file="vat_010_b_3802_b", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「無駄無駄…」
+
+//ガード失敗ダメージ
+st[532] = { volumetype=1, path=1, file="vat_010_b_3900_c", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「想定外…」
+st[536] = { volumetype=1, path=1, file="vat_010_b_3901_d", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「あり得ないこと」
+
+//受け身
+st[542] = { volumetype=1, path=1, file="vat_010_b_4000_c", type=0, category=1, prio=Def_SEP_Recover, }; //「危ない」
+st[543] = { volumetype=1, path=1, file="vat_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; //「せふせふ（セーフセーフ）」
+st[545] = { volumetype=1, path=1, file="vat_010_b_4002_b", type=0, category=1, prio=Def_SEP_Recover, }; //「リカバリー」
+
+//シールド発動
+st[551] = { volumetype=1, path=1, file="vat_010_b_4100_b", type=0, category=1, }; //「ふっ」
+st[552] = { volumetype=1, path=1, file="vat_010_b_4101", type=0, category=1, }; //「シールド」
+st[553] = { volumetype=1, path=1, file="vat_010_b_4102", type=0, category=1, }; //「プロテクション…」
+
+//シールド成功
+st[561] = { volumetype=1, path=1, file="vat_010_b_4200_b", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「ワンパターン」
+st[564] = { volumetype=1, path=1, file="vat_010_b_4201_c", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「無効化」
+st[565] = { volumetype=1, path=1, file="vat_010_b_4202", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「シャットアウト」
+
+//弱攻撃ダメージ
+st[571] = { volumetype=1, path=1, file="vat_010_b_4300_b", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「あっ」
+st[573] = { volumetype=1, path=1, file="vat_010_b_4301_b", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「うっ」
+st[574] = { volumetype=1, path=1, file="vat_010_b_4302_a", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「くっ」
+
+//中攻撃ダメージ
+st[580] = { volumetype=1, path=1, file="vat_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「きゃっ」
+st[581] = { volumetype=1, path=1, file="vat_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「そんなっ」
+st[582] = { volumetype=1, path=1, file="vat_010_b_4402_a", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「あうっ」
+st[584] = { volumetype=1, path=1, file="vat_010_b_4403", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「やあっ（嫌）」
+st[585] = { volumetype=1, path=1, file="vat_010_b_4404", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「だめっ」
+
+//強攻撃ダメージ
+st[590] = { volumetype=1, path=1, file="vat_010_b_4500_a", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「いたっ！」
+st[593] = { volumetype=1, path=1, file="vat_010_b_4501_b", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「ああっ！」
+st[594] = { volumetype=1, path=1, file="vat_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「ぐううぅ！」
+st[595] = { volumetype=1, path=1, file="vat_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「被害甚大」
+st[596] = { volumetype=1, path=1, file="vat_010_b_4504", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「これほどとは」
+
+//ダウン
+//相手にラウンドを取得された時に使用します。
+st[600] = { volumetype=1, path=1, file="vat_010_b_4600", type=0, category=1, prio=Def_SEP_KO }; //「くぁぁ……」
+
+//ラウンド敗北
+st[606] = { volumetype=1, path=1, file="vat_010_b_4650_e", type=0, category=1, prio=Def_SEP_KO }; //「タスクエラー…配列再組成」
+st[607] = { volumetype=1, path=1, file="vat_010_b_4651", type=0, category=1, prio=Def_SEP_KO }; //「工程を再確認…」
+
+//ダウン・ノックアウト
+st[610] = { volumetype=1, path=1, file="vat_010_b_4700_a", type=0, category=1, prio=Def_SEP_KO }; //「きゃぁぁぁぁぁーーーーーー」 長め
+
+//起き上がり
+st[624] = { volumetype=1, path=1, file="vat_010_b_4800_e", type=0, category=1, }; //「再開します」
+st[625] = { volumetype=1, path=1, file="vat_010_b_4801_a", type=0, category=1, }; //「んっ」
+st[627] = { volumetype=1, path=1, file="vat_010_b_4802", type=0, category=1, }; //「レジュームオペレーション」
+
+//起き上がり・瀕死
+st[631] = { volumetype=1, path=1, file="vat_010_b_4900_b", type=0, category=1, }; //「乱暴…」
+st[636] = { volumetype=1, path=1, file="vat_010_b_4901_d", type=0, category=1, }; //「シミュレート…」
+st[638] = { volumetype=1, path=1, file="vat_010_b_4902_b", type=0, category=1, }; //「追いつめられている」
+
+//ヴェールオフ
+st[641] = { volumetype=1, path=1, file="vat_010_b_5000_b", type=0, category=3, }; //「リミッター解除」
+st[643] = { volumetype=1, path=1, file="vat_010_b_5001_b", type=0, category=3, }; //「オープニング コントラクション」
+
+//チェインシフト
+st[650] = { volumetype=1, path=1, file="vat_010_b_5100", type=0, category=1, }; //「流れを…」
+st[654] = { volumetype=1, path=1, file="vat_010_b_5101_d", type=0, category=1, }; //「コンバージョン」
+
+//コンセントレーション
+st[660] = { volumetype=1, path=1, file="vat_010_b_5200", type=0, category=1, }; //「集中…」
+st[662] = { volumetype=1, path=1, file="vat_010_b_5201_b", type=0, category=1, }; //「ファルス グラインドゲイン」
+
+//ヴォーパル
+st[670] = { volumetype=1, path=1, file="vat_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「状況観測、良好」
+st[671] = { volumetype=1, path=1, file="vat_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; //「ステート アップデート」
+
+//ヴォーパル・瀕死
+st[673] = { volumetype=1, path=1, file="vat_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; //「リカバリープラン展開…」
+
+//必殺技
+st[680] = { volumetype=1, path=1, file="vat_010_b_6001", type=0, category=1, }; //「ばばばばっ」
+st[681] = { volumetype=1, path=1, file="vat_010_b_6002_a", type=0, category=1, }; //「連続攻撃」
+st[683] = { volumetype=1, path=1, file="vat_010_b_6003", type=0, category=1, }; //「アルマ ベルム（戦いの散弾という意味です）」
+st[684] = { volumetype=1, path=1, file="vat_010_b_6004", type=0, category=1, }; //「えいっ」
+st[687] = { volumetype=1, path=1, file="vat_010_b_6007_b", type=0, category=1, }; //「牽制」
+st[689] = { volumetype=1, path=1, file="vat_010_b_6010", type=0, category=1, }; //「蜂の巣」
+st[690] = { volumetype=1, path=1, file="vat_010_b_6011", type=0, category=1, }; //「それ～」
+st[692] = { volumetype=1, path=1, file="vat_010_b_6012_b", type=0, category=1, }; //「掃射…」
+st[700] = { volumetype=1, path=1, file="vat_010_b_6015", type=0, category=1, }; //「よいしょっ」
+st[701] = { volumetype=1, path=1, file="vat_010_b_6016", type=0, category=1, }; //「発射」
+st[702] = { volumetype=1, path=1, file="vat_010_b_6017", type=0, category=1, }; //「ルーメンステラ（「光る惑星」という意味）」
+st[704] = { volumetype=1, path=1, file="vat_010_b_6020", type=0, category=1, }; //「ルーメンステラ エルランス」
+
+st[710] = { volumetype=1, path=1, file="vat_010_b_6023", type=0, category=1, }; //「えいっ」
+st[711] = { volumetype=1, path=1, file="vat_010_b_6024", type=0, category=1, }; //「どーん」
+
+st[722] = { volumetype=1, path=1, file="vat_010_b_6031_c", type=0, category=1, }; //「飛ばせない」
+st[723] = { volumetype=1, path=1, file="vat_010_b_6032", type=0, category=1, }; //「さまそー（サマーソルト＝宙返りの意）」
+st[724] = { volumetype=1, path=1, file="vat_010_b_6033", type=0, category=1, }; //「ルベルアンゲルス（赤い天使という意味です）」
+st[726] = { volumetype=1, path=1, file="vat_010_b_6034_b", type=0, category=1, }; //「パターンマッチ」
+st[727] = { volumetype=1, path=1, file="vat_010_b_6035", type=0, category=1, }; //「とぉ」
+st[728] = { volumetype=1, path=1, file="vat_010_b_6036", type=0, category=1, }; //「落とす」
+st[732] = { volumetype=1, path=1, file="vat_010_b_6041_c", type=0, category=1, }; //「ルベルアンゲルス エスティス」
+st[733] = { volumetype=1, path=1, file="vat_010_b_6042", type=0, category=1, }; //「連続さまそー」
+st[742] = { volumetype=1, path=1, file="vat_010_b_6046_a", type=0, category=1, }; //「ほい…」
+st[744] = { volumetype=1, path=1, file="vat_010_b_6046_c", type=0, category=1, }; //「ほい…」
+st[745] = { volumetype=1, path=1, file="vat_010_b_6047", type=0, category=1, }; //「ミコルセオ（ミコ＝輝き＋ルセオ＝放射する）」
+st[748] = { volumetype=1, path=1, file="vat_010_b_6050_b", type=0, category=1, }; //「オープン」
+st[749] = { volumetype=1, path=1, file="vat_010_b_6051", type=0, category=1, }; //「ルクスフォーティス」
+
+st[761] = { volumetype=1, path=1, file="vat_010_b_6054_b", type=0, category=1, }; //「びーむ」
+st[762] = { volumetype=1, path=1, file="vat_010_b_6055", type=0, category=1, }; //「放つ」
+st[764] = { volumetype=1, path=1, file="vat_010_b_6058", type=0, category=1, }; //「逃がさない…」
+st[765] = { volumetype=1, path=1, file="vat_010_b_6059", type=0, category=1, }; //「撃ち抜く」
+st[770] = { volumetype=1, path=1, file="vat_010_b_6062", type=0, category=1, }; //「どりる」
+st[771] = { volumetype=1, path=1, file="vat_010_b_6063", type=0, category=1, }; //「急降下」
+st[772] = { volumetype=1, path=1, file="vat_010_b_6064_a", type=0, category=1, }; //「奇襲」
+st[775] = { volumetype=1, path=1, file="vat_010_b_6065_b", type=0, category=1, }; //「トラスウォーラス」
+st[778] = { volumetype=1, path=1, file="vat_010_b_6068_b", type=0, category=1, }; //「はい」
+st[779] = { volumetype=1, path=1, file="vat_010_b_6069", type=0, category=1, }; //「これはおまけ」
+st[794] = { volumetype=1, path=1, file="vat_010_b_6072_e", type=0, category=1, }; //「プリームム（１個目）」
+st[800] = { volumetype=1, path=1, file="vat_010_b_6073_f", type=0, category=1, }; //「セクンドゥム（２個目）」
+st[803] = { volumetype=1, path=1, file="vat_010_b_6074_c", type=0, category=1, }; //「テルティウム（３個目）」
+st[812] = { volumetype=1, path=1, file="vat_010_b_6077_c", type=0, category=1, }; //「シデウスフラグメンツム（星の欠片という意味です ）」
+st[813] = { volumetype=1, path=1, file="vat_010_b_6078", type=0, category=1, }; //「サーテレストリアングルム」
+st[823] = { volumetype=1, path=1, file="vat_010_b_6081_d", type=0, category=1, }; //「ばりあー」
+st[824] = { volumetype=1, path=1, file="vat_010_b_6082", type=0, category=1, }; //「調和をもたらす」
+st[825] = { volumetype=1, path=1, file="vat_010_b_6083_a", type=0, category=1, }; //「コンコルディア」
+st[830] = { volumetype=1, path=1, file="vat_010_b_6086", type=0, category=1, }; //「フリップフロップ」
+st[831] = { volumetype=1, path=1, file="vat_010_b_6087", type=0, category=1, }; //「レヴィオーサ」
+st[842] = { volumetype=1, path=1, file="vat_010_b_6091_c", type=0, category=1, }; //「照射」
+st[843] = { volumetype=1, path=1, file="vat_010_b_6092", type=0, category=1, }; //「きらきら～」
+st[845] = { volumetype=1, path=1, file="vat_010_b_6093_b", type=0, category=1, }; //「ソリスオリオー」
+
+//超必殺技
+st[881] = { volumetype=1, path=1, file="vat_010_b_6501_b", type=0, category=1, }; //「輻射機構展開…ラクテウス オルビス」
+
+st[893] = { volumetype=1, path=1, file="vat_010_b_6515_d", type=0, category=1, }; //「負荷など厭わない（次に続く）」
+st[898] = { volumetype=1, path=1, file="vat_010_b_6516_e", type=0, category=1, }; //「天高く舞え、この背に輝く閃光なる六の翼（次に続く）」
+st[900] = { volumetype=1, path=1, file="vat_010_b_6517_b", type=0, category=1, }; //「コード・ザッハイシオ！」

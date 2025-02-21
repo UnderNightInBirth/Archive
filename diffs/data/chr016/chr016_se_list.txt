@@ -1,0 +1,341 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr016/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(680); // てきとう
+local st = SeList_Table.Status; // 登録しやすいように
+
+//SE
+st[50] = { volumetype=0, path=2, file="SE_BombTheEarth", type=1, category=-1, }; // レーザー最初
+st[51] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, };
+st[55] = { volumetype=0, path=2, file="SE_Bomb", type=1, category=-1, };
+
+st[60] = { volumetype=0, path=2, file="SE_ChargeUp", type=1, category=-1, }; // 拡大ワーグナー
+st[62] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; // 拡大ワーグナースーパーサイヤ
+st[63] = { volumetype=0, path=2, file="SE_BombInsulator", type=1, category=-1, }; // 拡大ワーグナートーチ化
+st[64] = { volumetype=0, path=2, file="SE_SpecialBomb", type=1, category=-1, }; // 拡大ワーグナー上昇
+
+st[66] = { volumetype=0, path=2, file="SE_BloodSplashA", type=1, category=-1, }; 
+st[67] = { volumetype=0, path=2, file="SE_BloodSplashB", type=1, category=-1, }; 
+
+ 
+// ●バトル
+// 登場
+st[100] = { volumetype=1, path=1, file="wag_010_b_2000", type=0, category=1, }; //「出会った不運を呪うがいい」
+st[101] = { volumetype=1, path=1, file="wag_010_b_2001", type=0, category=1, }; //「一瞬で片付けてやる」
+st[102] = { volumetype=1, path=1, file="wag_010_b_2002", type=0, category=1, }; //「我が炎、試してみるか？」
+st[103] = { volumetype=1, path=1, file="wag_010_b_2003", type=0, category=1, }; //「顕現(イグジス)の使い方を教えてやろう」
+st[104] = { volumetype=1, path=1, file="wag_010_b_2004", type=0, category=1, }; //「私と出会うなど、お前も運が悪いな。」
+
+// 登場 特殊
+// 対オリエ
+st[109] = { volumetype=1, path=1, file="wag_010_b_2012", type=0, category=1, }; //「あのときの決着だ、いくぞ優等生」
+st[112] = { volumetype=1, path=1, file="wag_010_b_2014", type=0, category=1, }; //「謀らずとも機は熟したようだな」
+
+// 対ゴルドー
+st[115] = { volumetype=1, path=1, file="wag_010_b_2016", type=0, category=1, }; //「いいだろう、全力で来い。」
+
+// 対メルカヴァ
+st[117] = { volumetype=1, path=1, file="wag_010_b_2019", type=0, category=1, }; //「この『虚無狩り』の前に姿を現すとは」
+
+// 対ハイド
+st[119] = { volumetype=1, path=1, file="wag_010_b_2023", type=0, category=1, }; //「フッ、余程私の事が忘れられぬと見える」
+
+// 対ユズリハ
+st[123] = { volumetype=1, path=1, file="wag_010_b_2029", type=0, category=1, }; //「侍よ、手合わせ願おう」
+
+// 対ゴルドー
+st[126] = { volumetype=1, path=1, file="wag_010_b_2032", type=0, category=1, }; //「御託はいい。さっさと来たらどうだ？」
+
+// ラウンド勝利
+st[135] = { volumetype=1, path=1, file="wag_010_b_2100", type=0, category=1, }; //「立て。次は灰にしてやる。」
+st[136] = { volumetype=1, path=1, file="wag_010_b_2101", type=0, category=1, }; //「お前の本気はそんなものか？」
+st[137] = { volumetype=1, path=1, file="wag_010_b_2102", type=0, category=1, }; //「何度立ち上がっても同じだ」
+
+// ラウンド勝利 掛け合い
+// 対オリエ
+st[143] = { volumetype=1, path=1, file="wag_010_b_2106", type=0, category=1, }; //「どうした優等生、もう終わりか？」
+
+// 対ゴルドー
+st[145] = { volumetype=1, path=1, file="wag_010_b_2109", type=0, category=1, }; //「満足したか？すぐに友の後を追わせてやる」
+
+// 決着勝利 汎用
+st[148] = { volumetype=1, path=1, file="wag_010_b_2111", type=0, category=1, }; //「私との実力差、理解できたか？」
+st[149] = { volumetype=1, path=1, file="wag_010_b_2112", type=0, category=1, }; //「お前もまた、届かぬ者であったか」
+st[150] = { volumetype=1, path=1, file="wag_010_b_2113", type=0, category=1, }; //「躾というのも面倒なものだな」
+st[151] = { volumetype=1, path=1, file="wag_010_b_2114", type=0, category=1, }; //「弱すぎるな。この辺りの者達は」
+
+// 決着勝利 辛勝
+st[154] = { volumetype=1, path=1, file="wag_010_b_2120", type=0, category=1, }; //「立ち塞がる者はすべて焼き払う。それだけだ。」
+
+// 決着勝利 楽勝
+st[157] = { volumetype=1, path=1, file="wag_010_b_2123", type=0, category=1, }; //「所詮この程度か…つまらん」
+
+// 決着勝利 掛け合い
+// 対オリエ
+st[162] = { volumetype=1, path=1, file="wag_010_b_2127", type=0, category=1, }; //「フッ、当然の結果だなオリエ・バラーディアよ」
+
+// 対ゴルドー
+st[164] = { volumetype=1, path=1, file="wag_010_b_2130", type=0, category=1, }; //「すまんな。この命、くれてやるわけにはいかんのだ」
+
+// タイムアップ判定負け
+st[167] = { volumetype=1, path=1, file="wag_010_b_2200", type=0, category=1, }; //「お前如きに…！」
+st[168] = { volumetype=1, path=1, file="wag_010_b_2201", type=0, category=1, }; //「時間切れだと？　聞いていないぞ…」
+st[169] = { volumetype=1, path=1, file="wag_010_b_2202", type=0, category=1, }; //「ええい、忌々しい…」
+st[170] = { volumetype=1, path=1, file="wag_010_b_2203", type=0, category=1, }; //「ふん、逃げ足は一人前ということか」
+
+// 弱攻撃
+st[200] = { volumetype=1, path=1, file="wag_010_b_2300_a", type=0, category=1, }; //「は」
+st[201] = { volumetype=1, path=1, file="wag_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[202] = { volumetype=1, path=1, file="wag_010_b_2302_a", type=0, category=1, }; //「や」
+st[203] = { volumetype=1, path=1, file="wag_010_b_2303_a", type=0, category=1, }; //「し」
+st[204] = { volumetype=1, path=1, file="wag_010_b_2300_b", type=0, category=1, }; //「は」
+st[206] = { volumetype=1, path=1, file="wag_010_b_2302_b", type=0, category=1, }; //「や」
+
+// 中攻撃
+st[223] = { volumetype=1, path=1, file="wag_010_b_2403_a", type=0, category=1, }; //「たぁっ」
+st[225] = { volumetype=1, path=1, file="wag_010_b_2400_b", type=0, category=1, }; //「しゃっ」
+st[226] = { volumetype=1, path=1, file="wag_010_b_2401_b", type=0, category=1, }; //「せあっ」
+st[229] = { volumetype=1, path=1, file="wag_010_b_2404_b", type=0, category=1, }; //「はあっ」
+st[230] = { volumetype=1, path=1, file="wag_010_b_2400_c", type=0, category=1, }; //「しゃっ」
+st[233] = { volumetype=1, path=1, file="wag_010_b_2403_c", type=0, category=1, }; //「たぁっ」
+st[234] = { volumetype=1, path=1, file="wag_010_b_2404_c", type=0, category=1, }; //「はあっ」
+st[235] = { volumetype=1, path=1, file="wag_010_b_2400_d", type=0, category=1, }; //「しゃっ」
+st[238] = { volumetype=1, path=1, file="wag_010_b_2403_d", type=0, category=1, }; //「たぁっ」
+st[239] = { volumetype=1, path=1, file="wag_010_b_2404_d", type=0, category=1, }; //「はあっ」
+
+// 強攻撃
+st[242] = { volumetype=1, path=1, file="wag_010_b_2502_a", type=0, category=1, }; //「ふんっ！」
+st[243] = { volumetype=1, path=1, file="wag_010_b_2503_a", type=0, category=1, }; //「せぇあ！」
+st[244] = { volumetype=1, path=1, file="wag_010_b_2504_a", type=0, category=1, }; //「たぁっ！」
+st[245] = { volumetype=1, path=1, file="wag_010_b_2508_a", type=0, category=1, }; //「斬るっ！」
+st[247] = { volumetype=1, path=1, file="wag_010_b_2500_b", type=0, category=1, }; //「せいっ！」
+st[248] = { volumetype=1, path=1, file="wag_010_b_2501_b", type=0, category=1, }; //「はぁっ！」
+st[249] = { volumetype=1, path=1, file="wag_010_b_2502_b", type=0, category=1, }; //「ふんっ！」
+st[250] = { volumetype=1, path=1, file="wag_010_b_2503_b", type=0, category=1, }; //「せぇあ！」
+st[251] = { volumetype=1, path=1, file="wag_010_b_2504_b", type=0, category=1, }; //「たぁっ！」
+st[253] = { volumetype=1, path=1, file="wag_010_b_2509_b", type=0, category=1, }; //「燃えろっ！」
+
+// 吹き飛ばし攻撃
+st[262] = { volumetype=1, path=1, file="wag_010_b_2601", type=0, category=1, }; //「地を這え！」
+
+// 回避困難な攻撃
+st[268] = { volumetype=1, path=1, file="wag_010_b_2604", type=0, category=1, }; //「そこか！」
+st[269] = { volumetype=1, path=1, file="wag_010_b_2605", type=0, category=1, }; //「砕けろ！」
+
+// その他特殊攻撃
+st[275] = { volumetype=1, path=1, file="wag_010_b_2607", type=0, category=1, }; //「切り裂く！」
+st[276] = { volumetype=1, path=1, file="wag_010_b_2608", type=0, category=1, }; //「そらっ」
+st[277] = { volumetype=1, path=1, file="wag_010_b_2609", type=0, category=1, }; //「落ちろ！」
+st[280] = { volumetype=1, path=1, file="wag_010_b_2611", type=0, category=1, }; //「はあぁぁーっ！」
+st[281] = { volumetype=1, path=1, file="wag_010_b_2612", type=0, category=1, }; //「散れ！」
+st[282] = { volumetype=1, path=1, file="wag_010_b_2613", type=0, category=1, }; //「こっちだ！」
+st[283] = { volumetype=1, path=1, file="wag_010_b_2614", type=0, category=1, }; //「おそい！」
+
+st[284] = { volumetype=1, path=1, file="wag_010_b_6073", type=0, category=1, }; //
+st[285] = { volumetype=1, path=1, file="wag_010_b_5103", type=0, category=1, }; //
+
+// 投げ成功
+st[291] = { volumetype=1, path=1, file="wag_010_b_2700", type=0, category=1, }; //「捕まえたぞ」
+st[292] = { volumetype=1, path=1, file="wag_010_b_2701", type=0, category=1, }; //「燃えつきろ！」
+st[293] = { volumetype=1, path=1, file="wag_010_b_2702", type=0, category=1, }; //「ウァタイル！（裁き）」
+
+// 投げ失敗
+st[296] = { volumetype=1, path=1, file="wag_010_b_2800", type=0, category=1, }; //「なっ」
+st[297] = { volumetype=1, path=1, file="wag_010_b_2801", type=0, category=1, }; //「間違っ（「間違った！？」）」
+
+// 敵の投げ技を回避
+st[300] = { volumetype=1, path=1, file="wag_010_b_2900", type=0, category=1, }; //「触れるな」
+st[301] = { volumetype=1, path=1, file="wag_010_b_2901", type=0, category=1, }; //「汚らわしい」
+
+// ガードキャンセル攻撃
+st[304] = { volumetype=1, path=1, file="wag_010_b_2950", type=0, category=1, }; //「離れろ！」
+
+// 振り向き
+st[309] = { volumetype=1, path=1, file="wag_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki, }; //「ふん」
+st[310] = { volumetype=1, path=1, file="wag_010_b_3001", type=0, category=1, prio=Def_SEP_Furimuki, }; //「よく動く」
+// 待機モーション
+st[313] = { volumetype=1, path=1, file="wag_010_b_3100", type=0, category=1, }; //「犬が、待たせるつもりか？」
+st[314] = { volumetype=1, path=1, file="wag_010_b_3101", type=0, category=1, }; //「さっさと来たらどうだ？」
+// 前方回避
+st[317] = { volumetype=1, path=1, file="wag_010_b_3200", type=0, category=1, }; //「フォルト（前へ）」
+st[318] = { volumetype=1, path=1, file="wag_010_b_3201", type=0, category=1, }; //「シュリット（進む）」
+// ダッシュ
+st[321] = { volumetype=1, path=1, file="wag_010_b_3300", type=0, category=1, }; //「いくぞ」
+st[322] = { volumetype=1, path=1, file="wag_010_b_3301", type=0, category=1, }; //「詰める」
+st[323] = { volumetype=1, path=1, file="wag_010_b_3302", type=0, category=1, }; //「出る」
+
+// アサルト
+st[327] = { volumetype=1, path=1, file="wag_010_b_3310", type=0, category=1, }; //「ふっ」
+st[328] = { volumetype=1, path=1, file="wag_010_b_3311", type=0, category=1, }; //「はっ」
+
+// バックステップ
+st[332] = { volumetype=1, path=1, file="wag_010_b_3400", type=0, category=1, }; //「ふっ」
+st[333] = { volumetype=1, path=1, file="wag_010_b_3401", type=0, category=1, }; //「こっちだ」
+st[334] = { volumetype=1, path=1, file="wag_010_b_3402", type=0, category=1, }; //「引く」
+
+// 弱攻撃ガード
+st[337] = { volumetype=1, path=1, file="wag_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ふっ」
+st[338] = { volumetype=1, path=1, file="wag_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「何だそれは」
+st[339] = { volumetype=1, path=1, file="wag_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「つまらん」
+
+// 中攻撃ガード
+st[342] = { volumetype=1, path=1, file="wag_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「くっ」
+st[343] = { volumetype=1, path=1, file="wag_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「ほう」
+st[344] = { volumetype=1, path=1, file="wag_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「小癪な」
+
+// 強攻撃ガード
+st[348] = { volumetype=1, path=1, file="wag_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「その調子だ」
+st[349] = { volumetype=1, path=1, file="wag_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「その程度か？」
+st[350] = { volumetype=1, path=1, file="wag_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「悪くはない」
+
+// 攻撃を見切り余裕でガード
+st[353] = { volumetype=1, path=1, file="wag_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 }; //「つまらん」
+st[354] = { volumetype=1, path=1, file="wag_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 }; //「見え見えだ」
+st[355] = { volumetype=1, path=1, file="wag_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 }; //「ぬるいぞ」
+
+// ガード失敗ダメージ
+st[358] = { volumetype=1, path=1, file="wag_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 }; //「きゃあっ！？」
+st[359] = { volumetype=1, path=1, file="wag_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 }; //「そんなっ…！」
+st[360] = { volumetype=1, path=1, file="wag_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 }; //「なんだと！？」
+st[361] = { volumetype=1, path=1, file="wag_010_b_3903", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 }; //「この犬が！」
+
+// 受け身
+st[364] = { volumetype=1, path=1, file="wag_010_b_4000", type=0, category=1, prio=Def_SEP_Recover }; //「はっ」
+st[365] = { volumetype=1, path=1, file="wag_010_b_4001", type=0, category=1, prio=Def_SEP_Recover }; //「それで終わりか？」
+st[366] = { volumetype=1, path=1, file="wag_010_b_4002", type=0, category=1, prio=Def_SEP_Recover }; //「反撃開始だ」
+st[367] = { volumetype=1, path=1, file="wag_010_b_4003", type=0, category=1, prio=Def_SEP_Recover }; //「やらせはしない」
+
+// シールド発動
+st[370] = { volumetype=1, path=1, file="wag_010_b_4100", type=0, category=1, }; //「こい」
+st[371] = { volumetype=1, path=1, file="wag_010_b_4101", type=0, category=1, }; //「ここだろう？」
+st[372] = { volumetype=1, path=1, file="wag_010_b_4102", type=0, category=1, }; //「ふん」
+st[373] = { volumetype=1, path=1, file="wag_010_b_4103", type=0, category=1, }; //「受け止める」
+
+// シールド成功
+st[376] = { volumetype=1, path=1, file="wag_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「ここだ！」
+st[377] = { volumetype=1, path=1, file="wag_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「悪くないぞ」
+st[378] = { volumetype=1, path=1, file="wag_010_b_4202", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「見えている」
+
+// 弱攻撃ダメージ
+st[381] = { volumetype=1, path=1, file="wag_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「あっ」
+st[382] = { volumetype=1, path=1, file="wag_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「うっ」
+st[383] = { volumetype=1, path=1, file="wag_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「いっ（痛っ）」
+
+// 中攻撃ダメージ
+st[386] = { volumetype=1, path=1, file="wag_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「ぬぅっ」
+st[387] = { volumetype=1, path=1, file="wag_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「かはっ」
+st[388] = { volumetype=1, path=1, file="wag_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「ちぃっ」
+st[389] = { volumetype=1, path=1, file="wag_010_b_4403", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「アウア！（痛っ）」
+
+// 強攻撃ダメージ
+st[392] = { volumetype=1, path=1, file="wag_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「馬鹿な！」
+st[393] = { volumetype=1, path=1, file="wag_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「つぁっ！」
+st[394] = { volumetype=1, path=1, file="wag_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「そんなっ！」
+st[395] = { volumetype=1, path=1, file="wag_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「あああっ！」
+st[396] = { volumetype=1, path=1, file="wag_010_b_4504", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「シャイセ！（くそっ！）」
+
+// ダウン
+st[400] = { volumetype=1, path=1, file="wag_010_b_4600", type=0, category=1, prio=Def_SEP_KO, }; //「うわあっーーー」
+
+// ラウンド敗北
+st[404] = { volumetype=1, path=1, file="wag_010_b_4650", type=0, category=1, prio=Def_SEP_KO, }; //「なんだと…この私が？」
+st[405] = { volumetype=1, path=1, file="wag_010_b_4651", type=0, category=1, prio=Def_SEP_KO, }; //「犬ごときに遅れをとっただと…？」
+
+// ダウン・ノックアウト
+st[409] = { volumetype=1, path=1, file="wag_010_b_4700", type=0, category=1, prio=Def_SEP_KO, }; //「きゃあああぁぁぁぁ――――――っ」
+st[410] = { volumetype=1, path=1, file="wag_010_b_4701", type=0, category=1, prio=Def_SEP_KO, }; //「うわあぁぁぁーーーーーーーっ！」
+
+// 起き上がり
+st[414] = { volumetype=1, path=1, file="wag_010_b_4800", type=0, category=1, }; //「ここからだ」
+st[415] = { volumetype=1, path=1, file="wag_010_b_4801", type=0, category=1, }; //「侮るなよ」
+st[416] = { volumetype=1, path=1, file="wag_010_b_4802", type=0, category=1, }; //「この犬が…！」
+
+// 起き上がり・瀕死
+st[419] = { volumetype=1, path=1, file="wag_010_b_4900", type=0, category=1, }; //「ええいっ！」
+st[420] = { volumetype=1, path=1, file="wag_010_b_4901", type=0, category=1, }; //「許さんぞ…！」
+st[421] = { volumetype=1, path=1, file="wag_010_b_4902", type=0, category=1, }; //「こいつ！」
+
+// ヴェールオフ
+st[424] = { volumetype=1, path=1, file="wag_010_b_5000", type=0, category=3, }; //「見せてやる！」
+st[425] = { volumetype=1, path=1, file="wag_010_b_5001", type=0, category=3, }; //「終わりだ！」
+st[426] = { volumetype=1, path=1, file="wag_010_b_5002", type=0, category=3, }; //「トランスツェンデンツ！（解放）」
+
+// チェインシフト
+st[429] = { volumetype=1, path=1, file="wag_010_b_5100", type=0, category=1, }; //「ここだ！」
+st[430] = { volumetype=1, path=1, file="wag_010_b_5101", type=0, category=1, }; //「続くぞ！」
+st[431] = { volumetype=1, path=1, file="wag_010_b_5102", type=0, category=1, }; //「まだだっ！」
+
+// コンセントレーション
+st[435] = { volumetype=1, path=1, file="wag_010_b_5200", type=0, category=1, }; //「顕現(イグジス)よ…」
+st[436] = { volumetype=1, path=1, file="wag_010_b_5201", type=0, category=1, }; //「もっと熱く！」
+
+// ヴォーパル
+st[440] = { volumetype=1, path=1, file="wag_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「シャーンセ！（勝機）」
+st[441] = { volumetype=1, path=1, file="wag_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; //「（この私を）止められるかな？」
+
+// ヴォーパル・瀕死
+st[445] = { volumetype=1, path=1, file="wag_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; //「（この私が）折れるとでも？」
+
+// 必殺技
+st[500] = { volumetype=1, path=1, file="wag_010_b_6001", type=0, category=1, }; //「貫く！」
+st[501] = { volumetype=1, path=1, file="wag_010_b_6002", type=0, category=1, }; //「穿つ！」
+st[502] = { volumetype=1, path=1, file="wag_010_b_6003", type=0, category=1, }; //「そこっ！」
+st[504] = { volumetype=1, path=1, file="wag_010_b_6006", type=0, category=1, }; //「クーゲルブリッツ！」
+st[505] = { volumetype=1, path=1, file="wag_010_b_6007", type=0, category=1, }; //「吹き飛べ！」
+st[507] = { volumetype=1, path=1, file="wag_010_b_6010", type=0, category=1, }; //「上からだ！」
+st[508] = { volumetype=1, path=1, file="wag_010_b_6011", type=0, category=1, }; //「地を穿つ！」
+st[510] = { volumetype=1, path=1, file="wag_010_b_6014", type=0, category=1, }; //「シュトルムシュラーク！」
+st[511] = { volumetype=1, path=1, file="wag_010_b_6015", type=0, category=1, }; //「地を、穿つ！」
+st[513] = { volumetype=1, path=1, file="wag_010_b_6018", type=0, category=1, }; //「舞え！」
+st[514] = { volumetype=1, path=1, file="wag_010_b_6019", type=0, category=1, }; //「ツェアレーゲン！」
+st[516] = { volumetype=1, path=1, file="wag_010_b_6021", type=0, category=1, }; //「打ち破る！」
+st[517] = { volumetype=1, path=1, file="wag_010_b_6022", type=0, category=1, }; //「弾く！」
+st[518] = { volumetype=1, path=1, file="wag_010_b_6023", type=0, category=1, }; //「ここだ！」
+st[519] = { volumetype=1, path=1, file="wag_010_b_6024", type=0, category=1, }; //「甘いっ！」
+st[520] = { volumetype=1, path=1, file="wag_010_b_6025", type=0, category=1, }; //「シルトツァック！」
+st[522] = { volumetype=1, path=1, file="wag_010_b_6027", type=0, category=1, }; //「蹴散らす！」
+st[523] = { volumetype=1, path=1, file="wag_010_b_6028", type=0, category=1, }; //「押し潰す！」
+st[524] = { volumetype=1, path=1, file="wag_010_b_6029", type=0, category=1, }; //「邪魔だっ！」
+st[525] = { volumetype=1, path=1, file="wag_010_b_6030", type=0, category=1, }; //「駆ける！」
+st[527] = { volumetype=1, path=1, file="wag_010_b_6033", type=0, category=1, }; //「シュトルムブレハ！」
+st[529] = { volumetype=1, path=1, file="wag_010_b_6036", type=0, category=1, }; //「剣(つるぎ)よ！」
+st[530] = { volumetype=1, path=1, file="wag_010_b_6037", type=0, category=1, }; //「纏(まと)え！」
+
+st[533] = { volumetype=1, path=1, file="wag_010_b_6040", type=0, category=1, }; //「アンキレー！（※盾の名前です）」
+st[534] = { volumetype=1, path=1, file="wag_010_b_6041", type=0, category=1, }; //「輝け！」
+st[536] = { volumetype=1, path=1, file="wag_010_b_6044", type=0, category=1, }; //「紅蓮の炎よ！」
+st[537] = { volumetype=1, path=1, file="wag_010_b_6045", type=0, category=1, }; //「ローエンガルデ！」
+st[539] = { volumetype=1, path=1, file="wag_010_b_6048", type=0, category=1, }; //「はぁーっ！」
+st[540] = { volumetype=1, path=1, file="wag_010_b_6049", type=0, category=1, }; //「飛べ！」
+st[541] = { volumetype=1, path=1, file="wag_010_b_6050", type=0, category=1, }; //「舞い上がれっ！」
+st[542] = { volumetype=1, path=1, file="wag_010_b_6051", type=0, category=1, }; //「焼き払う！」
+st[544] = { volumetype=1, path=1, file="wag_010_b_6054", type=0, category=1, }; //「バッケンローダー！」
+st[546] = { volumetype=1, path=1, file="wag_010_b_6057", type=0, category=1, }; //「舐めろ（次に続く）」
+st[547] = { volumetype=1, path=1, file="wag_010_b_6058", type=0, category=1, }; //「この犬が！」
+
+st[549] = { volumetype=1, path=1, file="wag_010_b_6059", type=0, category=1, }; //「そらっ（次に続く）」
+st[550] = { volumetype=1, path=1, file="wag_010_b_6060", type=0, category=1, }; //「よく燃えるな」
+
+st[551] = { volumetype=1, path=1, file="wag_010_b_2401_d", type=0, category=1, }; // 「せや！」
+st[552] = { volumetype=1, path=1, file="wag_010_b_2403_b", type=0, category=1, }; // 「たあ！」
+st[553] = { volumetype=1, path=1, file="wag_010_b_6064", type=0, category=1, }; //「エアオーベルング！」
+st[555] = { volumetype=1, path=1, file="wag_010_b_6068", type=0, category=1, }; //「燃え盛れ！」
+st[556] = { volumetype=1, path=1, file="wag_010_b_6069", type=0, category=1, }; //「へレムブラント！」
+
+// 超必殺技
+st[566] = { volumetype=1, path=1, file="wag_010_b_6501", type=0, category=1, }; //「これで終わりだ！（次に続く）　」
+st[567] = { volumetype=1, path=1, file="wag_010_b_6502", type=0, category=1, }; //「ヒッツェフォーゲル！」
+st[569] = { volumetype=1, path=1, file="wag_010_b_6515", type=0, category=1, }; //「ここに終わりを告げよう（次に続く）」
+st[570] = { volumetype=1, path=1, file="wag_010_b_6516", type=0, category=1, }; //「我は『光輪(こうりん)』が剣(つるぎ)。光集(つど)わせ、闇を払う、その証たる者（次に続く）」
+st[571] = { volumetype=1, path=1, file="wag_010_b_6517", type=0, category=1, }; //「天炎…。メギドオーセレステグレーセ！」

@@ -1,0 +1,346 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr010/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(800); // てきとう
+local st = SeList_Table.Status; // 登録しやすいように
+
+st[9] = { volumetype=0, path=2, file="SE_SwingGlass", type=0, category=0, }; //落下
+st[10] = { volumetype=0, path=2, file="SE_Hari_Appear", type=0, category=-1, }; 
+st[20] = { volumetype=0, path=2, file="SE_Hari_Vanish", type=0, category=-1, }; 
+st[30] = { volumetype=0, path=2, file="SE_BallExplosion", type=0, category=0, }; //236
+st[31] = { volumetype=0, path=2, file="SE_ApperLightBlade", type=0, category=0, }; //623
+st[32] = { volumetype=0, path=2, file="SE_DrawnSword", type=0, category=0, }; //214 421の針発射
+st[35] = { volumetype=0, path=2, file="SE_AppearInsulator", type=0, category=0, }; //投げ・勝利の吸い込みＳＥ
+st[36] = { volumetype=0, path=2, file="SE_BloodFallDown", type=0, category=0, }; //勝利のすいこみ終了ＳＥ
+st[37] = { volumetype=0, path=0, file="SE239_Concentration_Loop", type=1, category=-1, }; //登場時のフォンフォン
+st[38] = { volumetype=0, path=2, file="SE_AppearInsulator", type=1, category=-1, }; //登場時のフォンフォン消滅フォン
+
+st[80] = { volumetype=0, path=2, file="SE_Hari_Appear", type=1, category=-1, }; //始動出現ＳＥ
+st[81] = { volumetype=0, path=2, file="SE_SwingLightSword", type=1, category=-1, }; //ワープで消えるＳＥ
+st[82] = { volumetype=0, path=2, file="SE_ChargeUp", type=1, category=-1, }; //闇が広がる
+st[83] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, }; //闇が広がってなんかゴゴゴゴ
+
+st[85] = { volumetype=0, path=0, file="SE202_BladeC", type=1, category=-1, volume=10000 }; //IXきりきざむ
+st[86] = { volumetype=0, path=0, file="SE202_BladeC", type=1, category=-1, volume=5000 }; //IXきりきざむ
+st[87] = { volumetype=0, path=0, file="SE202_BladeC", type=1, category=-1, volume=2500 }; //IXきりきざむ
+
+st[90] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IXとどめ
+
+st[95] = { volumetype=0, path=2, file="SE_BigBomb_Short", type=1, category=-1, }; //インフィニットワースとどめ
+
+
+//●バトル
+//登場
+st[100] = { volumetype=1, path=1, file="hil_010_b_2000_a", type=0, category=1, }; //「うふふふ、楽しませて頂戴？」
+st[101] = { volumetype=1, path=1, file="hil_010_b_2001_a", type=0, category=1, }; //「讃えなさい、このアタシを…！」
+st[102] = { volumetype=1, path=1, file="hil_010_b_2002_a", type=0, category=1, }; //「どぉ～れ、少し遊んであげようかしら？」
+
+//登場 特殊
+//対ハイド
+st[110] = { volumetype=1, path=1, file="hil_010_b_2012", type=0, category=1, }; //「その余裕、舐められたものね」（ハイド「開き直ってるだけだ、気にすんなよ」）
+
+//対ケイアス
+st[111] = { volumetype=1, path=1, file="hil_010_b_2016", type=0, category=1, }; //（ケイアス「ま、キミとぶつかるのも想定内ではある」）「一方的な敗北は、想定内かしら？」
+
+//対リンネ
+st[112] = { volumetype=1, path=1, file="hil_010_b_2019", type=0, category=1, }; //「アンタも倒す、アイツも倒す。このアタシが」（リンネ「出来やしないさ。今のお前にはな……）
+
+//対ゴルドー
+st[113] = { volumetype=1, path=1, file="hil_010_b_2022", type=0, category=1, }; //「白黒つけましょ？　ねぇ……？」（ゴルドー「踏み込みすぎると、大ケガするぜ？）
+
+//対エンキドゥ
+st[114] = { volumetype=1, path=1, file="hil_010_b_2025", type=0, category=1, }; //「今まで退屈だったでしょ～？」（エンキドゥ「この瞬間のための、代償であろう）
+
+//対クオン
+st[115] = { volumetype=1, path=1, file="hil_010_b_2028", type=0, category=1, }; //「ホントここまで長かったわぁ……」（クオン「永遠を望むなら、待つ事には慣れておくんだね」）
+
+//ラウンド勝利
+st[130] = { volumetype=1, path=1, file="hil_010_b_2100", type=0, category=1, }; //「ふふっ、雑魚過ぎて話になんないわぁ？」
+st[131] = { volumetype=1, path=1, file="hil_010_b_2101", type=0, category=1, }; //「これが力というものよぉ、圧倒的なねぇ」
+
+//ラウンド勝利 掛け合い
+//対ケイアス
+st[140] = { volumetype=1, path=1, file="hil_010_b_2106", type=0, category=1, }; //「さっすがケイアスぅ。見直したわぁ」
+
+//決着勝利 汎用
+st[150] = { volumetype=1, path=1, file="hil_010_b_2111", type=0, category=1, }; //「…んっふっふっ…あーっはっはっはっはっは！」
+st[151] = { volumetype=1, path=1, file="hil_010_b_2112", type=0, category=1, }; //「ふふっ、惨めなものね」
+
+//決着勝利 辛勝
+st[155] = { volumetype=1, path=1, file="hil_010_b_2120", type=0, category=1, }; //「手加減してあげたんだけど、気づいたかしら？」
+
+//決着勝利 楽勝
+st[158] = { volumetype=1, path=1, file="hil_010_b_2123", type=0, category=1, }; //「あらぁ、弱いのね」
+
+//決着勝利 掛け合い
+//対ケイアス/ゴルドー/エンキドゥ
+st[160] = { volumetype=1, path=1, file="hil_010_b_2127", type=0, category=1, }; //「黙ってアタシについてくればいいのよぉ」
+
+//対ハイド/リンネ
+st[161] = { volumetype=1, path=1, file="hil_010_b_2130", type=0, category=1, }; //「あーはっはっはっはっ！最高の気分だわぁ」
+
+//対クオン
+st[162] = { volumetype=1, path=1, file="hil_010_b_2133", type=0, category=1, }; //「再誕(リヴァース)も大したことないのねぇ」
+
+//タイムアップ判定負け
+st[170] = { volumetype=1, path=1, file="hil_010_b_2200", type=0, category=1, }; //「あぁら、残念ねぇ…ふふふ」
+st[171] = { volumetype=1, path=1, file="hil_010_b_2201", type=0, category=1, }; //「逃げ回ってばかりで、それで勝ったつもり？」
+st[172] = { volumetype=1, path=1, file="hil_010_b_2202", type=0, category=1, }; //「アタシは健在。…これで勝ったと言えるのかしら？」
+
+//弱攻撃
+st[180] = { volumetype=1, path=1, file="hil_010_b_2300_a", type=0, category=1, }; //「は」
+st[181] = { volumetype=1, path=1, file="hil_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[183] = { volumetype=1, path=1, file="hil_010_b_2303_a", type=0, category=1, }; //「し」
+st[184] = { volumetype=1, path=1, file="hil_010_b_2300_b", type=0, category=1, }; //「は」
+st[186] = { volumetype=1, path=1, file="hil_010_b_2302_b", type=0, category=1, }; //「や」
+
+//中攻撃
+st[192] = { volumetype=1, path=1, file="hil_010_b_2402_a", type=0, category=1, }; //「たっ」
+st[194] = { volumetype=1, path=1, file="hil_010_b_2404_a", type=0, category=1, }; //「えい」
+st[195] = { volumetype=1, path=1, file="hil_010_b_2405_a", type=0, category=1, }; //「どう？」
+st[200] = { volumetype=1, path=1, file="hil_010_b_2404_b", type=0, category=1, }; //「えい」
+st[202] = { volumetype=1, path=1, file="hil_010_b_2405_c", type=0, category=1, }; //「どう？」
+
+//強攻撃
+st[210] = { volumetype=1, path=1, file="hil_010_b_2500_a", type=0, category=1, }; //「これは？」
+st[211] = { volumetype=1, path=1, file="hil_010_b_2501_a", type=0, category=1, }; //「こっちなら？」
+st[212] = { volumetype=1, path=1, file="hil_010_b_2502_a", type=0, category=1, }; //「痛い？」
+st[214] = { volumetype=1, path=1, file="hil_010_b_2504_a", type=0, category=1, }; //「ほらほらぁ！」
+st[215] = { volumetype=1, path=1, file="hil_010_b_2500_b", type=0, category=1, }; //「これは？」
+st[218] = { volumetype=1, path=1, file="hil_010_b_2503_b", type=0, category=1, }; //「これはどう？」
+
+//吹き飛ばし攻撃
+st[230] = { volumetype=1, path=1, file="hil_010_b_2600", type=0, category=1, }; //「行きなさい」
+st[231] = { volumetype=1, path=1, file="hil_010_b_2601", type=0, category=1, }; //「刺しなさい」
+
+//回避困難な攻撃
+st[240] = { volumetype=1, path=1, file="hil_010_b_2604", type=0, category=1, }; //「うがちなさい」
+st[241] = { volumetype=1, path=1, file="hil_010_b_2605", type=0, category=1, }; //「砕きなさい」
+st[242] = { volumetype=1, path=1, file="hil_010_b_2606", type=0, category=1, }; //「跪きなさぁい」
+
+//その他特殊攻撃
+st[250] = { volumetype=1, path=1, file="hil_010_b_2607", type=0, category=1, }; //「回りなさい」
+st[251] = { volumetype=1, path=1, file="hil_010_b_2608", type=0, category=1, }; //「落ちなさい」
+st[252] = { volumetype=1, path=1, file="hil_010_b_2609", type=0, category=1, }; //「無様ねぇ？」
+st[255] = { volumetype=1, path=1, file="hil_010_b_2612", type=0, category=1, }; //「後悔させたげる！」
+st[256] = { volumetype=1, path=1, file="hil_010_b_2613", type=0, category=1, }; //「それ」
+st[257] = { volumetype=1, path=1, file="hil_010_b_2614", type=0, category=1, }; //「ウフフッ」
+
+st[258] = { volumetype=1, path=1, file="hil_010_b_2504_b", type=0, category=1, }; //
+st[259] = { volumetype=1, path=1, file="hil_010_b_2611", type=0, category=1, }; //
+
+//投げ成功
+st[260] = { volumetype=1, path=1, file="hil_010_b_2700", type=0, category=1, }; //「ふんふーん♪」
+st[261] = { volumetype=1, path=1, file="hil_010_b_2701", type=0, category=1, }; //「脆いものねぇ」
+
+//投げ失敗
+st[270] = { volumetype=1, path=1, file="hil_010_b_2800", type=0, category=1, }; //「ああん」
+st[271] = { volumetype=1, path=1, file="hil_010_b_2801", type=0, category=1, }; //「あらら」
+
+//敵の投げ技を回避
+st[280] = { volumetype=1, path=1, file="hil_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「慌てないでぇ？」
+st[281] = { volumetype=1, path=1, file="hil_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「乱暴ねぇ」
+
+//ガードキャンセル攻撃
+st[290] = { volumetype=1, path=1, file="hil_010_b_2950", type=0, category=1, }; //「させないわぁ！」
+
+//振り向き
+st[300] = { volumetype=1, path=1, file="hil_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki}; //「あら」
+
+//待機モーション
+st[310] = { volumetype=1, path=1, file="hil_010_b_3100", type=0, category=1, }; //「威勢だけかしら？」
+st[311] = { volumetype=1, path=1, file="hil_010_b_3101", type=0, category=1, }; //「いつまで待たせるつもりかしら？」
+
+//前方回避
+st[320] = { volumetype=1, path=1, file="hil_010_b_3200", type=0, category=1, }; //「これはぁ？」
+st[321] = { volumetype=1, path=1, file="hil_010_b_3201", type=0, category=1, }; //「かんた～ん」
+
+//ダッシュ
+st[330] = { volumetype=1, path=1, file="hil_010_b_3300", type=0, category=1, }; //「ふふっ」
+st[331] = { volumetype=1, path=1, file="hil_010_b_3301", type=0, category=1, }; //「行くわよ？」
+st[332] = { volumetype=1, path=1, file="hil_010_b_3302", type=0, category=1, }; //「逃げないでね」
+
+//アサルト
+st[340] = { volumetype=1, path=1, file="hil_010_b_3310", type=0, category=1, }; //「ふっ」
+st[341] = { volumetype=1, path=1, file="hil_010_b_3311", type=0, category=1, }; //「さぁて」
+
+//バックステップ
+st[350] = { volumetype=1, path=1, file="hil_010_b_3400", type=0, category=1, }; //「怖いわぁ」
+st[351] = { volumetype=1, path=1, file="hil_010_b_3401", type=0, category=1, }; //「嫌ねぇ…」
+
+//弱攻撃ガード
+st[360] = { volumetype=1, path=1, file="hil_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ふん」
+st[361] = { volumetype=1, path=1, file="hil_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「はっ（鼻で笑う）」
+st[362] = { volumetype=1, path=1, file="hil_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ぬっるぅ（温い）」
+
+//中攻撃ガード
+st[370] = { volumetype=1, path=1, file="hil_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「へぇー？」
+st[371] = { volumetype=1, path=1, file="hil_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「まあっ」
+st[372] = { volumetype=1, path=1, file="hil_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「本気出したら？」
+
+//強攻撃ガード
+st[380] = { volumetype=1, path=1, file="hil_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「強いわぁ」
+st[381] = { volumetype=1, path=1, file="hil_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「くっ…」
+st[382] = { volumetype=1, path=1, file="hil_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「なかなかの威力ね」
+st[383] = { volumetype=1, path=1, file="hil_010_b_3703", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「砕けちゃいそう」
+
+//攻撃を見切り余裕でガード
+st[390] = { volumetype=1, path=1, file="hil_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「そのへんにしといたらぁ？」
+st[391] = { volumetype=1, path=1, file="hil_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「無駄な足掻きねぇ」
+st[392] = { volumetype=1, path=1, file="hil_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「雑な攻めねぇ」
+
+//ガード失敗ダメージ
+st[400] = { volumetype=1, path=1, file="hil_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「はあ？」
+st[401] = { volumetype=1, path=1, file="hil_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「あ゛ぁ？」
+st[402] = { volumetype=1, path=1, file="hil_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「卑怯よぉ」
+
+//受け身
+st[410] = { volumetype=1, path=1, file="hil_010_b_4000", type=0, category=1, prio=Def_SEP_Recover, }; //「お上手～」
+st[412] = { volumetype=1, path=1, file="hil_010_b_4001_b", type=0, category=1, prio=Def_SEP_Recover, }; //「もったいなぁ～い」
+st[414] = { volumetype=1, path=1, file="hil_010_b_4002_b", type=0, category=1, prio=Def_SEP_Recover, }; //「まるで効いてないわぁ」
+
+//シールド発動
+st[420] = { volumetype=1, path=1, file="hil_010_b_4100", type=0, category=1, }; //「次はどう来るのかしら？」
+st[421] = { volumetype=1, path=1, file="hil_010_b_4101", type=0, category=1, }; //「さぁて」
+st[422] = { volumetype=1, path=1, file="hil_010_b_4102", type=0, category=1, }; //「来たらどぉ？」
+
+//シールド成功
+st[430] = { volumetype=1, path=1, file="hil_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「その程度？」
+st[431] = { volumetype=1, path=1, file="hil_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「予想通りねぇ」
+st[432] = { volumetype=1, path=1, file="hil_010_b_4202", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「バレバレねぇ」
+st[433] = { volumetype=1, path=1, file="hil_010_b_4203", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「くだらない技ねぇ」
+
+//弱攻撃ダメージ
+st[450] = { volumetype=1, path=1, file="hil_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「あっ」
+st[451] = { volumetype=1, path=1, file="hil_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「うっ」
+st[452] = { volumetype=1, path=1, file="hil_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「くっ」
+
+//中攻撃ダメージ
+st[460] = { volumetype=1, path=1, file="hil_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「きゃ」
+st[461] = { volumetype=1, path=1, file="hil_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「あん」
+st[462] = { volumetype=1, path=1, file="hil_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「がっ」
+
+//強攻撃ダメージ
+st[470] = { volumetype=1, path=1, file="hil_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「ぐうぅ！」
+st[471] = { volumetype=1, path=1, file="hil_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「痛いっ」
+st[472] = { volumetype=1, path=1, file="hil_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「調子にのっちゃって」
+st[473] = { volumetype=1, path=1, file="hil_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「このアタシに！」
+
+//ダウン
+st[480] = { volumetype=1, path=1, file="hil_010_b_4600", type=0, category=1, prio=Def_SEP_KO }; //「きゃぁああっーー」
+st[481] = { volumetype=1, path=1, file="hil_010_b_4601", type=0, category=1, prio=Def_SEP_KO }; //「ひゃああっ！」
+
+//ラウンド敗北
+st[490] = { volumetype=1, path=1, file="hil_010_b_4650", type=0, category=1, prio=Def_SEP_KO }; //「アタシに膝をつかせるなんて…」
+st[491] = { volumetype=1, path=1, file="hil_010_b_4651", type=0, category=1, prio=Def_SEP_KO }; //「やだ…服が汚れちゃうわぁ」
+
+//ラウンド敗北　掛け合い
+//対ケイアス
+st[500] = { volumetype=1, path=1, file="hil_010_b_4653", type=0, category=1, prio=Def_SEP_KO }; //「最初から本気出しなさいよぉ……」
+
+//ダウン・ノックアウト
+st[510] = { volumetype=1, path=1, file="hil_010_b_4700", type=0, category=1, prio=Def_SEP_KO }; //「きゃあああぁぁーーーーーー」
+st[511] = { volumetype=1, path=1, file="hil_010_b_4701", type=0, category=1, prio=Def_SEP_KO }; //「このアタシが敗れるなんてーーーー」
+st[512] = { volumetype=1, path=1, file="hil_010_b_4702", type=0, category=1, prio=Def_SEP_KO }; //「こんな…ことが！？」
+
+//起き上がり
+st[520] = { volumetype=1, path=1, file="hil_010_b_4800", type=0, category=1, }; //「その調子よ…」
+st[521] = { volumetype=1, path=1, file="hil_010_b_4801", type=0, category=1, }; //「酷いことするのねぇ…」
+st[522] = { volumetype=1, path=1, file="hil_010_b_4802", type=0, category=1, }; //「この程度かしら？」
+
+//起き上がり・瀕死
+st[530] = { volumetype=1, path=1, file="hil_010_b_4900", type=0, category=1, }; //「許さない…」
+st[531] = { volumetype=1, path=1, file="hil_010_b_4901", type=0, category=1, }; //「こ、ここまでとはね…！（ここまで強いとは）」
+st[532] = { volumetype=1, path=1, file="hil_010_b_4902", type=0, category=1, }; //「屈辱だわ……」
+
+//ヴェールオフ
+st[540] = { volumetype=1, path=1, file="hil_010_b_5000", type=0, category=3, }; //「本気出しちゃおうかしら？」
+st[541] = { volumetype=1, path=1, file="hil_010_b_5001", type=0, category=3, }; //「さすがに飽きてきちゃったわぁ」
+
+//チェインシフト
+st[550] = { volumetype=1, path=1, file="hil_010_b_5100", type=0, category=1, }; //「容赦しないから」
+st[551] = { volumetype=1, path=1, file="hil_010_b_5101", type=0, category=1, }; //「手加減できないわぁ」
+
+//コンセントレーション
+st[560] = { volumetype=1, path=1, file="hil_010_b_5200", type=0, category=1, }; //「ハァァァアアアア…ッ」
+st[561] = { volumetype=1, path=1, file="hil_010_b_5201", type=0, category=1, }; //「ウフフフフフ…」
+
+//ヴォーパル
+st[570] = { volumetype=1, path=1, file="hil_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「ふっふーん（ご機嫌）」
+st[571] = { volumetype=1, path=1, file="hil_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; //「もらったわ（この勝負もらったの意）」
+
+//ヴォーパル・瀕死
+st[580] = { volumetype=1, path=1, file="hil_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; //「見てなさい…？」
+
+//必殺技
+st[590] = { volumetype=1, path=1, file="hil_010_b_6000", type=0, category=1, }; //「スキューア」
+st[591] = { volumetype=1, path=1, file="hil_010_b_6002", type=0, category=1, }; //「逃がさないわぁ」
+st[595] = { volumetype=1, path=1, file="hil_010_b_6005", type=0, category=1, }; //「覚悟なさい？」
+st[600] = { volumetype=1, path=1, file="hil_010_b_6008", type=0, category=1, }; //「そこね」
+st[601] = { volumetype=1, path=1, file="hil_010_b_6009", type=0, category=1, }; //「いくわよぉ～」
+st[605] = { volumetype=1, path=1, file="hil_010_b_6012", type=0, category=1, }; //「撃ち抜いてあげる！」
+st[610] = { volumetype=1, path=1, file="hil_010_b_6015", type=0, category=1, }; //「踊りなさぁい」
+st[611] = { volumetype=1, path=1, file="hil_010_b_6016", type=0, category=1, }; //「苦しみなさぁ～い？」
+st[615] = { volumetype=1, path=1, file="hil_010_b_6019", type=0, category=1, }; //「貫きなさい！」
+st[616] = { volumetype=1, path=1, file="hil_010_b_6020", type=0, category=1, }; //「インタフェアランス！」
+st[620] = { volumetype=1, path=1, file="hil_010_b_6023", type=0, category=1, }; //「はぁい？」
+st[621] = { volumetype=1, path=1, file="hil_010_b_6024", type=0, category=1, }; //「ふ…っ」
+st[622] = { volumetype=1, path=1, file="hil_010_b_6025", type=0, category=1, }; //「こっちよ？」
+st[623] = { volumetype=1, path=1, file="hil_010_b_6026", type=0, category=1, }; //「ディズマルサイン」
+st[640] = { volumetype=1, path=1, file="hil_010_b_6034", type=0, category=1, }; //「こういうのはどう？」
+st[641] = { volumetype=1, path=1, file="hil_010_b_6035", type=0, category=1, }; //「乱してあげるぅ（ペースを）」
+st[642] = { volumetype=1, path=1, file="hil_010_b_6036", type=0, category=1, }; //「コンデンス グルーム」
+st[643] = { volumetype=1, path=1, file="hil_010_b_6037", type=0, category=1, }; //「時を刻むわぁ」
+st[646] = { volumetype=1, path=1, file="hil_010_b_6040", type=0, category=1, }; //「寂しがらなくてもいいのよぉ」
+st[647] = { volumetype=1, path=1, file="hil_010_b_6041", type=0, category=1, }; //「照らしてあげる」
+st[648] = { volumetype=1, path=1, file="hil_010_b_6042", type=0, category=1, }; //「コンデンス グルーム！」 強め
+st[650] = { volumetype=1, path=1, file="hil_010_b_6045", type=0, category=1, }; //「とっておきよぉ～」
+st[651] = { volumetype=1, path=1, file="hil_010_b_6046", type=0, category=1, }; //「諦めたらぁ？」
+st[655] = { volumetype=1, path=1, file="hil_010_b_6048", type=0, category=1, }; //「耐えられるかしらぁ～？」
+st[660] = { volumetype=1, path=1, file="hil_010_b_6050", type=0, category=1, }; //「出なさい」
+st[661] = { volumetype=1, path=1, file="hil_010_b_6051", type=0, category=1, }; //「フォールンペイン」
+st[670] = { volumetype=1, path=1, file="hil_010_b_6054", type=0, category=1, }; //「跳ねなさい」
+st[671] = { volumetype=1, path=1, file="hil_010_b_6055", type=0, category=1, }; //「ピラー」
+st[672] = { volumetype=1, path=1, file="hil_010_b_6056", type=0, category=1, }; //「突き上げる」
+
+st[676] = { volumetype=1, path=1, file="hil_010_b_6059", type=0, category=1, }; //「こんなのもあるわよ？」
+st[677] = { volumetype=1, path=1, file="hil_010_b_6060", type=0, category=1, }; //「レバナンスピラー！」
+st[680] = { volumetype=1, path=1, file="hil_010_b_6063", type=0, category=1, }; //「アンチディスパーシヴ」
+st[681] = { volumetype=1, path=1, file="hil_010_b_6064", type=0, category=1, }; //「そぉ～れ」
+st[690] = { volumetype=1, path=1, file="hil_010_b_6068", type=0, category=1, }; //「それ、行きなさい」
+st[691] = { volumetype=1, path=1, file="hil_010_b_6069", type=0, category=1, }; //「ネイルトーレント！」
+st[700] = { volumetype=1, path=1, file="hil_010_b_6072", type=0, category=1, }; //「食らいなさい」
+st[701] = { volumetype=1, path=1, file="hil_010_b_6073", type=0, category=1, }; //「重いわよぉ？」
+st[702] = { volumetype=1, path=1, file="hil_010_b_6074", type=0, category=1, }; //「あはっ」
+st[703] = { volumetype=1, path=1, file="hil_010_b_6075", type=0, category=1, }; //「トライファーケット」
+st[710] = { volumetype=1, path=1, file="hil_010_b_6078", type=0, category=1, }; //「近寄るんじゃないわぁ」
+st[711] = { volumetype=1, path=1, file="hil_010_b_6079", type=0, category=1, }; //「少し離れなさぁい？」
+st[712] = { volumetype=1, path=1, file="hil_010_b_6080", type=0, category=1, }; //「寄らないでちょうだい」
+
+st[730] = { volumetype=1, path=1, file="hil_010_b_6092", type=0, category=1, }; //「その場に留まりなさい」
+st[731] = { volumetype=1, path=1, file="hil_010_b_6093", type=0, category=1, }; //「しのばせる」
+st[732] = { volumetype=1, path=1, file="hil_010_b_6094", type=0, category=1, }; //「シャドウアウェイツ」
+
+//超必殺技
+st[750] = { volumetype=1, path=1, file="hil_010_b_6501", type=0, category=1, }; //「あーあ～！（次に続く）」
+st[751] = { volumetype=1, path=1, file="hil_010_b_6502", type=0, category=1, }; //「ふふふっ…ふはははっ…あーっはっはっはっはぁ！」
+st[753] = { volumetype=1, path=1, file="hil_010_b_6503", type=0, category=1, }; //「やんなっちゃうわぁ～（次に続く）」
+
+st[756] = { volumetype=1, path=1, file="hil_010_b_6505", type=0, category=1, }; //「やめやめぇ～（次に続く）」
+st[757] = { volumetype=1, path=1, file="hil_010_b_6506", type=0, category=1, }; //「眩(まばゆ)き闇に包まれなさい！」
+st[760] = { volumetype=1, path=1, file="hil_010_b_6515", type=0, category=1, }; //「覚悟なさい？（次に続く）」
+st[761] = { volumetype=1, path=1, file="hil_010_b_6516", type=0, category=1, };//「パラドクス・アヴァンダンス！相反する眩き闇よ、この空虚なるヴェセルを満たせ（次に続く）」
+st[762] = { volumetype=1, path=1, file="hil_010_b_6517", type=0, category=1, }; //「イン・ザ・ダークネス！」
+
+

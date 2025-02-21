@@ -1,0 +1,222 @@
+//コマンドテーブル skillは格ゲーコマンド表記
+btl_debPrint2("\n[WAL_CommandTable]");
+
+local t =
+{
+	Skill_41236SP_ABC = {},
+	Skill_41236SP = {},
+
+	Skill_63214EX = {
+		command = ["@C,<,37@6C"],
+		function CmdBeforeFunc()
+		{
+			// ダッシュ攻撃の入力っぽかったら失敗
+			if( BMvTbl.CheckCommandString( { command = "0606+C", lastdelay = 1 } ) )
+			{
+				print("\n ダッシュ攻撃っぽいので失敗:EX");
+				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_63214EX, time=2 } );
+				return 0;
+			}
+			
+			if( Battle_Std.CheckChargeCommandActivation_DashF() ) return 0; // タメ分割で漏れないように
+
+			return 1;
+		}
+	},
+	Skill_63214BorC = {
+		command = ["@C,<,37@6B","@C,<,37@6C"],
+		function CmdBeforeFunc()
+		{
+			// ダッシュ攻撃の入力っぽかったら失敗
+			if( BMvTbl.CheckCommandString( { command = ["0606+B","0606+C"], lastdelay = 1 } ) )
+			{
+				print("\n ダッシュ攻撃っぽいので失敗:B");
+				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_63214B, time=2 } );
+				return 0;
+			}
+			
+			// ボタンダッシュの入力っぽかったら両方失敗
+			if( BMvTbl.CheckCommandString( { command = ["6+A+B"], lastdelay = 1 } ) )
+			{
+				// _dp("\n ボタンダッシュ:B");
+				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_63214A, time=10 } );
+				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_63214B, time=10 } );
+				return 0;
+			}
+			
+			if( Battle_Std.CheckChargeCommandActivation_DashF() ) return 0; // タメ分割で漏れないように
+
+			return 1;
+		}
+	},
+	Skill_63214A = {
+		command = ["@C,<,37@6A"],
+		function CmdBeforeFunc()
+		{
+			// ダッシュ攻撃の入力っぽかったら失敗
+			if( BMvTbl.CheckCommandString( { command = ["0606+A"], lastdelay = 1 } ) )
+			{
+				print("\n ダッシュ攻撃っぽいので失敗:A");
+				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_63214A, time=2 } );
+				return 0;
+			}
+			
+			// ボタンダッシュの入力っぽかったら両方失敗
+			if( BMvTbl.CheckCommandString( { command = ["6+A+B"], lastdelay = 1 } ) )
+			{
+				// _dp("\n ボタンダッシュ:A");
+				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_63214A, time=10 } );
+				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_63214B, time=10 } );
+				return 0;
+			}
+			
+			if( Battle_Std.CheckChargeCommandActivation_DashF() ) return 0; // タメ分割で漏れないように
+			
+			return 1;
+		}
+	},
+
+	Skill_CircleEX = {
+		command = [ "@R,2@C","@R,1@C","41236^C","63214^C","4136^C","6314^C","4236^C","4126^C","6214^C","6324^C" ],
+		function CmdAfterFunc()
+		{
+			if( BMvTbl.IsCpu()==0 ) // プレイヤーの時
+			{
+				local cmdpos = BCMDTbl.GetSuccessButtonPos();
+				local double_circle = ( cmdpos == 0 )? 1 : 0;
+				BMvTbl.SetPP( def_PP_Wal_DoubleCircle, double_circle );
+				_dp("\n ２回転チェック:"+double_circle );
+			}
+			else // CPUの時
+			{
+				BMvTbl.SetPP( def_PP_Wal_DoubleCircle, 0 );
+			}
+			return 1;
+		}
+	},
+	Skill_CircleBorC = {
+		command = [ "@R,2@C","@R,2@B","@R,1@C","@R,1@B","41236^B","63214^B","41236^C","63214^C", "4136^B","6314^B","4236^B","4126^B","6214^B","6324^B", "4136^C","6314^C","4236^C","4126^C","6214^C","6324^C" ],
+		function CmdAfterFunc()
+		{
+			if( BMvTbl.IsCpu()==0 ) // プレイヤーの時
+			{
+				local cmdpos = BCMDTbl.GetSuccessButtonPos();
+				local double_circle = ( cmdpos == 0 || cmdpos == 1 )? 1 : 0;
+				BMvTbl.SetPP( def_PP_Wal_DoubleCircle, double_circle );
+				_dp("\n ２回転チェック:"+double_circle );
+			}
+			else // CPUの時
+			{
+				BMvTbl.SetPP( def_PP_Wal_DoubleCircle, 0 );
+			}
+			return 1;
+		}
+	},
+	Skill_CircleA = {
+		command = [ "@R,2@A","@R,1@A","41236^A","63214^A", "4136^A","6314^A","4236^A","4126^A","6214^A","6324^A" ],
+		function CmdAfterFunc()
+		{
+			if( BMvTbl.IsCpu()==0 ) // プレイヤーの時
+			{
+				local cmdpos = BCMDTbl.GetSuccessButtonPos();
+				local double_circle = ( cmdpos == 0 && BMvTbl.IsCpu()==0 )? 1 : 0;
+				BMvTbl.SetPP( def_PP_Wal_DoubleCircle, double_circle );
+				_dp("\n ２回転チェック:"+double_circle );
+			}
+			else // CPUの時
+			{
+				BMvTbl.SetPP( def_PP_Wal_DoubleCircle, 0 );
+			}
+			return 1;
+		}
+	},
+	
+	Skill_236EX = {},
+	Skill_236BorC = {},
+	Skill_236A = {}
+
+	Skill_236_Add = {
+		num = def_CN_Skill_AddCommand1,
+		command = ["4+A","4+B","4+C"],
+		
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			HitStatus = "Hit",
+			MvCheck = { Only = ["Mv_Skill_236A","Mv_Skill_236B"] },
+			FrameIDCheck = { Only = [100,150] },
+		},
+	}
+
+	Skill_623EX = {},
+	Skill_623BorC = {},
+	Skill_623A = {},
+
+	Skill_214EX = {},
+	Skill_214BorC = {},
+	Skill_214A = {},
+
+	Skill_J214EX = {},
+	Skill_J214BorC = {},
+	Skill_J214A = {},
+
+	Atk_Std4B = {},
+
+	Atk_Std6C = {},
+	Atk_Std3C = {},
+	Atk_Cro1A = {},		
+	Atk_Air2C = {},	
+	Atk_Air6C = {},	
+	
+	Atk_CroA = 
+	{
+		CmdCheck = { SkillType = "Normal",	}, //連打不可にする
+	}
+	Atk_StdBandC = {},
+	
+	Skill_0202EX = {},
+	Skill_0202BorC = {},
+	Skill_0202A = {},
+}
+
+local ar =
+[
+	{
+		CheckMoveName="Mv_Atk_StdA",
+		UpdateMoveName="Mv_Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdB",
+		UpdateMoveName="Mv_Atk_StdC",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdC",
+		UpdateMoveName="Mv_Skill_236A",
+		ResetTmplName="Atk_StdC",
+	},
+	{
+		CheckMoveName="Mv_Skill_236A",
+		UpdateMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_236A",
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			FrameIDCheck = { Only=[150] },
+		}
+		CmdTmplFlags=def_CMDFlags_AnnounceSmaetSteer, //スマートステアアナウンスの追加
+	},
+	{
+		CheckMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_SSRelayAtk",
+		UpdateMoveName="Mv_Skill_41236SP",
+		CmdCheck = 
+		{
+			SkillType = "SpSpecial",
+			HitStatus="Damage",
+			Cost = { ComboGauge = 20000 },
+		}
+	},
+]
+Battle_Std.MakeStdCombo( t, ar );
+
+CHR002_CommandTable <- Battle_Std.MakeCommandTable( { command=t } );

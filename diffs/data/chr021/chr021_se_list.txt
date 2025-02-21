@@ -1,0 +1,364 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr021/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(800); // 確保
+local st = SeList_Table.Status; // 登録しやすいように省略
+
+st[10] = { volumetype=0, path=2, file="SE_SpecialBombLong", type=1, category=-1, }; //爆発して上空へ
+st[15] = { volumetype=0, path=2, file="SE_SpecialAirWindShort", type=1, category=-1, }; //上空から寄ってくる
+
+
+st[50] = { volumetype=0, path=0, file="SE050_SlideDash", type=1, category=-1, }; //突進の移動音
+st[60] = { volumetype=0, path=0, file="SE051", type=1, category=-1, }; //キャノン発射SE
+
+//登場
+st[100] = { volumetype=1, path=1, file="mik_010_b_2000", type=0, category=1, };	//「おいーっす！」
+st[101] = { volumetype=1, path=1, file="mik_010_b_2001", type=0, category=1, };	//「ミカちゃん参上っ！」
+st[102] = { volumetype=1, path=1, file="mik_010_b_2002", type=0, category=1, };	//「アチシがお相手するんよ～！」
+st[103] = { volumetype=1, path=1, file="mik_010_b_2003", type=0, category=1, };	//「ミカちゃんです！よろしくぅー！」
+st[104] = { volumetype=1, path=1, file="mik_010_b_2004", type=0, category=1, };	//「ちょっと通らせて貰います！」
+
+st[106] = { volumetype=1, path=1, file="mik_010_b_2005_m", type=0, category=1, };	//「あだ」「覚悟するんゆー！」
+st[109] = { volumetype=1, path=1, file="mik_010_b_2007_m", type=0, category=1, };	//「ぶっ」「勝負するんゆー！」
+st[112] = { volumetype=1, path=1, file="mik_010_b_2009_m", type=0, category=1, };	//「いでっ」「いざ尋常に成敗いたす！」
+
+//登場 特殊
+st[120] = { volumetype=1, path=1, file="mik_010_b_2012", type=0, category=1, };	//（対オリエ）「へっ、お前ばかりに良いかっこはさせられねぇ！」
+st[121] = { volumetype=1, path=1, file="mik_010_b_2015", type=0, category=1, }	//（対ワレン「良かろう！　我らが共通言語、拳でな！）
+st[122] = { volumetype=1, path=1, file="mik_010_b_2018", type=0, category=1, };	//（対カグヤ）「ミカちゃん、ここは勝たせて貰います！！」
+
+//ラウンド勝利
+st[140] = { volumetype=1, path=1, file="mik_010_b_2100", type=0, category=1, };	//「全速～、前進んゆー！」
+st[141] = { volumetype=1, path=1, file="mik_010_b_2101", type=0, category=1, };	//「勝利のぶいっ！」
+st[142] = { volumetype=1, path=1, file="mik_010_b_2102", type=0, category=1, };	//「決まったんゆー！」
+st[143] = { volumetype=1, path=1, file="mik_010_b_2103", type=0, category=1, };	//「勝ったんよー！」
+st[144] = { volumetype=1, path=1, file="mik_010_b_2104", type=0, category=1, };	//「よっしゃー！　つぎつぎ！！」
+
+//決着勝利 汎用
+st[150] = { volumetype=1, path=1, file="mik_010_b_2111", type=0, category=1, };	//「やったやったー！（次に続く）」
+st[151] = { volumetype=1, path=1, file="mik_010_b_2112", type=0, category=1, };	//「って…（次に続く）」
+st[152] = { volumetype=1, path=1, file="mik_010_b_2113", type=0, category=1, };	//「あいたー…」
+st[153] = { volumetype=1, path=1, file="mik_010_b_2114", type=0, category=1, };	//「うははははーっ！（次に続く）」
+st[154] = { volumetype=1, path=1, file="mik_010_b_2115", type=0, category=1, };	//「あれぇ？（次に続く）」
+st[155] = { volumetype=1, path=1, file="mik_010_b_2116", type=0, category=1, };	//「うごぉ…」
+
+//決着勝利 辛勝
+st[158] = { volumetype=1, path=1, file="mik_010_b_2120", type=0, category=1, };	//「大ー勝ー利ー！（次に続く）」
+st[159] = { volumetype=1, path=1, file="mik_010_b_2121", type=0, category=1, };	//「おっ？（次に続く）」
+st[160] = { volumetype=1, path=1, file="mik_010_b_2122", type=0, category=1, };	//「なんでぇー…」
+
+//決着勝利 楽勝
+st[164] = { volumetype=1, path=1, file="mik_010_b_2123", type=0, category=1, };	//「アチシの敵じゃないんゆー！（次に続く）」
+st[165] = { volumetype=1, path=1, file="mik_010_b_2124", type=0, category=1, };	//「えっ？（次に続く）」
+st[166] = { volumetype=1, path=1, file="mik_010_b_2125", type=0, category=1, };	//「ぎゃふん！」
+
+//決着勝利 掛け合い
+st[170] = { volumetype=1, path=1, file="mik_010_b_2127", type=0, category=1, };	//「オリエっちに勝ったー！（次に続く）」
+st[171] = { volumetype=1, path=1, file="mik_010_b_2128", type=0, category=1, };	//「あれ？（次に続く）」
+st[172] = { volumetype=1, path=1, file="mik_010_b_2129", type=0, category=1, };	//「こんな罰はひどいんゆー…」
+
+st[174] = { volumetype=1, path=1, file="mik_010_b_2132", type=0, category=1, };	//「後衛に負けるわけないんゆー！（次に続く）」
+st[176] = { volumetype=1, path=1, file="mik_010_b_2134", type=0, category=1, };	//「人を呪わば穴ふたつー…」
+
+//タイムアップ判定負け
+st[180] = { volumetype=1, path=1, file="mik_010_b_2200", type=0, category=1, };	//「なっー！　ぐぬぬぬぬ…」
+st[181] = { volumetype=1, path=1, file="mik_010_b_2201", type=0, category=1, };	//「時間切れ！　ううう…」
+
+//弱攻撃
+st[190] = { volumetype=1, path=1, file="mik_010_b_2300_a", type=0, category=1, };	//「は」
+st[191] = { volumetype=1, path=1, file="mik_010_b_2301_a", type=0, category=1, };	//「ふ」
+st[192] = { volumetype=1, path=1, file="mik_010_b_2302_a", type=0, category=1, };	//「や」
+st[193] = { volumetype=1, path=1, file="mik_010_b_2303_a", type=0, category=1, };	//「し」
+st[194] = { volumetype=1, path=1, file="mik_010_b_2300_b", type=0, category=1, };	//「は」
+st[195] = { volumetype=1, path=1, file="mik_010_b_2301_b", type=0, category=1, };	//「ふ」
+st[196] = { volumetype=1, path=1, file="mik_010_b_2302_b", type=0, category=1, };	//「や」
+
+//中攻撃
+st[202] = { volumetype=1, path=1, file="mik_010_b_2402_a", type=0, category=1, };	//「たっ」
+st[204] = { volumetype=1, path=1, file="mik_010_b_2400_b", type=0, category=1, };	//「せっ」
+st[205] = { volumetype=1, path=1, file="mik_010_b_2401_b", type=0, category=1, };	//「やっ」
+st[207] = { volumetype=1, path=1, file="mik_010_b_2403_b", type=0, category=1, };	//「しっ」
+st[208] = { volumetype=1, path=1, file="mik_010_b_2400_c", type=0, category=1, };	//「せっ」
+st[209] = { volumetype=1, path=1, file="mik_010_b_2401_c", type=0, category=1, };	//「やっ」
+st[210] = { volumetype=1, path=1, file="mik_010_b_2402_c", type=0, category=1, };	//「たっ」
+
+//強攻撃
+st[220] = { volumetype=1, path=1, file="mik_010_b_2500_a", type=0, category=1, };	//「でいっ！」
+st[221] = { volumetype=1, path=1, file="mik_010_b_2501_a", type=0, category=1, };	//「ほいっ！」
+st[222] = { volumetype=1, path=1, file="mik_010_b_2502_a", type=0, category=1, };	//「せぇあ！」
+st[223] = { volumetype=1, path=1, file="mik_010_b_2503_a", type=0, category=1, };	//「でいあ！」
+st[224] = { volumetype=1, path=1, file="mik_010_b_2504_a", type=0, category=1, };	//「はっ！」
+st[225] = { volumetype=1, path=1, file="mik_010_b_2500_b", type=0, category=1, };	//「でいっ！」
+st[226] = { volumetype=1, path=1, file="mik_010_b_2501_b", type=0, category=1, };	//「ほいっ！」
+st[227] = { volumetype=1, path=1, file="mik_010_b_2502_b", type=0, category=1, };	//「せぇあ！」
+
+//吹き飛ばし攻撃
+st[240] = { volumetype=1, path=1, file="mik_010_b_2600", type=0, category=1, };	//「ぶっとべ！」
+st[241] = { volumetype=1, path=1, file="mik_010_b_2601", type=0, category=1, };	//「ぱーんち！」
+st[242] = { volumetype=1, path=1, file="mik_010_b_2602", type=0, category=1, };	//「んゆー！」
+
+//回避困難な攻撃
+st[250] = { volumetype=1, path=1, file="mik_010_b_2604", type=0, category=1, };	//「ドロップキッーック！」
+
+//その他特殊攻撃
+st[260] = { volumetype=1, path=1, file="mik_010_b_2607", type=0, category=1, };	//「よいしょー！」
+st[261] = { volumetype=1, path=1, file="mik_010_b_2608", type=0, category=1, };	//「ソイヤー」
+st[262] = { volumetype=1, path=1, file="mik_010_b_2609", type=0, category=1, };	//「あはは！」
+st[263] = { volumetype=1, path=1, file="mik_010_b_2610", type=0, category=1, };	//「どりゃー！」
+st[264] = { volumetype=1, path=1, file="mik_010_b_2611", type=0, category=1, };	//「んゆー！」
+st[265] = { volumetype=1, path=1, file="mik_010_b_2612", type=0, category=1, };	//「ヒップアタック！」
+st[266] = { volumetype=1, path=1, file="mik_010_b_2613", type=0, category=1, };	//「バンブー！」
+
+st[267] = { volumetype=1, path=1, file="mik_010_b_2605_a", type=0, category=1, };	//
+st[268] = { volumetype=1, path=1, file="mik_010_b_6084", type=0, category=1, };	//
+
+//投げ成功
+st[270] = { volumetype=1, path=1, file="mik_010_b_2700", type=0, category=1, };	//「よっこら…（次に続く）」
+st[271] = { volumetype=1, path=1, file="mik_010_b_2701", type=0, category=1, };	//「せぇーい！」
+
+st[273] = { volumetype=1, path=1, file="mik_010_b_2702", type=0, category=1, };	//「ぐるぐるー…（次に続く）」
+st[274] = { volumetype=1, path=1, file="mik_010_b_2703", type=0, category=1, };	//「どかーん！」
+
+//投げ失敗
+st[280] = { volumetype=1, path=1, file="mik_010_b_2800", type=0, category=1, };	//「あばばっ」
+st[281] = { volumetype=1, path=1, file="mik_010_b_2801", type=0, category=1, };	//「んゆゆ！？」
+
+//敵の投げ技を回避
+st[290] = { volumetype=1, path=1, file="mik_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 };	//「んゆ！」
+st[291] = { volumetype=1, path=1, file="mik_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 };	//「掴めまい」
+
+//ガードキャンセル攻撃
+st[300] = { volumetype=1, path=1, file="mik_010_b_2950", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 };	//「よいしょ！」
+
+//振り向き
+st[310] = { volumetype=1, path=1, file="mik_010_b_3000", type=0, category=1, };	//「む」
+
+//待機モーション
+st[320] = { volumetype=1, path=1, file="mik_010_b_3100", type=0, category=1, };	//「ばっちこーい！」
+st[321] = { volumetype=1, path=1, file="mik_010_b_3101", type=0, category=1, };	//「さっさとかかってこーい！」
+
+//前方回避
+st[330] = { volumetype=1, path=1, file="mik_010_b_3200", type=0, category=1, };	//「よけるんゆ」
+st[331] = { volumetype=1, path=1, file="mik_010_b_3201", type=0, category=1, };	//「ほほーっ」
+
+//ダッシュ
+st[340] = { volumetype=1, path=1, file="mik_010_b_3300", type=0, category=1, };	//「たたたっ！」
+st[341] = { volumetype=1, path=1, file="mik_010_b_3301", type=0, category=1, };	//「接近～」
+st[342] = { volumetype=1, path=1, file="mik_010_b_3302", type=0, category=1, };	//「き～ん！　　（飛行機の飛ぶ擬音）」
+
+//アサルト
+st[350] = { volumetype=1, path=1, file="mik_010_b_3310", type=0, category=1, };	//「よっ」
+st[351] = { volumetype=1, path=1, file="mik_010_b_3311", type=0, category=1, };	//「とっ」
+
+//バックステップ
+st[360] = { volumetype=1, path=1, file="mik_010_b_3400", type=0, category=1, };	//「ささっ」
+st[361] = { volumetype=1, path=1, file="mik_010_b_3401", type=0, category=1, };	//「とうっ」
+
+//弱攻撃ガード
+st[370] = { volumetype=1, path=1, file="mik_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1 };	//「んっ」
+st[371] = { volumetype=1, path=1, file="mik_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1 };	//「ふっ」
+st[372] = { volumetype=1, path=1, file="mik_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1 };	//「ん？」
+
+//中攻撃ガード
+st[380] = { volumetype=1, path=1, file="mik_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 };	//「きかぬ」
+st[381] = { volumetype=1, path=1, file="mik_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 };	//「んゆ」
+st[382] = { volumetype=1, path=1, file="mik_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 };	//「っと」
+st[383] = { volumetype=1, path=1, file="mik_010_b_3603", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 };	//「ぐっ」
+
+//強攻撃ガード
+st[390] = { volumetype=1, path=1, file="mik_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1 };	//「ぐうっ」
+st[391] = { volumetype=1, path=1, file="mik_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1 };	//「ぬうっ」
+st[392] = { volumetype=1, path=1, file="mik_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1 };	//「まだまだ！」
+st[393] = { volumetype=1, path=1, file="mik_010_b_3703", type=0, category=1, prio=Def_SEP_GuardLv3, check=1 };	//「タンマ！」
+
+//攻撃を見切り余裕でガード
+st[400] = { volumetype=1, path=1, file="mik_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 };	//「弱い！」
+st[402] = { volumetype=1, path=1, file="mik_010_b_3801_b", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 };	//「足りぬ！」
+st[404] = { volumetype=1, path=1, file="mik_010_b_3802_b", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 };	//「効かぬ！」
+st[405] = { volumetype=1, path=1, file="mik_010_b_3803", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 };	//「甘いんゆ！」
+
+//ガード失敗ダメージ
+st[410] = { volumetype=1, path=1, file="mik_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 };	//「んゆー！」
+st[411] = { volumetype=1, path=1, file="mik_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 };	//「わきゃ！」
+st[412] = { volumetype=1, path=1, file="mik_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 };	//「あばばっ！」
+st[413] = { volumetype=1, path=1, file="mik_010_b_3903", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 };	//「なんと！？」
+
+// 受け身
+st[420] = { volumetype=1, path=1, file="mik_010_b_4000", type=0, category=1, prio=Def_SEP_Recover };	//「ふっ」
+st[421] = { volumetype=1, path=1, file="mik_010_b_4001", type=0, category=1, prio=Def_SEP_Recover };	//「反撃開始！」
+st[422] = { volumetype=1, path=1, file="mik_010_b_4002", type=0, category=1, prio=Def_SEP_Recover };	//「くるりん！」
+st[423] = { volumetype=1, path=1, file="mik_010_b_4003", type=0, category=1, prio=Def_SEP_Recover };	//「やらせんゆ！」
+
+//シールド発動//
+st[430] = { volumetype=1, path=1, file="mik_010_b_4100", type=0, category=1, };	//「受ける」
+st[431] = { volumetype=1, path=1, file="mik_010_b_4101", type=0, category=1, };	//「ここ」
+st[432] = { volumetype=1, path=1, file="mik_010_b_4102", type=0, category=1, };	//「ばっへるべー！」
+
+//シールド成功
+st[440] = { volumetype=1, path=1, file="mik_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 };	//「おほほ！」
+st[441] = { volumetype=1, path=1, file="mik_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 };	//「ぬるいんゆー」
+st[442] = { volumetype=1, path=1, file="mik_010_b_4202", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 };	//「楽勝♪」
+st[443] = { volumetype=1, path=1, file="mik_010_b_4203", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 };	//「鉄壁！」
+st[444] = { volumetype=1, path=1, file="mik_010_b_4204", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 };	//「ろいやるー♪」
+
+//弱攻撃ダメージ
+st[450] = { volumetype=1, path=1, file="mik_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1 };	//「あっ」
+st[451] = { volumetype=1, path=1, file="mik_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1 };	//「うっ」
+st[452] = { volumetype=1, path=1, file="mik_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1 };	//「ぐっ」
+st[453] = { volumetype=1, path=1, file="mik_010_b_4303", type=0, category=1, prio=Def_SEP_DamageLv1 };	//「いっ　　（痛っ）」
+
+//中攻撃ダメージ
+st[460] = { volumetype=1, path=1, file="mik_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 };	//「おうっ」
+st[461] = { volumetype=1, path=1, file="mik_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 };	//「ぐぬっ」
+st[462] = { volumetype=1, path=1, file="mik_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 };	//「んがっ」
+st[463] = { volumetype=1, path=1, file="mik_010_b_4403", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 };	//「あいたっ」
+st[464] = { volumetype=1, path=1, file="mik_010_b_4404", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 };	//「ぬおっ」
+st[465] = { volumetype=1, path=1, file="mik_010_b_4405", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 };	//「うべっ」
+
+//強攻撃ダメージ
+st[470] = { volumetype=1, path=1, file="mik_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 };	//「いたっ！」
+st[471] = { volumetype=1, path=1, file="mik_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 };	//「カハッ！」
+st[472] = { volumetype=1, path=1, file="mik_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 };	//「ひゃあ！」
+st[473] = { volumetype=1, path=1, file="mik_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 };	//「ぐわぁ！」
+st[474] = { volumetype=1, path=1, file="mik_010_b_4504", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 };	//「ぐふっ！」
+st[475] = { volumetype=1, path=1, file="mik_010_b_4505", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 };	//「あべっち！」
+
+//ダウン
+st[480] = { volumetype=1, path=1, file="mik_010_b_4600", type=0, category=1, prio=Def_SEP_KO };	//「ぬわーーーーーっ！」
+st[482] = { volumetype=1, path=1, file="mik_010_b_4601_b", type=0, category=1, prio=Def_SEP_KO };	//「効いた…んゆ…」 若干短め
+st[483] = { volumetype=1, path=1, file="mik_010_b_4602", type=0, category=1, prio=Def_SEP_KO };	//「おりょーー」
+
+//ラウンド敗北
+st[490] = { volumetype=1, path=1, file="mik_010_b_4650", type=0, category=1, prio=Def_SEP_KO };	//「ハンデなんゆ」
+st[491] = { volumetype=1, path=1, file="mik_010_b_4651", type=0, category=1, prio=Def_SEP_KO };	//「暖まってきたんゆ……」
+st[492] = { volumetype=1, path=1, file="mik_010_b_4652", type=0, category=1, prio=Def_SEP_KO };	//「や、やるではないですか」
+
+//ダウン・ノックアウト
+st[500] = { volumetype=1, path=1, file="mik_010_b_4700", type=0, category=1, prio=Def_SEP_KO };	//「きゃあああぁぁぁーーーーっ」
+st[501] = { volumetype=1, path=1, file="mik_010_b_4701", type=0, category=1, prio=Def_SEP_KO };	//「うわああぁぁぁーーーっ！」
+st[502] = { volumetype=1, path=1, file="mik_010_b_4702", type=0, category=1, prio=Def_SEP_KO };	//「ナイス…ファイト…んゆ…」
+
+//起き上がり
+st[510] = { volumetype=1, path=1, file="mik_010_b_4800", type=0, category=1, };	//「んゆっ」
+st[511] = { volumetype=1, path=1, file="mik_010_b_4801", type=0, category=1, };	//「よっ」
+st[512] = { volumetype=1, path=1, file="mik_010_b_4802", type=0, category=1, };	//「よいしょ」
+st[513] = { volumetype=1, path=1, file="mik_010_b_4803", type=0, category=1, };	//「効かないんゆ」
+st[514] = { volumetype=1, path=1, file="mik_010_b_4804", type=0, category=1, };	//「まだまだ」
+
+//起き上がり・瀕死
+st[520] = { volumetype=1, path=1, file="mik_010_b_4900", type=0, category=1, };	//「あいたた…」
+st[521] = { volumetype=1, path=1, file="mik_010_b_4901", type=0, category=1, };	//「ぼろぼろ…」
+st[522] = { volumetype=1, path=1, file="mik_010_b_4902", type=0, category=1, };	//「ほほう…」
+st[523] = { volumetype=1, path=1, file="mik_010_b_4903", type=0, category=1, };	//「トサカにきたんゆ…」
+
+//ヴェールオフ
+st[530] = { volumetype=1, path=1, file="mik_010_b_5000", type=0, category=3, };	//「どかーん！」
+st[531] = { volumetype=1, path=1, file="mik_010_b_5001", type=0, category=3, };	//「やるんゆ！」
+st[532] = { volumetype=1, path=1, file="mik_010_b_5002", type=0, category=3, };	//「ダイナマイッ！」
+st[533] = { volumetype=1, path=1, file="mik_010_b_5003", type=0, category=3, };	//「怒らせたんゆ！」
+st[535] = { volumetype=1, path=1, file="mik_010_b_5004_b", type=0, category=3, };	//「ワレニカゴー（我に加護を）」
+
+//チェインシフト
+st[540] = { volumetype=1, path=1, file="mik_010_b_5100", type=0, category=1, };	//「見切った！」
+st[541] = { volumetype=1, path=1, file="mik_010_b_5101", type=0, category=1, };	//「ぴかーん！」
+st[542] = { volumetype=1, path=1, file="mik_010_b_5102", type=0, category=1, };	//「ここさね！」
+st[543] = { volumetype=1, path=1, file="mik_010_b_5103", type=0, category=1, };	//「つづいてぇ！（さぁ続いて）」
+st[544] = { volumetype=1, path=1, file="mik_010_b_5104", type=0, category=1, };	//「んでもってー（そんでもって）」
+
+//コンセントレーション
+st[550] = { volumetype=1, path=1, file="mik_010_b_5200", type=0, category=1, };	//「ほおおぉぉぉ……」
+st[551] = { volumetype=1, path=1, file="mik_010_b_5201", type=0, category=1, };	//「はああぁぁ……」
+st[552] = { volumetype=1, path=1, file="mik_010_b_5202", type=0, category=1, };	//「大地に根を張るのじゃ」
+
+//ヴォーパル
+st[560] = { volumetype=1, path=1, file="mik_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, };	//「流れキター！」
+st[561] = { volumetype=1, path=1, file="mik_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, };	//「ホアアアア…！　（軽い興奮）」
+
+//ヴォーパル・瀕死
+st[571] = { volumetype=1, path=1, file="mik_010_b_5302_b", type=0, category=1, prio=Def_SEP_Vorpal, };	//「まだまだ！こっからなんゆ！」 ダメージあり風
+
+//必殺技
+st[580] = { volumetype=1, path=1, file="mik_010_b_6001", type=0, category=1, };	//「んゆー！」
+st[581] = { volumetype=1, path=1, file="mik_010_b_6002", type=0, category=1, };	//「どーん！」
+st[585] = { volumetype=1, path=1, file="mik_010_b_6006", type=0, category=1, };	//「ミカちゃんミサイル！」
+st[590] = { volumetype=1, path=1, file="mik_010_b_6009", type=0, category=1, };	//「バーティカル！」
+st[591] = { volumetype=1, path=1, file="mik_010_b_6010", type=0, category=1, };	//「アッパー」
+st[592] = { volumetype=1, path=1, file="mik_010_b_6011", type=0, category=1, };	//「突撃ー！」
+st[593] = { volumetype=1, path=1, file="mik_010_b_6012", type=0, category=1, };	//「もいっちょ！」
+st[594] = { volumetype=1, path=1, file="mik_010_b_6013", type=0, category=1, };	//「いけいけー！」
+st[595] = { volumetype=1, path=1, file="mik_010_b_6014", type=0, category=1, };	//「どんどーん！」
+st[596] = { volumetype=1, path=1, file="mik_010_b_6015", type=0, category=1, };	//「急旋回！」
+st[597] = { volumetype=1, path=1, file="mik_010_b_6016", type=0, category=1, };	//「んゆー！」
+st[598] = { volumetype=1, path=1, file="mik_010_b_6017", type=0, category=1, };	//「ぐいっ！」
+st[600] = { volumetype=1, path=1, file="mik_010_b_6020", type=0, category=1, };	//「いけー！」
+st[601] = { volumetype=1, path=1, file="mik_010_b_6021", type=0, category=1, };	//「ミッソー」
+
+st[611] = { volumetype=1, path=1, file="mik_010_b_6028_b", type=0, category=1, };	//「ぐるぐる！」
+st[615] = { volumetype=1, path=1, file="mik_010_b_6030", type=0, category=1, };	//「ミカちゃん…（次に続く）」
+st[616] = { volumetype=1, path=1, file="mik_010_b_6031", type=0, category=1, };	//「トルネード！」
+st[620] = { volumetype=1, path=1, file="mik_010_b_6034", type=0, category=1, };	//「ハリケーン！」
+st[621] = { volumetype=1, path=1, file="mik_010_b_6035", type=0, category=1, };	//「ツイスター！」
+
+st[630] = { volumetype=1, path=1, file="mik_010_b_6044", type=0, category=1, };	//「どけどけー！」
+st[631] = { volumetype=1, path=1, file="mik_010_b_6045", type=0, category=1, };	//「どりゃー！」
+st[635] = { volumetype=1, path=1, file="mik_010_b_6050", type=0, category=1, };	//「大回転ー！」
+st[636] = { volumetype=1, path=1, file="mik_010_b_6051", type=0, category=1, };	//「逃がさないんゆー！」
+st[640] = { volumetype=1, path=1, file="mik_010_b_6057", type=0, category=1, };	//「ほっ（次に続く）」
+st[641] = { volumetype=1, path=1, file="mik_010_b_6058", type=0, category=1, };	//「ミカちゃん…（次に続く）」
+st[642] = { volumetype=1, path=1, file="mik_010_b_6059", type=0, category=1, };	//「キャノン！」
+st[645] = { volumetype=1, path=1, file="mik_010_b_6062", type=0, category=1, };	//「そこ！（次に続く）」
+st[646] = { volumetype=1, path=1, file="mik_010_b_6063", type=0, category=1, };	//「捕まえた！（次に続く）」
+st[647] = { volumetype=1, path=1, file="mik_010_b_6064", type=0, category=1, };	//「バッコーン！」
+st[650] = { volumetype=1, path=1, file="mik_010_b_6068", type=0, category=1, };	//「御免！（次に続く）」
+st[651] = { volumetype=1, path=1, file="mik_010_b_6069", type=0, category=1, };	//「よっ！（次に続く）」
+st[652] = { volumetype=1, path=1, file="mik_010_b_6070", type=0, category=1, };	//「はぁっ！（次に続く）」
+st[653] = { volumetype=1, path=1, file="mik_010_b_6071", type=0, category=1, };	//「どっかーん！（次に続く）」
+st[654] = { volumetype=1, path=1, file="mik_010_b_6072", type=0, category=1, };	//「（反動で転びそうになって）っとっと」
+
+st[657] = { volumetype=1, path=1, file="mik_010_b_6075_a", type=0, category=1, };	//「ヒップ！（次に続く）」
+st[659] = { volumetype=1, path=1, file="mik_010_b_6077_a", type=0, category=1, };	//「ファイヤー！（次に続く）」
+st[660] = { volumetype=1, path=1, file="mik_010_b_6078_a", type=0, category=1, };	//「イエス！」
+
+st[662] = { volumetype=1, path=1, file="mik_010_b_6074_b", type=0, category=1, };	//「いざ！（次に続く）」
+st[664] = { volumetype=1, path=1, file="mik_010_b_6076_b", type=0, category=1, };	//「そーれーでーもー♪（次に続く）」 UNI初代OP風
+st[670] = { volumetype=1, path=1, file="mik_010_b_6081", type=0, category=1, };	//「大爆裂ー！」
+st[671] = { volumetype=1, path=1, file="mik_010_b_6082", type=0, category=1, };	//「どっごーーーん！」
+
+st[680] = { volumetype=1, path=1, file="mik_010_b_6086", type=0, category=1, };	//「直撃！」
+st[681] = { volumetype=1, path=1, file="mik_010_b_6087", type=0, category=1, };	//「顔面直撃！」
+st[682] = { volumetype=1, path=1, file="mik_010_b_6088", type=0, category=1, };	//「あちしの全力ーー！」
+
+st[685] = { volumetype=1, path=1, file="mik_010_b_6089", type=0, category=1, };	//「ミカちゃーーん（次に続く）」
+st[686] = { volumetype=1, path=1, file="mik_010_b_6090", type=0, category=1, };	//「インパクトォー！」
+
+st[690] = { volumetype=1, path=1, file="mik_010_b_6094", type=0, category=1, };	//「どすこーい」
+st[691] = { volumetype=1, path=1, file="mik_010_b_6095", type=0, category=1, };	//「クラーッシュ！」
+st[700] = { volumetype=1, path=1, file="mik_010_b_6099", type=0, category=1, };	//「ぱぅわぁー！（パワー）」
+st[701] = { volumetype=1, path=1, file="mik_010_b_6100", type=0, category=1, };	//「ちょあー！」
+
+//超必殺技
+st[714] = { volumetype=1, path=1, file="mik_010_b_6501_b", type=0, category=1, };	//「ミカちゃーん！（次に続く）」
+st[715] = { volumetype=1, path=1, file="mik_010_b_6502_b", type=0, category=1, };	//「レボリューション！！（次に続く）」
+st[716] = { volumetype=1, path=1, file="mik_010_b_6503_b", type=0, category=1, };	//「抜けないー！」
+
+st[718] = { volumetype=1, path=1, file="mik_010_b_6506", type=0, category=1, };	//「ん゛ん゛ー！」
+
+st[720] = { volumetype=1, path=1, file="mik_010_b_6515_a", type=0, category=1, };	//「アチシの本気んゆ…（次に続く）」(少し短め)　
+st[721] = { volumetype=1, path=1, file="mik_010_b_6516_a", type=0, category=1, };	//「ファイナルミッションブート！（次に続く）」(少し短め)　
+st[722] = { volumetype=1, path=1, file="mik_010_b_6517_a", type=0, category=1, };	//「天地(てんち)雷鳴(らいめい)！　急速(きゅうそく)旋回(せんかい)！　一撃必殺(ひっさーーつ)！（次に続く）」(長め)　
+st[730] = { volumetype=1, path=1, file="mik_010_b_6518_c", type=0, category=1, };	//「ひき逃げアターック！」 
+
+st[732] = { volumetype=1, path=1, file="mik_010_b_6520_a", type=0, category=1, };	//「超奥義発動！（次に続く）」(少し長め)　
+st[733] = { volumetype=1, path=1, file="mik_010_b_6521_a", type=0, category=1, };	//「全力全開！（次に続く）」(少し長め)　
+st[738] = { volumetype=1, path=1, file="mik_010_b_6523", type=0, category=1, };	//「ミカちゃんギャラクシーー！」

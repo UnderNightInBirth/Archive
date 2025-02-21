@@ -1,0 +1,341 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr018/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(750); // 確保
+local st = SeList_Table.Status; // 登録しやすいように省略
+
+st[10] = { volumetype=0, path=2, file="SE_DrawnSword", type=1, category=-1, };  //足刀
+st[11] = { volumetype=0, path=2, file="SE_AppearInsulator", type=1, category=-1, };  //杖発光
+
+st[40] = { volumetype=0, path=2, file="SE_ShotWindL", type=1, category=-1, }; //リアクター展開、収納
+st[41] = { volumetype=0, path=2, file="SE_ApperLightBlade", type=1, category=-1, }; //リアクターから羽出現
+
+st[42] = { volumetype=0, path=2, file="SE_ShotWindH", type=1, category=-1, }; //投げの風
+st[43] = { volumetype=0, path=2, file="SE_ShotWindL", type=1, category=-1, }; //投げとどめ
+
+st[50] = { volumetype=0, path=2, file="SE_SpecialAirWindShort", type=1, category=-1, }; //IW 風
+st[51] = { volumetype=0, path=2, file="SE_ShotBall", type=1, category=-1, }; //IW 氷塊飛んでくる音
+st[52] = { volumetype=0, path=2, file="SE_SwingGlass", type=1, category=-1, }; //IW 氷塊砕ける音
+st[53] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWE とどめ
+st[54] = { volumetype=0, path=2, file="SE_GlassBreak", type=1, category=-1, }; //IWE とどめ
+st[55] = { volumetype=0, path=2, file="SE_SpecialTempest", type=1, category=-1, }; //IWE 竜巻
+st[56] = { volumetype=0, path=2, file="SE_ChargeUpEXLoop", type=1, category=-1, }; //IWE 杖チャージ
+st[57] = { volumetype=0, path=2, file="SE_ChargeUpEXEndEcho", type=1, category=-1, }; //IWE 杖チャージ終わり
+st[58] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, }; //IWX 十字架落下
+
+st[60] = { volumetype=0, path=2, file="SE_Skating", type=1, category=-1, }; //ダッシュ
+st[61] = { volumetype=0, path=2, file="SE_IceLong", type=1, category=-1, }; //氷やられ特大
+st[62] = { volumetype=0, path=2, file="SE_IceShort", type=1, category=-1, }; //氷やられ
+
+st[65] = { volumetype=0, path=2, file="SE_SwingGlassMin", type=1, category=-1, }; //氷塊砕ける音（小）
+
+//●バトル
+//登場
+st[100] = { volumetype=1, path=1, file="lnd_010_b_2000", type=0, category=1, }; //「これも僕の任務だ。」
+st[102] = { volumetype=1, path=1, file="lnd_010_b_2001_b", type=0, category=1, }; //「偽誕者(インヴァース)…鎮圧する」
+st[103] = { volumetype=1, path=1, file="lnd_010_b_2002", type=0, category=1, }; //「手ごわそうな相手だが…やってみせる。」
+st[104] = { volumetype=1, path=1, file="lnd_010_b_2003", type=0, category=1, }; //「負けるワケにはいかない。リッターシルトの名にかけて」
+st[105] = { volumetype=1, path=1, file="lnd_010_b_2004", type=0, category=1, }; //「森羅万象、凍らぬものはなし」
+st[106] = { volumetype=1, path=1, file="lnd_010_b_2005", type=0, category=1, }; //「互いの誇りにかけて正々堂々、勝負だ」
+st[107] = { volumetype=1, path=1, file="lnd_010_b_2006", type=0, category=1, }; //「どんな能力だろうと、凍らせよう」
+
+//登場 特殊
+//対オリエ
+st[110] = { volumetype=1, path=1, file="lnd_010_b_2012", type=0, category=1, }; //「君との出会い、光栄に思うよ」
+st[111] = { volumetype=1, path=1, file="lnd_010_b_2013", type=0, category=1, }; //「お手合わせ、願おう！」
+
+//対メルカヴァ
+st[113] = { volumetype=1, path=1, file="lnd_010_b_2016", type=0, category=1, }; //「つくづく、君とは縁があるようだ」
+st[114] = { volumetype=1, path=1, file="lnd_010_b_2017", type=0, category=1, }; //「君とまた、出会うことになるとはね」
+st[116] = { volumetype=1, path=1, file="lnd_010_b_2018", type=0, category=1, }; //「僕たちの関係も、終わりというワケだね」
+
+//対ミカ
+st[118] = { volumetype=1, path=1, file="lnd_010_b_2021", type=0, category=1, }; //「テ……テンス・イグゼクター！？」
+
+//対ワーグナー
+st[121] = { volumetype=1, path=1, file="lnd_010_b_2024", type=0, category=1, }; //「燃え盛る炎だろうと、凍らせてみせる！」
+st[122] = { volumetype=1, path=1, file="lnd_010_b_2025", type=0, category=1, }; //「勝負だ『虚無狩り』！」
+st[123] = { volumetype=1, path=1, file="lnd_010_b_2026", type=0, category=1, }; //「君を倒し、証明しよう。僕たちの方が上であるとね。」
+
+//ラウンド勝利
+st[140] = { volumetype=1, path=1, file="lnd_010_b_2100", type=0, category=1, }; //「こんなものではないだろう？（※君の実力はもっとあるだろう、という意味）」
+st[141] = { volumetype=1, path=1, file="lnd_010_b_2101", type=0, category=1, }; //「もう立ち上がらないでくれ」
+st[142] = { volumetype=1, path=1, file="lnd_010_b_2102", type=0, category=1, }; //「これでも引いてくれないか…」
+st[143] = { volumetype=1, path=1, file="lnd_010_b_2103", type=0, category=1, }; //「諦めが悪いね」
+st[144] = { volumetype=1, path=1, file="lnd_010_b_2104", type=0, category=1, }; //「少しずつ積み重ねていこう」
+
+//決着勝利 汎用
+st[151] = { volumetype=1, path=1, file="lnd_010_b_2111_b", type=0, category=1, }; //「ありがとう、いい経験になったよ」
+st[152] = { volumetype=1, path=1, file="lnd_010_b_2112", type=0, category=1, }; //「中々の勝負だった」
+st[153] = { volumetype=1, path=1, file="lnd_010_b_2113", type=0, category=1, }; //「任務完了だ」
+st[154] = { volumetype=1, path=1, file="lnd_010_b_2114", type=0, category=1, }; //「出来れば平和的に解決したかったな」
+
+//決着勝利 辛勝
+st[156] = { volumetype=1, path=1, file="lnd_010_b_2120", type=0, category=1, }; //「まだまだ訓練が足りないな（自分に対して）」
+
+//決着勝利 楽勝
+st[158] = { volumetype=1, path=1, file="lnd_010_b_2123", type=0, category=1, }; //「これに懲りたら、もう『夜』に来ようと思わないことだね」
+
+//決着勝利 掛け合い
+//対オリエ
+st[161] = { volumetype=1, path=1, file="lnd_010_b_2127", type=0, category=1, }; //「どうだい？　『聖盾(リッターシルト)』もなかなかやるだろう？」
+
+//対メルカヴァ
+st[163] = { volumetype=1, path=1, file="lnd_010_b_2129", type=0, category=1, }; //「こんな結末、残念だけど仕方ないか…」
+
+//対ミカ
+st[165] = { volumetype=1, path=1, file="lnd_010_b_2131", type=0, category=1, }; //「この子の事、『光輪(リヒトクライス)』に連絡すべきだろうか…？」
+
+//対ワーグナー
+st[167] = { volumetype=1, path=1, file="lnd_010_b_2133", type=0, category=1, }; //「これでわかっただろう？」
+st[168] = { volumetype=1, path=1, file="lnd_010_b_2134", type=0, category=1, }; //「切り札は君だけじゃないんだ」
+
+//タイムアップ判定負け
+st[170] = { volumetype=1, path=1, file="lnd_010_b_2200", type=0, category=1, }; //「一歩及ばず…か」
+st[171] = { volumetype=1, path=1, file="lnd_010_b_2201", type=0, category=1, }; //「くっ、詰めが甘かったか？」
+st[172] = { volumetype=1, path=1, file="lnd_010_b_2202", type=0, category=1, }; //「僕としたことが、時間を忘れるなんて」
+
+//弱攻撃
+st[201] = { volumetype=1, path=1, file="lnd_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[203] = { volumetype=1, path=1, file="lnd_010_b_2303_a", type=0, category=1, }; //「し」
+st[204] = { volumetype=1, path=1, file="lnd_010_b_2300_b", type=0, category=1, }; //「は」
+st[205] = { volumetype=1, path=1, file="lnd_010_b_2301_b", type=0, category=1, }; //「ふ」
+st[206] = { volumetype=1, path=1, file="lnd_010_b_2302_b", type=0, category=1, }; //「や」
+st[207] = { volumetype=1, path=1, file="lnd_010_b_2303_b", type=0, category=1, }; //「し」
+
+//中攻撃
+st[220] = { volumetype=1, path=1, file="lnd_010_b_2400_a", type=0, category=1, }; //「はっ」
+st[221] = { volumetype=1, path=1, file="lnd_010_b_2401_a", type=0, category=1, }; //「ほっ」
+st[222] = { volumetype=1, path=1, file="lnd_010_b_2402_a", type=0, category=1, }; //「たぁっ」
+st[225] = { volumetype=1, path=1, file="lnd_010_b_2400_b", type=0, category=1, }; //「はっ」
+st[226] = { volumetype=1, path=1, file="lnd_010_b_2401_b", type=0, category=1, }; //「ほっ」
+st[227] = { volumetype=1, path=1, file="lnd_010_b_2402_b", type=0, category=1, }; //「たぁっ」
+st[228] = { volumetype=1, path=1, file="lnd_010_b_2403_b", type=0, category=1, }; //「そらっ」
+st[229] = { volumetype=1, path=1, file="lnd_010_b_2404_b", type=0, category=1, }; //「これで！」
+
+//強攻撃
+st[240] = { volumetype=1, path=1, file="lnd_010_b_2500_a", type=0, category=1, }; //「はぁっ！」
+st[241] = { volumetype=1, path=1, file="lnd_010_b_2501_a", type=0, category=1, }; //「だぁっ！」
+st[242] = { volumetype=1, path=1, file="lnd_010_b_2502_a", type=0, category=1, }; //「せぃやっ！」
+st[243] = { volumetype=1, path=1, file="lnd_010_b_2503_a", type=0, category=1, }; //「うおぉっ！」
+st[244] = { volumetype=1, path=1, file="lnd_010_b_2504_a", type=0, category=1, }; //「貰った！」
+st[245] = { volumetype=1, path=1, file="lnd_010_b_2500_b", type=0, category=1, }; //「はぁっ！」
+st[246] = { volumetype=1, path=1, file="lnd_010_b_2501_b", type=0, category=1, }; //「だぁっ！」
+st[247] = { volumetype=1, path=1, file="lnd_010_b_2502_b", type=0, category=1, }; //「せぃやっ！」
+st[248] = { volumetype=1, path=1, file="lnd_010_b_2503_b", type=0, category=1, }; //「うおぉっ！」
+st[250] = { volumetype=1, path=1, file="lnd_010_b_2500_c", type=0, category=1, }; //「はぁっ！」
+
+//吹き飛ばし攻撃
+st[261] = { volumetype=1, path=1, file="lnd_010_b_2600_b", type=0, category=1, }; //「穿つ！」
+st[262] = { volumetype=1, path=1, file="lnd_010_b_2601", type=0, category=1, }; //「届け！」
+
+//回避困難な攻撃
+st[270] = { volumetype=1, path=1, file="lnd_010_b_2604", type=0, category=1, }; //「落とす！（氷を頭上から落とす）」
+st[271] = { volumetype=1, path=1, file="lnd_010_b_2605", type=0, category=1, }; //「上だよ」
+
+//その他特殊攻撃
+st[280] = { volumetype=1, path=1, file="lnd_010_b_2607", type=0, category=1, }; //「ここかい？」
+st[281] = { volumetype=1, path=1, file="lnd_010_b_2608", type=0, category=1, }; //「氷よ！」
+st[282] = { volumetype=1, path=1, file="lnd_010_b_2609", type=0, category=1, }; //「そらっ」
+st[284] = { volumetype=1, path=1, file="lnd_010_b_2611", type=0, category=1, }; //「氷刃(ひょうじん)」
+st[285] = { volumetype=1, path=1, file="lnd_010_b_2612", type=0, category=1, }; //「突く」
+
+st[286] = { volumetype=1, path=1, file="lnd_010_b_3201_a", type=0, category=1, }; //
+st[287] = { volumetype=1, path=1, file="lnd_010_b_2502_c", type=0, category=1, }; //
+
+//投げ成功
+st[290] = { volumetype=1, path=1, file="lnd_010_b_2700", type=0, category=1, }; //「捉えたぞ！」
+st[291] = { volumetype=1, path=1, file="lnd_010_b_2701_a", type=0, category=1, }; //「 雪風(ゆきかぜ)！」
+st[293] = { volumetype=1, path=1, file="lnd_010_b_2701_c", type=0, category=1, }; //「 雪風(せっぷう)！」
+st[294] = { volumetype=1, path=1, file="lnd_010_b_2702", type=0, category=1, }; //「吹き飛べ！」
+
+//投げ失敗
+st[300] = { volumetype=1, path=1, file="lnd_010_b_2800", type=0, category=1, }; //「なにっ？」
+st[301] = { volumetype=1, path=1, file="lnd_010_b_2801", type=0, category=1, }; //「読まれた！？」
+
+//敵の投げ技を回避
+st[310] = { volumetype=1, path=1, file="lnd_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「離してくれ」
+st[311] = { volumetype=1, path=1, file="lnd_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「おっと」
+
+//ガードキャンセル攻撃
+st[321] = { volumetype=1, path=1, file="lnd_010_b_2950_b", type=0, category=1, }; //「させないっ」
+st[354] = { volumetype=1, path=1, file="lnd_010_b_3201_d", type=0, category=1, }; //「隙あり！」
+
+//振り向き
+st[330] = { volumetype=1, path=1, file="lnd_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki }; //「そっちか」
+
+//待機モーション
+st[340] = { volumetype=1, path=1, file="lnd_010_b_3100", type=0, category=1, }; //「動きがないな…これも作戦なのか？」
+st[341] = { volumetype=1, path=1, file="lnd_010_b_3101", type=0, category=1, }; //「戦う気がないなら終わりにしないか？」
+
+//前方回避
+st[322] = { volumetype=1, path=1, file="lnd_010_b_2951", type=0, category=1, }; //「甘いね」
+st[350] = { volumetype=1, path=1, file="lnd_010_b_3200", type=0, category=1, }; //「見えた」
+
+//ダッシュ
+st[361] = { volumetype=1, path=1, file="lnd_010_b_3300_b", type=0, category=1, }; //「行くよ」
+st[363] = { volumetype=1, path=1, file="lnd_010_b_3301_b", type=0, category=1, }; //「前進する」
+
+//アサルト
+st[370] = { volumetype=1, path=1, file="lnd_010_b_3310", type=0, category=1, }; //「ふっ」
+st[371] = { volumetype=1, path=1, file="lnd_010_b_3311", type=0, category=1, }; //「とう」
+
+//バックステップ
+st[380] = { volumetype=1, path=1, file="lnd_010_b_3400", type=0, category=1, }; //「おっと」
+st[381] = { volumetype=1, path=1, file="lnd_010_b_3401", type=0, category=1, }; //「危険だっ」
+
+//弱攻撃ガード
+st[390] = { volumetype=1, path=1, file="lnd_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1 }; //「ふっ」
+st[391] = { volumetype=1, path=1, file="lnd_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1 }; //「つっ」
+st[392] = { volumetype=1, path=1, file="lnd_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1 }; //「軽い」
+
+//中攻撃ガード
+st[400] = { volumetype=1, path=1, file="lnd_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 }; //「くっ」
+st[401] = { volumetype=1, path=1, file="lnd_010_b_3601_a", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 }; //「うっ」
+st[403] = { volumetype=1, path=1, file="lnd_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1 }; //「やるね」
+
+//強攻撃ガード
+st[410] = { volumetype=1, path=1, file="lnd_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1 }; //「重い！」
+st[411] = { volumetype=1, path=1, file="lnd_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1 }; //「ぐっ！」
+st[412] = { volumetype=1, path=1, file="lnd_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1 }; //「耐えてくれよ！」
+st[413] = { volumetype=1, path=1, file="lnd_010_b_3703", type=0, category=1, prio=Def_SEP_GuardLv3, check=1 }; //「砕かれるっ！？」
+
+//攻撃を見切り余裕でガード
+st[420] = { volumetype=1, path=1, file="lnd_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 }; //「大丈夫だ」
+st[421] = { volumetype=1, path=1, file="lnd_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 }; //「破れないよ」
+st[422] = { volumetype=1, path=1, file="lnd_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1 }; //「通らないね」
+
+//ガード失敗ダメージ
+st[430] = { volumetype=1, path=1, file="lnd_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 }; //「まさか！？」
+st[431] = { volumetype=1, path=1, file="lnd_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1 }; //「しまった！」
+
+//受け身
+st[440] = { volumetype=1, path=1, file="lnd_010_b_4000", type=0, category=1, prio=Def_SEP_Recover }; //「よっと」
+st[441] = { volumetype=1, path=1, file="lnd_010_b_4001_a", type=0, category=1, prio=Def_SEP_Recover }; //「これからだ」
+st[444] = { volumetype=1, path=1, file="lnd_010_b_4002", type=0, category=1, prio=Def_SEP_Recover }; //「まだだ」
+
+//シールド発動
+st[450] = { volumetype=1, path=1, file="lnd_010_b_4100", type=0, category=1, }; //「受ける」
+st[451] = { volumetype=1, path=1, file="lnd_010_b_4101", type=0, category=1, }; //「読めたぞ！」
+
+//シールド成功
+st[460] = { volumetype=1, path=1, file="lnd_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「よしっ」
+st[461] = { volumetype=1, path=1, file="lnd_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「させない」
+
+//弱攻撃ダメージ
+st[470] = { volumetype=1, path=1, file="lnd_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「うっ」
+st[471] = { volumetype=1, path=1, file="lnd_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「ぐっ」
+
+//中攻撃ダメージ
+st[480] = { volumetype=1, path=1, file="lnd_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「ぐあっ」
+st[481] = { volumetype=1, path=1, file="lnd_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「かはっ」
+
+//強攻撃ダメージ
+st[490] = { volumetype=1, path=1, file="lnd_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「うわぁっ！」
+st[491] = { volumetype=1, path=1, file="lnd_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「うぐっ！」
+st[492] = { volumetype=1, path=1, file="lnd_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「ぐうぅっ！」
+st[493] = { volumetype=1, path=1, file="lnd_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「強いっ！」
+
+//ダウン
+st[501] = { volumetype=1, path=1, file="lnd_010_b_4600_b", type=0, category=1, prio=Def_SEP_KO  }; //「うわあぁぁーーーっ！」
+st[502] = { volumetype=1, path=1, file="lnd_010_b_4601", type=0, category=1, prio=Def_SEP_KO  }; //「なんて…ことだ…」
+
+//ラウンド敗北
+st[511] = { volumetype=1, path=1, file="lnd_010_b_4650_b", type=0, category=1, prio=Def_SEP_KO  }; //「つ、次こそは…！ 」
+st[512] = { volumetype=1, path=1, file="lnd_010_b_4651", type=0, category=1, prio=Def_SEP_KO  }; //「冷静になれロンドレキア…！」
+
+//ダウン・ノックアウト
+st[521] = { volumetype=1, path=1, file="lnd_010_b_4700_b", type=0, category=1, prio=Def_SEP_KO  }; //「うわああぁぁぁーーーーーーーっ！」
+st[522] = { volumetype=1, path=1, file="lnd_010_b_4701", type=0, category=1, prio=Def_SEP_KO  }; //「僕もまだまだ未熟…か…」
+
+//起き上がり
+st[530] = { volumetype=1, path=1, file="lnd_010_b_4800", type=0, category=1, }; //「強い…！」
+st[533] = { volumetype=1, path=1, file="lnd_010_b_4801_c", type=0, category=1, }; //「まだ立て直せる！」
+
+//起き上がり・瀕死
+st[542] = { volumetype=1, path=1, file="lnd_010_b_4901_a", type=0, category=1, }; //「このままでは！」
+st[543] = { volumetype=1, path=1, file="lnd_010_b_4901_b", type=0, category=1, }; //「このままでは！」
+
+//ヴェールオフ
+st[550] = { volumetype=1, path=1, file="lnd_010_b_5000", type=0, category=3, }; //「全力をぶつける！」
+st[551] = { volumetype=1, path=1, file="lnd_010_b_5001", type=0, category=3, }; //「仕上げだ！」
+st[552] = { volumetype=1, path=1, file="lnd_010_b_5002", type=0, category=3, }; //「手加減できないぞ！」
+
+//チェインシフト
+st[560] = { volumetype=1, path=1, file="lnd_010_b_5100", type=0, category=1, }; //「ここから！」
+st[561] = { volumetype=1, path=1, file="lnd_010_b_5101", type=0, category=1, }; //「これで終わりとでも？」
+st[562] = { volumetype=1, path=1, file="lnd_010_b_5102", type=0, category=1, }; //「見切った！」
+st[563] = { volumetype=1, path=1, file="lnd_010_b_5103", type=0, category=1, }; //「好機！」
+
+//コンセントレーション
+st[571] = { volumetype=1, path=1, file="lnd_010_b_5200_b", type=0, category=1, }; //「ハアアアァァァァ……」
+st[573] = { volumetype=1, path=1, file="lnd_010_b_5201_b", type=0, category=1, }; //「集え、顕現の力よ…」
+
+//ヴォーパル
+st[580] = { volumetype=1, path=1, file="lnd_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「（勝負を）決めさせてもらう！」
+st[581] = { volumetype=1, path=1, file="lnd_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; //「この流れに乗る！」
+
+//ヴォーパル・瀕死
+st[583] = { volumetype=1, path=1, file="lnd_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; //「ここは慎重にいくとしよう」
+
+//必殺技
+st[600] = { volumetype=1, path=1, file="lnd_010_b_6001", type=0, category=1, }; //「そこだ！」
+st[602] = { volumetype=1, path=1, file="lnd_010_b_6002_b", type=0, category=1, }; //「クリーヴ！」
+st[604] = { volumetype=1, path=1, file="lnd_010_b_6004", type=0, category=1, }; //「叩きつける！」
+st[605] = { volumetype=1, path=1, file="lnd_010_b_6005", type=0, category=1, }; //「おまけだっ」
+st[606] = { volumetype=1, path=1, file="lnd_010_b_6006", type=0, category=1, }; //「バイセクト！」
+st[610] = { volumetype=1, path=1, file="lnd_010_b_6008", type=0, category=1, }; //「飛べ！」
+st[611] = { volumetype=1, path=1, file="lnd_010_b_6009", type=0, category=1, }; //「楔(くさび)よ！」
+st[612] = { volumetype=1, path=1, file="lnd_010_b_6010", type=0, category=1, }; //「氷の楔よ！」
+st[613] = { volumetype=1, path=1, file="lnd_010_b_6011", type=0, category=1, }; //「磔(はりつけ)にする！」
+st[615] = { volumetype=1, path=1, file="lnd_010_b_6014", type=0, category=1, }; //「フローゼンスパイア！」
+st[620] = { volumetype=1, path=1, file="lnd_010_b_6017", type=0, category=1, }; //「氷華(ひょうか)よ！」
+st[621] = { volumetype=1, path=1, file="lnd_010_b_6018", type=0, category=1, }; //「咲け！」
+st[623] = { volumetype=1, path=1, file="lnd_010_b_6021", type=0, category=1, }; //「スノーブロッサム！」
+
+st[630] = { volumetype=1, path=1, file="lnd_010_b_6027", type=0, category=1, }; //「サーキュラーステップ！」
+st[632] = { volumetype=1, path=1, file="lnd_010_b_6028_b", type=0, category=1, }; //「氷脚(ひょうきゃく)！」
+st[634] = { volumetype=1, path=1, file="lnd_010_b_6029_b", type=0, category=1, }; //「ペザンテ！（「重々しく」という意味です）」
+st[635] = { volumetype=1, path=1, file="lnd_010_b_6030", type=0, category=1, }; //「足元だ！」
+st[636] = { volumetype=1, path=1, file="lnd_010_b_6031", type=0, category=1, }; //「翻弄する！」
+st[637] = { volumetype=1, path=1, file="lnd_010_b_6032", type=0, category=1, }; //「アウトエッジ！」
+st[639] = { volumetype=1, path=1, file="lnd_010_b_6035", type=0, category=1, }; //「疾走！」
+st[640] = { volumetype=1, path=1, file="lnd_010_b_6036", type=0, category=1, }; //「レガート！（「すべらかに」という意味です）」
+st[641] = { volumetype=1, path=1, file="lnd_010_b_6037", type=0, category=1, }; //「クロスシークエンス！」
+st[643] = { volumetype=1, path=1, file="lnd_010_b_6041", type=0, category=1, }; //「跳躍！」
+st[644] = { volumetype=1, path=1, file="lnd_010_b_6042", type=0, category=1, }; //「アニマート！（「生き生きと」という意味です）」
+st[645] = { volumetype=1, path=1, file="lnd_010_b_6043", type=0, category=1, }; //「サーペンタインテイル！ 」
+st[647] = { volumetype=1, path=1, file="lnd_010_b_6047", type=0, category=1, }; //「ついてこれるか！？」
+st[648] = { volumetype=1, path=1, file="lnd_010_b_6048", type=0, category=1, }; //「ハイドロブレーディング！」
+
+st[651] = { volumetype=1, path=1, file="lnd_010_b_6053_b", type=0, category=1, }; //「行け！」
+st[653] = { volumetype=1, path=1, file="lnd_010_b_6054_b", type=0, category=1, }; //「杖よ！」
+st[655] = { volumetype=1, path=1, file="lnd_010_b_6055_b", type=0, category=1, }; //「フローゼンスロープ！」
+st[660] = { volumetype=1, path=1, file="lnd_010_b_6060", type=0, category=1, }; //「フローゼンバイン！」
+st[670] = { volumetype=1, path=1, file="lnd_010_b_6062", type=0, category=1, }; //「アイシクルレイン！」
+st[680] = { volumetype=1, path=1, file="lnd_010_b_6063", type=0, category=1, }; //「強く輝け！」
+st[681] = { volumetype=1, path=1, file="lnd_010_b_6064", type=0, category=1, }; //「ルーセントライム！」
+st[690] = { volumetype=1, path=1, file="lnd_010_b_6067", type=0, category=1, }; //「激しく降り注げ！」
+
+//超必殺技
+st[701] = { volumetype=1, path=1, file="lnd_010_b_6501_b", type=0, category=1, }; //「氷雪(ひょうせつ)よ、吹き荒(すさ)べ！（次に続く）」
+st[703] = { volumetype=1, path=1, file="lnd_010_b_6502_b", type=0, category=1, }; //「ヘイルストーム！」
+st[720] = { volumetype=1, path=1, file="lnd_010_b_6515", type=0, category=1, }; //「コキュートスの氷獄（次に続く）」
+st[721] = { volumetype=1, path=1, file="lnd_010_b_6516", type=0, category=1, }; //「顕現(けんげん)せよ、我が戒めの氷槍。彼の者を捕らえ、連れ誘(いざな)え！（次に続く）」
+st[722] = { volumetype=1, path=1, file="lnd_010_b_6517", type=0, category=1, }; //「コキュートス！ ヘイルダウンフォール！」
+
+//対ワーグナー
+st[725] = { volumetype=1, path=1, file="lnd_010_b_6519_b", type=0, category=1, }; //「決着と行こう（次に続く）」
+st[726] = { volumetype=1, path=1, file="lnd_010_b_6520", type=0, category=1, }; //「炎さえも凍らせよう。リッターシルト最大の奥義、受けてみると良い！（次に続く）」
+//「コキュートス！ ヘイルダウンフォール！」

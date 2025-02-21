@@ -1,0 +1,319 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr003/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(500); // 確保
+local st = SeList_Table.Status; // 登録しやすいように省略
+
+st[0]  = { volumetype=0, path=2, file="SE_BloodCongeals", type=0, category=3, }; //通常技のブレード関係
+st[10] = { volumetype=0, path=2, file="SE_BloodPool", type=0, category=2, }; //236とかの血設置関係
+st[20] = { volumetype=0, path=2, file="SE_BloodSplashA", type=0, category=4, }; //6Bとか
+
+st[30] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=3, }; //236
+st[40] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=3, }; //214
+st[50] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=3, }; //623
+st[60] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=3, }; //22
+
+st[65] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWとどめ
+
+st[70] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWX柱破壊
+st[71] = { volumetype=0, path=2, file="SE_SpecialBrontides", type=1, category=-1, }; //IWX柱ゆれゆれ
+
+// 登場
+
+st[100] = { volumetype=1, path=1, file="car_010_b_2000", type=0, category=1, }; //「ククク…後悔してももう遅ェ！」
+st[101] = { volumetype=1, path=1, file="car_010_b_2001", type=0, category=1, }; //「雑魚はすっこんでろ…」
+st[102] = { volumetype=1, path=1, file="car_010_b_2002", type=0, category=1, }; //「軽くひねってやんよォ」
+
+// 登場 特殊
+// 対ハイド
+st[107] = { volumetype=1, path=1, file="car_010_b_2012_b", type=0, category=1, }; //「唯一の趣味だ、邪魔すんじゃねぇよ」
+
+// 対ゴルドー
+st[110] = { volumetype=1, path=1, file="car_010_b_2016", type=0, category=1, }; //「けっ…、テメェの命だけ心配してな…」
+
+// 対クオン
+st[113] = { volumetype=1, path=1, file="car_010_b_2025", type=0, category=1, }; //「気取ってんなよ、ガキが……」
+
+// ラウンド勝利
+st[122] = { volumetype=1, path=1, file="car_010_b_2100_a", type=0, category=1, }; //「クックックックックッ…ハァーッハッハッハッハッハァ！」
+st[124] = { volumetype=1, path=1, file="car_010_b_2101", type=0, category=1, }; //「おいおい、もう少し頑張れよ！」
+
+// 決着勝利 汎用
+st[127] = { volumetype=1, path=1, file="car_010_b_2111", type=0, category=1, }; //「まだまだ足んねーんだよォ！」
+st[128] = { volumetype=1, path=1, file="car_010_b_2112", type=0, category=1, }; //「格付け完了だ！」
+
+// 決着勝利 辛勝
+st[131] = { volumetype=1, path=1, file="car_010_b_2120", type=0, category=1, }; //「テメェ…犬が噛みついてんじゃねえぞ！」
+
+// 決着勝利 楽勝
+st[134] = { volumetype=1, path=1, file="car_010_b_2123", type=0, category=1, }; //「チッ…退屈しのぎにもなんねェ」
+ 
+// 決着勝利 掛け合い
+// 対ハイド
+st[138] = { volumetype=1, path=1, file="car_010_b_2127", type=0, category=1, }; //「なんだかわからねえがムカつく野郎だったぜ…」
+
+// 対ビャクヤ
+st[141] = { volumetype=1, path=1, file="car_010_b_2130", type=0, category=1, }; //「ガキが…おねーちゃんとママゴトでもしてな」
+
+// タイムアップ判定負け
+st[144] = { volumetype=1, path=1, file="car_010_b_2200", type=0, category=1, }; //「はあぁー！？」
+st[145] = { volumetype=1, path=1, file="car_010_b_2201", type=0, category=1, }; //「…チィッ…」
+st[146] = { volumetype=1, path=1, file="car_010_b_2202_a", type=0, category=1, }; //「はああァーッ！？オイオイマジかよ…」
+
+// 弱攻撃
+st[150] = { volumetype=1, path=1, file="car_010_b_2300_a", type=0, category=1, }; //「は」
+st[151] = { volumetype=1, path=1, file="car_010_b_2301_a", type=0, category=1, }; //「ふ」
+st[152] = { volumetype=1, path=1, file="car_010_b_2302_a", type=0, category=1, }; //「や」
+st[153] = { volumetype=1, path=1, file="car_010_b_2303_a", type=0, category=1, }; //「し」
+st[154] = { volumetype=1, path=1, file="car_010_b_2300_b", type=0, category=1, }; //「は」
+st[155] = { volumetype=1, path=1, file="car_010_b_2301_b", type=0, category=1, }; //「ふ」
+st[156] = { volumetype=1, path=1, file="car_010_b_2302_b", type=0, category=1, }; //「や」
+st[157] = { volumetype=1, path=1, file="car_010_b_2303_b", type=0, category=1, }; //「し」
+
+// 中攻撃
+st[160] = { volumetype=1, path=1, file="car_010_b_2400_a", type=0, category=1, }; //「はっ」
+st[161] = { volumetype=1, path=1, file="car_010_b_2401_a", type=0, category=1, }; //「へっ」
+st[162] = { volumetype=1, path=1, file="car_010_b_2402_a", type=0, category=1, }; //「そら」
+st[163] = { volumetype=1, path=1, file="car_010_b_2403_a", type=0, category=1, }; //「オラァ」
+st[164] = { volumetype=1, path=1, file="car_010_b_2404_a", type=0, category=1, }; //「クソが！」
+st[165] = { volumetype=1, path=1, file="car_010_b_2400_b", type=0, category=1, }; //「はっ」
+st[166] = { volumetype=1, path=1, file="car_010_b_2401_b", type=0, category=1, }; //「へっ」
+st[167] = { volumetype=1, path=1, file="car_010_b_2402_b", type=0, category=1, }; //「そら」
+st[168] = { volumetype=1, path=1, file="car_010_b_2403_b", type=0, category=1, }; //「オラァ」
+
+// 強攻撃
+st[172] = { volumetype=1, path=1, file="car_010_b_2500_a", type=0, category=1, }; //「ヒュゥ！」
+st[173] = { volumetype=1, path=1, file="car_010_b_2501_a", type=0, category=1, }; //「ホアァ！」
+st[174] = { volumetype=1, path=1, file="car_010_b_2502_a", type=0, category=1, }; //「食らえ」
+st[175] = { volumetype=1, path=1, file="car_010_b_2503_a", type=0, category=1, }; //「おら！」
+st[176] = { volumetype=1, path=1, file="car_010_b_2504_a", type=0, category=1, }; //「どうした！」
+st[177] = { volumetype=1, path=1, file="car_010_b_2505_a", type=0, category=1, }; //「オラァ！」
+st[178] = { volumetype=1, path=1, file="car_010_b_2506_a", type=0, category=1, }; //「ダラァ！」
+st[181] = { volumetype=1, path=1, file="car_010_b_2501_b", type=0, category=1, }; //「ホアァ！」
+st[182] = { volumetype=1, path=1, file="car_010_b_2502_b", type=0, category=1, }; //「食らえ」
+st[183] = { volumetype=1, path=1, file="car_010_b_2503_b", type=0, category=1, }; //「おら！」
+st[184] = { volumetype=1, path=1, file="car_010_b_2504_b", type=0, category=1, }; //「どうした！」
+st[185] = { volumetype=1, path=1, file="car_010_b_2505_b", type=0, category=1, }; //「オラァ！」
+st[186] = { volumetype=1, path=1, file="car_010_b_2506_b", type=0, category=1, }; //「ダラァ！」
+st[187] = { volumetype=1, path=1, file="car_010_b_2507_b", type=0, category=1, }; //「クソがぁぁぁ！」
+
+// 吹き飛ばし攻撃
+st[190] = { volumetype=1, path=1, file="car_010_b_2600", type=0, category=1, }; //「逝っちまいなァ！」
+st[191] = { volumetype=1, path=1, file="car_010_b_2601", type=0, category=1, }; //「消し飛べェ！」
+st[192] = { volumetype=1, path=1, file="car_010_b_2602", type=0, category=1, }; //「目ざわりだ！」
+
+// 回避困難な攻撃
+// st[195] = { volumetype=1, path=1, file="car_010_b_2604", type=0, category=1, }; //「バカがよ！」
+// st[196] = { volumetype=1, path=1, file="car_010_b_2605", type=0, category=1, }; //「ウスノロ！」
+st[197] = { volumetype=1, path=1, file="car_010_b_2606", type=0, category=1, }; //「逃げんな！」
+
+// その他特殊攻撃
+st[200] = { volumetype=1, path=1, file="car_010_b_2607", type=0, category=1, }; //「死にな！」
+st[203] = { volumetype=1, path=1, file="car_010_b_2609_b", type=0, category=1, }; //「ボンクラァ！」
+st[204] = { volumetype=1, path=1, file="car_010_b_2610", type=0, category=1, }; //「オマケだ！」
+st[205] = { volumetype=1, path=1, file="car_010_b_2611", type=0, category=1, }; //「そォらァ…よッ！」
+st[206] = { volumetype=1, path=1, file="car_010_b_2612", type=0, category=1, }; //「オラァ！」
+st[207] = { volumetype=1, path=1, file="car_010_b_2613", type=0, category=1, }; //「踊れェ！」
+
+st[208] = { volumetype=1, path=1, file="car_010_b_5100_a", type=0, category=1, }; //
+st[209] = { volumetype=1, path=1, file="car_010_b_6047_a", type=0, category=1, }; //
+
+// 投げ成功
+st[210] = { volumetype=1, path=1, file="car_010_b_2700", type=0, category=1, }; //「爆ぜろ！」
+st[211] = { volumetype=1, path=1, file="car_010_b_2701", type=0, category=1, }; //「ブチまけろァ！」
+
+// 投げ失敗
+st[214] = { volumetype=1, path=1, file="car_010_b_2800", type=0, category=1, }; //「逃げたか」
+st[215] = { volumetype=1, path=1, file="car_010_b_2801", type=0, category=1, }; //「クソッ」
+
+// 敵の投げ技を回避
+st[218] = { volumetype=1, path=1, file="car_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; //「うざってぇ！」
+st[219] = { volumetype=1, path=1, file="car_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; //「さわんじゃねぇ！」
+
+// ガードキャンセル攻撃
+st[222] = { volumetype=1, path=1, file="car_010_b_2950", type=0, category=1, }; //「カスがァ！」
+
+// 振り向き
+st[225] = { volumetype=1, path=1, file="car_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki, }; //「こっちかァ？」
+ 
+// 待機モーション
+st[228] = { volumetype=1, path=1, file="car_010_b_3100", type=0, category=1, }; //「どうした、かかってこいよオラァ！」
+st[229] = { volumetype=1, path=1, file="car_010_b_3101", type=0, category=1, }; //「なんだ、ビビッちまったかァ？」
+
+// 前方回避
+st[232] = { volumetype=1, path=1, file="car_010_b_3200", type=0, category=1, }; //「アメーぜ！」
+st[233] = { volumetype=1, path=1, file="car_010_b_3201", type=0, category=1, }; //「こっちの番だ」
+
+// ダッシュ
+st[236] = { volumetype=1, path=1, file="car_010_b_3300", type=0, category=1, }; //「行くぜオラァ！」
+st[238] = { volumetype=1, path=1, file="car_010_b_3301_b", type=0, category=1, }; //「速攻だァ！」
+
+// アサルト
+st[241] = { volumetype=1, path=1, file="car_010_b_3310", type=0, category=1, }; //「しゅっ」
+st[242] = { volumetype=1, path=1, file="car_010_b_3311", type=0, category=1, }; //「へっ」
+
+// バックステップ
+st[245] = { volumetype=1, path=1, file="car_010_b_3400", type=0, category=1, }; //「ふん」
+st[246] = { volumetype=1, path=1, file="car_010_b_3401", type=0, category=1, }; //「無駄無駄」
+
+// 弱攻撃ガード
+st[249] = { volumetype=1, path=1, file="car_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「ハッ（鼻で笑う）」
+st[250] = { volumetype=1, path=1, file="car_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「へっ」
+
+// 中攻撃ガード
+st[253] = { volumetype=1, path=1, file="car_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「なんでェ」
+st[254] = { volumetype=1, path=1, file="car_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「効かねェよ」
+st[255] = { volumetype=1, path=1, file="car_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「そのへんにしとけって」
+
+// 強攻撃ガード
+st[258] = { volumetype=1, path=1, file="car_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「結構くるな」
+st[261] = { volumetype=1, path=1, file="car_010_b_3701_c", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「やべェなこれ」
+st[262] = { volumetype=1, path=1, file="car_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「パワーだけはありやがる」
+
+// 攻撃を見切り余裕でガード
+st[265] = { volumetype=1, path=1, file="car_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「ハイハイ」
+st[266] = { volumetype=1, path=1, file="car_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「チッ、なめてんのか？」
+st[267] = { volumetype=1, path=1, file="car_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「んだァ？そりゃぁ」
+ 
+// ガード失敗ダメージ
+st[270] = { volumetype=1, path=1, file="car_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「ざっけ！」
+st[271] = { volumetype=1, path=1, file="car_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「調子にっ……（乗んじゃねぇ！）」
+st[272] = { volumetype=1, path=1, file="car_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「心底うぜぇ」
+
+// 受け身
+st[275] = { volumetype=1, path=1, file="car_010_b_4000", type=0, category=1, prio=Def_SEP_Recover, }; //「１０倍返しだ」
+st[276] = { volumetype=1, path=1, file="car_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; //「やってくれたな」
+st[277] = { volumetype=1, path=1, file="car_010_b_4002", type=0, category=1, prio=Def_SEP_Recover, }; //「っとやべえやべえ」
+
+// シールド発動
+st[280] = { volumetype=1, path=1, file="car_010_b_4100", type=0, category=1, }; //「へっ！」
+st[281] = { volumetype=1, path=1, file="car_010_b_4101", type=0, category=1, }; //「こいよ！」
+st[282] = { volumetype=1, path=1, file="car_010_b_4102", type=0, category=1, }; //「ふん」
+
+// シールド成功
+st[285] = { volumetype=1, path=1, file="car_010_b_4200", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「バカが！」
+st[286] = { volumetype=1, path=1, file="car_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「もうわかったっつの」
+st[288] = { volumetype=1, path=1, file="car_010_b_4202_b", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; //「バカの一つ覚えかァ？」
+ 
+// 弱攻撃ダメージ
+st[291] = { volumetype=1, path=1, file="car_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「っ」
+st[292] = { volumetype=1, path=1, file="car_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「てっ」
+st[293] = { volumetype=1, path=1, file="car_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「クソ」
+
+// 中攻撃ダメージ
+st[296] = { volumetype=1, path=1, file="car_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「つぅ」
+st[297] = { volumetype=1, path=1, file="car_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「がっ」
+
+// 強攻撃ダメージ
+st[300] = { volumetype=1, path=1, file="car_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「があっ！」
+st[301] = { volumetype=1, path=1, file="car_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「グボッ！」
+st[302] = { volumetype=1, path=1, file="car_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「クッソォッ！」
+st[303] = { volumetype=1, path=1, file="car_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; //「ふざけろ！」
+
+// ダウン
+st[307] = { volumetype=1, path=1, file="car_010_b_4600_b", type=0, category=1, prio=Def_SEP_KO, }; //「このオレがッ！」
+ 
+// ラウンド敗北
+st[310] = { volumetype=1, path=1, file="car_010_b_4650", type=0, category=1, prio=Def_SEP_KO, }; //「ちったぁできるみてェだなァ…」
+st[311] = { volumetype=1, path=1, file="car_010_b_4651", type=0, category=1, prio=Def_SEP_KO, }; //「テッメェ…やってくれるじゃねーか」
+
+// ダウン・ノックアウト
+st[314] = { volumetype=1, path=1, file="car_010_b_4700", type=0, category=1, prio=Def_SEP_KO, }; //「ぐおあぁぁぁぁぁぁーーーーー」
+
+// 起き上がり
+st[318] = { volumetype=1, path=1, file="car_010_b_4801", type=0, category=1, }; //「上等だ」
+st[324] = { volumetype=1, path=1, file="car_010_b_4800_d", type=0, category=1, }; //「１００倍返しだァ…！」
+st[326] = { volumetype=1, path=1, file="car_010_b_4802_e", type=0, category=1, }; //「キレそうだぜオイィ…！」
+
+// 起き上がり・瀕死
+st[329] = { volumetype=1, path=1, file="car_010_b_4900", type=0, category=1, }; //「あー…クソッ…」
+st[330] = { volumetype=1, path=1, file="car_010_b_4901", type=0, category=1, }; //「クソったれがァァ…ッ！」
+st[331] = { volumetype=1, path=1, file="car_010_b_4902", type=0, category=1, }; //「へっ…なかなかやるじゃねェか」
+ 
+// ヴェールオフ
+st[334] = { volumetype=1, path=1, file="car_010_b_5000", type=0, category=3, }; //「恐れろォ！」
+st[335] = { volumetype=1, path=1, file="car_010_b_5001", type=0, category=3, }; //「ブッ潰してやんぜ！」
+
+// チェインシフト
+st[340] = { volumetype=1, path=1, file="car_010_b_5100_b", type=0, category=1, }; //「ヒャッハー！」
+st[341] = { volumetype=1, path=1, file="car_010_b_5101_b", type=0, category=1, }; //「きたぜきたぜェ…！」
+
+// コンセントレーション
+st[346] = { volumetype=1, path=1, file="car_010_b_5200_c", type=0, category=1, }; //「クックックッ…」
+st[347] = { volumetype=1, path=1, file="car_010_b_5201", type=0, category=1, }; //「クールダウンだ…」
+
+// ヴォーパル
+st[350] = { volumetype=1, path=1, file="car_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「たぎってきたぜ…」
+st[351] = { volumetype=1, path=1, file="car_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; //「絶望をくれてやるぜェ…！」
+ 
+// ヴォーパル・瀕死
+st[355] = { volumetype=1, path=1, file="car_010_b_5302_b", type=0, category=1, prio=Def_SEP_Vorpal, }; //「なんだもう勝ったつもりかァ？！」
+
+// 必殺技
+st[361] = { volumetype=1, path=1, file="car_010_b_6001_b", type=0, category=1, }; //「まわれェ！」
+st[362] = { volumetype=1, path=1, file="car_010_b_6002_b", type=0, category=1, }; //「飲み込め！」
+
+st[365] = { volumetype=1, path=1, file="car_010_b_6007", type=0, category=1, }; //「まわりやがれェ！」
+
+st[368] = { volumetype=1, path=1, file="car_010_b_6011_a", type=0, category=1, }; //「ヒャッハー！」
+st[370] = { volumetype=1, path=1, file="car_010_b_6012", type=0, category=1, }; //「切り刻め！」
+
+st[373] = { volumetype=1, path=1, file="car_010_b_6016", type=0, category=1, }; //「微塵切りだァ！」
+
+st[376] = { volumetype=1, path=1, file="car_010_b_6021", type=0, category=1, }; //「シャァァ！」
+st[378] = { volumetype=1, path=1, file="car_010_b_6022_b", type=0, category=1, }; //「すり潰せ！」
+ 
+st[381] = { volumetype=1, path=1, file="car_010_b_6026", type=0, category=1, }; //「痛い目みるぜェ？」
+st[382] = { volumetype=1, path=1, file="car_010_b_6027", type=0, category=1, }; //「撒き散らす！」
+st[383] = { volumetype=1, path=1, file="car_010_b_6028", type=0, category=1, }; //「ブチ撒けろ！」
+
+st[386] = { volumetype=1, path=1, file="car_010_b_6031", type=0, category=1, }; //「オラァ！」
+st[388] = { volumetype=1, path=1, file="car_010_b_6032_b", type=0, category=1, }; //「ブチ抜け！」
+st[389] = { volumetype=1, path=1, file="car_010_b_6033", type=0, category=1, }; //「貫け！」
+st[390] = { volumetype=1, path=1, file="car_010_b_6034", type=0, category=1, }; //「ケケケ」
+
+st[393] = { volumetype=1, path=1, file="car_010_b_6038", type=0, category=1, }; //「串刺しだオラァ！」
+st[394] = { volumetype=1, path=1, file="car_010_b_6039", type=0, category=1, }; //「ギロチンだオラァ！」
+
+st[402] = { volumetype=1, path=1, file="car_010_b_6043_b", type=0, category=1, }; //「そこだ」
+st[403] = { volumetype=1, path=1, file="car_010_b_6044_b", type=0, category=1, }; //「根こそぎィ！」
+st[404] = { volumetype=1, path=1, file="car_010_b_6045_b", type=0, category=1, }; //「突き上げろ！」
+st[405] = { volumetype=1, path=1, file="car_010_b_6046_b", type=0, category=1, }; //「足元ォ」
+st[406] = { volumetype=1, path=1, file="car_010_b_6047_b", type=0, category=1, }; //「ぶち抜けぇ！」
+
+st[409] = { volumetype=1, path=1, file="car_010_b_6050", type=0, category=1, }; //「嬲ってやんよォ！」
+st[410] = { volumetype=1, path=1, file="car_010_b_6051", type=0, category=1, }; //「食われちまえよ！」
+
+st[413] = { volumetype=1, path=1, file="car_010_b_6054", type=0, category=1, }; //「見えたぜ…」
+st[414] = { volumetype=1, path=1, file="car_010_b_6055", type=0, category=1, }; //「はああっ！」
+st[415] = { volumetype=1, path=1, file="car_010_b_6056", type=0, category=1, }; //「いただきだぜ！」
+st[416] = { volumetype=1, path=1, file="car_010_b_6057", type=0, category=1, }; //「（失敗）ちぃ…」
+st[417] = { volumetype=1, path=1, file="car_010_b_6058", type=0, category=1, }; //「よこしやがれ！」
+
+st[421] = { volumetype=1, path=1, file="car_010_b_6063_a", type=0, category=1, }; //「捲け！」
+st[422] = { volumetype=1, path=1, file="car_010_b_6062_b", type=0, category=1, }; //「捲かれな！」
+
+st[431] = { volumetype=1, path=1, file="car_010_b_6071", type=0, category=1, }; //「歪んだ顔を見せてくれよぉ」
+st[432] = { volumetype=1, path=1, file="car_010_b_6072", type=0, category=1, }; //「痛ぇだろぉ！？」
+
+st[435] = { volumetype=1, path=1, file="car_010_b_6075", type=0, category=1, }; //「捉えたぜぇ！」
+
+// 超必殺技
+st[441] = { volumetype=1, path=1, file="car_010_b_6501", type=0, category=1, }; //「避(よ)けてみやがれ…！（次に続く）」
+st[442] = { volumetype=1, path=1, file="car_010_b_6502", type=0, category=1, }; //「ヒャァーッハッハッハァ！（次に続く）」
+st[443] = { volumetype=1, path=1, file="car_010_b_6503", type=0, category=1, }; //「喰らい尽くせ！」
+
+st[447] = { volumetype=1, path=1, file="car_010_b_6516_a", type=0, category=1, }; //「赤き棺(ひつぎ)に抱かれ、赤き刺針(ししん)に貫かれ、死んで還るんだなぁ、原初(げんしょ)の赤に！（次に続く）」
+st[449] = { volumetype=1, path=1, file="car_010_b_6515_b", type=0, category=1, }; //「ここだァ！（次に続く）」
+st[451] = { volumetype=1, path=1, file="car_010_b_6517_b", type=0, category=1, }; //「クソがぁ！これで仕舞いだぁ！！」

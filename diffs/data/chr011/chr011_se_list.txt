@@ -1,0 +1,332 @@
+__dofile__("./script/btl_SEDefine.txt"); //ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか	
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // 0:汎用SE
+SeList_Table.Path.append( "./se/battle_se/chr011/" ); // 1:キャラ音声
+SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
+
+SeList_Table.Status.resize(750); // てきとう
+local st = SeList_Table.Status; // 登録しやすいように
+
+//SE
+st[2] = { volumetype=0, path=2, file="SE_OldBulletPoping", type=0, category=-1, }; //威嚇射撃はねるＳＥ
+st[3] = { volumetype=0, path=2, file="SE_OldBulletFiring", type=0, category=-1, }; //横打ち・威嚇射撃ＳＥ
+st[4] = { volumetype=0, path=2, file="SE_OldBulletFiring", type=0, category=-1, }; //横打ちEXＳＥ
+st[5] = { volumetype=0, path=2, file="SE_OldStringsAttached", type=1, category=-1, }; //エーテライト集中ＳＥ
+st[6] = { volumetype=0, path=2, file="SE_ReloadBullet", type=1, category=-1, }; //リロード　カチャッＳＥ
+
+
+st[7] = { volumetype=0, path=2, file="SE_ShotBall", type=1, category=-1, }; //J214加速しゅん
+st[8] = { volumetype=0, path=0, file="SE031_ShieldSuccess", type=1, category=-1, }; //リロード成功ＳＥ
+st[9] = { volumetype=0, path=2, file="SE_BigBomb_Short", type=1, category=-1, }; //J214EX最後・・・にしてはでかい
+
+st[10] = { volumetype=0, path=2, file="SE_SwingAetheryte", type=1, category=-1, };
+st[15] = { volumetype=0, path=2, file="SE_SpecialLaserBeamShort", type=1, category=-1, }; //236EXレーザーＳＥ
+
+st[20] = { volumetype=0, path=2, file="SE_SpecialLaserBeam2", type=1, category=-1, };
+st[21] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, }; //IW地震
+
+st[30] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, }; //IX出現地震
+st[31] = { volumetype=0, path=2, file="SE_BombTheEarth", type=1, category=-1, }; //IXヘルメス手出現
+
+st[33] = { volumetype=0, path=2, file="SE_ChargeUp", type=1, category=-1, }; //IXヘルメス構え
+
+st[35] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, }; //IXヘルメス攻撃開始
+st[36] = { volumetype=0, path=2, file="SE_Hari_Appear", type=1, category=-1, }; //ヘルメス攻撃レーザーＳＥ
+st[37] = { volumetype=0, path=2, file="SE_Bomb", type=1, category=-1, }; //ヘルメスとどめレーザーＳＥ
+
+st[40] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //とどめ爆発ＳＥ
+st[41] = { volumetype=0, path=2, file="SE_BigBomb_Short", type=1, category=-1, }; //623EX最後
+
+
+//登場
+st[100] = { volumetype=1, path=1, file="elt_010_b_2000", type=0, category=1, }; //「お仕置きの時間です。」
+st[101] = { volumetype=1, path=1, file="elt_010_b_2001", type=0, category=1, }; //「見せてあげましょう、年季の違いを。」
+
+//登場 特殊
+//対アカツキ
+st[106] = { volumetype=1, path=1, file="elt_010_b_2012", type=0, category=1, }; //「それではラストダンスと参りましょうか、先輩」
+
+//ラウンド勝利
+st[115] = { volumetype=1, path=1, file="elt_010_b_2100", type=0, category=1, }; //「貴方はまず、無謀という言葉を知るべきだ」
+st[116] = { volumetype=1, path=1, file="elt_010_b_2101", type=0, category=1, }; //「予測数値以下とは……情けない」
+st[117] = { volumetype=1, path=1, file="elt_010_b_2102", type=0, category=1, }; //「ふん、まったく嘆(なげ)かわしい……」
+
+//決着勝利 汎用
+st[120] = { volumetype=1, path=1, file="elt_010_b_2111", type=0, category=1, }; //「以上です、解りきった結末でした」
+st[121] = { volumetype=1, path=1, file="elt_010_b_2112", type=0, category=1, }; //「お分かりいただけましたか？」
+
+//決着勝利 辛勝
+st[124] = { volumetype=1, path=1, file="elt_010_b_2120", type=0, category=1, }; //「こちらの計算を超えますか…お見事です。結果は変わりませんが」
+
+//決着勝利 楽勝
+st[127] = { volumetype=1, path=1, file="elt_010_b_2123", type=0, category=1, }; //「易しい問題でした。」
+
+//決着勝利 掛け合い
+//対アカツキ
+st[132] = { volumetype=1, path=1, file="elt_010_b_2127", type=0, category=1, }; //「このめぐりあわせに感謝を」
+
+//タイムアップ判定負け
+st[135] = { volumetype=1, path=1, file="elt_010_b_2200", type=0, category=1, }; //「……私とした事が……」
+st[136] = { volumetype=1, path=1, file="elt_010_b_2201", type=0, category=1, }; //「時間切れだなんて……」
+st[137] = { volumetype=1, path=1, file="elt_010_b_2202", type=0, category=1, }; //「…甘く見過ぎていたようですね」
+
+//弱攻撃
+st[140] = { volumetype=1, path=1, file="elt_010_b_2300_a", type=0, category=1, }; //はっ
+st[141] = { volumetype=1, path=1, file="elt_010_b_2301_a", type=0, category=1, }; //ふっ
+st[142] = { volumetype=1, path=1, file="elt_010_b_2302_a", type=0, category=1, }; //やっ
+st[143] = { volumetype=1, path=1, file="elt_010_b_2303_a", type=0, category=1, }; //しっ
+st[144] = { volumetype=1, path=1, file="elt_010_b_2300_b", type=0, category=1, }; //はっ
+st[145] = { volumetype=1, path=1, file="elt_010_b_2301_b", type=0, category=1, }; //ふっ
+st[146] = { volumetype=1, path=1, file="elt_010_b_2302_b", type=0, category=1, }; //やっ
+
+//中攻撃
+st[150] = { volumetype=1, path=1, file="elt_010_b_2400_a", type=0, category=1, }; //たぁ
+st[151] = { volumetype=1, path=1, file="elt_010_b_2401_a", type=0, category=1, }; //やぁ
+st[154] = { volumetype=1, path=1, file="elt_010_b_2404_a", type=0, category=1, }; //はあ！
+st[155] = { volumetype=1, path=1, file="elt_010_b_2400_b", type=0, category=1, }; //たぁ
+st[156] = { volumetype=1, path=1, file="elt_010_b_2401_b", type=0, category=1, }; //やぁ
+st[157] = { volumetype=1, path=1, file="elt_010_b_2402_b", type=0, category=1, }; //ロー！
+st[158] = { volumetype=1, path=1, file="elt_010_b_2403_b", type=0, category=1, }; //てやぁ！
+st[159] = { volumetype=1, path=1, file="elt_010_b_2404_b", type=0, category=1, }; //はあ！
+// 
+//強攻撃
+st[160] = { volumetype=1, path=1, file="elt_010_b_2500_a", type=0, category=1, }; //はあぁぁっ！
+st[162] = { volumetype=1, path=1, file="elt_010_b_2502_a", type=0, category=1, }; //やあぁー！
+st[165] = { volumetype=1, path=1, file="elt_010_b_2505_a", type=0, category=1, }; //食らいなさい！
+st[167] = { volumetype=1, path=1, file="elt_010_b_2500_b", type=0, category=1, }; //はあぁぁっ！
+st[168] = { volumetype=1, path=1, file="elt_010_b_2501_b", type=0, category=1, }; //えいっ！
+st[169] = { volumetype=1, path=1, file="elt_010_b_2502_b", type=0, category=1, }; //やあぁー！
+st[170] = { volumetype=1, path=1, file="elt_010_b_2503_b", type=0, category=1, }; //いきます！	// J623Aで使用
+st[171] = { volumetype=1, path=1, file="elt_010_b_2504_b", type=0, category=1, }; //でぇい！
+st[172] = { volumetype=1, path=1, file="elt_010_b_2505_b", type=0, category=1, }; //食らいなさい！
+st[173] = { volumetype=1, path=1, file="elt_010_b_2506_b", type=0, category=1, }; //どうです！？
+st[174] = { volumetype=1, path=1, file="elt_010_b_2500_c", type=0, category=1, }; //はあぁぁっ！
+
+//吹き飛ばし攻撃
+st[180] = { volumetype=1, path=1, file="elt_010_b_2600", type=0, category=1, }; //「無駄です！」
+st[181] = { volumetype=1, path=1, file="elt_010_b_2601", type=0, category=1, }; //「飛べっ！」
+st[182] = { volumetype=1, path=1, file="elt_010_b_2602", type=0, category=1, }; //「はああ！」
+
+//回避困難な攻撃
+st[185] = { volumetype=1, path=1, file="elt_010_b_2604", type=0, category=1, }; //「はあぁぁっ！」
+st[186] = { volumetype=1, path=1, file="elt_010_b_2605", type=0, category=1, }; //「でぇい！」
+st[188] = { volumetype=1, path=1, file="elt_010_b_2606_b", type=0, category=1, }; //「潰れなさい！」
+
+//その他特殊攻撃
+st[190] = { volumetype=1, path=1, file="elt_010_b_2607", type=0, category=1, }; //「引き寄せる！」
+st[191] = { volumetype=1, path=1, file="elt_010_b_2608", type=0, category=1, }; //「はっ！」
+st[192] = { volumetype=1, path=1, file="elt_010_b_2609", type=0, category=1, }; //「甘い！」
+st[194] = { volumetype=1, path=1, file="elt_010_b_2611", type=0, category=1, }; //「未熟！」
+
+st[195] = { volumetype=1, path=1, file="elt_010_b_2610", type=0, category=1, }; //
+st[196] = { volumetype=1, path=1, file="elt_010_b_3311_a", type=0, category=1, }; //
+
+st[197] = { volumetype=1, path=1, file="elt_010_b_2506_a", type=0, category=1, }; //
+st[198] = { volumetype=1, path=1, file="elt_010_b_2950_a", type=0, category=1, }; //
+
+//投げ成功
+st[200] = { volumetype=1, path=1, file="elt_010_b_2700", type=0, category=1, }; //「寝てろ」
+st[201] = { volumetype=1, path=1, file="elt_010_b_2701", type=0, category=1, }; //「逃がすか」
+
+//投げ失敗
+st[210] = { volumetype=1, path=1, file="elt_010_b_2800", type=0, category=1, }; //「しまっ……！」
+st[211] = { volumetype=1, path=1, file="elt_010_b_2801", type=0, category=1, }; //「チッ……！」
+
+//敵の投げ技を回避
+st[220] = { volumetype=1, path=1, file="elt_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「計算通り……！」
+st[221] = { volumetype=1, path=1, file="elt_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「そうくると思っていました」
+
+//ガードキャンセル攻撃
+st[231] = { volumetype=1, path=1, file="elt_010_b_2950_b", type=0, category=1, }; //「そこまでだ！」
+
+//振り向き
+st[240] = { volumetype=1, path=1, file="elt_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki }; //「ふむ」
+st[241] = { volumetype=1, path=1, file="elt_010_b_3001", type=0, category=1, prio=Def_SEP_Furimuki }; //「小癪(こしゃく)な」
+
+//待機モーション
+st[250] = { volumetype=1, path=1, file="elt_010_b_3100", type=0, category=1, }; //「思考まで停止しましたか？」
+st[251] = { volumetype=1, path=1, file="elt_010_b_3101", type=0, category=1, }; //「そろそろ本気を出したらどうですか？」
+
+//前方回避
+st[261] = { volumetype=1, path=1, file="elt_010_b_3200_b", type=0, category=1, }; //「回避する」
+st[263] = { volumetype=1, path=1, file="elt_010_b_3201_b", type=0, category=1, }; //「詰める」
+
+//ダッシュ
+st[270] = { volumetype=1, path=1, file="elt_010_b_3300", type=0, category=1, }; //「シッ」
+st[271] = { volumetype=1, path=1, file="elt_010_b_3301", type=0, category=1, }; //「行きます」
+
+//アサルト
+st[280] = { volumetype=1, path=1, file="elt_010_b_3310", type=0, category=1, }; //「よっ」
+st[282] = { volumetype=1, path=1, file="elt_010_b_3311_b", type=0, category=1, }; //「はっ」
+
+//バックステップ
+st[290] = { volumetype=1, path=1, file="elt_010_b_3400", type=0, category=1, }; //「はっ」
+st[291] = { volumetype=1, path=1, file="elt_010_b_3401", type=0, category=1, }; //「とっ」
+
+//弱攻撃ガード
+st[300] = { volumetype=1, path=1, file="elt_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「チッ」
+st[301] = { volumetype=1, path=1, file="elt_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「なんの」
+st[302] = { volumetype=1, path=1, file="elt_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; //「くっ」
+
+//中攻撃ガード
+st[310] = { volumetype=1, path=1, file="elt_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「単調ですね」
+st[311] = { volumetype=1, path=1, file="elt_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「苛(いら)つかせる」
+st[313] = { volumetype=1, path=1, file="elt_010_b_3602_b", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; //「おっと」
+
+//強攻撃ガード
+st[320] = { volumetype=1, path=1, file="elt_010_b_3700", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「削られる…！？」
+st[321] = { volumetype=1, path=1, file="elt_010_b_3701", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「なんという怪力…！」
+st[322] = { volumetype=1, path=1, file="elt_010_b_3702", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; //「ぐっ、これ以上は…！」
+
+//攻撃を見切り余裕でガード
+st[330] = { volumetype=1, path=1, file="elt_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「予測済みです」
+st[331] = { volumetype=1, path=1, file="elt_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「お見通しです」
+st[332] = { volumetype=1, path=1, file="elt_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; //「攻めが雑ですね」
+
+//ガード失敗ダメージ
+st[340] = { volumetype=1, path=1, file="elt_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「予想外です！」
+st[341] = { volumetype=1, path=1, file="elt_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「間違っ！？」
+st[342] = { volumetype=1, path=1, file="elt_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; //「こんなはずは……」
+
+//受け身
+st[350] = { volumetype=1, path=1, file="elt_010_b_4000", type=0, category=1, prio=Def_SEP_Recover, }; //「やりますね」
+st[351] = { volumetype=1, path=1, file="elt_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; //「詰めがあまい」
+
+//シールド発動
+st[360] = { volumetype=1, path=1, file="elt_010_b_4100", type=0, category=1, }; //「はっ」
+st[361] = { volumetype=1, path=1, file="elt_010_b_4101", type=0, category=1, }; //「来い！」
+
+//シールド成功
+st[371] = { volumetype=1, path=1, file="elt_010_b_4200_b", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「これも計算通り」
+st[372] = { volumetype=1, path=1, file="elt_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「よし！」
+st[373] = { volumetype=1, path=1, file="elt_010_b_4202", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1 }; //「やはり！」
+
+//弱攻撃ダメージ
+st[380] = { volumetype=1, path=1, file="elt_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「あっ」
+st[381] = { volumetype=1, path=1, file="elt_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「うっ」
+st[382] = { volumetype=1, path=1, file="elt_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1 }; //「くっ」
+
+//中攻撃ダメージ
+st[390] = { volumetype=1, path=1, file="elt_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「ぐぅっ」
+st[391] = { volumetype=1, path=1, file="elt_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「ばかなっ」
+st[392] = { volumetype=1, path=1, file="elt_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1 }; //「ちぃ！」
+
+//強攻撃ダメージ
+st[400] = { volumetype=1, path=1, file="elt_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「つあ！？」
+st[401] = { volumetype=1, path=1, file="elt_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「そんなっ」
+st[402] = { volumetype=1, path=1, file="elt_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「あああぁぅ！」
+st[403] = { volumetype=1, path=1, file="elt_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1 }; //「予測が！？」
+
+//ダウン
+st[410] = { volumetype=1, path=1, file="elt_010_b_4600", type=0, category=1, prio=Def_SEP_KO }; //「うわあっーーー」
+st[411] = { volumetype=1, path=1, file="elt_010_b_4601", type=0, category=1, prio=Def_SEP_KO }; //「この私が……！？」
+
+//ラウンド敗北
+st[420] = { volumetype=1, path=1, file="elt_010_b_4650", type=0, category=1, prio=Def_SEP_KO }; //「一度は花を持たせましょう……」
+st[421] = { volumetype=1, path=1, file="elt_010_b_4651", type=0, category=1, prio=Def_SEP_KO }; //「甘く見ていたよう……です」
+
+//ダウン・ノックアウト
+st[430] = { volumetype=1, path=1, file="elt_010_b_4700", type=0, category=1, prio=Def_SEP_KO }; //「きゃあああぁぁぁぁ――――――っ」
+st[431] = { volumetype=1, path=1, file="elt_010_b_4701", type=0, category=1, prio=Def_SEP_KO }; //「うわあぁぁぁーーーーーーーっ！」
+
+//起き上がり
+st[441] = { volumetype=1, path=1, file="elt_010_b_4800_b", type=0, category=1, }; //「戦闘、再開します」
+st[443] = { volumetype=1, path=1, file="elt_010_b_4801_b", type=0, category=1, }; //「まだまだ……！」
+
+//起き上がり・瀕死
+st[450] = { volumetype=1, path=1, file="elt_010_b_4900", type=0, category=1, }; //「ここからだ……！」
+st[451] = { volumetype=1, path=1, file="elt_010_b_4901", type=0, category=1, }; //「負けられないっ……！」
+
+//ヴェールオフ
+st[460] = { volumetype=1, path=1, file="elt_010_b_5000", type=0, category=-1, }; //「はぁぁぁぁぁぁあ……！」
+st[461] = { volumetype=1, path=1, file="elt_010_b_5001", type=0, category=-1, }; //「開放！」
+
+//チェインシフト
+st[470] = { volumetype=1, path=1, file="elt_010_b_5100", type=0, category=1, }; //「最適戦略―――」
+st[471] = { volumetype=1, path=1, file="elt_010_b_5101", type=0, category=1, }; //「この期、逃(のが)しません！」
+
+//コンセントレーション
+st[480] = { volumetype=1, path=1, file="elt_010_b_5200", type=0, category=1, }; //「セット……」
+st[481] = { volumetype=1, path=1, file="elt_010_b_5201", type=0, category=1, }; //「ハァァァアアアア…（だんだん大きく）」
+
+//ヴォーパル
+st[490] = { volumetype=1, path=1, file="elt_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; //「造作もない」
+st[491] = { volumetype=1, path=1, file="elt_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; //「理想的な展開です」
+
+//ヴォーパル・瀕死
+st[501] = { volumetype=1, path=1, file="elt_010_b_5302_b", type=0, category=1, prio=Def_SEP_Vorpal, }; //「この程度、想定内です」
+
+//必殺技
+st[511] = { volumetype=1, path=1, file="elt_010_b_6001_b", type=0, category=1, }; //「落ちろ」
+st[520] = { volumetype=1, path=1, file="elt_010_b_6004", type=0, category=1, }; //「よっと」
+st[521] = { volumetype=1, path=1, file="elt_010_b_6005", type=0, category=1, }; //「はっ」
+
+st[530] = { volumetype=1, path=1, file="elt_010_b_6008", type=0, category=1, }; //「そこっ！」
+st[531] = { volumetype=1, path=1, file="elt_010_b_6009", type=0, category=1, }; //「逃がさない！」
+st[532] = { volumetype=1, path=1, file="elt_010_b_6010", type=0, category=1, }; //「撃ちぬく！」
+st[533] = { volumetype=1, path=1, file="elt_010_b_6011", type=0, category=1, }; //「ロック解除！」
+st[537] = { volumetype=1, path=1, file="elt_010_b_6014", type=0, category=1, }; //「威嚇射撃だと思いましたか？」
+st[538] = { volumetype=1, path=1, file="elt_010_b_6015", type=0, category=1, }; //「ホローポイント！」
+st[540] = { volumetype=1, path=1, file="elt_010_b_6018", type=0, category=1, }; //「止まれっ！」
+st[541] = { volumetype=1, path=1, file="elt_010_b_6019", type=0, category=1, }; //「動くな！」
+st[542] = { volumetype=1, path=1, file="elt_010_b_6020", type=0, category=1, }; //「威嚇ですよ」
+st[550] = { volumetype=1, path=1, file="elt_010_b_6022", type=0, category=1, }; //「リロード」
+st[551] = { volumetype=1, path=1, file="elt_010_b_6023", type=0, category=1, }; //「（失敗）弾切れ」
+st[560] = { volumetype=1, path=1, file="elt_010_b_6027", type=0, category=1, }; //「いやあぁ！」
+st[561] = { volumetype=1, path=1, file="elt_010_b_6028", type=0, category=1, }; //「エーテライト・エア！」
+st[562] = { volumetype=1, path=1, file="elt_010_b_6029_a", type=0, category=1, }; //「根本は千点です！ 」
+st[566] = { volumetype=1, path=1, file="elt_010_b_6032", type=0, category=1, }; //「見えました！ （次に続く）」
+st[567] = { volumetype=1, path=1, file="elt_010_b_6033", type=0, category=-1, }; //「お前の罪を数えなさい」
+
+st[570] = { volumetype=1, path=1, file="elt_010_b_6036", type=0, category=1, }; //「そこです！（次に続く）」
+st[571] = { volumetype=1, path=1, file="elt_010_b_6037", type=0, category=-1, }; //「足元に注意。」
+
+st[572] = { volumetype=1, path=1, file="elt_010_b_6038", type=0, category=1, }; //「エーテライト・グランド！」
+st[576] = { volumetype=1, path=1, file="elt_010_b_6042", type=0, category=1, }; //「チェック……！（次に続く）」
+st[577] = { volumetype=1, path=1, file="elt_010_b_6043", type=0, category=2, }; //「ここは安定と行きましょう。」
+
+st[578] = { volumetype=1, path=1, file="elt_010_b_6044", type=0, category=1, }; //「（失敗）なんと 」
+st[580] = { volumetype=1, path=1, file="elt_010_b_6048", type=0, category=1, }; //「シッ」
+
+st[581] = { volumetype=1, path=1, file="elt_010_b_6049", type=0, category=1, }; //「しゅっ！（次に続く）」
+st[582] = { volumetype=1, path=1, file="elt_010_b_6050", type=0, category=1, }; //「たぁ！」
+st[583] = { volumetype=1, path=1, file="elt_010_b_6082_s0", type=0, category=-1 }; //２「徐々に強く」
+st[584] = { volumetype=1, path=1, file="elt_010_b_6082_s1", type=0, category=-1 }; //３「しなやかに！」
+
+st[586] = { volumetype=1, path=1, file="elt_010_b_6054", type=0, category=1, }; //「カッティングシンク！」
+st[590] = { volumetype=1, path=1, file="elt_010_b_6058", type=0, category=1, }; //「じゃっ……！（次に続く）」
+st[591] = { volumetype=1, path=1, file="elt_010_b_6059", type=0, category=1, }; //「スライドエア！」
+
+st[592] = { volumetype=1, path=1, file="elt_010_b_6060", type=0, category=1, }; //「貰った……！（次に続く）」
+st[593] = { volumetype=1, path=1, file="elt_010_b_6061", type=0, category=1, }; //「亀ですか貴方は」
+// 
+st[597] = { volumetype=1, path=1, file="elt_010_b_6065", type=0, category=1, }; //「取った……！（次に続く）」
+st[598] = { volumetype=1, path=1, file="elt_010_b_6066", type=0, category=1, }; //「甘い（次に続く）」
+st[599] = { volumetype=1, path=1, file="elt_010_b_6067", type=0, category=1, }; //「温い（次に続く）」
+st[600] = { volumetype=1, path=1, file="elt_010_b_6068", type=0, category=1, }; //「弱い（次に続く）」
+st[601] = { volumetype=1, path=1, file="elt_010_b_6069", type=0, category=1, }; //「落ちろ（次に続く）」
+st[602] = { volumetype=1, path=1, file="elt_010_b_6070", type=0, category=1, }; //「貴方の負けだ……！」
+
+st[612] = { volumetype=1, path=1, file="elt_010_b_6074_b", type=0, category=1, }; //「いい加減にっ！」
+st[615] = { volumetype=1, path=1, file="elt_010_b_6078", type=0, category=1, }; //「耐えてみなさい！」
+
+st[630] = { volumetype=1, path=1, file="elt_010_b_6087", type=0, category=1, }; //「上昇基調」
+st[631] = { volumetype=1, path=1, file="elt_010_b_6088", type=0, category=1, }; //「整理しましょう」
+st[632] = { volumetype=1, path=1, file="elt_010_b_6089", type=0, category=1, }; //「エーテライトウィールド！」
+st[633] = { volumetype=1, path=1, file="elt_010_b_6092", type=0, category=1, }; //「そこです！」
+st[634] = { volumetype=1, path=1, file="elt_010_b_6093", type=0, category=1, }; //「打ち破る！」
+
+//超必殺技
+st[660] = { volumetype=1, path=1, file="elt_010_b_6501", type=0, category=1, }; //「バレルレプリカ、フルトランス」
+st[670] = { volumetype=1, path=1, file="elt_010_b_6515", type=0, category=1, }; //「幕と行きましょう（次に続く）」
+st[671] = { volumetype=1, path=1, file="elt_010_b_6516", type=0, category=1, }; //「ヘェェェルッメェェーース！（次に続く）」
+st[672] = { volumetype=1, path=1, file="elt_010_b_6517", type=0, category=1, }; //「アルティメットアーク、トライヘルメス・インサイド！（次に続く）」
+st[673] = { volumetype=1, path=1, file="elt_010_b_6518", type=0, category=1, }; //「ヘルメス！入ってる！」

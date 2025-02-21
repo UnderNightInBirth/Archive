@@ -1,0 +1,147 @@
+//コマンドテーブル skillは格ゲーコマンド表記
+btl_debPrint2("\n[GOR_CommandTable]");
+
+local t =
+{
+	Skill_41236SP_ABC = {},
+	Skill_41236SP = {},
+
+	Skill_236EX = {},
+	Skill_236BorC = {},
+	Skill_236A = {}
+
+	Skill_236_236 = 
+	{
+		command = [Def_CMD_236A,Def_CMD_236B,Def_CMD_236C,"6+A","6+B","6+C"],
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236A","Mv_Skill_236B"] }
+		}
+	},
+
+	Skill_236_236_236 = 
+	{
+		command = [Def_CMD_236A,Def_CMD_236B,Def_CMD_236C,"6+A","6+B","6+C"],
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236_236"] }
+		}
+	},	
+	
+	Skill_236_236_214 = 
+	{
+		command = [Def_CMD_214A,Def_CMD_214B,Def_CMD_214C,"4+A","4+B","4+C"],
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236_236"] }
+		}
+	},	
+
+	Skill_623EX = {},
+	Skill_623BorC = {},
+	Skill_623A = {},
+	
+	Skill_623A_Add = 
+	{
+		num = def_CN_Skill_AddCommand2,
+		commandcheckmuki = 1,
+		command = ["6+A","6+B","6+C"],
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 200}, MvCheck = { Only = ["Mv_Skill_623A"] }
+		}
+	},	
+	Skill_623B_Add = 
+	{
+		num = def_CN_Skill_AddCommand3,
+		commandcheckmuki = 1,
+		command = ["6+A","6+B","6+C"],
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 200}, MvCheck = { Only = ["Mv_Skill_623B"] }
+		}
+	},		
+	
+	Skill_214EX = {},
+	Skill_214BorC = {},
+	Skill_214A = {},
+
+	Skill_0202EX = {},	
+	Skill_0202BorC = {},
+	Skill_0202A = {},
+
+	Skill_J236EX = {},
+	Skill_J236BorC = {},
+	Skill_J236A = {},
+	
+	Skill_J214EX = {},
+	Skill_J214BorC = {},
+	Skill_J214A = {},	
+	
+	Atk_Std6B = {},
+	Atk_Std4B = {},
+	Atk_Cro3C = {},
+
+	//投げ追加
+	Throw_F_Hit_Add2 =
+	{
+		num = def_CN_Skill_AddCommand1,	
+		command = "v",
+		CmdCheck = 
+		{
+			SkillType = "AddCommand"
+			MvCheck = { Only = ["Mv_Throw_F_Hit",] },
+			FrameIDCheck = { Only = 100 },
+		},
+		UpdateTable = { name = "Mv_Throw_F_Hit_Add2", },		
+	},	
+	Atk_StdBandC = {},
+	
+	
+	Atk_DashStdBandC = {},
+}
+
+local ar =
+[
+	{
+		CheckMoveName="Mv_Atk_StdA",
+		UpdateMoveName="Mv_Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdB",
+		UpdateMoveName="Mv_Atk_StdC",
+		ResetTmplName="Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdC",
+		UpdateMoveName="Mv_Skill_236A",
+		ResetTmplName="Atk_StdC",
+	},
+	{
+		CheckMoveName="Mv_Skill_236A",
+		UpdateMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_236A",
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			FrameIDCheck = {Only = 110},
+		}
+		CmdTmplFlags=def_CMDFlags_AnnounceSmaetSteer, //スマートステアアナウンスの追加
+	},
+	{
+		CheckMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_SSRelayAtk",
+		UpdateMoveName="Mv_Skill_41236SP",
+		CmdCheck = 
+		{
+			SkillType = "SpSpecial",
+			HitStatus="Damage",
+			Cost = { ComboGauge = 20000 },
+		}
+	},
+]
+Battle_Std.MakeStdCombo( t, ar );
+
+CHR005_CommandTable <- Battle_Std.MakeCommandTable( { command=t } );
+
+

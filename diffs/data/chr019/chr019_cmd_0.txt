@@ -1,0 +1,230 @@
+//コマンドテーブル skillは格ゲーコマンド表記
+btl_debPrint2("\n[TSU_CommandTable]");
+
+local t =
+{
+	Skill_41236SP = {},
+	Skill_41236SP_ABC = {},
+
+	Skill_236A = {},
+	Skill_236BorC = {},
+	Skill_236EX = {},
+	
+	Skill_214EX = {},
+	Skill_214BorC = {},
+	Skill_214A = {},
+	
+	Skill_623A = {},	
+	Skill_623BorC = {},	
+	Skill_623EX = {},	
+
+	Skill_J236EX = { },
+	Skill_J236BorC = { },
+	Skill_J236A = {},
+	
+	Atk_Std3C = {},	
+	Atk_Std6C = {},	
+	Atk_Air2C = {},
+	Atk_Air6C = {},
+	
+	Skill_236_AddOverKick = {
+		num = def_CN_Skill_AddCommand1,
+		command = ["6+B","6+C"],
+		commandcheckmuki = 1,
+		
+		CmdCheck = 
+		{
+			SkillType = "AddCommand"
+			MvCheck = { Only = ["Mv_Skill_236A","Mv_Skill_236B"] },
+			FrameIDCheck = { Only = [100,150] },
+		},
+	},	
+	Skill_236_AddPress = {
+		num = def_CN_Skill_AddCommand2,
+		command = ["6+A"],
+		commandcheckmuki = 1,
+		
+		CmdCheck = 
+		{
+			SkillType = "AddCommand"
+			MvCheck = { Only = ["Mv_Skill_236A","Mv_Skill_236B"] },
+			FrameIDCheck = { Only = [100,150] },
+		},
+	},	
+	
+
+	//FF
+	Atk_VPBandC = {
+		num = def_CN_AtkJBandC,//B+Cより優先度低くする必要があるから適当
+		name = "Cmd_Atk_RelayBandC",
+		command = "B+C",
+		flags = [ "lastdelay" ],
+		CmdCheck = { SkillType = "ExSpecial", ComboLimit = DEF_BS_CL_ATKBANDC,
+		MvCheck={ SkillFail="Mv_Atk_StdBandC"},	
+		flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck },	
+		UpdateTable = { name = "Mv_Atk_RelayBandC", }
+		function CmdBeforeFunc()
+		{
+			//VP中のみ
+			//230712 非VP中も出せるようにする
+			// if( BMvEff.GRD_GetJudgeResult() <= 0 ) return 0; // VP時じゃないとダメ
+			return 1;
+		}
+	}
+	Atk_StdBandC = {},
+	
+	//FFの構え
+	Skill_FF_Dash =
+	{
+		num = def_CN_Basic_AddMove8, name = "Cmd_Skill_FF_Dash", command = ["0606","6+A+B"],//6だと236とかやると出ちゃう
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			ParamFlagCheck = { Fail = { [2]=1 }, },
+			MvCheck = {DoujiOnly = ["Mv_Skill_FFBase"]},
+		},
+	},
+	Skill_FF_BackStep =
+	{
+		num = def_CN_Basic_AddMove9, name = "Cmd_Skill_FF_BackStep", command = ["0404","4+A+B"],//6だと236とかやると出ちゃう
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			ParamFlagCheck = { Fail = { [2]=1 }, },
+			MvCheck = {DoujiOnly = ["Mv_Skill_FFBase","Mv_Skill_FF_Dash"]},
+		},
+		UpdateTable = { name = "Mv_Dash_B", }
+	},	
+	
+	//構え中攻撃
+	Atk_FF_AtkHop = 
+	{
+		num = def_CN_Basic_AddMove12, name = "Cmd_Atk_FF_AtkHop", command = ["<+A","<+B","<+C"],
+		function CmdBeforeFunc()
+		{
+			// Dを押していたら失敗
+			if( BMvTbl.GetPP(CDef_Tsu_PP_FFKeep)==0 )
+			{
+				return 0;
+			}
+			// バクステor投げの入力っぽかったら失敗
+			if( BMvTbl.CheckCommandString( { command = ["4+A+B","A+D"], lastdelay = 1 } ) )
+			{
+				_dpn("バクステor投げっぽいので失敗:4派生");
+				return 0;
+			}
+			return 1;
+		}
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			ParamFlagCheck = { Fail = { [2]=1 }, },
+			MvCheck = {Only = ["Mv_Skill_FFBase","Mv_Skill_FF_Dash"]},
+		},
+	},
+	Atk_FF_AtkSlide = 
+	{
+		num = def_CN_Basic_AddMove11, name = "Cmd_Atk_FF_AtkSlide", command = ["v+A","v+B","v+C"],
+		function CmdBeforeFunc()
+		{
+			// Dを押していたら失敗
+			if( BMvTbl.GetPP(CDef_Tsu_PP_FFKeep)==0 )
+			{
+				return 0;
+			}
+			// 投げの入力っぽかったら失敗
+			if( BMvTbl.CheckCommandString( { command = ["A+D"], lastdelay = 1 } ) )
+			{
+				_dpn("投げっぽいので失敗:2派生");
+				return 0;
+			}
+			return 1;
+		}
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			ParamFlagCheck = { Fail = { [2]=1 }, },
+			MvCheck = {Only = ["Mv_Skill_FFBase","Mv_Skill_FF_Dash"]},
+		},
+	},
+	// Skill_FF_AtkUpper = 
+	// {
+		// num = def_CN_Basic_AddMove13, name = "Cmd_Skill_FF_AtkUpper", command = ["^+A","^+B","^+C"],
+		// CmdCheck = 
+		// {
+			// SkillType = "AddCommand",
+			// ParamFlagCheck = { Fail = { [2]=1 }, },
+			// MvCheck = {Only = ["Mv_Skill_FFBase","Mv_Skill_FF_Dash"]},
+		// },
+	// },
+	Atk_FF_AtkPush = 
+	{
+		num = def_CN_Basic_AddMove14, name = "Cmd_Atk_FF_AtkPush", command = ["A","B","C"],
+		function CmdBeforeFunc()
+		{
+			// Dを押していたら失敗
+			if( BMvTbl.GetPP(CDef_Tsu_PP_FFKeep)==0 )
+			{
+				return 0;
+			}
+			// ダッシュorバクステor投げの入力っぽかったら失敗
+			if( BMvTbl.CheckCommandString( { command = ["6+A+B","4+A+B","A+D"], lastdelay = 1 } ) )
+			{
+				_dpn("ダッシュorバクステor投げっぽいので失敗:N派生");
+				return 0;
+			}
+			return 1;
+		}
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			ParamFlagCheck = { Fail = { [2]=1 }, },
+			MvCheck = {Only = ["Mv_Skill_FFBase","Mv_Skill_FF_Dash"]},
+		},
+	},
+}
+
+local ar =
+[
+	{
+		CheckMoveName="Mv_Atk_StdA",
+		UpdateMoveName="Mv_Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdB",
+		UpdateMoveName="Mv_Atk_StdC",
+		ResetTmplName="Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdC",
+		UpdateMoveName="Mv_Skill_236A",
+		ResetTmplName="Atk_StdC",
+	},
+	{
+		CheckMoveName="Mv_Skill_236A",
+		UpdateMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_236A",
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			FrameIDCheck = { Only = [100,150] },
+		}
+		CmdTmplFlags=def_CMDFlags_AnnounceSmaetSteer, //スマートステアアナウンスの追加
+	},
+	{
+		CheckMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_SSRelayAtk",
+		UpdateMoveName="Mv_Skill_41236SP",
+		CmdCheck = 
+		{
+			SkillType = "SpSpecial",
+			HitStatus="Damage",
+			Cost = { ComboGauge = 20000 },
+		}		
+	},
+
+]
+Battle_Std.MakeStdCombo( t, ar );
+
+CHR019_CommandTable <- Battle_Std.MakeCommandTable( { command=t } );
+
