@@ -15,16 +15,16 @@ SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
 SeList_Table.Status.resize(750); // てきとう
 local st = SeList_Table.Status; // 登録しやすいように
 
-st[0] = { volumetype=0, path=2, file="SE_InsulatorSwingA", type=0, category=3, }; 
-st[1] = { volumetype=0, path=2, file="SE_InsulatorSwingB", type=0, category=3, }; 
-st[2] = { volumetype=0, path=2, file="SE_InsulatorSwingC", type=0, category=3, }; 
-st[3] = { volumetype=0, path=2, file="SE_SpecialBomb", type=0, category=3, }; //IW用爆発
+st[0] = { volumetype=0, path=2, file="SE_InsulatorSwingA", type=0, category=-1, }; 
+st[1] = { volumetype=0, path=2, file="SE_InsulatorSwingB", type=0, category=-1, }; 
+st[2] = { volumetype=0, path=2, file="SE_InsulatorSwingC", type=0, category=-1, }; 
+st[3] = { volumetype=0, path=2, file="SE_SpecialBomb", type=0, category=-1, }; //IW用爆発
 
-st[4] = { volumetype=0, path=2, file="SE_ShotDiscBall", type=0, category=3, }; //236発射音
-st[5] = { volumetype=0, path=2, file="SE_VanishDiscBall", type=0, category=2, }; 
-st[6] = { volumetype=0, path=2, file="SE_AppearInsulator", type=0, category=3, }; 
+st[4] = { volumetype=0, path=2, file="SE_ShotDiscBall", type=0, category=-1, }; //236発射音
+st[5] = { volumetype=0, path=2, file="SE_VanishDiscBall", type=0, category=-1, }; 
+st[6] = { volumetype=0, path=2, file="SE_AppearInsulator", type=0, category=-1, }; 
 
-st[7] = { volumetype=0, path=2, file="SE_VanishDiscBall", type=0, category=2, }; //0202攻
+st[7] = { volumetype=0, path=2, file="SE_VanishDiscBall", type=0, category=-1, }; //0202攻
 st[8] = { volumetype=0, path=2, file="SE_ApperLightBlade", type=1, category=-1, }; //236発射音2
 
 //IWX
@@ -36,65 +36,71 @@ st[13] = { volumetype=0, path=2, file="SE_SpecialBombLong", type=1, category=-1,
 st[15] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWX最後赤くなるところ
 
 // 登場
-st[100] = { volumetype=1 path=1, file="hyd_010_b_2000", type=0, category=1, };//「出ろ！　インスレーター！」
-st[101] = { volumetype=1 path=1, file="hyd_010_b_2001", type=0, category=1, };//「邪魔をするなら…片付けるまでだ！」
-st[102] = { volumetype=1 path=1, file="hyd_010_b_2002", type=0, category=1, };//「……この力で終わらせてやる！」
-st[103] = { volumetype=1 path=1, file="hyd_010_b_2003", type=0, category=1, };//「オレの力……見せてやる！」
+st[100] = { volumetype=1 path=1, file="hyd_010_b_2000", type=0, category=1, userparam=112 };//「出ろ！　インスレーター！」
+st[101] = { volumetype=1 path=1, file="hyd_010_b_2001", type=0, category=1, userparam=186 };//「邪魔をするなら…片付けるまでだ！」
+st[102] = { volumetype=1 path=1, file="hyd_010_b_2002", type=0, category=1, userparam=124 };//「……この力で終わらせてやる！」
+st[103] = { volumetype=1 path=1, file="hyd_010_b_2003", type=0, category=1, userparam=146 };//「オレの力……見せてやる！」
 
 // 登場 特殊
 // 対リンネ
-st[108] = { volumetype=1 path=1, file="hyd_010_b_2012", type=0, category=1, };//「いつまでもあの頃の俺じゃないぜ？」
+st[108] = { volumetype=1 path=1, file="hyd_010_b_2012", type=0, category=1, userparam=164 };//「いつまでもあの頃の俺じゃないぜ？」
 
 // 対ワレンシュタイン
-st[111] = { volumetype=1 path=1, file="hyd_010_b_2016", type=0, category=1, };//「あんたのお陰だ、礼を言うぜ」
+st[111] = { volumetype=1 path=1, file="hyd_010_b_2016", type=0, category=1, userparam=160 };//「あんたのお陰だ、礼を言うぜ」
 
 // 対ワーグナー
-st[113] = { volumetype=1 path=1, file="hyd_010_b_2019", type=0, category=1, };//「誤解されるようなこと言うなよ！！」
+st[113] = { volumetype=1 path=1, file="hyd_010_b_2019", type=0, category=1, userparam=152 };//「誤解されるようなこと言うなよ！！」
 
 // 対セト
-st[115] = { volumetype=1 path=1, file="hyd_010_b_2022", type=0, category=1, };//「ま、決着はつけなくちゃいけねぇよな」
+st[115] = { volumetype=1 path=1, file="hyd_010_b_2022", type=0, category=1, userparam=209 };//「ま、決着はつけなくちゃいけねぇよな」
 
 // 対カーマイン
-st[118] = { volumetype=1 path=1, file="hyd_010_b_2025", type=0, category=1, };//「懲りねぇヤロウだな、お前も。」
+st[118] = { volumetype=1 path=1, file="hyd_010_b_2025", type=0, category=1, userparam=156 };//「懲りねぇヤロウだな、お前も。」
 
 // 対ヒルダ
-st[121] = { volumetype=1 path=1, file="hyd_010_b_2028", type=0, category=1, };//「開き直ってるだけだ、気にすんなよ」
+st[121] = { volumetype=1 path=1, file="hyd_010_b_2028", type=0, category=1, userparam=188 };//「開き直ってるだけだ、気にすんなよ」
 
 // 対クオン
-st[124] = { volumetype=1 path=1, file="hyd_010_b_2031", type=0, category=1, };//「さぁ、幕と行こうぜ！」
+st[124] = { volumetype=1 path=1, file="hyd_010_b_2031", type=0, category=1, userparam=146 };//「さぁ、幕と行こうぜ！」
 
 // 対ツルギ
-st[127] = { volumetype=1 path=1, file="hyd_010_b_2034", type=0, category=1, };//「呆れた腐れ縁だな、ったく」
+st[127] = { volumetype=1 path=1, file="hyd_010_b_2034", type=0, category=1, userparam=188 };//「呆れた腐れ縁だな、ったく」
 
 // 対オリエ
-st[130] = { volumetype=1 path=1, file="hyd_010_b_2037", type=0, category=1, };//「……黙って退いちゃくれねぇか？」
+st[130] = { volumetype=1 path=1, file="hyd_010_b_2037", type=0, category=1, userparam=136 };//「……黙って退いちゃくれねぇか？」
 
 // 対カグヤ
-st[133] = { volumetype=1 path=1, file="hyd_010_b_2040", type=0, category=1, };//「アンタとは、やり合いたくねーんだが」
+st[133] = { volumetype=1 path=1, file="hyd_010_b_2040", type=0, category=1, userparam=167 };//「アンタとは、やり合いたくねーんだが」
 
 // 対バティスタ
-st[136] = { volumetype=1 path=1, file="hyd_010_b_2043", type=0, category=1, };//「一番やりにくい相手だな、こりゃ」
+st[136] = { volumetype=1 path=1, file="hyd_010_b_2043", type=0, category=1, userparam=209 };//「一番やりにくい相手だな、こりゃ」
+
+// 対ウヅキ
+st[138] = { volumetype=1 path=1, file="hyd_010_b_2049", type=0, category=1, userparam=284 };//「怖ぇな。形だけは人間なのが尚更だ。」
+
+// 対イズミ
+st[139] = { volumetype=1 path=1, file="hyd_010_b_2046", type=0, category=1, userparam=224 };//「似ちゃいるかも知れねぇが 同じじゃねぇよ」
 
 // ラウンド勝利
-st[151] = { volumetype=1 path=1, file="hyd_010_b_2100", type=0, category=1, };//「風が…ざらつく…」
-st[152] = { volumetype=1 path=1, file="hyd_010_b_2101", type=0, category=1, };//「なんだ…見掛け倒しか」
+st[151] = { volumetype=1 path=1, file="hyd_010_b_2100", type=0, category=1, userparam=123 };//「風が…ざらつく…」
+st[152] = { volumetype=1 path=1, file="hyd_010_b_2101", type=0, category=1, userparam=138 };//「なんだ…見掛け倒しか」
 
 // 決着勝利 汎用
-st[155] = { volumetype=1 path=1, file="hyd_010_b_2111", type=0, category=1, };//「そのまま寝てな」
-st[156] = { volumetype=1 path=1, file="hyd_010_b_2112", type=0, category=1, };//「俺も成長したってことだな」
-st[157] = { volumetype=1 path=1, file="hyd_010_b_2113", type=0, category=1, };//「これが…俺の力…」
+st[155] = { volumetype=1 path=1, file="hyd_010_b_2111", type=0, category=1, userparam=92 };//「そのまま寝てな」
+st[156] = { volumetype=1 path=1, file="hyd_010_b_2112", type=0, category=1, userparam=160 };//「俺も成長したってことだな」
+st[157] = { volumetype=1 path=1, file="hyd_010_b_2113", type=0, category=1, userparam=126 };//「これが…俺の力…」
 
 // 決着勝利 辛勝
-st[160] = { volumetype=1 path=1, file="hyd_010_b_2120", type=0, category=1, };//「あ、あっぶねぇ……」
+st[160] = { volumetype=1 path=1, file="hyd_010_b_2120", type=0, category=1, userparam=125 };//「あ、あっぶねぇ……」
 
 // 決着勝利 楽勝
-st[164] = { volumetype=1 path=1, file="hyd_010_b_2123", type=0, category=1, };//「思ったより…たいしたことねーな」
+st[164] = { volumetype=1 path=1, file="hyd_010_b_2123", type=0, category=1, userparam=169 };//「思ったより…たいしたことねーな」
 
 // 決着勝利 掛け合い
 // 対リンネ
-st[169] = { volumetype=1 path=1, file="hyd_010_b_2127", type=0, category=1, };//「成長しただろ？後は俺に任せてくれ」
+st[169] = { volumetype=1 path=1, file="hyd_010_b_2127", type=0, category=1, userparam=198 };//「成長しただろ？後は俺に任せてくれ」
 // 対オリエ
-st[171] = { volumetype=1 path=1, file="hyd_010_b_2130", type=0, category=1, };//「ごめん、原田さん！どっかで埋め合わせするから！」
+st[171] = { volumetype=1 path=1, file="hyd_010_b_2130", type=0, category=1, userparam=223 };//「ごめん、原田さん！どっかで埋め合わせするから！」
 
 // タイムアップ判定負け
 st[174] = { volumetype=1 path=1, file="hyd_010_b_2200", type=0, category=1, };//「なん…だと…」

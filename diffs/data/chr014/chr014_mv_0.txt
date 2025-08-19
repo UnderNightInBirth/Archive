@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 
@@ -657,7 +656,7 @@ t.Mv_Skill_236B <-
 			Battle_Std.CreateFireBall({ x=110, y=-220, mv="Mv_FireBall_236B", pat="FB_236B", vec={x=3200}, ball=4, angle=BMvEff.Random_Limit(10000), });
 			break;
 		case 200:// タメ版
-			Battle_Std.CreateFireBall({ x=110, y=-250, mv="Mv_FireBall_i236B", pat="FB_i236B", vec={x=3200}, ball=4, angle=BMvEff.Random_Limit(10000), });			
+			Battle_Std.CreateFireBall({ x=110, y=-250, mv="Mv_FireBall_i236B", pat="FB_i236B", vec={x=4000}, ball=4, angle=BMvEff.Random_Limit(10000), });			
 			break;		
 		}
 	}
@@ -665,6 +664,10 @@ t.Mv_Skill_236B <-
 
 t.Mv_Skill_236EX <-
 {
+	function Start_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GuardChainShiftOK ); // ツールで「チェインシフト可能」がある時ならガードでCS可能なMV
+	}
 	function FrameUpdate_After()
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
@@ -693,6 +696,8 @@ t.Mv_Skill_J236A <-
 			});
 			break;
 		}
+		
+		Battle_Std.SetHitMuteki2_Param1( { [128]=Def_HitCheckFlag_LightLegs } );
 	}
 }
 
@@ -711,11 +716,17 @@ t.Mv_Skill_J236B <-
 			});
 			break;
 		}
+
+		Battle_Std.SetHitMuteki2_Param1( { [128]=Def_HitCheckFlag_LightLegs } );
 	}
 }
 
 t.Mv_Skill_J236EX <-
 {
+	function Start_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GuardChainShiftOK ); // ツールで「チェインシフト可能」がある時ならガードでCS可能なMV
+	}
 	function FrameUpdate_After()
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
@@ -724,6 +735,8 @@ t.Mv_Skill_J236EX <-
 			BMvEff.CreateObject( { x=100, y=-200, mvname="Mv_Null_J236EXCreator", flags=_Position_ToolShift } );
 			break;
 		}
+
+		Battle_Std.SetHitMuteki2_Param1( { [128]=Def_HitCheckFlag_LightLegs } );
 	}
 }
 
@@ -1350,6 +1363,22 @@ t.Mv_Skill_41236SP <-
 	function Init_After()
 	{
 		BMvTbl.SetFinalizeCode(0); //初期状態が0でない＋GetFinalizeCodeで分岐してるので初期化
+	}
+	function FrameUpdate_After()
+	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 50:
+			local now_vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+			local vec_x = Battle_Std.GetEnemyDistance()/2 - now_vec.x; //2F後に到達
+			// _dpn("vec_x:"+vec_x);
+
+			// 近すぎたら減速
+			if( vec_x < -9000 ) vec_x = -9000; // 下げ過ぎないように
+			if( vec_x > 0 ) vec_x = 0;  // 十分早いので加速はしない
+			BMvTbl.SetVector({ x=vec_x, flags=_VecFlag_Add|_Vector_Normal });
+			break;
+		}
 	}
 	function HitInterrupt_After()
 	{
@@ -2174,7 +2203,8 @@ t.Mv_Skill_J214EX <-
 	}
 	function LastUpdate_After()
 	{
-		Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+		// 240524 追撃可能に変更
+		// Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
 		// Battle_Std.CSAntenGaesi_DamageHosei(); // CSからの暗転返しで出したら補正をかける
 	}
 }

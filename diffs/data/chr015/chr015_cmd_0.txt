@@ -4,8 +4,7 @@ btl_debPrint2("\n[CHA_CommandTable]");
 // ダハーカの位置情報をチェック
 local dah_CheckPosState = function( _flag )
 {
-	local findobj = BMvCore.CFindObject(); // クラス生成
-	local dah = findobj.Get(1); // ID1を検索
+	local dah = BMvCore.CFindObject().Get(1); // ID1を検索
 	if( dah.isdone() )
 	{
 		if( dah.push() )
@@ -385,13 +384,18 @@ local t =
 	},
 	
 	Atk_Std6C = {},
-	Atk_6C_6C = { CmdCheck = { SkillType = "Special" } }, // 6C派生移動
+	Atk_6C_6C = {
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "Special" }
+	}, // 6C派生移動
 	
 	Skill_CancelRoll =
 	{
 		num = def_CN_Atk_DashAdd,
 		command = ["6+A+B"],
 		flags = [ "lastdelay" ],
+		// 逆向きに前転できてしまうがOKとする
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc()
 		{
 			// 6ABのボタンダッシュの操作ではそのまま発動しないようにする
@@ -507,7 +511,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

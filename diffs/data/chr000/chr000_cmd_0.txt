@@ -30,6 +30,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand2,
 		command = [Def_CMD_236A,"6+A"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc()
 		{
 			//FrameIDが20　か　飛び道具がヒットしてれば追加は出せる
@@ -75,6 +76,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand10,
 		command = [Def_CMD_236B,Def_CMD_236C,"6+B","6+C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc()
 		{
 			//FrameIDが20　か　飛び道具がヒットしてれば追加は出せる
@@ -125,6 +127,7 @@ local t =
 		num = def_CN_Skill_AddCommand8,
 		usegauge = 10000,
 		command = ["46C@N,255@",Def_CMD_236C],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc()
 		{
 			//FrameIDが20　か　飛び道具がヒットしてれば追加は出せる
@@ -253,7 +256,7 @@ local ar =
 		UpdateMoveName="Mv_Skill_41236SP",
 		CmdCheck = 
 		{
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
 		}

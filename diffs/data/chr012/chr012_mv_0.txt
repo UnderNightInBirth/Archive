@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 local t = {};
@@ -542,6 +541,8 @@ t.Mv_Atk_StdC <-
 	{
 		Battle_Std.SetPattern_NotHoldButton( { ButtonMask=(1<<2), CheckFrameID=50, EndFrameID=60, SetPattern="StdC_End" } ); // ButtonMask, CheckFrameID, SetPattern
 
+		Battle_Std.JumpFrameID_MvDamage( { CheckFrameID=109, JumpFrameID=120 } ); // ダメージ情報があるときFrameIDを変える
+
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100:
@@ -849,6 +850,7 @@ t.Mv_Atk_StdBandC <-
 			BMvEff.SetPlayerTimer( { muteki_nage=def_FL_JumpWaitNageMuteki, muteki_nageX=def_FL_JumpWaitNageMuteki } ); //ジャンプ移行は投げ無敵に設定
 			BMvTbl.SetLP(0,1); // 離陸したことを記憶
 			BMvTbl.AddAirCount( 0, 1 ); // 回数制限をかける
+			BMvTbl.SetPP(def_PP_JumpFrame,0);//離陸から何フレームかを記憶する
 			break;
 		}
 		
@@ -1057,6 +1059,7 @@ local makemv_JumpingWindAtk = function( param={} ) : (set_winddust, create_shutt
 		BallMv = "Mv_FireBall_214A",
 		BallFlags = 0,
 		enable_add = 0,
+		limit_xvec = 0,
 	}
 	
 	switch( param.type )
@@ -1092,6 +1095,7 @@ local makemv_JumpingWindAtk = function( param={} ) : (set_winddust, create_shutt
 		usep.BallPat = "FB_SSRelayAtk";
 		usep.BallMv = "Mv_FireBall_SSRelayAtk";
 		usep.enable_add = 0;
+		usep.limit_xvec = 1;
 		break;
 	}
 	
@@ -1116,6 +1120,24 @@ local makemv_JumpingWindAtk = function( param={} ) : (set_winddust, create_shutt
 				// Battle_Std.AddXPos_CheckFrontStage( usep.PosX, 100 ); // ステージ端との距離が一定以下にならないように近づく
 				Battle_Std.AddXPos_NearEnemy( usep.PosX, 0 ); // 相手より後ろには出ない
 				eff.pop();
+			}
+			if( usep.limit_xvec )
+			{
+				// 裏に行かないように減速
+				local now_vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+				local kyori = Battle_Std.GetEnemyDistance();
+				// _dpn("now_vec:"+now_vec.x+" kyori:"+kyori/128);
+				
+				local max_kyori = 110*128; // 制限をかける範囲
+				if( kyori < max_kyori )
+				{
+					local kyori_par = 100 - ((max_kyori - kyori) * 100 / max_kyori);//少ないほど近い0-100
+					if( kyori_par > 100 ) kyori_par = 100;
+					if( kyori_par <  30 ) kyori_par =  30; // 下げすぎると見た目が変
+					// _dpn("kyori_par:"+kyori_par);
+					local vec_x = now_vec.x * kyori_par / 100;
+					BMvTbl.SetVector({ x=vec_x, flags=_Vector_Normal });
+				}
 			}
 			break;
 		case 20:
@@ -1194,9 +1216,12 @@ t.Mv_FireBall_214EX_Blocked <-
 
 t.Mv_FireBall_SSRelayAtk <- 
 {
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_NoSetUseExSkillFlag ); // EX技扱いだがEX技の保証補正制限はかけない
+	}
 	function HitInterrupt_After()
 	{
-		
 		if( Battle_Std.CheckDamageTiming() )
 		{
 			Battle_Std.SetPosition_DamageHanteiRect({ power=25, }); // 強く引っ張ると違和感出やすいので控えめに
@@ -1372,6 +1397,7 @@ local makemv_GroundDashSlash = function( param={} )
 		HitStrike = 0,
 		BallMuteki = 0,
 		enable_add = 0,
+		Damage_shorten = 0,
 	}
 	
 	
@@ -1389,6 +1415,7 @@ local makemv_GroundDashSlash = function( param={} )
 	case "A":
 	default:
 		usep.enable_add = 1;
+		usep.Damage_shorten = 1; // Damage時に硬直を短くする
 		break;
 	}
 	
@@ -1412,6 +1439,17 @@ local makemv_GroundDashSlash = function( param={} )
 				BMvEff.SetExist( { level = _Exist_NoKasanariHantei, mode=_ExistMode_Erase } );
 			}
 			break;
+		case 1000:
+			if( usep.Damage_shorten )
+			{
+				local hs = BMvTbl.GetMvHitStatus();
+				if( hs.Type&_HitType_Damage )
+				{
+					_dpn("ダメージを与えていたので硬直4F短く");
+					BMvTbl.JumpFrameID(1010);
+				}
+			}
+			break;	
 		}
 		
 		if( usep.BallMuteki )
@@ -1497,6 +1535,17 @@ t.Mv_Skill_236_AddA <-
 	}
 	function FrameUpdate_After()
 	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 1000:
+			local hs = BMvTbl.GetMvHitStatus();
+			if( hs.Type&_HitType_Damage )
+			{
+				_dpn("ダメージを与えていたので硬直2F短く");
+				BMvTbl.JumpFrameID(1010);
+			}
+			break;
+		}
 	}
 	function HitInterrupt_After()
 	{
@@ -1647,6 +1696,7 @@ local makemv_AirShotWind = function( param={} )
 		Extend = { enable=0, mask=(1<<0), frameid=50, setpat=0 },
 		ExtendBall = { enable=0, pat=0, mv=0 },
 		enable_add = 0,
+		hitcheck_muteki = 0,
 	}
 	
 	switch( param.type )
@@ -1665,7 +1715,8 @@ local makemv_AirShotWind = function( param={} )
 		usep.Extend.setpat="J236A_End";
 		usep.ExtendBall.enable=1;
 		usep.ExtendBall.pat="FB_iJ236A";
-		usep.ExtendBall.mv="Mv_FireBall_J236A";		
+		usep.ExtendBall.mv="Mv_FireBall_J236A";
+		usep.hitcheck_muteki = { [128]=Def_HitCheckFlag_LightLegs };
 		break;
 	case "B":
 		usep.enable_add = 1;
@@ -1682,6 +1733,7 @@ local makemv_AirShotWind = function( param={} )
 		usep.ExtendBall.enable=1;
 		usep.ExtendBall.pat="FB_iJ236B";
 		usep.ExtendBall.mv="Mv_FireBall_J236B";
+		usep.hitcheck_muteki = { [128]=Def_HitCheckFlag_LightLegs };
 		break;
 	case "EX":
 		usep.ShotAngle = 3400;
@@ -1690,6 +1742,7 @@ local makemv_AirShotWind = function( param={} )
 		usep.BallMv = "Mv_FireBall_J236EX";
 		usep.BallSlot = 3;
 		usep.BallFlags = def_BallFlags_NoAddHitComboRate;
+		usep.hitcheck_muteki = { [128]=Def_HitCheckFlag_LightLegs };
 		break;
 	}
 	
@@ -1730,6 +1783,11 @@ local makemv_AirShotWind = function( param={} )
 		case 200: // EXとどめ
 			Battle_Std.CreateFireBall( { y=-200, angle=usep.ShotAngle, mv=usep.BallMv, pat="FB_J236EX2", ball=usep.BallSlot } );
 			break;
+		}
+		
+		if( usep.hitcheck_muteki )
+		{
+			Battle_Std.SetHitMuteki2_Param1( usep.hitcheck_muteki );
 		}
 	}
 	
@@ -2013,12 +2071,14 @@ local makemv_KaitenTaikuu = function( param={} ) : (set_winddust_double, create_
 	local useparam = 
 	{
 		csAntenHosei = 0,
+		karaburics = 0,
 	}
 	
 	local rapid_powup = 0;
 	switch( param.type )
 	{
 	case "A":
+		useparam.karaburics = 1;
 		break;
 	case "B":
 		useparam.csAntenHosei = 1;
@@ -2031,11 +2091,16 @@ local makemv_KaitenTaikuu = function( param={} ) : (set_winddust_double, create_
 		break;
 	}
 	
-	ret_tmpl.Init_After <- function()
+	ret_tmpl.Init_After <- function() : (useparam)
 	{
 		BMvTbl.SetLP(0,0); // 連打カウンタ
 		BMvTbl.SetLP(1,0); // 前回のボタン
 		BMvTbl.SetLP(2,0); // 前回のレバー
+		
+		if( useparam.karaburics )
+		{
+			Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
+		}
 	}	
 	
 	local moveenemy = function( _frame )
@@ -2137,7 +2202,8 @@ local makemv_KaitenTaikuu = function( param={} ) : (set_winddust_double, create_
 		{
 			// レバー回しながらボタンですごい増えるようにするので別チェック
 			local button = BMvTbl.CheckCommandString( [ "A", "B", "C" ] );
-			if( button && button != BMvTbl.GetLP(1) )
+			// if( button && button != BMvTbl.GetLP(1) )
+			if( 1 ) // レバガチャ廃止
 			{
 				// _dp("\n ボタン押した");
 				BMvTbl.AddLP(0,1); // 連打回数を加算
@@ -2146,7 +2212,8 @@ local makemv_KaitenTaikuu = function( param={} ) : (set_winddust_double, create_
 			
 			// ZERO3っぽく斜めも受け付ける
 			local stick = BMvTbl.CheckCommandString( [ "4", "6", "2", "8", "1", "3", "9", "7" ] );
-			if( stick && stick != BMvTbl.GetLP(2) )
+			// if( stick && stick != BMvTbl.GetLP(2) )
+			if( 1 ) // レバガチャ廃止
 			{
 				// _dp("\n レバーまわした");
 				BMvTbl.AddLP(0,1); // 連打回数を加算
@@ -2523,8 +2590,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 			BMvEff.ThrowParam( { pattern=304, x=2000, y=0, } ); //敵の座標を設定
 			break;
 		case 200: // 雲が画面を覆ったところ
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(1);
+			local findchara = BMvCore.CFindObject().Get(1);
 			if( findchara.push() )
 			{
 				BMvTbl.JumpFrameID( 900 ); // スクロールを消滅へ
@@ -2550,8 +2616,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 			BSound.BGM_SetFade( { val=50, time=240 } );//BGMのフェードアウト
 			break;
 		case 250: // 雲が画面を覆ったところ
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(2);
+			local findchara = BMvCore.CFindObject().Get(2);
 			if( findchara.push() )
 			{
 				BMvTbl.SetPattern( "BigNanBig" );
@@ -2580,8 +2645,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 			}		
 			break;
 		case 280: // きり始め
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(2);
+			local findchara = BMvCore.CFindObject().Get(2);
 			if( findchara.push() )
 			{
 				BMvTbl.SetPattern( "BigNanBigSlash" );
@@ -2600,16 +2664,14 @@ t.Mv_Skill_IWEXIST_Hit <-
 			break;
 		case 300: // 竜巻落下
 			// ここから別シーンっぽいので色々消す
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(2);
+			local findchara = BMvCore.CFindObject().Get(2);
 			if( findchara.push() )
 			{
 				BMvTbl.SetFinalize( 0 );
 				
 				findchara.pop();
 			}		
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(3);
+			local findchara = BMvCore.CFindObject().Get(3);
 			if( findchara.push() )
 			{
 				BMvTbl.SetFinalize( 0 );

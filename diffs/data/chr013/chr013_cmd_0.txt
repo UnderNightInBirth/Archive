@@ -38,6 +38,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand2,
 		command = ["6A@L,10@","6B@L,10@","6C@L,10@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -63,6 +64,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand16,
 		command = ["6A","6B","6C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -76,6 +78,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand4,
 		command = ["6A@L,10@","6B@L,10@","6C@L,10@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -101,6 +104,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand17,
 		command = ["6A","6B","6C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -115,6 +119,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand6,
 		command = ["4+A",Def_CMD_214A,"24A@D,12@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -127,6 +132,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand7,
 		command = ["4+B",Def_CMD_214B,"24B@D,12@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -139,6 +145,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand8,
 		command = ["4+C",Def_CMD_214C,"24C@D,12@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -152,6 +159,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand9,
 		command = ["4+A",Def_CMD_214A,"24A@D,12@"], posstatus = _PosState_Always,
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -165,6 +173,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand10,
 		command = ["4+B",Def_CMD_214B,"24B@D,12@"], posstatus = _PosState_Always,
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -178,6 +187,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand11,
 		command = ["4+C",Def_CMD_214C,"24C@D,12@"], posstatus = _PosState_Always,
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -328,7 +338,6 @@ local t =
 		}	
 		function CmdBeforeFunc()
 		{
-			if( BMvTbl.AddAirCount( 1, 0 ) >= 1 ) return 0;
 			local trap_tobival = BMvTbl.TobiParam_Func( { slot=def_TS_Bya_WebTrap, type=_ValGet } );
 			local trapatk_tobival = BMvTbl.TobiParam_Func( { slot=def_TS_Bya_WebTrapAtk, type=_ValGet } );
 			if( trap_tobival < 1 && trapatk_tobival < 0 ) return 0;
@@ -352,7 +361,6 @@ local t =
 		}	
 		function CmdBeforeFunc()
 		{
-			if( BMvTbl.AddAirCount( 1, 0 ) >= 1 ) return 0;
 			local trap_tobival = BMvTbl.TobiParam_Func( { slot=def_TS_Bya_WebTrap, type=_ValGet } );
 			local trapatk_tobival = BMvTbl.TobiParam_Func( { slot=def_TS_Bya_WebTrapAtk, type=_ValGet } );
 			if( trap_tobival < 1 && trapatk_tobival < 0 ) return 0;
@@ -376,7 +384,6 @@ local t =
 		}	
 		function CmdBeforeFunc()
 		{
-			if( BMvTbl.AddAirCount( 1, 0 ) >= 1 ) return 0;
 			local trap_tobival = BMvTbl.TobiParam_Func( { slot=def_TS_Bya_WebTrap, type=_ValGet } );
 			local trapatk_tobival = BMvTbl.TobiParam_Func( { slot=def_TS_Bya_WebTrapAtk, type=_ValGet } );
 			if( trap_tobival < 1 && trapatk_tobival < 0 ) return 0;
@@ -475,6 +482,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand18,
 		command = ["4+A",Def_CMD_214A,"24A@D,12@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -499,6 +507,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand19,
 		command = ["4+B",Def_CMD_214B,"24B@D,12@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -523,6 +532,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand20,
 		command = ["4+C",Def_CMD_214C,"24C@D,12@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck =
 		{
 			SkillType = "AddCommand"
@@ -580,7 +590,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}	
 	},
 

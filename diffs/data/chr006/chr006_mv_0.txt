@@ -96,7 +96,8 @@ t.Mv_Atk_StdBandC_Hit <-
 			BMvTbl.SetLP(4,0); // 次のループまでパターン変化をとめる
 			
 			local gatya_lv = Battle_Std.LP_Rebagatya_Check( { CheckLP=0, List=[14,7,3] } ); // CRL:21,14,7
-			if( Def_Dbg_CommandAssist )
+			// if( Def_Dbg_CommandAssist )
+			if( 1 ) // レバガチャ廃止
 			{
 				gatya_lv = 3;
 			}
@@ -122,6 +123,23 @@ t.Mv_Atk_StdBandC_Hit <-
 	function Update()
 	{
 		Battle_Std.LP_Rebagatya_Update( 0, 1, 2 ); // LP0:レバガチャカウンタ
+		
+		//1.05に近い性能にする処理
+		//1.05と完全に同じではないが、比較的近い値になるようにした
+		local enemy = BMvCore.GetEnemyCharaData();
+		if( enemy.push() )
+		{
+			local eMvName = BMvTbl.GetMvName();
+			enemy.pop();
+			
+			if( eMvName == "Mv_Bound_Capture" ) // このときの処理に差がある
+			{
+				// VP時は増えにくくする
+				local addVal = ( BMvEff.GRD_GetJudgeResult() > 0 )? 36 : 72;
+				Battle_Std.GRD_AddValue({ val=addVal, boundplus=1, target=0 }); //自分増加
+			}
+			
+		}
 	}
 	function Finalize()
 	{
@@ -165,6 +183,10 @@ t.Mv_Atk_CroBandC <-
 		{
 			BMvTbl.SetNextMoveTable( "Mv_Neutral" );
 		}
+	}
+	function LastUpdate_After()
+	{
+		BMvTbl.SetFinalizeCode(0); // 使ったので初期化
 	}
 }
 
@@ -477,7 +499,8 @@ t.Mv_Throw_F_Hit <-
 			
 			local jumpid = 30; //何もしないと弱い
 			// _dp("\n count"+count );
-			if( count>2 || Def_Dbg_CommandAssist ) // CLR:4
+			// if( count>2 || Def_Dbg_CommandAssist ) // CLR:4
+			if( 1 ) // レバガチャ廃止
 			{
 				jumpid = 32; //早い
 			}
@@ -650,6 +673,10 @@ t.Mv_Atk_DashStdB <-
 	{
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
 	}
+	function FrameUpdate_After()
+	{
+		Battle_Std.JumpFrameID_MvDamage( { CheckFrameID=109, JumpFrameID=120 } ); // ダメージ情報があるときFrameIDを変える
+	}
 	function HitInterrupt_After() : (Call_Atk_KamiEff)
 	{
 		if( Battle_Std.CheckDamageTiming() )
@@ -774,6 +801,10 @@ t.Mv_Skill_3C_JAddJump <-
 	function Finalize()
 	{
 		Battle_Std.SwitchNextMoveTable("Mv_Skill_JFly",[100,"Mv_Neutral"]); //デフォ,[code,mv]...
+	}
+	function LastUpdate_After()
+	{
+		BMvTbl.SetFinalizeCode(0); // 使ったので初期化
 	}
 }
 
@@ -2081,11 +2112,13 @@ local func_GetHebiEndFlag = function() : (func_HebiYarareCheck)
 		BMvTbl.AddLP(5,1); // 滞在時間カウンタ加算
 	}
 	
+	// ガードで虫が消えないのはVP特性だったが廃止
+	// ( Battle_Std.CheckPlayerisBound() && !(BMvEff.GRD_GetJudgeResult() > 0) )
+	
 	local mvs = BMvTbl.GetMvStatus();
 	local mer_mv = Battle_Std.GetPlayerMvName();
 	local end_flag = (
 		Battle_Std.CheckPlayerisDamage() ||
-		( Battle_Std.CheckPlayerisBound() && !(BMvEff.GRD_GetJudgeResult() > 0) ) ||
 		Battle_Std.CharaisKO() ||
 		func_HebiYarareCheck() ||
 		// Battle_Std.CheckGamenGaiMuki() ||
@@ -2603,7 +2636,10 @@ t.Mv_Skill_JFly <-
 		if( s.isLanding )  BMvTbl.SetFinalize(800); //着地終了
 		
 		//浮遊中はGRD減少のデメリットがある
-		Battle_Std.GRD_AddValue({ val=Battle_Std.GetGRD_AddValue(-150), pressure=0, });
+		if( s.MvCount>45 ) // 序盤は消費なしに変更
+		{
+			Battle_Std.GRD_AddValue({ val=Battle_Std.GetGRD_AddValue(-100), pressure=0, });
+		}
 		
 		switch( Battle_Std.GetUpdateFrameID( s ) )
 		{

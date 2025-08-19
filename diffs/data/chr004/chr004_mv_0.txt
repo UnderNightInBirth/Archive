@@ -230,7 +230,6 @@ t.Mv_Atk_CroB <-
 {
 	function Init_After()
 	{
-		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
 	}
 }
 
@@ -336,6 +335,7 @@ local maketmpl_SkillThrustUpper = function( param={} )
 	switch( param.type )
 	{
 	case "A":
+		mvparam.cs_ok = 1;
 		mvparam.atama_muteki = 1;
 		mvparam.change_damage_land_frame = 6;
 		break;
@@ -867,6 +867,7 @@ local maketmpl_SkillAirSummonAtk = function( param={} )
 		xpos = 50,
 		ypos = 0,
 		mvname = "Mv_Tanatos_J214A",
+		vec_limit = 0,
 	}
 	
 	switch( param.type )
@@ -875,11 +876,13 @@ local maketmpl_SkillAirSummonAtk = function( param={} )
 		mvparam.xpos = 50;
 		mvparam.ypos = 0;
 		mvparam.mvname = "Mv_Tanatos_J214A";
+		mvparam.vec_limit = 1;
 		break;
 	case "B":
 		mvparam.xpos = 150;
 		mvparam.ypos = 0;
 		mvparam.mvname = "Mv_Tanatos_J214B";
+		mvparam.vec_limit = 1;
 		break;
 	case "C":
 		mvparam.xpos = 50;
@@ -902,11 +905,28 @@ local maketmpl_SkillAirSummonAtk = function( param={} )
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
-		case 100:
+		case 100: // タナトスよび
 			BMvEff.CreateObject( { x=mvparam.xpos*128, y=mvparam.ypos*128, mvname=mvparam.mvname } );
 			break;
-		case 200:
+		case 200: // EXのみ
 			BMvTbl.SetCommandLongDelay(1); //受付時間増加（先行入力用）
+			break;
+		case 700:
+			// _dpn("ベクトル復帰タイミング");
+			if( mvparam.vec_limit )
+			{
+				// 250619 上昇中に出したら軌道が変わる
+				// limit_yより高いと制限がかかる。元のY移動量の20%ほどは残る
+				local limit_y = -1250; // これより高いと制限がかかる
+				local now_vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+				
+				if( now_vec.y < limit_y && now_vec.x < 0 ) // 後ろ方向への移動時（バックジャンプ）のみ
+				{
+					local vec_y = Battle_Std.Math_Lerp(now_vec.y, limit_y, 20); // 20%寄せる
+					_dpn("★軌道変更:" + now_vec.y + " -> " + vec_y);
+					BMvTbl.SetVector( { y = vec_y, flags = _Vector_Normal } );
+				}
+			}
 			break;
 		}
 	}
@@ -1146,6 +1166,22 @@ t.Mv_Tanatos <-
 						BMvTbl.SetLP(0,0); //消滅時にパーティクルを呼ぶフラグを消す
 					}
 				}
+				
+				// IWのとき
+				if( orie_mv=="Mv_Skill_41236SP" )
+				{
+					if( tana_p.push() )
+					{
+						BMvEff.SetObjectFlags( { flags=_ObjFlags_MoveTimeStopAll } ); //例外処理
+						BMvTbl.SetDrawAlpha( { val=128, time=9999, flag=_ClearFlag_ChangeMv } ); // ちょい半透明に1Fだけするｗ
+						BMvTbl.SetFinalize(0); // 消滅アニメとか無く消す
+						
+						tana_p.pop();
+						
+						// 暗転中にエフェクト呼ぶためにFinalizeへ
+						BMvTbl.SetFinalize(0);
+					}
+				}
 			}
 
 			
@@ -1372,6 +1408,9 @@ local maketmpl_TanSkillGround2ndAtk = function( param={} )
 	{
 		pat = "T214_214A",
 		flags = _ObjFlags_NoGround|_ObjFlags_ToParentStop|_ObjFlags_NoRenderOrder|_ObjFlags_ToParentHitBack|_ObjFlags_ToParentHitStatus,
+		AddVec = -1, // チェックするFrameID ※0だとFrameID=0で処理を通ってしまう
+		HitFrame = 0, // 移動開始からヒットするまでのフレーム
+		Hantei = 0, // 攻撃判定の長さ
 		limitVec = 0, // チェックするFrameID
 	}
 	
@@ -1379,12 +1418,21 @@ local maketmpl_TanSkillGround2ndAtk = function( param={} )
 	{
 	case "A":
 		mvparam.pat = "T214_214A";
+		mvparam.AddVec = 50;
+		mvparam.HitFrame = 10;
+		mvparam.Hantei = 530;
 		break;
 	case "B":
 		mvparam.pat = "T214_214B";
+		mvparam.AddVec = 50;
+		mvparam.HitFrame = 12;
+		mvparam.Hantei = 354;
 		break;
 	case "C":
 		mvparam.pat = "T214_214C";
+		mvparam.AddVec = 65;
+		mvparam.HitFrame = 11; //[094_005]で当たる想定
+		mvparam.Hantei = 309;
 		mvparam.limitVec = 65;
 		break;
 	case "EX":
@@ -1403,8 +1451,21 @@ local maketmpl_TanSkillGround2ndAtk = function( param={} )
 		
 		BMvTbl.SetLP(0,0); // 親が変わってフラグ更新したかどうか
 		BMvTbl.SetLP(1,0); // 親に受付時間増加を与えたか
+		BMvTbl.SetLP(2,0); // 始動でヒットしてそうなら1
 		
 		BMvTbl.TobiParam_Func( { slot=7, val=1, type=_ValSet } ); //FFを制限
+		
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
+		{
+			local isSidou = Battle_Std.MoveCodeEx.CheckFlag( 5, def_MC5_FromSidouAddSkill );
+			player.pop();
+			
+			if( isSidou )
+			{
+				BMvTbl.SetLP(2,1); // 始動でヒットしてそうなら1
+			}
+		}
 	}
 
 	ret_tmpl.FrameUpdate <- function() : (mvparam)
@@ -1443,6 +1504,31 @@ local maketmpl_TanSkillGround2ndAtk = function( param={} )
 		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
+		case mvparam.AddVec: // 50
+			// 相手との距離を見て遠かったら少しベクトルを増やす（相手がやられ中のみ）
+			if( Battle_Std.CheckEnemyisDamage() )
+			{
+				local x_max = 700*128; // 最大距離（これ以上離れてたら当たらない）
+				local e_kyori = Battle_Std.GetEnemyDistance();
+				if( e_kyori > x_max )
+				{
+					e_kyori = x_max;
+				}
+				
+				local frame = mvparam.HitFrame; // 攻撃判定が当たるまでのフレーム
+				local now_vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+				e_kyori = e_kyori - mvparam.Hantei*128; // 攻撃判定の長さを引く
+				local vec_x = e_kyori/frame; // 攻撃が届くために必要な速さ
+				if( vec_x < 0 ) vec_x = 0;
+				if( vec_x > 3000 ) vec_x = 3000;
+				if( vec_x > now_vec.x )
+				{
+					BMvTbl.SetVector({ x=vec_x, flags=_Vector_Normal });
+					// _dp("\n vec_x:"+vec_x);
+					// _dp("\n now_vec.x:"+now_vec.x);
+				}
+			}
+			break;
 		case mvparam.limitVec: // 65
 		
 			// ステージ外にいかないようにベクトルに補整をかける
@@ -1469,6 +1555,16 @@ local maketmpl_TanSkillGround2ndAtk = function( param={} )
 		if( Battle_Std.CheckHitTiming_FrameID( 200 ) )
 		{
 			BMvTbl.TobiParam_Func( { slot=6, val=1, type=_ValSet } ); //派生を出せるように
+		}
+		if( Battle_Std.CheckHitTiming_FrameID( 100 ) && BMvTbl.GetLP(2)==1 )
+		{
+			local enemy = BMvCore.GetEnemyCharaData();
+			if( enemy.push() )
+			{
+				_dpn("始動としてヒットしたので受け身不能を増やす");
+				BMvEff.SetUkemiTime( { addtime = 11 } );
+				enemy.pop();
+			}
 		}
 	}
 
@@ -1538,7 +1634,9 @@ t.Mv_Tanatos_22EXEff <-
 	}
 	function HitInterrupt()
 	{
-		if( Battle_Std.CheckDamageTiming_FrameID( 900 ) ) // 最終段
+		// ヒットした瞬間にコンボレート加算
+		// 何回も入るが万が一スっポ抜けてレートなしになると大変なので多重加算は許容する
+		if( Battle_Std.CheckDamageTiming() )
 		{
 			BMvTbl.AddComboRate();
 		}
@@ -1877,6 +1975,8 @@ t.Mv_IE_Tan <-
 				BMvEff.SetCamera_Focus( { num=1, x=epos.x, y=-300*128, zoom=1.8, time=[100,999,30], type_in=1 } );
 				
 				BSound.BGM_SetFade( { val=50, time=240 } );//BGMのフェードアウト
+
+				BMvEff.CutInProc_SetResourceView( { mode=0 } ); // 軽量化のため謎空間を表示しない
 			}
 			break;
 		case 20: //全体を見る
@@ -2104,7 +2204,9 @@ t.Mv_Skill_IWEXIST_Hit <-
 		BMvEff.ThrowRelease( { type="崩れ落ちダウン", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
 
 		BMvEff.SetCamera_Focus( { time=[0,0,0] } );
-		BMvEff.ResetViewCamera();		
+		BMvEff.ResetViewCamera();
+		BMvEff.CutInProc_SetResourceView( { mode=1 } ); // 謎空間を戻す
+		
 		//BMvEff.SetCamera_Focus( { zoom=1.0, time=[0,0,30] } ); //カメラ固定
 		Battle_Std.FinalizeIWExistSkill();
 	}	

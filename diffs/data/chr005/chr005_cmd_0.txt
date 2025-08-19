@@ -10,30 +10,42 @@ local t =
 	Skill_236BorC = {},
 	Skill_236A = {}
 
-	Skill_236_236 = 
+	Skill_236A_236A = 
 	{
-		command = [Def_CMD_236A,Def_CMD_236B,Def_CMD_236C,"6+A","6+B","6+C"],
+		command = [Def_CMD_236A,Def_CMD_236B,Def_CMD_236C,"6+A","6+B","6+C"], // 操作感を変えないためになんでもOKのまま
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
-			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236A","Mv_Skill_236B"] }
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236A"] }
 		}
 	},
+	Skill_236B_236B = 
+	{
+		command = [Def_CMD_236A,Def_CMD_236B,Def_CMD_236C,"6+A","6+B","6+C"], // 操作感を変えないためになんでもOKのまま
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236B"] }
+		}
+	},	
 
 	Skill_236_236_236 = 
 	{
 		command = [Def_CMD_236A,Def_CMD_236B,Def_CMD_236C,"6+A","6+B","6+C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
-			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236_236"] }
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236A_236A","Mv_Skill_236B_236B"] }
 		}
 	},	
 	
 	Skill_236_236_214 = 
 	{
 		command = [Def_CMD_214A,Def_CMD_214B,Def_CMD_214C,"4+A","4+B","4+C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
-			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236_236"] }
+			SkillType = "AddCommand", HitStatus = "Hit", FrameIDCheck = {Only = 100}, MvCheck = { Only = ["Mv_Skill_236A_236A","Mv_Skill_236B_236B"] }
 		}
 	},	
 
@@ -136,7 +148,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

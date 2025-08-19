@@ -15,14 +15,14 @@ SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
 SeList_Table.Status.resize(800); // てきとう
 local st = SeList_Table.Status; // 登録しやすいように
 
-st[9] = { volumetype=0, path=2, file="SE_SwingGlass", type=0, category=0, }; //落下
+st[9] = { volumetype=0, path=2, file="SE_SwingGlass", type=0, category=-1, }; //落下
 st[10] = { volumetype=0, path=2, file="SE_Hari_Appear", type=0, category=-1, }; 
 st[20] = { volumetype=0, path=2, file="SE_Hari_Vanish", type=0, category=-1, }; 
-st[30] = { volumetype=0, path=2, file="SE_BallExplosion", type=0, category=0, }; //236
-st[31] = { volumetype=0, path=2, file="SE_ApperLightBlade", type=0, category=0, }; //623
-st[32] = { volumetype=0, path=2, file="SE_DrawnSword", type=0, category=0, }; //214 421の針発射
-st[35] = { volumetype=0, path=2, file="SE_AppearInsulator", type=0, category=0, }; //投げ・勝利の吸い込みＳＥ
-st[36] = { volumetype=0, path=2, file="SE_BloodFallDown", type=0, category=0, }; //勝利のすいこみ終了ＳＥ
+st[30] = { volumetype=0, path=2, file="SE_BallExplosion", type=0, category=-1, }; //236
+st[31] = { volumetype=0, path=2, file="SE_ApperLightBlade", type=0, category=-1, }; //623
+st[32] = { volumetype=0, path=2, file="SE_DrawnSword", type=0, category=-1, }; //214 421の針発射
+st[35] = { volumetype=0, path=2, file="SE_AppearInsulator", type=0, category=-1, }; //投げ・勝利の吸い込みＳＥ
+st[36] = { volumetype=0, path=2, file="SE_BloodFallDown", type=0, category=-1, }; //勝利のすいこみ終了ＳＥ
 st[37] = { volumetype=0, path=0, file="SE239_Concentration_Loop", type=1, category=-1, }; //登場時のフォンフォン
 st[38] = { volumetype=0, path=2, file="SE_AppearInsulator", type=1, category=-1, }; //登場時のフォンフォン消滅フォン
 
@@ -42,56 +42,62 @@ st[95] = { volumetype=0, path=2, file="SE_BigBomb_Short", type=1, category=-1, }
 
 //●バトル
 //登場
-st[100] = { volumetype=1, path=1, file="hil_010_b_2000_a", type=0, category=1, }; //「うふふふ、楽しませて頂戴？」
-st[101] = { volumetype=1, path=1, file="hil_010_b_2001_a", type=0, category=1, }; //「讃えなさい、このアタシを…！」
-st[102] = { volumetype=1, path=1, file="hil_010_b_2002_a", type=0, category=1, }; //「どぉ～れ、少し遊んであげようかしら？」
+st[100] = { volumetype=1, path=1, file="hil_010_b_2000_a", type=0, category=1, userparam=195 }; //「うふふふ、楽しませて頂戴？」
+st[101] = { volumetype=1, path=1, file="hil_010_b_2001_a", type=0, category=1, userparam=140 }; //「讃えなさい、このアタシを…！」
+st[102] = { volumetype=1, path=1, file="hil_010_b_2002_a", type=0, category=1, userparam=194 }; //「どぉ～れ、少し遊んであげようかしら？」
 
 //登場 特殊
 //対ハイド
-st[110] = { volumetype=1, path=1, file="hil_010_b_2012", type=0, category=1, }; //「その余裕、舐められたものね」（ハイド「開き直ってるだけだ、気にすんなよ」）
+st[110] = { volumetype=1, path=1, file="hil_010_b_2012", type=0, category=1, userparam=181 }; //「その余裕、舐められたものね」（ハイド「開き直ってるだけだ、気にすんなよ」）
 
 //対ケイアス
-st[111] = { volumetype=1, path=1, file="hil_010_b_2016", type=0, category=1, }; //（ケイアス「ま、キミとぶつかるのも想定内ではある」）「一方的な敗北は、想定内かしら？」
+st[111] = { volumetype=1, path=1, file="hil_010_b_2016", type=0, category=1, userparam=200 }; //（ケイアス「ま、キミとぶつかるのも想定内ではある」）「一方的な敗北は、想定内かしら？」
 
 //対リンネ
-st[112] = { volumetype=1, path=1, file="hil_010_b_2019", type=0, category=1, }; //「アンタも倒す、アイツも倒す。このアタシが」（リンネ「出来やしないさ。今のお前にはな……）
+st[112] = { volumetype=1, path=1, file="hil_010_b_2019", type=0, category=1, userparam=248 }; //「アンタも倒す、アイツも倒す。このアタシが」（リンネ「出来やしないさ。今のお前にはな……）
 
 //対ゴルドー
-st[113] = { volumetype=1, path=1, file="hil_010_b_2022", type=0, category=1, }; //「白黒つけましょ？　ねぇ……？」（ゴルドー「踏み込みすぎると、大ケガするぜ？）
+st[113] = { volumetype=1, path=1, file="hil_010_b_2022", type=0, category=1, userparam=160 }; //「白黒つけましょ？　ねぇ……？」（ゴルドー「踏み込みすぎると、大ケガするぜ？）
 
 //対エンキドゥ
-st[114] = { volumetype=1, path=1, file="hil_010_b_2025", type=0, category=1, }; //「今まで退屈だったでしょ～？」（エンキドゥ「この瞬間のための、代償であろう）
+st[114] = { volumetype=1, path=1, file="hil_010_b_2025", type=0, category=1, userparam=147 }; //「今まで退屈だったでしょ～？」（エンキドゥ「この瞬間のための、代償であろう）
 
 //対クオン
-st[115] = { volumetype=1, path=1, file="hil_010_b_2028", type=0, category=1, }; //「ホントここまで長かったわぁ……」（クオン「永遠を望むなら、待つ事には慣れておくんだね」）
+st[115] = { volumetype=1, path=1, file="hil_010_b_2028", type=0, category=1, userparam=146 }; //「ホントここまで長かったわぁ……」（クオン「永遠を望むなら、待つ事には慣れておくんだね」）
+
+//対ウヅキ
+st[116] = { volumetype=1, path=1, file="hil_010_b_2031", type=0, category=1, userparam=159 }; //「貴方が敗れるところまでが、ね」
+
+//対オーガ
+st[118] = { volumetype=1, path=1, file="hil_010_b_2034", type=0, category=1, userparam=273 }; //「直に懇願するわぁ 早く醒めてくれ ってね……」
 
 //ラウンド勝利
-st[130] = { volumetype=1, path=1, file="hil_010_b_2100", type=0, category=1, }; //「ふふっ、雑魚過ぎて話になんないわぁ？」
-st[131] = { volumetype=1, path=1, file="hil_010_b_2101", type=0, category=1, }; //「これが力というものよぉ、圧倒的なねぇ」
+st[130] = { volumetype=1, path=1, file="hil_010_b_2100", type=0, category=1, userparam=226 }; //「ふふっ、雑魚過ぎて話になんないわぁ？」
+st[131] = { volumetype=1, path=1, file="hil_010_b_2101", type=0, category=1, userparam=262 }; //「これが力というものよぉ、圧倒的なねぇ」
 
 //ラウンド勝利 掛け合い
 //対ケイアス
-st[140] = { volumetype=1, path=1, file="hil_010_b_2106", type=0, category=1, }; //「さっすがケイアスぅ。見直したわぁ」
+st[140] = { volumetype=1, path=1, file="hil_010_b_2106", type=0, category=1, userparam=237 }; //「さっすがケイアスぅ。見直したわぁ」
 
 //決着勝利 汎用
-st[150] = { volumetype=1, path=1, file="hil_010_b_2111", type=0, category=1, }; //「…んっふっふっ…あーっはっはっはっはっは！」
-st[151] = { volumetype=1, path=1, file="hil_010_b_2112", type=0, category=1, }; //「ふふっ、惨めなものね」
+st[150] = { volumetype=1, path=1, file="hil_010_b_2111", type=0, category=1, userparam=208 }; //「…んっふっふっ…あーっはっはっはっはっは！」
+st[151] = { volumetype=1, path=1, file="hil_010_b_2112", type=0, category=1, userparam=186 }; //「ふふっ、惨めなものね」
 
 //決着勝利 辛勝
-st[155] = { volumetype=1, path=1, file="hil_010_b_2120", type=0, category=1, }; //「手加減してあげたんだけど、気づいたかしら？」
+st[155] = { volumetype=1, path=1, file="hil_010_b_2120", type=0, category=1, userparam=202 }; //「手加減してあげたんだけど、気づいたかしら？」
 
 //決着勝利 楽勝
-st[158] = { volumetype=1, path=1, file="hil_010_b_2123", type=0, category=1, }; //「あらぁ、弱いのね」
+st[158] = { volumetype=1, path=1, file="hil_010_b_2123", type=0, category=1, userparam=175 }; //「あらぁ、弱いのね」
 
 //決着勝利 掛け合い
 //対ケイアス/ゴルドー/エンキドゥ
-st[160] = { volumetype=1, path=1, file="hil_010_b_2127", type=0, category=1, }; //「黙ってアタシについてくればいいのよぉ」
+st[160] = { volumetype=1, path=1, file="hil_010_b_2127", type=0, category=1, userparam=172 }; //「黙ってアタシについてくればいいのよぉ」
 
 //対ハイド/リンネ
-st[161] = { volumetype=1, path=1, file="hil_010_b_2130", type=0, category=1, }; //「あーはっはっはっはっ！最高の気分だわぁ」
+st[161] = { volumetype=1, path=1, file="hil_010_b_2130", type=0, category=1, userparam=261 }; //「あーはっはっはっはっ！最高の気分だわぁ」
 
 //対クオン
-st[162] = { volumetype=1, path=1, file="hil_010_b_2133", type=0, category=1, }; //「再誕(リヴァース)も大したことないのねぇ」
+st[162] = { volumetype=1, path=1, file="hil_010_b_2133", type=0, category=1, userparam=175 }; //「再誕(リヴァース)も大したことないのねぇ」
 
 //タイムアップ判定負け
 st[170] = { volumetype=1, path=1, file="hil_010_b_2200", type=0, category=1, }; //「あぁら、残念ねぇ…ふふふ」

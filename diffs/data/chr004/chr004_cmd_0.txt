@@ -3,8 +3,8 @@ btl_debPrint2("\n[ORI_CommandTable]");
 
 local t =
 {
-	Skill_41236SP_ABC = { CmdCheck = { BallLimit = { [5] = 1 } } },
-	Skill_41236SP = { CmdCheck = { BallLimit = { [5] = 1 } } },
+	Skill_41236SP_ABC = {}, // { CmdCheck = { BallLimit = { [5] = 1 } } },
+	Skill_41236SP = {}, // { CmdCheck = { BallLimit = { [5] = 1 } } },
 	
 	Skill_41236EX = {},
 
@@ -16,7 +16,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand6,
 		command = ["6+A","6+B","6+C"],
-		
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -39,7 +39,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand2,
 		command = ["4+A",Def_CMD_214A,"24A@D,12@"],
-		
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -53,6 +53,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand3,
 		command = ["4+B",Def_CMD_214B,"24B@D,12@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -66,6 +67,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand4,
 		command = ["4+C",Def_CMD_214C,"24C@D,12@"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -80,6 +82,7 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand1,
 		command = ["v+B+C","4+B+C","6+B+C","B+C"], // サイズ変える時def_PP_Ori_FFStickTypeに注意
+		// 振り向くのでcommandcheckmuki=0のままでOK
 		function CmdBeforeFunc()
 		{
 			if( BMvTbl.AddAirCount( 0, 0 ) ) return 0;
@@ -108,6 +111,7 @@ local t =
 			{
 				BMvTbl.SetPP(def_PP_Ori_FFStickType,3);
 			}
+			return 1;
 		}
 		UpdateTable = { name = "Mv_Via_214_FF", },
 	}
@@ -176,6 +180,7 @@ local t =
 			{
 				BMvTbl.SetPP(def_PP_Ori_FFStickType,3);
 			}
+			return 1;
 		}
 	},
 	Atk_AirBandC = {
@@ -217,6 +222,7 @@ local ar =
 		CheckMoveName="Mv_Atk_StdB",
 		UpdateMoveName="Mv_Skill_214A",
 		ResetTmplName="Atk_StdB",
+		SrcCmdTmpl="Skill_214A",
 	},
 	{
 		CheckMoveName="Mv_Skill_214A",
@@ -237,7 +243,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},	
 ]

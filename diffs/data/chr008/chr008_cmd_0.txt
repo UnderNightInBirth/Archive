@@ -277,7 +277,30 @@ local t =
 	
 	Skill_J0202A = 
 	{
-		command = ["0202","v+A+B"],
+		command = ["0202","v+A+B","A+B"],
+		function CmdBeforeFunc()
+		{
+			// 方向キー↓じゃないと失敗
+			// ここでチェックすることで、A+B>2みたいな入力でも可能になる（半分バグ利用）
+			local cmd_pos = BCMDTbl.GetSuccessButtonPos();
+			if( cmd_pos == 2 )
+			{
+				if( BMvTbl.IsCpu()==0 ) // プレイヤーの時
+				{
+					if( !BMvTbl.CheckCommandString( "v" ) )
+					{
+						_dpn("下要素ではないので失敗");
+						return 0;
+					}
+				}
+				else
+				{
+					// CPUでは常に失敗
+					return 0;
+				}
+			}
+			return 1;
+		}
 		//高度制限をつける
 		CmdCheck = {
 			HeightLimit = def_POS_AirDashLimitHeight,
@@ -428,7 +451,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

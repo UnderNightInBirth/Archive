@@ -350,14 +350,13 @@ t.ComboLiberate <-
 t.Skill_DyingIWEAtk <-
 { //-------------------------------
 	cmdtmplflags = Def_SCT_Common,
-	num = def_CN_Skill_DyingIWE, name = "Cmd_Skill_DyingIWEAtk", command = ["A+B+C+D"], usegauge = 20000,
+	num = def_CN_Skill_DyingIWE, name = "Cmd_Skill_DyingIWEAtk", command = ["A+B+C+D","A+B+C+D@L,30@"], usegauge = 20000,
 	flags = [ "lastdelay" ], posstatus = _PosState_Always,
 	CmdCheck = { Cost = { ComboGauge = "OverLiberate" }, SkillType = "SpSpecial", MvCheck={ Fail="Mv_DyingIWEAtk"},
 	},
 	CmdBeforeStdFunc = function()
 	{
-		// MEMO:IWEはステアエンダーから繋がらないキャラもいて怪しいので一旦入れないことにする
-		// if( !Battle_Std.CheckSSRelayAtkExCancel( 1 ) ) return 0; // ステアエンダー後のみ有効なコマンドチェック
+		if( !Battle_Std.CheckSSRelayAtkExCancel( 1 ) ) return 0; // ステアエンダー後のみ有効なコマンドチェック
 
 		local mvs = BMvTbl.GetMvStatus();
 		if( mvs.flags & _MvStFlag_DangerHPDef )
@@ -957,6 +956,31 @@ if( Def_Rule_GameSystem == Def_RGS_UNI )
 			Battle_Std.SetCharaFlash_GuardCansel(); //GCで発光
 			local muteki_frame = 20;
 			BMvEff.SetPlayerTimer( { muteki_dage=muteki_frame, muteki_dageX=muteki_frame, muteki_nage=muteki_frame, muteki_nageX=muteki_frame } );
+			
+			// 最後に殴られた相手がガースラに弱い属性ならヒットストップの上限を下げてすぐ発動するようにする
+			// MEMO:当時に殴られているなどで正常に取得できないことはある
+			if( Def_Sys_EnableReducedGuardStopOnGuardCancelMove )
+			{
+				local enemy = BMvCore.GetLastDamageCharaData( 0 ); // そのままの相手
+				if( enemy.push() )
+				{
+					local check = Battle_Std.MoveCodeEx.CheckFlag( 5, def_MC5_ReducedGuardStopOnGuardCancel ); // ガースラでヒットストップが弱くなる技
+					enemy.pop();
+					
+					if( check )
+					{
+						local mvs = BMvTbl.GetMvStatus();
+						local stopframe = BMvTbl.GetHitStop();
+						_dpn("ガードストップ:"+stopframe+" 経過F:"+mvs.MvCountFrame+" MvCount:"+mvs.MvCount);
+						
+						if( mvs.MvCount <= 1 && stopframe > 0 && mvs.MvCountFrame >= Def_Sys_EnableReducedGuardStopOnGuardCancelMove )
+						{
+							_dpn("ガードストップ強制クリア")
+							BMvTbl.SetHitStop( 0, _ValSet ); // 終わり
+						}
+					}
+				}
+			}
 			
 			BMvTbl.SetPP(def_PP_GuardCancelStatus,0); // 初期化
 			return 1;
@@ -2710,6 +2734,18 @@ t.Atk_C_C <-
 	flags = [ "lastdelay" ],
 	CmdCheck = { SkillType = "Normal", MvCheck = { Only = ["Mv_Atk_StdC"] }, },
 	UpdateTable = { name = "Mv_Atk_C_C", }
+}
+
+t.Atk_C_C_C <-
+{ //-------------------------------
+	num = def_CN_Atk_C_C_C, name = "Cmd_Atk_C_C_C", command = "C",
+	flags = [ "lastdelay" ],
+	CmdCheck =
+	{
+		SkillType = "Normal",
+		MvCheck = { Only = ["Mv_Atk_C_C"] },
+	},
+	UpdateTable = { name = "Mv_Atk_C_C_C", },
 }
 
 

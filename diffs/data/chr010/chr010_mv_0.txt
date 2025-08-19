@@ -125,6 +125,8 @@ t.Mv_Atk_StdBandC_AddA <-
 	}
 	function FrameUpdate_After()
 	{
+		Battle_Std.SetHitMuteki( 1, 32, _HitCheckFlag_Legs ); // Param1 & 32 の時、足無敵
+
 		//ヒット時は着地の硬直減らそうかな
 		if( BMvTbl.GetLP(1)==0 )
 		{
@@ -177,6 +179,7 @@ t.Mv_Atk_StdBandC_Add2A <-
 	}
 	function FrameUpdate_After()
 	{
+		Battle_Std.SetHitMuteki( 1, 32, _HitCheckFlag_Legs ); // Param1 & 32 の時、足無敵
 	}
 }
 
@@ -206,12 +209,20 @@ t.Mv_Skill_J0202B <-
 		// 浮遊中…にすると、即別行動に移るのが正義なので、発動時に減るほうが良さそうだが…
 		//Battle_Std.GRD_AddValue({ val=Battle_Std.GetGRD_AddValue(-150), pressure=0, });
 		
+		// KO後はすぐに落下する
+		if( BMvTbl.GetLP(0)==0 && mvs.Param2&1 && Battle_Std.CharaisKO() )
+		{
+			BMvTbl.JumpFrameID(700);
+		}
+		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 500:
 			// ワープ処理
+			/*
 			BMvTbl.AddAirCount( 0, 1 ); // 回数制限をかける
 			BMvTbl.AddAirCount( 1, 1 ); // 回数制限をかける
+			*/
 			
 			// 現在位置から特定の座標にワープする
 			// 出現位置：Y=高さ固定（カメラの都合） X=相手位置を基準として、自分の向きを基準にちょっと後ろ（技名の都合）
@@ -1033,59 +1044,59 @@ t.Mv_IX_CatchEff <-
 	}
 }
 
+// 途中からのエフェクト管理タイムライン
 t.Mv_IX_KIS <-
 {
 	function Init()
 	{
-		BMvTbl.SetLP(0,0);
 	}
 	function FrameUpdate()
 	{
-		local mode = BMvTbl.GetLP(0);
-		local s = BMvTbl.GetMvStatus();
-		if( mode==0 )
+		switch( Battle_Std.GetUpdateFrameID() )
 		{
-			if( s.FrameID==100 )
+		case 10:
+			BMvEff.CutInProc_SetResourceView( { mode=0 } ); // 謎空間を消す
+			break;
+		case 50:
+			// ヒルダを非表示にする
+			local player = BMvCore.GetPlayerCharaData(); // 操作親の情報を得る
+			if( player.push() )
 			{
-				//エフェクト予備
-				BMvTbl.SetLP(0,1); //状態移行
-				
-				local eff;
-				eff = BMvEff.CreateObject( { start_pat="IX_KIS_Temae" } );
-				if( eff.push() )
-				{
-					BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange|_ObjFlags_NoGround|_ObjFlags_NoCamera } );
-					BMvTbl.SetPosition( { x=0, y=-320*128 } );
-					
-					eff.pop();
-				}
-				eff = BMvEff.CreateObject( { start_pat="IX_KIS_Flash", mvname="Mv_IX_KIS_Flash" } );
-				if( eff.push() )
-				{
-					BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange|_ObjFlags_NoGround|_ObjFlags_NoCamera } );
-					BMvTbl.SetPosition( { x=0, y=-320*128 } );
-					
-					eff.pop();
-				}
-				eff = BMvEff.CreateObject( { start_pat="IX_KIS_WhiteOut" } );
-				if( eff.push() )
-				{
-					BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange|_ObjFlags_NoGround|_ObjFlags_NoCamera } );
-					BMvTbl.SetPosition( { x=0, y=-320*128 } );
-					
-					eff.pop();
-				}				
-				//IX_KIS_Flash
-				//IX_KIS_WhiteOut
+				BMvEff.SetObjectFlags( { flags=_ObjFlags_NoRender } ); //非表示にする
+				player.pop();
 			}
-		}
-		if( s.FrameID==850 && s.isFrameUpdate )
-		{
+			break;
+		case 100:
+			local eff = BMvEff.CreateObject( { start_pat="IX_KIS_Temae" } );
+			if( eff.push() )
+			{
+				BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange|_ObjFlags_NoGround|_ObjFlags_NoCamera } );
+				BMvTbl.SetPosition( { x=0, y=-320*128 } );
+				
+				eff.pop();
+			}
+			eff = BMvEff.CreateObject( { start_pat="IX_KIS_Flash", mvname="Mv_IX_KIS_Flash" } );
+			if( eff.push() )
+			{
+				BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange|_ObjFlags_NoGround|_ObjFlags_NoCamera } );
+				BMvTbl.SetPosition( { x=0, y=-320*128 } );
+				
+				eff.pop();
+			}
+			eff = BMvEff.CreateObject( { start_pat="IX_KIS_WhiteOut" } );
+			if( eff.push() )
+			{
+				BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange|_ObjFlags_NoGround|_ObjFlags_NoCamera } );
+				BMvTbl.SetPosition( { x=0, y=-320*128 } );
+				
+				eff.pop();
+			}		
+			break;
+		case 850:
 			Battle_Std.IWExistSkill_FinishEffect(); //KOと同じような揺れやスローを呼ぶ
 			// ヒルダは遅いので呼ばない　どうせ真っ白だし…
-		}
-		else if( s.FrameID==900 )
-		{
+			break;
+		case 900:
 			//親に終了を伝える
 			local p = BMvCore.GetPlayerCharaData(); // 操作親の情報を得る
 			if( p.push() )
@@ -1094,21 +1105,16 @@ t.Mv_IX_KIS <-
 				
 				p.pop();
 			}			
-		}
-		if( s.FrameID==50 )
-		{
-			// ヒルダを非表示にする
-			local player = BMvCore.GetPlayerCharaData(); // 操作親の情報を得る
-			if( player.push() )
-			{
-				BMvEff.SetObjectFlags( { flags=_ObjFlags_NoRender } ); //非表示にする
-				player.pop();
-			}
+			break;
 		}
 	}
 	function Finalize()
 	{
 		BMvTbl.SetDeleteMoveTable();
+	}
+	function LastUpdate()
+	{
+		BMvEff.CutInProc_SetResourceView( { mode=1 } ); // 謎空間を戻す
 	}
 }
 
@@ -1674,7 +1680,8 @@ t.Mv_Skill_0202EX <-
 			BMvEff.SetCamera_Focus( { time=[0,0,25], type_out=2 } );
 		}
 		BMvEff.SetPlayerTimer( { muteki_nage=0, muteki_dage=0 } ); //無敵状態を解除
-	}	
+		BMvTbl.SetFinalizeCode(0); // 使ったので初期化
+	}
 }
 
 t.Mv_Skill_0202EX_Hit <-
@@ -1778,21 +1785,34 @@ t.Mv_Skill_SSRelayAtk <-
 			if( eff.push() )
 			{
 				BMvTbl.SetPosition( { x=epos.x, y=epos.y-450*128 } ); //相手の座標に出現
-				BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentHitStatus|_ObjFlags_MoveTimeStopAll } );
+				BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentHitStatus } );
 				eff.pop();
 			}
 			break;
+		case 600:
+			// ダメージを与えていたときは行動可能になるのを早く
+			local hs = BMvTbl.GetMvHitStatus();
+			if( hs.Type & _HitType_Damage )
+			{
+				BMvTbl.SetMoveableFlag( { move=1, time=254, flag=_ClearFlag_ChangeMv } ); // Mv中行動可能にする
+			}
+			break;	
 		}
 	}
 }
 t.Mv_Obj_SSTakenoko <- 
 {
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_NoSetUseExSkillFlag ); // EX技扱いだがEX技の保証補正制限はかけない
+		
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=31, time=255, flag=_ClearFlag_ChangeMv } ); // 受身不能時間を31Fに固定
+	}
 	function FrameUpdate_After()
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
-		case 100: // 本体の時間停止が終わった辺りで時間停止中動かないようにする
-			BMvEff.EraseObjectFlags( { flags=_ObjFlags_MoveTimeStopAll } );
+		case 100:
 			break;
 		}
 	}
@@ -2194,7 +2214,25 @@ t.Mv_Skill_623A <-
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100: //設置開始
-			local eff = BMvEff.CreateObject( { x=200, y=-230, mvname="Mv_Obj_Eff623A", flags=_Position_ToolShift } );
+			local tpos_y = 0;
+			
+			// DAMAGE時はy方向に40ドットだけサーチする
+			if( Battle_Std.CheckEnemyisDamage() )
+			{
+				local epos = Battle_Std.GetEnemyPosition();
+				if( epos.y > 0 )
+				{
+					epos.y = 0
+				}
+				else if( epos.y < -40*128 )
+				{
+					epos.y = -40*128
+				}
+				tpos_y = epos.y/128
+			}
+			_dpn("tpos_y="+tpos_y);
+			
+			local eff = BMvEff.CreateObject( { x=200, y=tpos_y-230, mvname="Mv_Obj_Eff623A", flags=_Position_ToolShift } );
 			if( eff.push() )
 			{
 				BtlPl.SetPos_ExcessGamenHajiX();
@@ -2236,7 +2274,25 @@ t.Mv_Skill_623EX <-
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100: //設置開始
-			local eff = BMvEff.CreateObject( { x=300, y=-230, mvname="Mv_Obj_Eff623EX", flags=_Position_ToolShift } );
+			local tpos_y = 0;
+			
+			// DAMAGE時はy方向に40ドットだけサーチする
+			if( Battle_Std.CheckEnemyisDamage() )
+			{
+				local epos = Battle_Std.GetEnemyPosition();
+				if( epos.y > 0 )
+				{
+					epos.y = 0
+				}
+				else if( epos.y < -40*128 )
+				{
+					epos.y = -40*128
+				}
+				tpos_y = epos.y/128
+			}
+			_dpn("tpos_y="+tpos_y);
+			
+			local eff = BMvEff.CreateObject( { x=300, y=tpos_y-230, mvname="Mv_Obj_Eff623EX", flags=_Position_ToolShift } );
 			if( eff.push() )
 			{
 				BtlPl.SetPos_ExcessGamenHajiX();
@@ -2291,6 +2347,16 @@ local maketmpl_Eff623_Takenoko = function( param={} )
 			BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange } ); //以降はPAT変更で消滅
 		}
 		*/
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 200:
+			if( Battle_Std.CheckEnemyisDamage() )
+			{
+				BMvTbl.JumpFrameID(210); // でかい判定に変更
+			}
+			break;
+		}
 		
 		local p = BMvCore.GetPlayerCharaData(); // プレイヤーの情報を得る
 		if( p.push() )
@@ -3722,6 +3788,10 @@ t.Mv_Skill_63214EX <-
 t.Mv_FireBall_63214EX <-
 {
 	flags = def_FBTmplFlags_NewTypeFireBall|def_FBTmplFlags_NoVanishLand|def_FBTmplFlags_NoVanishScreenOut,
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_ReducedGuardStopOnGuardCancel ); // ガースラでヒットストップが弱くなる技
+	}
 	function FrameUpdate_After()
 	{
 		local mvs = BMvTbl.GetMvStatus(); // ステータス取得
@@ -4220,6 +4290,9 @@ HilCheck.SetPrio <- function( _prio )
 	}
 }
 
+// しりもちになったら椅子エフェクトを変更する
+// 1:しりもち
+// 2:しりもちからの戻り
 HilCheck.isSirimoti <- function()
 {
 	local isSirimoti = 0; //しりもちではない
@@ -4233,21 +4306,26 @@ HilCheck.isSirimoti <- function()
 		
 		if( bs.isBound != 0 ) //バウンド状態が有効
 		{
+			// DataFrameを見ることで1F目の屈やられをしりもちとしない
+			// 空中でしりもちで落下するのは着地後をしりもちとする
+			local vecNum = bs.Num;
 			if(
-			(bs.Num==201 && mvst.DataFrame>0 ) || 
-			(bs.Num==199 && bs.VecCount==1 ) || 
-			(bs.Num==200 && bs.VecCount==1 ) )
+			( (vecNum==100 || vecNum==197 || vecNum==198 || vecNum==201 || vecNum==205 || vecNum==274 || vecNum==286 || vecNum==301) && mvst.DataFrame>0 ) ||
+			( (vecNum==199 || vecNum==200 ) && bs.VecCount==1 ) 
+			)
 			{
 				isSirimoti = 1; //しりもち状態
 				
 				local checkFrame = 5; //これ以降はしりもち戻り扱い
-				if( bs.Num==201 ) checkFrame = 6;
+				
+				if( vecNum==201 ) checkFrame = 6; // この処理かなり謎だけど一応残す
 
 				if( mvst.DataFrame>=checkFrame )
 				{
 					isSirimoti = 2; //しりもちからの戻り
 				}
 			}
+			// _dpn("Num:"+bs.Num+" DataFrame:"+mvst.DataFrame+" VecCount:"+bs.VecCount+" -> "+isSirimoti );
 		}
 	}
 	return isSirimoti;

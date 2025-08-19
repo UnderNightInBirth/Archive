@@ -47,31 +47,31 @@ st[41] = { volumetype=0, path=2, file="SE_BigBomb_Short", type=1, category=-1, }
 
 
 //登場
-st[100] = { volumetype=1, path=1, file="elt_010_b_2000", type=0, category=1, }; //「お仕置きの時間です。」
-st[101] = { volumetype=1, path=1, file="elt_010_b_2001", type=0, category=1, }; //「見せてあげましょう、年季の違いを。」
+st[100] = { volumetype=1, path=1, file="elt_010_b_2000", type=0, category=1, userparam=95 }; //「お仕置きの時間です。」
+st[101] = { volumetype=1, path=1, file="elt_010_b_2001", type=0, category=1, userparam=167 }; //「見せてあげましょう、年季の違いを。」
 
 //登場 特殊
 //対アカツキ
-st[106] = { volumetype=1, path=1, file="elt_010_b_2012", type=0, category=1, }; //「それではラストダンスと参りましょうか、先輩」
+st[106] = { volumetype=1, path=1, file="elt_010_b_2012", type=0, category=1, userparam=179 }; //「それではラストダンスと参りましょうか、先輩」
 
 //ラウンド勝利
-st[115] = { volumetype=1, path=1, file="elt_010_b_2100", type=0, category=1, }; //「貴方はまず、無謀という言葉を知るべきだ」
-st[116] = { volumetype=1, path=1, file="elt_010_b_2101", type=0, category=1, }; //「予測数値以下とは……情けない」
-st[117] = { volumetype=1, path=1, file="elt_010_b_2102", type=0, category=1, }; //「ふん、まったく嘆(なげ)かわしい……」
+st[115] = { volumetype=1, path=1, file="elt_010_b_2100", type=0, category=1, userparam=177 }; //「貴方はまず、無謀という言葉を知るべきだ」
+st[116] = { volumetype=1, path=1, file="elt_010_b_2101", type=0, category=1, userparam=150 }; //「予測数値以下とは……情けない」
+st[117] = { volumetype=1, path=1, file="elt_010_b_2102", type=0, category=1, userparam=138 }; //「ふん、まったく嘆(なげ)かわしい……」
 
 //決着勝利 汎用
-st[120] = { volumetype=1, path=1, file="elt_010_b_2111", type=0, category=1, }; //「以上です、解りきった結末でした」
-st[121] = { volumetype=1, path=1, file="elt_010_b_2112", type=0, category=1, }; //「お分かりいただけましたか？」
+st[120] = { volumetype=1, path=1, file="elt_010_b_2111", type=0, category=1, userparam=159 }; //「以上です、解りきった結末でした」
+st[121] = { volumetype=1, path=1, file="elt_010_b_2112", type=0, category=1, userparam=104 }; //「お分かりいただけましたか？」
 
 //決着勝利 辛勝
-st[124] = { volumetype=1, path=1, file="elt_010_b_2120", type=0, category=1, }; //「こちらの計算を超えますか…お見事です。結果は変わりませんが」
+st[124] = { volumetype=1, path=1, file="elt_010_b_2120", type=0, category=1, userparam=310 }; //「こちらの計算を超えますか…お見事です。結果は変わりませんが」
 
 //決着勝利 楽勝
-st[127] = { volumetype=1, path=1, file="elt_010_b_2123", type=0, category=1, }; //「易しい問題でした。」
+st[127] = { volumetype=1, path=1, file="elt_010_b_2123", type=0, category=1, userparam=98 }; //「易しい問題でした。」
 
 //決着勝利 掛け合い
 //対アカツキ
-st[132] = { volumetype=1, path=1, file="elt_010_b_2127", type=0, category=1, }; //「このめぐりあわせに感謝を」
+st[132] = { volumetype=1, path=1, file="elt_010_b_2127", type=0, category=1, userparam=122 }; //「このめぐりあわせに感謝を」
 
 //タイムアップ判定負け
 st[135] = { volumetype=1, path=1, file="elt_010_b_2200", type=0, category=1, }; //「……私とした事が……」
@@ -246,8 +246,8 @@ st[450] = { volumetype=1, path=1, file="elt_010_b_4900", type=0, category=1, }; 
 st[451] = { volumetype=1, path=1, file="elt_010_b_4901", type=0, category=1, }; //「負けられないっ……！」
 
 //ヴェールオフ
-st[460] = { volumetype=1, path=1, file="elt_010_b_5000", type=0, category=-1, }; //「はぁぁぁぁぁぁあ……！」
-st[461] = { volumetype=1, path=1, file="elt_010_b_5001", type=0, category=-1, }; //「開放！」
+st[460] = { volumetype=1, path=1, file="elt_010_b_5000", type=0, category=3, }; //「はぁぁぁぁぁぁあ……！」
+st[461] = { volumetype=1, path=1, file="elt_010_b_5001", type=0, category=3, }; //「開放！」
 
 //チェインシフト
 st[470] = { volumetype=1, path=1, file="elt_010_b_5100", type=0, category=1, }; //「最適戦略―――」

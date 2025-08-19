@@ -1,3 +1,10 @@
+//1.30
+const Def_Sys_ExCutinDrawType = 1; // 0:’Êí@1:­‚µˆÃ‚­iVP‚Æ‚©IW‚É”ä‚×‚é‚Æ”’”ò‚Ñ‚ªƒLƒc‚¢‚Ì‚Å’²®j
+const Def_Sys_Concentration_AddTS_NoDamage = 1; // ‚â‚ç‚ê’†‚ÍƒRƒ“ƒZ‚ÌTS‚ğ‘‚ß‚éŒø‰Ê‚ğ‚È‚­‚·
+const Def_Sys_FixMoveEnemyStageCornerBug = 1; // ‰æ–Ê’[‚Å”¼ƒƒbƒN‹Z‚ğ”w–Ê“–‚Ä‚µ‚½‚Æ‚«‚Éè‘O‚É‚à‚Á‚Ä‚±‚ê‚È‚¢•s‹ï‡‚ğ’¼‚·
+const Def_Sys_FixCameraFocusBug_OnHitDuringExCutinMove = 1; // ˆÃ“]’†i‚ŞEX‹Z‚ğˆÃ“]‚µ‚½uŠÔ‚É”í’e‚·‚é‚ÆƒJƒƒ‰ƒtƒH[ƒJƒX‚ª‚©‚©‚Á‚½‚Ü‚Ü‚É‚È‚é•s‹ï‡‚ğ’¼‚·
+const Def_Sys_EnableReducedGuardStopOnGuardCancelMove = 1; // ƒK[ƒXƒ‰‚Éã‚¢‹Z‚Ìˆ—‚ğ—LŒø‚É‚·‚é•ƒK[ƒXƒ‰‚ªo‚¹‚éÅ’áƒqƒbƒgƒXƒgƒbƒv
+
 //1.20
 const Def_Sys_ExSkillInitNageMutekiF = 0; // EX•KE‹Z‚Å‚©‚©‚è‚Ì“Š‚°–³“GƒtƒŒ[ƒ€B1.10:3
 const Def_Sys_EXCutinNageMuteki	= 0; // EXƒJƒbƒgƒCƒ“ƒ^ƒCƒ~ƒ“ƒO‚Å‹­§“I‚É“Š‚°–³“G‚ğ‚Â‚¯‚é‚© 0:•t‚¯‚È‚¢ 1`:–³“GƒtƒŒ[ƒ€ 1.10:2
@@ -6,7 +13,7 @@ const Def_Sys_ChangeAssaultEffect = 1; // ƒAƒTƒ‹ƒg‚ÌƒGƒtƒFƒNƒg‚ğ•ÏX•ŠÔ’â~’†
 const Def_Sys_AddThrowInActiveEffect = 1; // “Š‚°‚Å‚©‚©‚è—p‚ÌƒCƒ“ƒAƒNƒeƒBƒuƒGƒtƒFƒNƒg‚ğ’Ç‰Á
 const Def_Sys_ChangeMaxCVOEffect = 0; // 200%CVO‚ÌƒGƒtƒFƒNƒg‚ÌŒ©‚½–Ú‚ğ•Ï‚¦‚é
 const Def_Sys_AirShieldFallMovable = 1; // ‹ó’†ƒV[ƒ‹ƒhŒã‚Ì—‰º’†‚ğs“®‰Â”\‚É‚·‚é‚©
-const Def_Sys_StearEnderNoAttackHitCheckDamage = 1; // ƒXƒeƒAƒGƒ“ƒ_[‚Ì’ÇŒ‚•s”\‚Ìƒ`ƒFƒbƒN‚ÅAMV‚Ìƒqƒbƒg‚ğƒ`ƒFƒbƒN‚·‚é‚©‚Ç‚¤‚©
+const Def_Sys_StearEnderNoAttackHitCheckDamage = 0; // ƒXƒeƒAƒGƒ“ƒ_[‚Ì’ÇŒ‚•s”\‚Ìƒ`ƒFƒbƒN‚ÅAMV‚Ìƒqƒbƒg‚ğƒ`ƒFƒbƒN‚·‚é‚©‚Ç‚¤‚©@¦‹óU‚èƒRƒ“ƒ{‚Å•â³‚ª‚·‚²‚¢‚±‚Æ‚É‚È‚é
 const Def_Sys_IWE_IncreaseDamageAtkRectSize = 1; // ‘Šè‚ª‚â‚ç‚ê’†‚ÍIWE‚ÌÕŒ‚”g‚ğ‘å‚«‚­‚µ‚Ä‚ ‚½‚è‚â‚·‚­‚·‚é
 const Def_Sys_ChainShift_ResetCharaAirCount = 1; // CS”­“®‚É‹ó’†•KE‹Z‰ñ”§ŒÀ‚ğƒŠƒZƒbƒg‚·‚é
 const Def_Sys_AirSkillStartupLightLegsMuteki = 0; // ‹ó’†•KE‹Z”­“®ADef_HitCheckFlag_LightLegs‚ª‘O‚Ìs“®‚É‚ ‚Á‚½‚ç­‚µ‚¾‚¯Œp‘±@¦‘å‚«‚¢”š‚É‚µ‚Ä‘¼‚É‘®«–³“G‚ª‚ ‚éUŒ‚‚¾‚ÆƒoƒO‚é‚Ì‚Å’ˆÓ
@@ -677,7 +684,7 @@ const def_MC_EnableCansel_SkilltoJump		= 1073741824; // 31 •KE‹Z‚Ì’Êí‚b‚ğƒWƒƒƒ
 /* 30 */const def_MC1_TutoBallMuteki = 536870912; // ƒ`ƒ…[ƒgƒŠƒAƒ‹‚ÌƒnƒCƒh‚Ì”ò‚Ñ“¹‹ï‚ğ”²‚¯‚é‚Æ‚Â‚­
 /* 31 */const def_MC1_GenFlag = 1073741824; // MvŒÅ—Lƒtƒ‰ƒOiİ’è‚Í‹¤’Ê“®ì‚ÌMv‚ğw’è‚·‚éBƒ`ƒFƒbƒN‚ÍMv–¼‚Æˆê‚É’²‚×‚Äg‚¤j
 
-// Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_GRDBreak_WeakDmgHosei );
+// Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SidouHitSkillTmp );
 const def_MC2_CheckStartExtendAction = 1;
 const def_MC2_CheckEndExtendAction = 2;
 const def_MC2_ZyodanAirAtk = 4; // ã’i‰»‚µ‚½ƒWƒƒƒ“ƒvUŒ‚
@@ -707,6 +714,7 @@ const def_MC2_ShieldSteady = 67108864; // ƒV[ƒ‹ƒh‚³‚ê‚Ä‚àŒ„‚ª‚ ‚Ü‚è•Ï‚í‚ç‚È‚¢‹Z
 const def_MC2_SSRelayAtk = 134217728; // SS‹Z
 const def_MC2_YarareObject_AnySousai = 268435456; // CheckSousai‚ÅYarareObject‚ÉG‚É‚Â‚­‘ŠEƒtƒ‰ƒOi‚â‚ç‚êƒIƒuƒWƒFƒNƒg‚ªCheckSousai‚Ì”»’è‚ÅÁ–Å‚·‚éğŒj
 const def_MC2_GRDBreak_WeakDmgHosei = 536870912; // ‚f‚q‚cƒuƒŒƒCƒN‚Åƒ_ƒ[ƒW•â³‚ªƒLƒc‚­‚È‚é
+const def_MC2_SidouHitSkillTmp = 1073741824; // n“®ƒqƒbƒg‚É—§‚Âƒtƒ‰ƒO—\”õiMV‘¤‚Å©—R‚ÉÁ‚µ‚Ä‚à‚¢‚¢ƒeƒ“ƒ|ƒ‰ƒŠƒtƒ‰ƒOj
 
 // Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_EnableJumpFramePP );
 const def_MC3_CallComboChainMv = 1; // ˜A‘ÅƒRƒ“ƒ{‚ÅŒÄ‚Î‚ê‚½Mv
@@ -737,7 +745,8 @@ const def_MC5_StrictFurimukiCheckNextMv = 8; // Ÿ‚Ìs“®‚ÍInit‚ÌU‚èŒü‚«ƒ`ƒFƒbƒN
 // const def_MC5_ArcDriveSkill = 8192; // AD‹Z
 const def_MC5_SkillAfterLanding = 16384; // ©“®¶¬‚³‚ê‚½•KE‹Z‚Å’…’nŒã‚©‚Ç‚¤‚©iq‚È‚Ç‚©‚çe‚Ì’…’n‚ğŒ©‚é—pj
 const def_MC5_ChainShiftOK_NoShield = 32768; // ƒc[ƒ‹‚ÅCS‰Â‚È‚ç‹óU‚èCS‰Â”\iƒV[ƒ‹ƒh‚Í•s‰Âj
-const def_MC5_DisableChangeGRD_AssultOverheadF  = 65536; // ”­¶F‚É‰‚¶‚½ƒAƒTƒ‹ƒg’†’iƒK[ƒh‚ÌGRD‘‰Á—Ê‚ğ–³Œø‚É‚·‚é
+const def_MC5_DisableChangeGRD_AssultOverheadF = 65536; // ”­¶F‚É‰‚¶‚½ƒAƒTƒ‹ƒg’†’iƒK[ƒh‚ÌGRD‘‰Á—Ê‚ğ–³Œø‚É‚·‚é
+const def_MC5_ReducedGuardStopOnGuardCancel = 1048576; // ƒK[ƒhƒLƒƒƒ“ƒZƒ‹‚³‚ê‚½‚Æ‚«‚ÉƒK[ƒhƒqƒbƒgƒXƒgƒbƒv‚ğ’Z‚­’²®‚³‚ê‚é‰Â”\«‚Ì‚ ‚é‹Z
 
 //FireBallŠÖ˜A
 // Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_CheckSousaiYarareObject );
@@ -989,7 +998,9 @@ const def_PP_RecoverHoldMask		= 35; //ó‚¯g‚Ég‚Á‚½‰Ÿ‚µ‚Á‚Ï‚È‚µƒ{ƒ^ƒ“(“¯‰Ÿ‚µ‚
 
 const def_PP_Temp					= 36; //Š„‚Æ“K“–‚Ég‚¤”Ä—p•Ï”
 const def_PP_Temp2					= 37; //Š„‚Æ“K“–‚Ég‚¤”Ä—p•Ï”
-const def_PP_IWEXS_ChgVO_Hit		= 38; //IWEXS‚ªg—p‰Â”\‚©‚Ç‚¤‚© 200%‚Å‘Šè‚ª•m€‚ÅÅ‘å‚½‚ß‚u‚n‚ğƒqƒbƒg‚Å‚P
+// const def_PP_IWEXS_ChgVO_Hit		= 38; //IWEXS‚ªg—p‰Â”\‚©‚Ç‚¤‚© 200%‚Å‘Šè‚ª•m€‚ÅÅ‘å‚½‚ß‚u‚n‚ğƒqƒbƒg‚Å‚P
+const def_PP_AssultAirAtkHosei		= 38; //ƒAƒTƒ‹ƒgƒWƒƒƒ“ƒvUŒ‚‚ÌæZ•â³‹L‰¯ƒXƒƒbƒg
+
 
 // CmdCheck‚ÌŠÖ”“à‚Å‚Ì‚İg‚Á‚Ä—Ç‚¢
 // Battle_Std.PP_AddFlag(def_PP_CmdStatus,0);
@@ -1306,6 +1317,7 @@ const def_CN_ComboBlast		= 62; //‚n‚lƒuƒ‰ƒXƒg
 const def_CN_BoundBlast		= 63; //Âƒuƒ‰ƒXƒg
 
 const def_CN_Skill_IWEXIST		= 70; //‰½‚Å‚±‚±‚È‚Ì
+const def_CN_Skill_41236SP_ABC	= 75; //ƒ_ƒbƒVƒ…ƒoƒNƒXƒe‚æ‚è—Dæ“x‚‚­
 
 const def_CN_Dash_F_Douji		= 80;
 const def_CN_Dash_B_Douji		= 81;
@@ -1326,7 +1338,7 @@ const def_CN_Skill_CircleC		= 111;
 const def_CN_Skill_CircleB		= 112;
 const def_CN_Skill_CircleA		= 113;
 
-const def_CN_Skill_41236SP_ABC	= 116;
+// const def_CN_Skill_41236SP_ABC	= 116; // 1.20‚Ü‚Å‚±‚±‚¾‚ªCVO’†4ABC‚ÅƒoƒNƒXƒe‚ªo‚é‚Ì‚ğ’¼‚·‚½‚ß•ÏX
 const def_CN_Skill_41236SP		= 120; //CPU‚ª120ƒLƒ‘Å‚¿‚µ‚Ä‚é
 const def_CN_Skill_41236EX		= 119;
 const def_CN_Skill_41236C		= 121;
@@ -1677,6 +1689,7 @@ const def_CN_Atk_JA_JA			= 1137;
 const def_CN_Atk_JB_JB			= 1138;
 const def_CN_Atk_JC_JC			= 1139;
 const def_CN_Atk_B_B_B			= 1140;
+const def_CN_Atk_C_C_C			= 1141;
 
 
 const def_CN_Atk_AddCommand1	= 1150;

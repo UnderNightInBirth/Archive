@@ -15,14 +15,14 @@ SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
 SeList_Table.Status.resize(500); // 確保
 local st = SeList_Table.Status; // 登録しやすいように省略
 
-st[0]  = { volumetype=0, path=2, file="SE_BloodCongeals", type=0, category=3, }; //通常技のブレード関係
-st[10] = { volumetype=0, path=2, file="SE_BloodPool", type=0, category=2, }; //236とかの血設置関係
-st[20] = { volumetype=0, path=2, file="SE_BloodSplashA", type=0, category=4, }; //6Bとか
+st[0]  = { volumetype=0, path=2, file="SE_BloodCongeals", type=0, category=-1, }; //通常技のブレード関係
+st[10] = { volumetype=0, path=2, file="SE_BloodPool", type=0, category=-1, }; //236とかの血設置関係
+st[20] = { volumetype=0, path=2, file="SE_BloodSplashA", type=0, category=-1, }; //6Bとか
 
-st[30] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=3, }; //236
-st[40] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=3, }; //214
-st[50] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=3, }; //623
-st[60] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=3, }; //22
+st[30] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=-1, }; //236
+st[40] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=-1, }; //214
+st[50] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=-1, }; //623
+st[60] = { volumetype=0, path=2, file="SE_BloodSplashB", type=0, category=-1, }; //22
 
 st[65] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWとどめ
 
@@ -31,40 +31,40 @@ st[71] = { volumetype=0, path=2, file="SE_SpecialBrontides", type=1, category=-1
 
 // 登場
 
-st[100] = { volumetype=1, path=1, file="car_010_b_2000", type=0, category=1, }; //「ククク…後悔してももう遅ェ！」
-st[101] = { volumetype=1, path=1, file="car_010_b_2001", type=0, category=1, }; //「雑魚はすっこんでろ…」
-st[102] = { volumetype=1, path=1, file="car_010_b_2002", type=0, category=1, }; //「軽くひねってやんよォ」
+st[100] = { volumetype=1, path=1, file="car_010_b_2000", type=0, category=1, userparam=220 }; //「ククク…後悔してももう遅ェ！」
+st[101] = { volumetype=1, path=1, file="car_010_b_2001", type=0, category=1, userparam=121 }; //「雑魚はすっこんでろ…」
+st[102] = { volumetype=1, path=1, file="car_010_b_2002", type=0, category=1, userparam=128 }; //「軽くひねってやんよォ」
 
 // 登場 特殊
 // 対ハイド
-st[107] = { volumetype=1, path=1, file="car_010_b_2012_b", type=0, category=1, }; //「唯一の趣味だ、邪魔すんじゃねぇよ」
+st[107] = { volumetype=1, path=1, file="car_010_b_2012_b", type=0, category=1, userparam=186 }; //「唯一の趣味だ、邪魔すんじゃねぇよ」
 
 // 対ゴルドー
-st[110] = { volumetype=1, path=1, file="car_010_b_2016", type=0, category=1, }; //「けっ…、テメェの命だけ心配してな…」
+st[110] = { volumetype=1, path=1, file="car_010_b_2016", type=0, category=1, userparam=197 }; //「けっ…、テメェの命だけ心配してな…」
 
 // 対クオン
-st[113] = { volumetype=1, path=1, file="car_010_b_2025", type=0, category=1, }; //「気取ってんなよ、ガキが……」
+st[113] = { volumetype=1, path=1, file="car_010_b_2025", type=0, category=1, userparam=145 }; //「気取ってんなよ、ガキが……」
 
 // ラウンド勝利
-st[122] = { volumetype=1, path=1, file="car_010_b_2100_a", type=0, category=1, }; //「クックックックックッ…ハァーッハッハッハッハッハァ！」
-st[124] = { volumetype=1, path=1, file="car_010_b_2101", type=0, category=1, }; //「おいおい、もう少し頑張れよ！」
+st[122] = { volumetype=1, path=1, file="car_010_b_2100_a", type=0, category=1, userparam=365 }; //「クックックックックッ…ハァーッハッハッハッハッハァ！」
+st[124] = { volumetype=1, path=1, file="car_010_b_2101", type=0, category=1, userparam=204 }; //「おいおい、もう少し頑張れよ！」
 
 // 決着勝利 汎用
-st[127] = { volumetype=1, path=1, file="car_010_b_2111", type=0, category=1, }; //「まだまだ足んねーんだよォ！」
-st[128] = { volumetype=1, path=1, file="car_010_b_2112", type=0, category=1, }; //「格付け完了だ！」
+st[127] = { volumetype=1, path=1, file="car_010_b_2111", type=0, category=1, userparam=143 }; //「まだまだ足んねーんだよォ！」
+st[128] = { volumetype=1, path=1, file="car_010_b_2112", type=0, category=1, userparam=123 }; //「格付け完了だ！」
 
 // 決着勝利 辛勝
-st[131] = { volumetype=1, path=1, file="car_010_b_2120", type=0, category=1, }; //「テメェ…犬が噛みついてんじゃねえぞ！」
+st[131] = { volumetype=1, path=1, file="car_010_b_2120", type=0, category=1, userparam=198 }; //「テメェ…犬が噛みついてんじゃねえぞ！」
 
 // 決着勝利 楽勝
-st[134] = { volumetype=1, path=1, file="car_010_b_2123", type=0, category=1, }; //「チッ…退屈しのぎにもなんねェ」
+st[134] = { volumetype=1, path=1, file="car_010_b_2123", type=0, category=1, userparam=167 }; //「チッ…退屈しのぎにもなんねェ」
  
 // 決着勝利 掛け合い
 // 対ハイド
-st[138] = { volumetype=1, path=1, file="car_010_b_2127", type=0, category=1, }; //「なんだかわからねえがムカつく野郎だったぜ…」
+st[138] = { volumetype=1, path=1, file="car_010_b_2127", type=0, category=1, userparam=189 }; //「なんだかわからねえがムカつく野郎だったぜ…」
 
 // 対ビャクヤ
-st[141] = { volumetype=1, path=1, file="car_010_b_2130", type=0, category=1, }; //「ガキが…おねーちゃんとママゴトでもしてな」
+st[141] = { volumetype=1, path=1, file="car_010_b_2130", type=0, category=1, userparam=216 }; //「ガキが…おねーちゃんとママゴトでもしてな」
 
 // タイムアップ判定負け
 st[144] = { volumetype=1, path=1, file="car_010_b_2200", type=0, category=1, }; //「はあぁー！？」

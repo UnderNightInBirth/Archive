@@ -26,50 +26,57 @@ st[65] = { volumetype=0, path=2, file="SE_DrawnSword", type=1, category=-1, }; /
 st[70] = { volumetype=0, path=2, file="SE_BloodFallDown", type=1, category=-1, }; //IW 発動ぐるぐる
 st[71] = { volumetype=0, path=2, file="SE_CoilRound", type=1, category=-1, }; //IW ヒットすいこみ
 
-st[80] = { volumetype=1, path=1, file="tuk_010_b_2000", type=0, category=3, }; // 後はお願いね、ビャクヤ
-st[81] = { volumetype=1, path=1, file="tuk_010_b_2012", type=0, category=3, }; // しつこいわね、あの人……
-st[82] = { volumetype=1, path=1, file="tuk_010_b_2014", type=0, category=3, }; // しつこいわね、あの子……
-st[83] = { volumetype=1, path=1, file="tuk_010_b_2001", type=0, category=3, }; // 我が弟ビャクヤがあなたを喰らいに来たわ
+st[80] = { volumetype=1, path=1, file="tuk_010_b_2000", type=0, category=3, userparam=130 }; // 後はお願いね、ビャクヤ
+st[81] = { volumetype=1, path=1, file="tuk_010_b_2012", type=0, category=3, userparam=134 }; // しつこいわね、あの人……
+st[82] = { volumetype=1, path=1, file="tuk_010_b_2014", type=0, category=3, userparam=130 }; // しつこいわね、あの子……
+st[83] = { volumetype=1, path=1, file="tuk_010_b_2001", type=0, category=3, userparam=189 }; // 我が弟ビャクヤがあなたを喰らいに来たわ
 
 
 // ●バトル
 // 登場
-st[101] = { volumetype=1, path=1, file="bya_010_b_2000", type=0, category=1, }; //「任せてよ姉さん （姉へ向けて）」
+st[101] = { volumetype=1, path=1, file="bya_010_b_2000", type=0, category=1, userparam=100 }; //「任せてよ姉さん （姉へ向けて）」
 
-st[104] = { volumetype=1, path=1, file="bya_010_b_2001", type=0, category=1, }; //「や、こんばんは （相手に対して）」
-st[105] = { volumetype=1, path=1, file="bya_010_b_2002", type=0, category=1, }; //「早速でわるいんだけど。消えてもらうよ」
-st[106] = { volumetype=1, path=1, file="bya_010_b_2003", type=0, category=1, }; //「懲りないね～ホント（姉へ向けて）」
-st[107] = { volumetype=1, path=1, file="bya_010_b_2004", type=0, category=1, }; //「や、また会ったね （相手に対して）」
+st[104] = { volumetype=1, path=1, file="bya_010_b_2001", type=0, category=1, userparam=84 }; //「や、こんばんは （相手に対して）」
+st[105] = { volumetype=1, path=1, file="bya_010_b_2002", type=0, category=1, userparam=205 }; //「早速でわるいんだけど。消えてもらうよ」
+st[106] = { volumetype=1, path=1, file="bya_010_b_2003", type=0, category=1, userparam=103 }; //「懲りないね～ホント（姉へ向けて）」
+st[107] = { volumetype=1, path=1, file="bya_010_b_2004", type=0, category=1, userparam=110 }; //「や、また会ったね （相手に対して）」
 
-st[109] = { volumetype=1, path=1, file="bya_010_b_2005", type=0, category=1, }; //「僕の名でケンカ売るのやめて？」
+st[109] = { volumetype=1, path=1, file="bya_010_b_2005", type=0, category=1, userparam=137 }; //「僕の名でケンカ売るのやめて？」
 
 // 登場 特殊
 // 対カグヤ
-st[118] = { volumetype=1, path=1, file="bya_010_b_2021", type=0, category=1, }; //「その笑顔、消してみせよう（次に続く）」
+st[118] = { volumetype=1, path=1, file="bya_010_b_2021", type=0, category=1, userparam=152 }; //「その笑顔、消してみせよう（次に続く）」
 
-st[120] = { volumetype=1, path=1, file="bya_010_b_2022", type=0, category=1, }; //「……被らせないでよ」※上のと順番に再生する
+st[120] = { volumetype=1, path=1, file="bya_010_b_2022", type=0, category=1, userparam=87 }; //「……被らせないでよ」※上のと順番に再生する
 
+// 対オーガ
+st[122] = { volumetype=1, path=1, file="bya_010_b_2012", type=0, category=1, userparam=194 }; //「無性に腹が立つね キミを見てると」「そいつは残念 ま 野郎に好かれるより良いか」
 
 // ラウンド勝利
-st[129] = { volumetype=1, path=1, file="bya_010_b_2100", type=0, category=1, }; //「おーい、生きてる？」
-st[130] = { volumetype=1, path=1, file="bya_010_b_2101", type=0, category=1, }; //「この程度じゃ終わらないよね？」
-st[131] = { volumetype=1, path=1, file="bya_010_b_2102", type=0, category=1, }; //「弱いね」
-st[132] = { volumetype=1, path=1, file="bya_010_b_2103", type=0, category=1, }; //「解ったろ。無駄な抵抗だって」
+st[129] = { volumetype=1, path=1, file="bya_010_b_2100", type=0, category=1, userparam=118 }; //「おーい、生きてる？」
+st[130] = { volumetype=1, path=1, file="bya_010_b_2101", type=0, category=1, userparam=125 }; //「この程度じゃ終わらないよね？」
+st[131] = { volumetype=1, path=1, file="bya_010_b_2102", type=0, category=1, userparam=58 }; //「弱いね」
+st[132] = { volumetype=1, path=1, file="bya_010_b_2103", type=0, category=1, userparam=158 }; //「解ったろ。無駄な抵抗だって」
 
 // 決着勝利 汎用
-st[135] = { volumetype=1, path=1, file="bya_010_b_2111", type=0, category=1, }; //「君、ホント口だけだね～」
-st[136] = { volumetype=1, path=1, file="bya_010_b_2112", type=0, category=1, }; //「え～　もう終わりなの？」
-st[137] = { volumetype=1, path=1, file="bya_010_b_2113", type=0, category=1, }; //「こりゃ、食べる価値もない」
-st[138] = { volumetype=1, path=1, file="bya_010_b_2114", type=0, category=1, }; //「あれ？ 君、弱いなあ」
+st[135] = { volumetype=1, path=1, file="bya_010_b_2111", type=0, category=1, userparam=160 }; //「君、ホント口だけだね～」
+st[136] = { volumetype=1, path=1, file="bya_010_b_2112", type=0, category=1, userparam=145 }; //「え～　もう終わりなの？」
+st[137] = { volumetype=1, path=1, file="bya_010_b_2113", type=0, category=1, userparam=137 }; //「こりゃ、食べる価値もない」
+st[138] = { volumetype=1, path=1, file="bya_010_b_2114", type=0, category=1, userparam=139 }; //「あれ？ 君、弱いなあ」
 
-st[140] = { volumetype=1, path=1, file="bya_010_b_2115_m0", type=0, category=1, }; //
-st[141] = { volumetype=1, path=1, file="bya_010_b_2115_m1", type=0, category=1, }; // 短いver
+st[140] = { volumetype=1, path=1, file="bya_010_b_2115_m0", type=0, category=1, userparam=324 }; //あーっはっはっはっ この人すごいザコだよ
+st[141] = { volumetype=1, path=1, file="bya_010_b_2115_m1", type=0, category=1, userparam=157 }; //あーっはっはっはっ
 
 // 決着勝利 辛勝
-st[146] = { volumetype=1, path=1, file="bya_010_b_2120", type=0, category=1, }; //「頑張ったみたいだけど、ここまでのようだね」
+st[146] = { volumetype=1, path=1, file="bya_010_b_2120", type=0, category=1, userparam=232 }; //「頑張ったみたいだけど、ここまでのようだね」
 
 // 決着勝利 楽勝
-st[149] = { volumetype=1, path=1, file="bya_010_b_2123", type=0, category=1, }; //「なぁんだ、この程度か」
+st[149] = { volumetype=1, path=1, file="bya_010_b_2123", type=0, category=1, userparam=122 }; //「なぁんだ、この程度か」
+
+// 決着勝利 掛け合い
+// 対オーガ
+st[151] = { volumetype=1, path=1, file="bya_010_b_2127", type=0, category=1, userparam=249 }; //「…姉さんに近づく悪い虫は、僕が潰さないとね」
+st[152] = { volumetype=1, path=1, file="bya_010_b_2128", type=0, category=1, userparam=231 }; //「…よくわからないけど、念入りに切り刻んでおこう」
 
 // タイムアップ判定負け
 st[158] = { volumetype=1, path=1, file="bya_010_b_2200", type=0, category=1, }; //「命拾いしたね（相手が）」
@@ -141,8 +148,8 @@ st[300] = { volumetype=1, path=1, file="bya_010_b_2950", type=0, category=1, pri
 st[301] = { volumetype=1, path=1, file="bya_010_b_2951", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; //「全力で拒否」
 
 // 振り向き
-st[304] = { volumetype=1, path=1, file="bya_010_b_3000", type=0, category=1, }; //「よく動くね」
-st[305] = { volumetype=1, path=1, file="bya_010_b_3001", type=0, category=1, }; //「どこかな （本当はわかってる）」
+st[304] = { volumetype=1, path=1, file="bya_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki }; //「よく動くね」
+st[305] = { volumetype=1, path=1, file="bya_010_b_3001", type=0, category=1, prio=Def_SEP_Furimuki }; //「どこかな （本当はわかってる）」
 
 // 待機モーション
 st[308] = { volumetype=1, path=1, file="bya_010_b_3100", type=0, category=1, }; //「ねえどうしたの？　早く続きやろうよ」

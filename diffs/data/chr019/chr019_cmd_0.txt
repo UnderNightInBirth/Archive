@@ -60,8 +60,7 @@ local t =
 		command = "B+C",
 		flags = [ "lastdelay" ],
 		CmdCheck = { SkillType = "ExSpecial", ComboLimit = DEF_BS_CL_ATKBANDC,
-		MvCheck={ SkillFail="Mv_Atk_StdBandC"},	
-		flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck },	
+		MvCheck={ SkillFail="Mv_Atk_StdBandC"}, },	
 		UpdateTable = { name = "Mv_Atk_RelayBandC", }
 		function CmdBeforeFunc()
 		{
@@ -219,7 +218,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}		
 	},
 

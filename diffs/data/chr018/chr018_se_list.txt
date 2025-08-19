@@ -42,64 +42,64 @@ st[65] = { volumetype=0, path=2, file="SE_SwingGlassMin", type=1, category=-1, }
 
 //●バトル
 //登場
-st[100] = { volumetype=1, path=1, file="lnd_010_b_2000", type=0, category=1, }; //「これも僕の任務だ。」
-st[102] = { volumetype=1, path=1, file="lnd_010_b_2001_b", type=0, category=1, }; //「偽誕者(インヴァース)…鎮圧する」
-st[103] = { volumetype=1, path=1, file="lnd_010_b_2002", type=0, category=1, }; //「手ごわそうな相手だが…やってみせる。」
-st[104] = { volumetype=1, path=1, file="lnd_010_b_2003", type=0, category=1, }; //「負けるワケにはいかない。リッターシルトの名にかけて」
-st[105] = { volumetype=1, path=1, file="lnd_010_b_2004", type=0, category=1, }; //「森羅万象、凍らぬものはなし」
-st[106] = { volumetype=1, path=1, file="lnd_010_b_2005", type=0, category=1, }; //「互いの誇りにかけて正々堂々、勝負だ」
-st[107] = { volumetype=1, path=1, file="lnd_010_b_2006", type=0, category=1, }; //「どんな能力だろうと、凍らせよう」
+st[100] = { volumetype=1, path=1, file="lnd_010_b_2000", type=0, category=1, userparam=106 }; //「これも僕の任務だ。」
+st[102] = { volumetype=1, path=1, file="lnd_010_b_2001_b", type=0, category=1, userparam=122 }; //「偽誕者(インヴァース)…鎮圧する」
+st[103] = { volumetype=1, path=1, file="lnd_010_b_2002", type=0, category=1, userparam=173 }; //「手ごわそうな相手だが…やってみせる。」
+st[104] = { volumetype=1, path=1, file="lnd_010_b_2003", type=0, category=1, userparam=221 }; //「負けるワケにはいかない。リッターシルトの名にかけて」
+st[105] = { volumetype=1, path=1, file="lnd_010_b_2004", type=0, category=1, userparam=185 }; //「森羅万象、凍らぬものはなし」
+st[106] = { volumetype=1, path=1, file="lnd_010_b_2005", type=0, category=1, userparam=213 }; //「互いの誇りにかけて正々堂々、勝負だ」
+st[107] = { volumetype=1, path=1, file="lnd_010_b_2006", type=0, category=1, userparam=169 }; //「どんな能力だろうと、凍らせよう」
 
 //登場 特殊
 //対オリエ
-st[110] = { volumetype=1, path=1, file="lnd_010_b_2012", type=0, category=1, }; //「君との出会い、光栄に思うよ」
-st[111] = { volumetype=1, path=1, file="lnd_010_b_2013", type=0, category=1, }; //「お手合わせ、願おう！」
+st[110] = { volumetype=1, path=1, file="lnd_010_b_2012", type=0, category=1, userparam=154 }; //「君との出会い、光栄に思うよ」
+st[111] = { volumetype=1, path=1, file="lnd_010_b_2013", type=0, category=1, userparam=85 }; //「お手合わせ、願おう！」
 
 //対メルカヴァ
-st[113] = { volumetype=1, path=1, file="lnd_010_b_2016", type=0, category=1, }; //「つくづく、君とは縁があるようだ」
-st[114] = { volumetype=1, path=1, file="lnd_010_b_2017", type=0, category=1, }; //「君とまた、出会うことになるとはね」
-st[116] = { volumetype=1, path=1, file="lnd_010_b_2018", type=0, category=1, }; //「僕たちの関係も、終わりというワケだね」
+st[113] = { volumetype=1, path=1, file="lnd_010_b_2016", type=0, category=1, userparam=150 }; //「つくづく、君とは縁があるようだ」
+st[114] = { volumetype=1, path=1, file="lnd_010_b_2017", type=0, category=1, userparam=176 }; //「君とまた、出会うことになるとはね」
+st[116] = { volumetype=1, path=1, file="lnd_010_b_2018", type=0, category=1, userparam=204 }; //「僕たちの関係も、終わりというワケだね」
 
 //対ミカ
-st[118] = { volumetype=1, path=1, file="lnd_010_b_2021", type=0, category=1, }; //「テ……テンス・イグゼクター！？」
+st[118] = { volumetype=1, path=1, file="lnd_010_b_2021", type=0, category=1, userparam=144 }; //「テ……テンス・イグゼクター！？」
 
 //対ワーグナー
-st[121] = { volumetype=1, path=1, file="lnd_010_b_2024", type=0, category=1, }; //「燃え盛る炎だろうと、凍らせてみせる！」
-st[122] = { volumetype=1, path=1, file="lnd_010_b_2025", type=0, category=1, }; //「勝負だ『虚無狩り』！」
-st[123] = { volumetype=1, path=1, file="lnd_010_b_2026", type=0, category=1, }; //「君を倒し、証明しよう。僕たちの方が上であるとね。」
+st[121] = { volumetype=1, path=1, file="lnd_010_b_2024", type=0, category=1, userparam=199 }; //「燃え盛る炎だろうと、凍らせてみせる！」
+st[122] = { volumetype=1, path=1, file="lnd_010_b_2025", type=0, category=1, userparam=93 }; //「勝負だ『虚無狩り』！」
+st[123] = { volumetype=1, path=1, file="lnd_010_b_2026", type=0, category=1, userparam=252 }; //「君を倒し、証明しよう。僕たちの方が上であるとね。」
 
 //ラウンド勝利
-st[140] = { volumetype=1, path=1, file="lnd_010_b_2100", type=0, category=1, }; //「こんなものではないだろう？（※君の実力はもっとあるだろう、という意味）」
-st[141] = { volumetype=1, path=1, file="lnd_010_b_2101", type=0, category=1, }; //「もう立ち上がらないでくれ」
-st[142] = { volumetype=1, path=1, file="lnd_010_b_2102", type=0, category=1, }; //「これでも引いてくれないか…」
-st[143] = { volumetype=1, path=1, file="lnd_010_b_2103", type=0, category=1, }; //「諦めが悪いね」
-st[144] = { volumetype=1, path=1, file="lnd_010_b_2104", type=0, category=1, }; //「少しずつ積み重ねていこう」
+st[140] = { volumetype=1, path=1, file="lnd_010_b_2100", type=0, category=1, userparam=107 }; //「こんなものではないだろう？（※君の実力はもっとあるだろう、という意味）」
+st[141] = { volumetype=1, path=1, file="lnd_010_b_2101", type=0, category=1, userparam=110 }; //「もう立ち上がらないでくれ」
+st[142] = { volumetype=1, path=1, file="lnd_010_b_2102", type=0, category=1, userparam=109 }; //「これでも引いてくれないか…」
+st[143] = { volumetype=1, path=1, file="lnd_010_b_2103", type=0, category=1, userparam=91 }; //「諦めが悪いね」
+st[144] = { volumetype=1, path=1, file="lnd_010_b_2104", type=0, category=1, userparam=123 }; //「少しずつ積み重ねていこう」
 
 //決着勝利 汎用
-st[151] = { volumetype=1, path=1, file="lnd_010_b_2111_b", type=0, category=1, }; //「ありがとう、いい経験になったよ」
-st[152] = { volumetype=1, path=1, file="lnd_010_b_2112", type=0, category=1, }; //「中々の勝負だった」
-st[153] = { volumetype=1, path=1, file="lnd_010_b_2113", type=0, category=1, }; //「任務完了だ」
-st[154] = { volumetype=1, path=1, file="lnd_010_b_2114", type=0, category=1, }; //「出来れば平和的に解決したかったな」
+st[151] = { volumetype=1, path=1, file="lnd_010_b_2111_b", type=0, category=1, userparam=151 }; //「ありがとう、いい経験になったよ」
+st[152] = { volumetype=1, path=1, file="lnd_010_b_2112", type=0, category=1, userparam=99 }; //「中々の勝負だった」
+st[153] = { volumetype=1, path=1, file="lnd_010_b_2113", type=0, category=1, userparam=84 }; //「任務完了だ」
+st[154] = { volumetype=1, path=1, file="lnd_010_b_2114", type=0, category=1, userparam=154 }; //「出来れば平和的に解決したかったな」
 
 //決着勝利 辛勝
-st[156] = { volumetype=1, path=1, file="lnd_010_b_2120", type=0, category=1, }; //「まだまだ訓練が足りないな（自分に対して）」
+st[156] = { volumetype=1, path=1, file="lnd_010_b_2120", type=0, category=1, userparam=133 }; //「まだまだ訓練が足りないな（自分に対して）」
 
 //決着勝利 楽勝
-st[158] = { volumetype=1, path=1, file="lnd_010_b_2123", type=0, category=1, }; //「これに懲りたら、もう『夜』に来ようと思わないことだね」
+st[158] = { volumetype=1, path=1, file="lnd_010_b_2123", type=0, category=1, userparam=251 }; //「これに懲りたら、もう『夜』に来ようと思わないことだね」
 
 //決着勝利 掛け合い
 //対オリエ
-st[161] = { volumetype=1, path=1, file="lnd_010_b_2127", type=0, category=1, }; //「どうだい？　『聖盾(リッターシルト)』もなかなかやるだろう？」
+st[161] = { volumetype=1, path=1, file="lnd_010_b_2127", type=0, category=1, userparam=189 }; //「どうだい？　『聖盾(リッターシルト)』もなかなかやるだろう？」
 
 //対メルカヴァ
-st[163] = { volumetype=1, path=1, file="lnd_010_b_2129", type=0, category=1, }; //「こんな結末、残念だけど仕方ないか…」
+st[163] = { volumetype=1, path=1, file="lnd_010_b_2129", type=0, category=1, userparam=213 }; //「こんな結末、残念だけど仕方ないか…」
 
 //対ミカ
-st[165] = { volumetype=1, path=1, file="lnd_010_b_2131", type=0, category=1, }; //「この子の事、『光輪(リヒトクライス)』に連絡すべきだろうか…？」
+st[165] = { volumetype=1, path=1, file="lnd_010_b_2131", type=0, category=1, userparam=250 }; //「この子の事、『光輪(リヒトクライス)』に連絡すべきだろうか…？」
 
 //対ワーグナー
-st[167] = { volumetype=1, path=1, file="lnd_010_b_2133", type=0, category=1, }; //「これでわかっただろう？」
-st[168] = { volumetype=1, path=1, file="lnd_010_b_2134", type=0, category=1, }; //「切り札は君だけじゃないんだ」
+st[167] = { volumetype=1, path=1, file="lnd_010_b_2133", type=0, category=1, userparam=92 }; //「これでわかっただろう？」
+st[168] = { volumetype=1, path=1, file="lnd_010_b_2134", type=0, category=1, userparam=128 }; //「切り札は君だけじゃないんだ」
 
 //タイムアップ判定負け
 st[170] = { volumetype=1, path=1, file="lnd_010_b_2200", type=0, category=1, }; //「一歩及ばず…か」

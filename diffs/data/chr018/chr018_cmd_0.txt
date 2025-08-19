@@ -131,6 +131,7 @@ local t =
 				// スマートステア中なので失敗
 				return 0;
 			}
+			return 1;
 		}
 		UpdateTable = { name = "Mv_Skill_214_AddD", }	
 	},
@@ -234,7 +235,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

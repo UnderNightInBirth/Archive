@@ -27,7 +27,7 @@ local t =
 	Skill_214A_Add = {
 		num = def_CN_Skill_AddCommand1,
 		command = ["4+A","4+B","4+C"],
-		
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -39,7 +39,7 @@ local t =
 	Skill_214B_Add = {
 		num = def_CN_Skill_AddCommand2,
 		command = ["4+A","4+B","4+C"],
-		
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -142,7 +142,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}	
 	},
 

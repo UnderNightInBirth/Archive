@@ -32,48 +32,48 @@ st[33] = { volumetype=0, path=2, file="SE_ApperLightBlade", type=1, category=-1,
 
 
 // 登場
-st[100] = { volumetype=1, path=1, file="kag_010_b_2000", type=0, category=1, }; //「派手に蹴散らしましょう～！」
-st[101] = { volumetype=1, path=1, file="kag_010_b_2001", type=0, category=1, }; //「それではいきますよ～、いざ勝負！」
-st[102] = { volumetype=1, path=1, file="kag_010_b_2002", type=0, category=1, }; //「ここは正攻法で挑むと致しましょう♪」
-st[103] = { volumetype=1, path=1, file="kag_010_b_2003", type=0, category=1, }; //「あらあら、お仕置きが必要かしら？」
-st[104] = { volumetype=1, path=1, file="kag_010_b_2004", type=0, category=1, }; //「お手並み拝見といきましょう～」
+st[100] = { volumetype=1, path=1, file="kag_010_b_2000", type=0, category=1, userparam=134 }; //「派手に蹴散らしましょう～！」
+st[101] = { volumetype=1, path=1, file="kag_010_b_2001", type=0, category=1, userparam=182 }; //「それではいきますよ～、いざ勝負！」
+st[102] = { volumetype=1, path=1, file="kag_010_b_2002", type=0, category=1, userparam=173 }; //「ここは正攻法で挑むと致しましょう♪」
+st[103] = { volumetype=1, path=1, file="kag_010_b_2003", type=0, category=1, userparam=184 }; //「あらあら、お仕置きが必要かしら？」
+st[104] = { volumetype=1, path=1, file="kag_010_b_2004", type=0, category=1, userparam=154 }; //「お手並み拝見といきましょう～」
 
 // 登場 特殊
 // 対オリエ
-st[105] = { volumetype=1, path=1, file="kag_010_b_2012", type=0, category=1, }; //「ここから先は汚れ仕事。私に任せておきなさい」
+st[105] = { volumetype=1, path=1, file="kag_010_b_2012", type=0, category=1, userparam=235 }; //「ここから先は汚れ仕事。私に任せておきなさい」
 
 // 対ビャクヤ
-st[106] = { volumetype=1, path=1, file="kag_010_b_2015", type=0, category=1, }; //「その笑顔、消してみせましょう（次に続く）」
-st[107] = { volumetype=1, path=1, file="kag_010_b_2016", type=0, category=1, }; //「……貴方の方こそ」
+st[106] = { volumetype=1, path=1, file="kag_010_b_2015", type=0, category=1, userparam=151 }; //「その笑顔、消してみせましょう（次に続く）」
+st[107] = { volumetype=1, path=1, file="kag_010_b_2016", type=0, category=1, userparam=103 }; //「……貴方の方こそ」
 // 対ハイド
-st[108] = { volumetype=1, path=1, file="kag_010_b_2018", type=0, category=1, }; //「お気になさらずに。私も気にしませんから♪」
+st[108] = { volumetype=1, path=1, file="kag_010_b_2018", type=0, category=1, userparam=204 }; //「お気になさらずに。私も気にしませんから♪」
 
 // 対ミカ
-st[109] = { volumetype=1, path=1, file="kag_010_b_2024", type=0, category=1, }; //「え～？　絶対後悔させますよ？　今のセリフ」
+st[109] = { volumetype=1, path=1, file="kag_010_b_2024", type=0, category=1, userparam=224 }; //「え～？　絶対後悔させますよ？　今のセリフ」
 
 // 対クオン
-st[110] = { volumetype=1, path=1, file="kag_010_b_2027", type=0, category=1, }; //「言い残すことは、ありませんか？」
+st[110] = { volumetype=1, path=1, file="kag_010_b_2027", type=0, category=1, userparam=144 }; //「言い残すことは、ありませんか？」
 
 // ラウンド勝利
-st[130] = { volumetype=1, path=1, file="kag_010_b_2100", type=0, category=1, }; //「結構な御手前でした」
-st[131] = { volumetype=1, path=1, file="kag_010_b_2101", type=0, category=1, }; //「はい、お仕置き完了です♪」
-st[132] = { volumetype=1, path=1, file="kag_010_b_2102", type=0, category=1, }; //「銃弾のお味はいかがでした？」
+st[130] = { volumetype=1, path=1, file="kag_010_b_2100", type=0, category=1, userparam=119 }; //「結構な御手前でした」
+st[131] = { volumetype=1, path=1, file="kag_010_b_2101", type=0, category=1, userparam=133 }; //「はい、お仕置き完了です♪」
+st[132] = { volumetype=1, path=1, file="kag_010_b_2102", type=0, category=1, userparam=141 }; //「銃弾のお味はいかがでした？」
 
 // 決着勝利 汎用
-st[140] = { volumetype=1, path=1, file="kag_010_b_2111", type=0, category=1, }; //「あらあら、もう終わりですか～？」
-st[141] = { volumetype=1, path=1, file="kag_010_b_2112", type=0, category=1, }; //「は～いおしまい。そこでしばらく反省してくださいね」
-st[142] = { volumetype=1, path=1, file="kag_010_b_2113", type=0, category=1, }; //「そんなところで寝てると風邪ひいちゃいますよ～？」
-st[143] = { volumetype=1, path=1, file="kag_010_b_2114", type=0, category=1, }; //「う～ん、ちょっとおいたが過ぎるわね～」
+st[140] = { volumetype=1, path=1, file="kag_010_b_2111", type=0, category=1, userparam=163 }; //「あらあら、もう終わりですか～？」
+st[141] = { volumetype=1, path=1, file="kag_010_b_2112", type=0, category=1, userparam=271 }; //「は～いおしまい。そこでしばらく反省してくださいね」
+st[142] = { volumetype=1, path=1, file="kag_010_b_2113", type=0, category=1, userparam=191 }; //「そんなところで寝てると風邪ひいちゃいますよ～？」
+st[143] = { volumetype=1, path=1, file="kag_010_b_2114", type=0, category=1, userparam=204 }; //「う～ん、ちょっとおいたが過ぎるわね～」
 
 // 決着勝利 辛勝
-st[144] = { volumetype=1, path=1, file="kag_010_b_2120", type=0, category=1, }; //「ふぅ、危いところだったわ～」
+st[144] = { volumetype=1, path=1, file="kag_010_b_2120", type=0, category=1, userparam=157 }; //「ふぅ、危いところだったわ～」
 
 // 決着勝利 楽勝
-st[145] = { volumetype=1, path=1, file="kag_010_b_2123", type=0, category=1, }; //「あら～、やりすぎちゃったかしら……」
+st[145] = { volumetype=1, path=1, file="kag_010_b_2123", type=0, category=1, userparam=178 }; //「あら～、やりすぎちゃったかしら……」
 
 // 決着勝利 掛け合い
 // 対ハイド
-st[146] = { volumetype=1, path=1, file="kag_010_b_2127", type=0, category=1, }; //「うーん、これじゃあオリエのことは任せられませんね～」
+st[146] = { volumetype=1, path=1, file="kag_010_b_2127", type=0, category=1, userparam=271 }; //「うーん、これじゃあオリエのことは任せられませんね～」
 
 // タイムアップ判定負け
 st[150] = { volumetype=1, path=1, file="kag_010_b_2200", type=0, category=1, }; //「あら～、夢中になりすぎちゃった」
@@ -151,8 +151,8 @@ st[280] = { volumetype=1, path=1, file="kag_010_b_2950", type=0, category=1, };/
 st[281] = { volumetype=1, path=1, file="kag_010_b_2951", type=0, category=1, };//「お返しです！」
 
 // 振り向き
-st[290] = { volumetype=1, path=1, file="kag_010_b_3000", type=0, category=1, }; //「あら」
-st[291] = { volumetype=1, path=1, file="kag_010_b_3001", type=0, category=1, }; //「そちらですね」
+st[290] = { volumetype=1, path=1, file="kag_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki }; //「あら」
+st[291] = { volumetype=1, path=1, file="kag_010_b_3001", type=0, category=1, prio=Def_SEP_Furimuki }; //「そちらですね」
 
 // 待機モーション
 st[300] = { volumetype=1, path=1, file="kag_010_b_3100", type=0, category=1, }; //「うふふ～♪」

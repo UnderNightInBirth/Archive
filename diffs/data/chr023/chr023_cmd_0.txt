@@ -179,10 +179,11 @@ local t =
 		}
 	},
 	
+	// BallLimitメモ 0:A 1:EX 2:B 3:FF_4BC
 	Skill_214EX = { CmdCheck = { BallLimit = { [1] = 1 } } },
 	Skill_214BorC =
 	{
-		CmdCheck = { BallLimit = { [1] = 1, [2] = 1 } },
+		CmdCheck = { BallLimit = { [1] = 1 } }, // 再設置可能に
 		function CmdBeforeFunc() : (checkWarpAtk_SpecialCancel)
 		{
 			if( checkWarpAtk_SpecialCancel() == 0 ) return 0;
@@ -191,7 +192,7 @@ local t =
 	},
 	Skill_214A =
 	{
-		CmdCheck = { BallLimit = { [0] = 1, [1] = 1 } },
+		CmdCheck = { BallLimit = { [1] = 1 } }, // 再設置可能に
 		function CmdBeforeFunc() : (checkWarpAtk_SpecialCancel)
 		{
 			if( checkWarpAtk_SpecialCancel() == 0 ) return 0;
@@ -201,7 +202,7 @@ local t =
 	Skill_J214C =
 	{
 		command = ["<+B+C"],
-		CmdCheck = { BallLimit = { [1] = 1, [3] = 1 } },
+		CmdCheck = { BallLimit = { [1] = 1 } }, // 再設置可能に
 		function CmdBeforeFunc() : (checkWarpAtk_SpecialCancel,check_FFAtk)
 		{
 			if( !check_FFAtk() ) return 0;
@@ -282,6 +283,7 @@ local t =
 	},
 	
 	Atk_6B_6B = {
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AnyNormalCancelFlag",
@@ -509,7 +511,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 	

@@ -7,8 +7,7 @@ local BMode = {};
 // 操作親から呼ぶ、抜刀管理オブジェクトの突然の死
 BMode.CallModeEnd <- function()
 {
-	local findobj = BMvCore.CFindObject(); // クラス生成
-	local findchara = findobj.Get(7); // 抜刀モード管理を検索
+	local findchara = BMvCore.CFindObject().Get(7); // 抜刀モード管理を検索
 	if( findchara.push() ) // 有効かどうか
 	{
 		// _dm("\n 操作親からの強引な終了指示");
@@ -601,8 +600,13 @@ t.Mv_Throw_F_TechMissWait <- t.Mv_Throw_F_TechWait;
 
 t.Mv_Throw_F_Hit <- 
 {
-	function Init_After()
+	function Init_After() : (BMode)
 	{
+		Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoSkill ); // 必殺Ｃで必殺技へのキャンセル可　※ホールド時にキャンセル可能にするため
+		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // このMvは抜刀モード継続可
+		
+		BMode.CheckFunc.JumpFrameID_StartMode( -1 ); //モード開始
+
 		local enemy = BMvCore.GetNearEnemyCharaData();
 		if( enemy.push() )
 		{
@@ -612,7 +616,7 @@ t.Mv_Throw_F_Hit <-
 			enemy.pop();
 		}	
 	}
-	function FrameUpdate_After()
+	function FrameUpdate_After() : (BMode)
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
@@ -620,8 +624,20 @@ t.Mv_Throw_F_Hit <-
 			BMvEff.ThrowParam( { x=100, y=0, pattern=320 } );
 			BMvEff.ThrowRelease( { type="追撃ダウン" } );
 			break;
+		case 10200: // 着地
+			// ホールドしてたら構え移行・してなかったら通常着地
+			Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag2 ); // このMvはホールドチェック（ここからはホールドしてないと抜刀状態を解除する）
+			if( BMode.CheckFunc.IsKeepMode() ) // 外部参照初なのでやや危ない
+			{
+				BMvTbl.SetFinalize(900);
+			}
+			break;
 		}
 		Battle_Std.CaptureChara_Positioning(); //地面に埋まらないように座標補正をかける		
+	}
+	function Finalize()
+	{
+		Battle_Std.SwitchNextMoveTable("Mv_Neutral", [900,"Mv_Skill_BStand"] ); //デフォ,[code,mv]...	
 	}
 }
 
@@ -633,6 +649,12 @@ t.Mv_Throw_F_Hit_Add2 <-
 
 		Battle_Std.MoveCode.AddFlag( def_MC_Throw ); // 行動コード(投げ)を設定
 		BMvTbl.SetMvAction( def_MVA_Throw );
+		
+		// この処理を入れないと通常投げのゲージ回収制限がかかったままになる
+		if( Def_Sys_SetSpGaugeLimit_Throw )
+		{
+	        BMvEff.SpGauge_SetLimitCombo( { time=0 } ); //ゲージ増加制限を消す
+        }
 	}
 	function FrameUpdate()
 	{
@@ -653,6 +675,12 @@ t.Mv_Throw_F_Hit_Add2 <-
 	{
 		//通常投げ始動は最低保証に制限をかける
 		Battle_Std.SetSpHosyoHosei( { type="Throw" } );
+		
+		if( Def_Sys_SetSpGaugeLimit_Throw )
+		{
+			// 241212 通常投げ後のコンボだけゲージ増加制限をかける
+	        BMvEff.SpGauge_SetLimitCombo( { val=Def_Sys_SetSpGaugeLimit_Throw, time=0 } ); //ゲージ増加制限
+        }
 	}
 }
 
@@ -664,7 +692,7 @@ t.Mv_Atk_StdA <-
 {
 	function Init_After()
 	{
-		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
+		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs|Def_HitCheckFlag_LightLegs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵と小足無敵にスカる
 	}
 }
 
@@ -1258,6 +1286,30 @@ t.Mv_BattouModeWait <-
 
 t.Mv_BattouMode <-
 {
+	function CheckHoldEndHosei()
+	{
+		// コンボ中に構え＞構え解除で結構コンボが伸びてきたので、少し補正の制限をいれる
+		// 構えホールド自体は推奨にしたいが多すぎるのは少し抑えたい
+		if( Battle_Std.EnemyDamageFlag_Check( def_DF_CharaFlag1 ) )
+		{
+			if( Battle_Std.EnemyDamageFlag_Check( def_DF_CharaFlag2 ) )
+			{
+				_dpn("構え解除:3回目以降　★補正あり");
+				BMvEff.ComboView_Set( { val=93, type=1 } );
+			}
+			else
+			{
+				_dpn("構え解除:2回目　★補正あり");
+				Battle_Std.EnemyDamageFlag_Add( def_DF_CharaFlag2 );
+				BMvEff.ComboView_Set( { val=95, type=1 } );
+			}
+		}
+		else
+		{
+			_dpn("構え解除:1回目");
+			Battle_Std.EnemyDamageFlag_Add( def_DF_CharaFlag1 );
+		}
+	}
 	function Init() : (BMode)// 
 	{
 		// _dp("\n BattouMode_Init()");
@@ -1330,7 +1382,8 @@ t.Mv_BattouMode <-
 					local kaizyo = false;
 					// if( 0 && BMvTbl.CheckButtonHold( (1<<3) ) >= 1 ) //D
 					// Dを離す、もしくは同時押しで解除。同時押しはB+D抜刀みたいなのを使いやすくするために入れる。
-					if( BMvTbl.CheckCommandString( { command=["@X,D@","A+D","B+D","C+D"], lastdelay = 1 } ) ) //D
+					// lastdelay=1にすると、Dホールドしようとして構え解除が出てしまうので@L@を使っている
+					if( BMvTbl.CheckCommandString( { command=["@X,D@@L,2@","A+D@L,2@","B+D@L,2@","C+D@L,2@"] } ) ) //D
 					{
 						//_dm("抜刀キャンセルした");
 						BMvTbl.SetPP( def_PP_Yuz_BattouA, 0 );
@@ -1350,6 +1403,7 @@ t.Mv_BattouMode <-
 						_dm("任意にＤで解除した");
 						BMvTbl.SetLP(1,1); // 任意解除かどうか 1:任意解除 0:自動解除
 						BMvTbl.SetFinalize(0);
+						CheckHoldEndHosei(); // コンボ中のホールド解除数を数えて補正をかける
 						return; // これが無いと↓で自動解除で上書きされる
 					}
 				}
@@ -1364,6 +1418,7 @@ t.Mv_BattouMode <-
 						_dm("自動でホールドとけましたね");
 						BMvTbl.SetLP(1,0); // 任意解除かどうか 1:任意解除 0:自動解除
 						BMvTbl.SetFinalize(0);
+						CheckHoldEndHosei(); // コンボ中のホールド解除数を数えて補正をかける
 					}
 				}
 			}
@@ -2007,6 +2062,7 @@ t.Mv_Atk_StdBandC <-
 					// if( BMvTbl.GetLP(0)==0 && BMvTbl.CheckButtonHold( (1<<0)|(1<<1)|(1<<2)|(1<<3) ) == 1 )
 					if( BMvTbl.CheckButtonHold( (1<<0)|(1<<1)|(1<<2)|(1<<3) ) == 1 )
 					{
+						BMode.UseFunc.StockRecover(); //ストック回復
 						BMvTbl.SetFinalize( 900 );
 					}
 				}
@@ -2221,16 +2277,25 @@ t.Mv_Atk_AirBandC <-
 			
 			BMvTbl.SetLP(0,1); //ベクトル戻した		
 			break;
+		case 900:
+			// 構え解除時に短くなる分のフレーム
+			break;
 		}
 		
 		if( mvs.isLanding )
 		{
-			BMvTbl.SetFinalize(256);
-		}	
+			BMvTbl.SetFinalize(256); //着地したらLandにいく
+		}
+		
+		// 構えを解除していたら少し早めにFinalizeする
+		if( mvs.FrameID==900 && !BMode.CheckFunc.IsMode() ) 
+		{
+			BMvTbl.SetFinalize(512); //空中で構えを解除
+		}
 	}
 	function Finalize() // 
 	{
-		Battle_Std.SwitchNextMoveTable("Mv_Skill_JBAir", [256,"Mv_Skill_JBAir_Land"] ); //デフォ,[code,mv]...
+		Battle_Std.SwitchNextMoveTable("Mv_Skill_JBAir", [256,"Mv_Skill_JBAir_Land"],[512,"Mv_Skill_JBAirtoAir"] ); //デフォ,[code,mv]...
 	}
 	function LastUpdate_After()
 	{
@@ -2255,36 +2320,60 @@ t.Mv_Atk_CroBandC <-
 {
 	function Init_After() : (BMode)
 	{
-		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel ); // ツールでEX可でも空振りEX不可
-		
 		Battle_Std.SetVorpalPattern( "V_2+B+C" ); // VP時
 		
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // このMvは抜刀モード継続可
 		
-		BMode.CheckFunc.JumpFrameID_StartMode( -1 ); //モード開始
+		BMode.CheckFunc.JumpFrameID_StartMode(40); //モード開始
 		
-		BMode.CheckFunc.JumpFrameID_StartMode(40);
+		BMvTbl.SetLP(0,0); // ヒットしたら1
+	}
+	function Start_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel ); // ツールでEX可でも空振りEX不可
 	}
 	function FrameUpdate_After() : (BMode)
 	{
 		BMode.DelayUseBattouStock(); // 予約分を3F目あたりに消費
 		
-		local mvs = BMvTbl.GetMvStatus();
-		
-		switch( mvs.FrameID )
+		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 40: // 構え中の飛び先
 			break;
 		case 200: // 着地
 			// ホールドしてたら構え移行
-			if( BMode.CheckFunc.IsMode() )
+			if( BMvTbl.GetLP(0)==1 ) // ヒット時
 			{
-				BMvTbl.SetFinalize(900);
+				if( BMode.CheckFunc.IsMode() ) // ヒットして構え着地へ(任意D解除しないと基本ここ)
+				{
+					// _dpn("構え着地");
+					BMvTbl.SetFinalize(900);
+				}
+				else // ヒットして通常着地へ(任意D解除着地)
+				{
+					// 通常着地硬直
+					// _dpn("通常着地");
+				}
 			}
+			else // 空振り時の着地
+			{
+				// _dpn("空振り着地");
+				Battle_Std.MoveCode.DelFlag( def_MC_CharaFlag1 ); // このMvは抜刀モード継続可　を消して構え解除
+				BMvTbl.JumpFrameID(210); // 硬直が少し長い着地へ飛ばす
+			}
+			break;
+		case 210: // 空振り着地Jump先
 			break;
 		}
 		
 		Battle_Std.SetHitMuteki( 1, 8, _HitCheckFlag_Head ); // Param1 & 8 の時、頭無敵
+	}
+	function HitInterrupt_After()
+	{
+		if( Battle_Std.CheckHitTiming() )
+		{
+			BMvTbl.SetLP(0,1); // ヒットしたら1
+		}
 	}
 	function Finalize() // 
 	{
@@ -2547,6 +2636,7 @@ t.Mv_Skill_JBAirtoAir <-
 		{
 			Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoAtk ); // 通常Ｃで通常技へのキャンセル可
 		}
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
 	}
 	function FrameUpdate_After() : (BMode)
 	{
@@ -2731,10 +2821,27 @@ t.Mv_Atk_Air6A <-
 	function FrameUpdate_After() : (BMode)
 	{
 		BMode.DelayUseBattouStock(); // 予約分を3F目あたりに消費
+		
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.isLanding )
+		{
+			BMvTbl.SetFinalize(256); //着地したらLandにいく
+		}
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 800:
+			// 構えを解除していたら硬直短く＆少し早く落下を始める
+			if( !BMode.CheckFunc.IsMode() )
+			{
+				BMvTbl.JumpFrameID(801);
+			}
+			break;
+		}
 	}
 	function Finalize() // 
 	{
-		BMvTbl.SetNextMoveTable( "Mv_Skill_JBAir" );
+		Battle_Std.SwitchNextMoveTable("Mv_Skill_JBAir", [256,"Mv_Skill_JBAir_Land"],[512,"Mv_Skill_JBAirtoAir"] ); //デフォ,[code,mv]...
 	}
 }
 
@@ -2750,10 +2857,27 @@ t.Mv_Atk_Air6B <-
 	function FrameUpdate_After() : (BMode)
 	{
 		BMode.DelayUseBattouStock(); // 予約分を3F目あたりに消費
+		
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.isLanding )
+		{
+			BMvTbl.SetFinalize(256); //着地したらLandにいく
+		}
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 800:
+			// 構えを解除していたら硬直短く＆少し早く落下を始める
+			if( !BMode.CheckFunc.IsMode() )
+			{
+				BMvTbl.JumpFrameID(801);
+			}
+			break;
+		}
 	}
 	function Finalize() // 
 	{
-		BMvTbl.SetNextMoveTable( "Mv_Skill_JBAir" );
+		Battle_Std.SwitchNextMoveTable("Mv_Skill_JBAir", [256,"Mv_Skill_JBAir_Land"],[512,"Mv_Skill_JBAirtoAir"] ); //デフォ,[code,mv]...
 	}
 }
 
@@ -2769,10 +2893,27 @@ t.Mv_Atk_Air6C <-
 	function FrameUpdate_After() : (BMode)
 	{
 		BMode.DelayUseBattouStock(); // 予約分を3F目あたりに消費
+		
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.isLanding )
+		{
+			BMvTbl.SetFinalize(256); //着地したらLandにいく
+		}
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 800:
+			// 構えを解除していたら硬直短く＆少し早く落下を始める
+			if( !BMode.CheckFunc.IsMode() )
+			{
+				BMvTbl.JumpFrameID(801);
+			}
+			break;
+		}
 	}
 	function Finalize() // 
 	{
-		BMvTbl.SetNextMoveTable( "Mv_Skill_JBAir" );
+		Battle_Std.SwitchNextMoveTable("Mv_Skill_JBAir", [256,"Mv_Skill_JBAir_Land"],[512,"Mv_Skill_JBAirtoAir"] ); //デフォ,[code,mv]...
 	}
 }
 
@@ -3391,7 +3532,7 @@ t.Mv_Skill_214EX <-
 	}
 	function LastUpdate_After()
 	{
-		// この程度では強すぎてアカン
+		// この程度では強すぎてアカン(214EXから構え技でノーゲージ追撃可能なため)
 		// Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
 		
 		Battle_Std.CSAntenGaesi_DamageHosei(); // CSからの暗転返しで出したら補正をかける
@@ -3627,7 +3768,7 @@ t.Mv_Skill_BS_Dash_F <-
 	{
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // このMvは抜刀モード継続可
 		
-		BMvTbl.SetPattern("BS_Dash_F");
+		Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoSkill ); // 必殺Ｃで必殺技へのキャンセル可
 		BMode.CheckFunc.JumpFrameID_StartMode(100); //モードジャンプorモード開始
 	}
 	function FrameUpdate_After() : (BMode)
@@ -3646,7 +3787,7 @@ t.Mv_Skill_BS_Dash_B <-
 	{
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // このMvは抜刀モード継続可
 		
-		BMvTbl.SetPattern("BS_Dash_B");
+		Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoSkill ); // 必殺Ｃで必殺技へのキャンセル可
 		BMode.CheckFunc.JumpFrameID_StartMode(100);		
 	}
 	function FrameUpdate_After() : (BMode)
@@ -3768,7 +3909,8 @@ t.Mv_Skill_JBA_JDashF <-
 	function Init_After() : (BMode)
 	{
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // このMvは抜刀モード継続可
-
+		
+		Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoSkill ); // 必殺Ｃで必殺技へのキャンセル可
 		BMode.CheckFunc.JumpFrameID_StartMode(100); //モードジャンプorモード開始
 	}
 	function FrameUpdate_After() : (BMode)
@@ -3788,7 +3930,8 @@ t.Mv_Skill_JBA_JDashB <-
 	function Init_After() : (BMode)
 	{
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // このMvは抜刀モード継続可
-
+		
+		Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoSkill ); // 必殺Ｃで必殺技へのキャンセル可
 		BMode.CheckFunc.JumpFrameID_StartMode(100);		
 	}
 	function FrameUpdate_After() : (BMode)
@@ -3821,7 +3964,7 @@ t.Mv_Skill_BS_JumpF <-
 		//BMvTbl.SetMuki(_Direction_Auto);
 		//BMvTbl.SetPattern("BS_JumpF");
 		BMvEff.CreateObject( { x=0, y=0, mvname="", datatype=1, start_pat=255, flags=_Position_ToolShift } );
-		Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
+		//Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
 		BMvTbl.ClearComboLimit(-1); // コンボリミット初期化
 	}
 	function FrameUpdate()
@@ -3853,7 +3996,7 @@ t.Mv_Skill_BS_JumpN <-
 		//BMvTbl.SetMuki(_Direction_Auto);
 		//BMvTbl.SetPattern("BS_JumpN");
 		BMvEff.CreateObject( { x=0, y=0, mvname="", datatype=1, start_pat=256, flags=_Position_ToolShift } );
-		Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
+		//Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
 		BMvTbl.ClearComboLimit(-1); // コンボリミット初期化
 	}
 	function FrameUpdate()
@@ -3885,7 +4028,7 @@ t.Mv_Skill_BS_JumpB <-
 		//BMvTbl.SetMuki(_Direction_Auto);
 		//BMvTbl.SetPattern("BS_JumpB");
 		BMvEff.CreateObject( { x=0, y=0, mvname="", datatype=1, start_pat=257, flags=_Position_ToolShift } );
-		Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
+		//Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
 		BMvTbl.ClearComboLimit(-1); // コンボリミット初期化
 	}
 	function FrameUpdate()
@@ -3929,11 +4072,12 @@ t.Mv_Skill_BA_JumpF <-
 
 		//BMvTbl.SetMuki(_Direction_Auto);
 		//BMvTbl.SetPattern("BS_JumpF");
-		Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
+		//Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
 		
 		draw_MultiJumpEff(); // 二段ジャンプエフェクト表示
 
 		BMvTbl.AddAirCount( 0, 1 ); // 何度も出せないようにする
+		BMvTbl.ClearComboLimit(-1); // コンボリミット初期化
 	}
 	function FrameUpdate()
 	{
@@ -3955,11 +4099,12 @@ t.Mv_Skill_BA_JumpN <-
 
 		//BMvTbl.SetMuki(_Direction_Auto);
 		//BMvTbl.SetPattern("BS_JumpN");
-		Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
+		//Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
 		
 		draw_MultiJumpEff(); // 二段ジャンプエフェクト表示
 		
 		BMvTbl.AddAirCount( 0, 1 ); // 何度も出せないようにする
+		BMvTbl.ClearComboLimit(-1); // コンボリミット初期化
 	}
 	function FrameUpdate()
 	{
@@ -3981,11 +4126,12 @@ t.Mv_Skill_BA_JumpB <-
 
 		//BMvTbl.SetMuki(_Direction_Auto);
 		//BMvTbl.SetPattern("BS_JumpB");
-		Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
+		//Battle_Std.EnemyDamageFlag_Add( def_DF_JumpCanseled ); // 「ジャンプキャンセルをされた」を相手に記憶
 		
 		draw_MultiJumpEff(); // 二段ジャンプエフェクト表示
 		
 		BMvTbl.AddAirCount( 0, 1 ); // 何度も出せないようにする
+		BMvTbl.ClearComboLimit(-1); // コンボリミット初期化
 	}
 	function FrameUpdate()
 	{

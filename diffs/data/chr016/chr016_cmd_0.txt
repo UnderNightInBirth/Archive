@@ -158,6 +158,7 @@ local t =
 		function CmdBeforeFunc()
 		{
 			if( Battle_Std.IsMatchMvNameArray( ["Mv_Skill_214A","Mv_Skill_214B"] ) ) return 0;
+			return 1;
 		}
 	},	
 	Skill_214A =
@@ -165,6 +166,7 @@ local t =
 		function CmdBeforeFunc()
 		{
 			if( Battle_Std.IsMatchMvNameArray( ["Mv_Skill_214A","Mv_Skill_214B"] ) ) return 0;
+			return 1;
 		}
 	},
 	
@@ -229,7 +231,6 @@ local t =
 		CmdCheck =
 		{
 			SkillType = "Special", MvCheck={ SkillFail="Mv_Skill_421A"},
-			flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck,
 		},
 	},
 	
@@ -273,7 +274,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 

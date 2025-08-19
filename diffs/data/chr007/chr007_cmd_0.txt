@@ -37,13 +37,42 @@ local spExCancelCheck = function( _pos, _ar )
 }
 
 //当身成功時の追加技チェック
-local addCmdCheck_OnAtemi = function()
+//ダメなときに0を返す
+local addCmdCheck_OnAtemi = function( zureCheck=0 )
 {
 	//MVの一致＋フラグ系をすべてチェック
 	if( BMvTbl.GetMvName() != "Mv_Atk_CroAandB" || !( Battle_Std.MoveCode.CheckFlag( def_MC_CharaFlag1 ) || BMvTbl.GetMvStatus().Param2&1 ) )
 	{
-		// _dp(" -> ng");
-		return 0;
+		// ダメそうだった
+
+		// 同時押しのズレによるチェックもやって、それでもダメなら弾く
+		if( zureCheck )
+		{
+			local mvs = BMvTbl.GetMvStatus();
+			if(mvs.MvCount <= 2 ) // 同時押し猶予以内
+			{
+				if( BMvTbl.ChangeMv_GetMvName() != "Mv_Atk_CroAandB" || !( Battle_Std.ChangeMoveCodeEx_CheckFlag( 0, def_MC_CharaFlag1 ) || BMvTbl.GetMvStatusBF().Param2&1 ) )
+				{
+					// 同時押しの猶予を見てもダメでした
+					return 0;
+				}
+				else
+				{
+					// 同時押しの猶予を見たらいけたわ
+					return 1;
+				}
+			}
+			else
+			{
+				// 同時押しの猶予を過ぎれいる
+				return 0;
+			}
+		}
+		else
+		{
+			// 同時押しのズレチェックはないので失敗
+			return 0;
+		}
 	}
 	return 1;
 }
@@ -62,7 +91,7 @@ local t =
 			// ダッシュ攻撃の入力っぽかったら失敗
 			if( BMvTbl.CheckCommand( [def_CN_Atk_DashStdC_Direct] ) )
 			{
-				print("\n ダッシュ攻撃っぽいので失敗:EX");
+				_dpn("ダッシュ攻撃っぽいので失敗:EX");
 				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_236EX, time=2 } );
 				return 0;
 			}
@@ -80,7 +109,7 @@ local t =
 			// ダッシュ攻撃の入力っぽかったら失敗
 			if( BMvTbl.CheckCommand( [def_CN_Atk_DashStdB_Direct, def_CN_Atk_DashStdC_Direct] ) )
 			{
-				print("\n ダッシュ攻撃っぽいので失敗:B");
+				_dpn("ダッシュ攻撃っぽいので失敗:B");
 				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_236B, time=2 } );
 				return 0;
 			}
@@ -105,7 +134,7 @@ local t =
 			// ダッシュ攻撃の入力っぽかったら失敗
 			if( BMvTbl.CheckCommandString( ["0606+A"] ) )
 			{
-				print("\n ダッシュ攻撃っぽいので失敗:A");
+				_dpn("ダッシュ攻撃っぽいので失敗:A");
 				BMvTbl.SetCommandFailTime( { command=def_CN_Skill_236A, time=2 } );
 				return 0;
 			}
@@ -128,7 +157,7 @@ local t =
 	
 		function CmdAfterFunc()
 		{
-			// print("\n だせなくする");
+			// _dpn("だせなくする");
 			// BMvTbl.SetCommandFailTime( { command=def_CN_Skill_236A, time=20 } );
 			// BMvTbl.SetCommandFailTime( { command=def_CN_Skill_236B, time=20 } );
 			return 1;
@@ -409,8 +438,8 @@ local t =
 	//2ABの追加技
 	Skill_2AB_Add6BC = {
 		num = def_CN_Skill_020202EX, command = ["6+B+C",], usegauge = 10000, // def_CN_AtkBandCよりも優先度が高くないと出せない
-		function CmdBeforeFunc() : (addCmdCheck_OnAtemi) { return addCmdCheck_OnAtemi(); }
-		CmdCheck = { SkillType = "AddCommand", MvCheck = { Only = ["Mv_Atk_CroAandB"] }, Cost = { ComboGauge = 10000 }, BallLimit = { [5] = 1 } }, UpdateTable = { name = "Mv_Skill_41236EX", }
+		function CmdBeforeFunc() : (addCmdCheck_OnAtemi) { return addCmdCheck_OnAtemi(1); }
+		CmdCheck = { SkillType = "AddCommand", MvCheck = { DoujiOnly=["Mv_Atk_CroAandB"] }, Cost = { ComboGauge = 10000 }, BallLimit = { [5] = 1 } }, UpdateTable = { name = "Mv_Skill_41236EX", }
 	},
 	Skill_2AB_Add6C = {
 		num = def_CN_Skill_AddCommand1, command = ["6+C"], usegauge = 10000,
@@ -566,7 +595,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

@@ -37,6 +37,7 @@ local t =
 	
 	Atk_6B_6B =
 	{
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc()
 		{
 			//これがないと着地後6+A+Bのダッシュをやろうとして派生が暴発しやすい
@@ -146,7 +147,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

@@ -97,7 +97,8 @@ t.Mv_FireBall_BandC <-
 					if( enemy.push() )
 					{
 						local isAir = BCMDTbl.CheckPosState( _PosState_Air );
-						if( isAir )
+						local bs = BtlMvStd.GetBoundStatus();
+						if( isAir && !bs.isCapture ) // つかみ中のロック演出中は無効
 						{
 							BMvTbl.SetVector( { x=vx, addx=0, flags=_Vector_Bound  } ); // ベクトル上書き　同一フレームに別の攻撃が当たるとそちらのベクトルで上書きされるので注意
 						}
@@ -123,7 +124,7 @@ t.Mv_FireBall_BandC <-
 		{
 			if( Battle_Std.CheckGuardTiming_FrameID( 100 ) )
 			{
-				print("\n GRD吸収");
+				_dpn("GRD吸収");
 				power_drain.start();
 				
 				if( Def_Sys_FF_RecoverGRD )
@@ -139,7 +140,7 @@ t.Mv_FireBall_BandC <-
 			}
 			else if( Battle_Std.CheckDamageTiming_FrameID( 100 ) )
 			{
-				print("\n GRD吸収");
+				_dpn("GRD吸収");
 				power_drain.start();
 				
 				if( Def_Sys_FF_RecoverGRD )
@@ -238,6 +239,12 @@ t.Mv_Throw_F_Hit_Add2 <-
 		}
 		Battle_Std.MoveCode.AddFlag( def_MC_Throw ); // 行動コード(投げ)を設定
 		BMvTbl.SetMvAction( def_MVA_Throw );
+		
+		// この処理を入れないと通常投げのゲージ回収制限がかかったままになる
+		if( Def_Sys_SetSpGaugeLimit_Throw )
+		{
+	        BMvEff.SpGauge_SetLimitCombo( { time=0 } ); //ゲージ増加制限を消す
+        }
 	}
 	function FrameUpdate()
 	{
@@ -254,6 +261,12 @@ t.Mv_Throw_F_Hit_Add2 <-
 	{
 		//通常投げ始動は最低保証に制限をかける
 		Battle_Std.SetSpHosyoHosei( { type="Throw" } );
+		
+		if( Def_Sys_SetSpGaugeLimit_Throw )
+		{
+			// 241212 通常投げ後のコンボだけゲージ増加制限をかける
+	        BMvEff.SpGauge_SetLimitCombo( { val=Def_Sys_SetSpGaugeLimit_Throw, time=0 } ); //ゲージ増加制限
+        }
 	}
 }
 
@@ -265,7 +278,7 @@ t.Mv_Atk_StdA <-
 {
 	function Init_After()
 	{
-		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
+		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs|Def_HitCheckFlag_LightLegs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵と小足無敵にスカる
 	}
 }
 
@@ -374,7 +387,7 @@ t.Mv_Atk_Cro3C <-
 	{
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
 		
-		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GuardChainShiftOK ); // ガード時もCS可能
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GuardChainShiftOK ); // ツールで「チェインシフト可能」がある時ならガードでCS可能なMV
 		
 		// ゴルドー重いしHintではなくキャッシュ予約を入れる
 		Battle_Std.CallSkillSoonCaches( [51,8], [52,9] );
@@ -399,6 +412,7 @@ local maketmpl_SkillDoubleRollingSlash = function( param={} )
 		csAntenHosei = 0,
 		cvoCancel = 0,
 		enable_add = 0,
+		han_lock = 0,
 	}
 	
 	switch( param.type )
@@ -413,6 +427,7 @@ local maketmpl_SkillDoubleRollingSlash = function( param={} )
 		break;
 	case "EX":
 		mvparam.csAntenHosei = 1;
+		mvparam.han_lock = 1; // 初段のみ
 		break;
 	}
 
@@ -430,11 +445,29 @@ local maketmpl_SkillDoubleRollingSlash = function( param={} )
 		{
 			Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_EnableCansel_AddCommand );
 		}
+		
+		BMvTbl.SetLP(0,0); // 引き寄せたか
 	}
 
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
 		Battle_Std.SetHitMuteki2_Param1( { [8]=_HitCheckFlag_Head, [64]=Def_HitCheckFlag_AirDive, [4]=_HitCheckFlag_FireBall } );
+	}	
+	
+	ret_tmpl.HitInterrupt_After <- function() : (mvparam)
+	{
+		// 表でヒットしたときのみ引き寄せる
+		if( mvparam.han_lock )
+		{
+			if( Battle_Std.CheckDamageTiming() )
+			{
+				if( BMvTbl.GetLP(0)==0 )
+				{
+					BMvTbl.SetLP(0,1); // 引き寄せた
+					Battle_Std.SetPosition_DamageHanteiRect( { power=50, flags=(1<<2)|(1<<4) } );
+				}
+			}
+		}
 	}	
 	
 	ret_tmpl.LastUpdate_After <- function() : (mvparam)
@@ -505,7 +538,49 @@ t.Mv_Obj_623Add_RollEff <-
 	}
 }
 
-t.Mv_Obj_SS_RollEff <- t.Mv_Obj_623Add_RollEff;
+t.Mv_Obj_SS_RollEff <- 
+{
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_NoSetUseExSkillFlag ); // EX技扱いだがEX技の保証補正制限はかけない
+		
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentDamage|_ObjFlags_NoGround|_ObjFlags_EraseParentPatChange|_ObjFlags_ToParentHitStatus } );
+		BMvTbl.SetLP(0,0); // 消滅させたか
+	}
+	function FrameUpdate_After()
+	{
+		//親の特殊判定の位置にくっつける
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
+		{
+			local rc = BMvEff.GetHanteiRect( { check=[ _Hantei_Etc, 0 ], flags=0 } );
+			local xpos = ( BMvTbl.GetMuki()==1 )? rc.sx : rc.ex; //右向きならsx、左向きならex
+			
+			player.pop();
+			
+			if( rc.sx != _Hantei_Error ) // 存在するか
+			{
+				BMvTbl.SetPosition( { x=xpos, y=rc.sy } );
+			}
+			else
+			{
+				//特殊判定がないなら消えます
+				if( BMvTbl.GetLP(0)==0 )
+				{
+					BMvTbl.SetLP(0,1); // 消滅させたか
+					BMvTbl.JumpFrameID(110);
+				}
+			}
+		}
+	}
+	function HitInterrupt_After()
+	{
+		if( Battle_Std.CheckDamageTiming() )
+		{
+			Battle_Std.SetPosition_DamageHanteiRect( { power=50 } );
+		}
+	}
+}
 
 
 //-----------------------------------------------------------------------------
@@ -783,7 +858,7 @@ t.Mv_Skill_214B_Hit <-
 	function LastUpdate_After() : (power_drain)
 	{
 		power_drain.clear(); //念のため　吸収色変え初期化
-		Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+		Battle_Std.NoCansel_NoAttackHit( { check_nosidou={ hosei=70 } } ); //何かでキャンセルしなかった場合追撃不能にする・始動時は追撃可能
 	}	
 }
 
@@ -860,12 +935,24 @@ local maketmpl_SkillLongSlideSwing = function( param={} )
 t.Mv_Skill_236A <- maketmpl_SkillLongSlideSwing( { type="A" } );
 t.Mv_Skill_236B <- maketmpl_SkillLongSlideSwing( { type="B" } );
 
-t.Mv_Skill_236_236 <- 
+t.Mv_Skill_236A_236A <- 
 {
 	flags = def_TmplFlags_NoAddComboRate|def_TmplFlags_Add, // コンボレートを加算しない
 	function Init_After()
 	{
 		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_EnableCansel_AddCommand );
+	}
+	function FrameUpdate_After()
+	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 50:
+			if( Battle_Std.CheckEnemyisDamage() )
+			{
+				BMvTbl.JumpFrameID( 90 ); // DAMAGE時用判定に飛ぶ
+			}
+			break;
+		}
 	}
 	function HitInterrupt_After()
 	{
@@ -892,6 +979,8 @@ t.Mv_Skill_236_236 <-
 		}
 	}
 }
+
+t.Mv_Skill_236B_236B <- t.Mv_Skill_236A_236A;
 
 t.Mv_Skill_236_236_236 <- 
 {
@@ -976,7 +1065,7 @@ t.Mv_Skill_236_236_214 <-
 	}	
 }
 
-//214Bヒット先と同じ処理
+//214Bヒット先とほぼ同じ処理
 t.Mv_Skill_236_236_214_Hit <- 
 {
 	flags = def_TmplFlags_NoAddComboRate, // コンボレートを加算しない
@@ -1006,6 +1095,7 @@ t.Mv_Skill_236_236_214_Hit <-
 	function LastUpdate_After() : (power_drain)
 	{
 		power_drain.clear(); //念のため　吸収色変え初期化
+		// こっちは始動でも追撃不可（意味がないので）
 		Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
 	}	
 }
@@ -1623,6 +1713,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 				BMvEff.ThrowParam( { x=150, y=-20, pattern=320 } );
 				BMvEff.SetCamera_Quake( { time=30, type=0, clear=0, } ); //揺らし
 				SetVector_CaptureChara( { x=-256, y=-512 } );
+				BMvEff.CutInProc_SetResourceView( { mode=0 } ); // 軽量化のため謎空間を表示しない
 				break;
 			case 210: //持ち上げ
 				BMvEff.ThrowParam( { x=160, y=-150, pattern=320 } );

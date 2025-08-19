@@ -15,10 +15,10 @@ SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
 SeList_Table.Status.resize(500); // てきとう
 local st = SeList_Table.Status; // 登録しやすいように
 
-st[0] = { volumetype=0, path=2, file="SE_ApperLightBlade", type=0, category=2, }; 
-st[1] = { volumetype=0, path=2, file="SE_SwingLightSword", type=0, category=2, }; 
-st[2] = { volumetype=0, path=2, file="SE_ApperLightWall", type=0, category=3, }; 
-st[3] = { volumetype=0, path=2, file="SE_ShotLightWing", type=0, category=4, }; 
+st[0] = { volumetype=0, path=2, file="SE_ApperLightBlade", type=0, category=-1, }; 
+st[1] = { volumetype=0, path=2, file="SE_SwingLightSword", type=0, category=-1, }; 
+st[2] = { volumetype=0, path=2, file="SE_ApperLightWall", type=0, category=-1, }; 
+st[3] = { volumetype=0, path=2, file="SE_ShotLightWing", type=0, category=-1, }; 
 
 st[70] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWXいっせん
 st[71] = { volumetype=0, path=2, file="SE_SwingLightSword", type=1, category=-1, }; //乱舞で剣を振る時　　　　　：IFWと同じヴォンと言う音
@@ -27,52 +27,55 @@ st[73] = { volumetype=0, path=2, file="SE_SwingGlass", type=1, category=-1, }; /
 st[80] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWとどめ
 
 // 登場
-st[100] = { volumetype=1, path=1, file="lin_010_b_2000", type=0, category=1, }; //「厄介なのが現れたな」
-st[101] = { volumetype=1, path=1, file="lin_010_b_2001", type=0, category=1, }; //「面倒なのと出くわしたな」
+st[100] = { volumetype=1, path=1, file="lin_010_b_2000", type=0, category=1, userparam=125 }; //「厄介なのが現れたな」
+st[101] = { volumetype=1, path=1, file="lin_010_b_2001", type=0, category=1, userparam=118 }; //「面倒なのと出くわしたな」
 
 // 登場 特殊
 // 対ハイド
-st[108] = { volumetype=1, path=1, file="lin_010_b_2012", type=0, category=1, }; //「解っているさ、それくらいな」
+st[108] = { volumetype=1, path=1, file="lin_010_b_2012", type=0, category=1, userparam=144 }; //「解っているさ、それくらいな」
 
 // 対セト
-st[111] = { volumetype=1, path=1, file="lin_010_b_2016", type=0, category=1, }; //「あぁ、長生きすると物忘れが、な」
+st[111] = { volumetype=1, path=1, file="lin_010_b_2016", type=0, category=1, userparam=227 }; //「あぁ、長生きすると物忘れが、な」
 
 // 対クオン
-st[114] = { volumetype=1, path=1, file="lin_010_b_2019", type=0, category=1, }; //「安心しろ、もうすぐ終わるさ」
+st[114] = { volumetype=1, path=1, file="lin_010_b_2019", type=0, category=1, userparam=158 }; //「安心しろ、もうすぐ終わるさ」
 
 // 対ワレンシュタイン
-st[117] = { volumetype=1, path=1, file="lin_010_b_2022", type=0, category=1, }; //「真剣勝負は、久しいな」
+st[117] = { volumetype=1, path=1, file="lin_010_b_2022", type=0, category=1, userparam=132 }; //「真剣勝負は、久しいな」
 
 // 対ヒルダ
-st[120] = { volumetype=1, path=1, file="lin_010_b_2031", type=0, category=1, }; //「出来やしないさ。今のお前にはな……」
+st[120] = { volumetype=1, path=1, file="lin_010_b_2031", type=0, category=1, userparam=189 }; //「出来やしないさ。今のお前にはな……」
 
 // ラウンド勝利
-st[131] = { volumetype=1, path=1, file="lin_010_b_2100", type=0, category=1, }; //「目は覚めたか」
-st[132] = { volumetype=1, path=1, file="lin_010_b_2101", type=0, category=1, }; //「なに、悲観する事は無い」
+st[131] = { volumetype=1, path=1, file="lin_010_b_2100", type=0, category=1, userparam=79 }; //「目は覚めたか」
+st[132] = { volumetype=1, path=1, file="lin_010_b_2101", type=0, category=1, userparam=141 }; //「なに、悲観する事は無い」
 
 // ラウンド勝利 掛け合い
 // 対ハイド
-st[136] = { volumetype=1, path=1, file="lin_010_b_2106", type=0, category=1, }; //「やる気はあるのか？」
+st[136] = { volumetype=1, path=1, file="lin_010_b_2106", type=0, category=1, userparam=100 }; //「やる気はあるのか？」
 
 // 決着勝利 汎用
-st[139] = { volumetype=1, path=1, file="lin_010_b_2111", type=0, category=1, }; //「よくできました、とだけ言っておくよ」
-st[140] = { volumetype=1, path=1, file="lin_010_b_2112", type=0, category=1, }; //「ふん、遅すぎる」
+st[139] = { volumetype=1, path=1, file="lin_010_b_2111", type=0, category=1, userparam=177 }; //「よくできました、とだけ言っておくよ」
+st[140] = { volumetype=1, path=1, file="lin_010_b_2112", type=0, category=1, userparam=123 }; //「ふん、遅すぎる」
 
 // 決着勝利 辛勝
-st[143] = { volumetype=1, path=1, file="lin_010_b_2120", type=0, category=1, }; //「悪くない、楽しめた方だ」
+st[143] = { volumetype=1, path=1, file="lin_010_b_2120", type=0, category=1, userparam=152 }; //「悪くない、楽しめた方だ」
 
 // 決着勝利 楽勝
-st[146] = { volumetype=1, path=1, file="lin_010_b_2123", type=0, category=1, }; //「下の下だな…、話にならない」
+st[146] = { volumetype=1, path=1, file="lin_010_b_2123", type=0, category=1, userparam=169 }; //「下の下だな…、話にならない」
 
 // 決着勝利 掛け合い
 // 対ハイド
-st[150] = { volumetype=1, path=1, file="lin_010_b_2127", type=0, category=1, }; //「成長したな。後は私に任せろ…」
+st[150] = { volumetype=1, path=1, file="lin_010_b_2127", type=0, category=1, userparam=197 }; //「成長したな。後は私に任せろ…」
 
 // 対ワレン
-st[153] = { volumetype=1, path=1, file="lin_010_b_2130", type=0, category=1, }; //「（私との）手合わせも最後だ。もう休め。」
+st[153] = { volumetype=1, path=1, file="lin_010_b_2130", type=0, category=1, userparam=163 }; //「（私との）手合わせも最後だ。もう休め。」
 
 // 対クオン
-st[156] = { volumetype=1, path=1, file="lin_010_b_2133", type=0, category=1, }; //「長い旅路…ここで終着点(おわり)だ。」
+st[156] = { volumetype=1, path=1, file="lin_010_b_2133", type=0, category=1, userparam=169 }; //「長い旅路…ここで終着点(おわり)だ。」
+
+// 対イズミ(掛け合い)
+st[157] = { volumetype=1, path=1, file="lin_010_b_2034", type=0, category=1, userparam=144 }; //「出来ぬ相談だな それは」
 
 // タイムアップ判定負け
 st[159] = { volumetype=1, path=1, file="lin_010_b_2200", type=0, category=1, }; //「納得…いかない…」

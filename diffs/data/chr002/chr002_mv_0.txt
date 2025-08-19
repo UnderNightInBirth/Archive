@@ -360,7 +360,7 @@ t.Mv_Atk_StdC <-
 	function Init_After()
 	{
 		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する
-		BMvCore.CallEntryBCCachePreTransfer( { pat=3, frame=5, rest=10 } ); // ヒット分岐後を予約
+		BMvCore.CallEntryBCCachePreTransfer( { pat=3, frame=6, rest=10 } ); // ヒット分岐後を予約
 	}
 	function FrameUpdate_After()
 	{
@@ -698,6 +698,10 @@ t.Mv_Throw_F_Hit <-
 			break;
 		}
 	}
+	function LastUpdate_After()
+	{
+		Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+	}
 }
 
 
@@ -843,7 +847,7 @@ local maketmpl_SkillShakeCrowSlash = function( param={} )
 			if( update_param1 > 0 )
 			{
 				// _dpn("update_param1:"+update_param1);
-				Battle_Std.AddToolShift_NoSurinuke( update_param1, (1<<0)|(1<<1) );
+				Battle_Std.AddToolShift_NoSurinuke( update_param1, (1<<0)|(1<<1), 450 );
 			}
 		}
 	}
@@ -875,6 +879,7 @@ local maketmpl_SkillRapidCrowSlash = function( param={} )
 	local mvparam =
 	{
 		csAntenHosei = 0,
+		han_lock = 0,
 	}
 	
 	switch( param.type )
@@ -887,17 +892,34 @@ local maketmpl_SkillRapidCrowSlash = function( param={} )
 		break;
 	case "EX":
 		mvparam.csAntenHosei = 1;
+		mvparam.han_lock = 1; // 初段のみ
 		break;
 	}
 
 	ret_tmpl.Init_After <- function()
 	{
+		BMvTbl.SetLP(0,0); // 引き寄せたか
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
 		Battle_Std.SetHitMuteki2_Param1( { [8]=_HitCheckFlag_Head, [64]=Def_HitCheckFlag_AirDive } );
 	}
+	
+	ret_tmpl.HitInterrupt_After <- function() : (mvparam)
+	{
+		if( mvparam.han_lock )
+		{
+			if( Battle_Std.CheckDamageTiming() )
+			{
+				if( BMvTbl.GetLP(0)==0 )
+				{
+					BMvTbl.SetLP(0,1); // 引き寄せた
+					Battle_Std.SetPosition_DamageHanteiRect( { power=70, flags=(1<<2)|(1<<4) } ); // 相手が地上でも引き寄せ処理を行う・相手が地上のときにY座標無効
+				}
+			}
+		}
+	}	
 	
 	ret_tmpl.LastUpdate_After <- function() : (mvparam)
 	{
@@ -1217,6 +1239,10 @@ t.Mv_Skill_41236SP <-
 		Battle_Std.CallSkillSoonCache( 666, 40 ); // 現Patのキャッシュ予約 FrameID, rest
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SkillThrow );
 	}
+	function FrameUpdate_After()
+	{
+		Battle_Std.EnemyGuardShield_ThroughRemoveBound( { Param1=1, Hosei=89 } ); // ガードシールド中はBound空振りを無くして掴む
+	}
 	function Update_After() // フレーム更新処理
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
@@ -1244,7 +1270,7 @@ t.Mv_Skill_41236SP_Hit <-
 		local enemy = BMvCore.GetNearEnemyCharaData(); // 敵情報を得る
 		if( enemy.push() )
 		{
-			BMvTbl.SetWallCount(0);
+			// BMvTbl.SetWallCount(0);
 			BMvCore.CallEntryBCCachePreTransfer( { pat=330, frame=1, rest=20 } ); // 持ち上げのところ予約
 			
 			enemy.pop();
@@ -1316,26 +1342,17 @@ t.Mv_Skill_41236SP_Hit <-
 			//カメラを↑にもって行って早くみせる
 			if( mvs.isFrameUpdate )
 			{
-				//まずリリースする
-				//無条件で掴んで画面下にベクトル？
-				//相手をリリースはしないで、画面下で固定する
-				
 				BMvEff.ThrowParam( { pattern=330, x=350, y=-100, } );
-				BMvEff.ThrowRelease( { type="真下落下", airrecover=0, flags = _ThrowRelease_NoGroundRecover } );
 				local enemy = BMvCore.GetEnemyCharaData();
 				if( enemy.isdone() )
 				{
-					local ret = BMvEff.CapturePlayer( { target = enemy } );
-					if( ret == 1 )
+					BMvEff.ThrowChara_SetJoint( 0 );
+					if( enemy.push() )
 					{
-						BMvEff.ThrowChara_SetJoint( 0 );
-						if( enemy.push() )
-						{
-							Battle_Std.InitVector();
-							BMvTbl.SetVector( { x=0, y=10000, xadd=0, yadd=0, flags=_Vector_Bound } );
-							
-							enemy.pop();
-						}
+						Battle_Std.InitVector();
+						BMvTbl.SetVector( { x=0, y=10000, xadd=0, yadd=0, flags=_Vector_Bound } );
+						
+						enemy.pop();
 					}
 					BMvEff.CreateObject( { x=0, y=0, mvname="Mv_Obj_41236SP_Camera", flags=_Position_ToolShift } );
 					BMvEff.CreateObject( { x=0, y=0, mvname="Mv_Obj_41236SP_EnemyFall", flags=_Position_ToolShift } );
@@ -1683,6 +1700,8 @@ local maketmpl_SkillDashPress = function( param={} )
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
+		Battle_Std.EnemyGuardShield_ThroughRemoveBound( { Param1=1 } ); // ガードシールド中はBound空振りを無くして掴む
+	
 		local mvs = BMvTbl.GetMvStatus(); // ステータス取得
 		
 		local mvs_FrameID = mvs.FrameID;
@@ -1801,15 +1820,24 @@ t.Mv_Skill_63214_Hit <-
 		case 400: //終わり
 			if( mvs.isFrameUpdate )
 			{
-				BMvEff.ThrowParam( { pattern=320, x=0, y=-110, } );
-				BMvEff.ThrowRelease( { type="垂直吹き飛び" } )
+				local isSidou = Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_SidouHitSkill ); // 始動であてた技
+				if( isSidou ) // 始動ヒット
+				{
+					BMvEff.ThrowParam( { pattern=320, x=0, y=-110, } );
+					BMvEff.ThrowRelease( { type="垂直吹き飛び", airrecover=60, flags=_ThrowRelease_NoGroundRecover } )
+				}
+				else
+				{
+					BMvEff.ThrowParam( { pattern=320, x=0, y=-110, } );
+					BMvEff.ThrowRelease( { type="垂直吹き飛び" } )
+				}
 			}
 			break;
 		}
 	}
 	function LastUpdate_After()
 	{
-		Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+		Battle_Std.NoCansel_NoAttackHit( { check_nosidou={ hosei=30, cp=65 } } ); //何かでキャンセルしなかった場合追撃不能にする・始動時は除外
 
 		if( BMvTbl.GetLP(3) == 1 ) // とどめ
 		{
@@ -1881,8 +1909,17 @@ t.Mv_Skill_63214EX_Hit <-
 		case 400: //終わり
 			if( mvs.isFrameUpdate )
 			{
-				BMvEff.ThrowParam( { pattern=320, x=0, y=-110, } );
-				BMvEff.ThrowRelease( { type="垂直吹き飛び", airrecover=50 } )
+				local isSidou = Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_SidouHitSkill ); // 始動であてた技
+				if( isSidou ) // 始動ヒット
+				{
+					BMvEff.ThrowParam( { pattern=320, x=0, y=-110, } );
+					BMvEff.ThrowRelease( { type="垂直吹き飛び", airrecover=60, flags=_ThrowRelease_NoGroundRecover } );
+				}
+				else
+				{
+					BMvEff.ThrowParam( { pattern=320, x=0, y=-110, } );
+					BMvEff.ThrowRelease( { type="垂直吹き飛び", airrecover=50 } );
+				}
 			}
 			BMvCore.CallEntryBCCachePreTransfer( { pat=441, frame=15, rest=10 } ); // １Ｆアニメ後予約	
 			break;
@@ -1890,7 +1927,7 @@ t.Mv_Skill_63214EX_Hit <-
 	}
 	function LastUpdate_After()
 	{
-		Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+		Battle_Std.NoCansel_NoAttackHit( { check_nosidou={ hosei=70 } } ); //何かでキャンセルしなかった場合追撃不能にする・始動時は除外
 
 		if( BMvTbl.GetLP(3) == 1 ) // とどめ
 		{

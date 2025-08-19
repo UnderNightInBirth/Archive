@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 
 // ●ケイアス・ダハーカ仕様
 // 　・ダハーカの子(Mv_Dah_Ctrl)が常にケイアスを監視
@@ -340,6 +339,49 @@ t.Mv_ComboLiberate <-
 	{
 		// 使用済みの技をリセットする
 		BMvTbl.SetPP( def_PP_Cha_DahActList, 0 );
+		
+		BMvEff.CreateObject({ mvname="Mv_Obj_EffCVOBook", x=60, y=-360, flags=_Position_ToolShift });
+	}
+}
+
+//VOとはちょっとだけ作りが違う
+t.Mv_Obj_EffCVOBook <-
+{
+	function Init_After()
+	{
+		BMvEff.SetCharaFlash( { color = 0xFFFFFF, type = 0, time = 30 } );
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_NoGround|_ObjFlags_EraseParentPatChange|_ObjFlags_MoveTimeStopAll } );
+		BMvTbl.SetVector( { y=-256, flags=_Vector_Normal } );
+		BMvTbl.SetLP(0,0); //本が開いたかどうか
+	}
+	function FrameUpdate_After()
+	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 30:
+			BMvTbl.SetVector( { y=-64, flags=_Vector_Normal } );
+			BMvTbl.SetVector( { y=-300, addy=30, flags=_Vector_Div } );
+			break;
+		}
+		
+		//親のVOのフレームID見て本を開いたり消したりする
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
+		{
+			local player_mvs = BMvTbl.GetMvStatus();
+			
+			player.pop();
+
+			if( player_mvs.FrameID == 30 && BMvTbl.GetLP(0) == 0 )
+			{
+				BMvTbl.JumpFrameID( 30 );
+				BMvTbl.SetLP(0,1); //本が開いた
+			}
+			if( player_mvs.FrameID == 100 || player_mvs.FrameID == 0 )
+			{
+				BMvTbl.SetFinalize();
+			}
+		}
 	}
 }
 
@@ -347,7 +389,58 @@ t.Mv_ComboLiberate <-
 // スマートステア
 //-----------------------------------------------------------------------------
 
-t.Mv_Skill_SSRelayAtk <- {};
+t.Mv_Skill_SSRelayAtk <- 
+{
+	function FrameUpdate_After()
+	{
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.Param1&1 ) // チェックする期間
+		{
+			// ※SS_DamageLockParams で 半ロックのflags=(1<<6)にしたので不要ではあるが性能が変わりそうなので残す
+			// 端で6C>A+Bとしたとき、画面端に入り込んでしまうことがあるのを直す
+			if( Battle_Std.CheckEnemyisDamage() )
+			{
+				local enemy = BMvEff.CheckHantei( { src=[ _Hantei_Kasanari, 0, 1 ], dst=[ _Hantei_Kasanari, 0, 1 ], flags=_HC_EnemyPc  } );
+				if( enemy.isdone() )
+				{
+					local pos = BMvTbl.GetPosition();
+					local epos = Battle_Std.GetEnemyPosition();
+				
+					local limit_posx = def_POS_GamenHajiX - 128*50;
+					if( pos.x >= limit_posx && epos.x >= limit_posx )
+					{
+						BMvTbl.SetPosition( { x=limit_posx } );
+					}
+					else if( pos.x <= -limit_posx && epos.x <= -limit_posx )
+					{
+						BMvTbl.SetPosition( { x=-limit_posx } );
+					}
+				}
+			}
+		}
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 100:
+			// スマートステア以外から出したら相手との距離を見て減速処理をする
+			local isDirectSS = BMvTbl.GetLPEx(1,1); // A+Bで直接出したか
+			if( isDirectSS )
+			{
+				local now_vec = BMvTbl.GetVector();
+				local vec_x = Battle_Std.GetEnemyDistance()/8 - now_vec.x; //8F後に到達
+				// _dpn("vec_x:"+vec_x);
+
+				// 近すぎたら減速、遠かったら加速
+				if( vec_x < -3500 ) vec_x = -3500;
+				if( vec_x > 0 ) vec_x = 0;  // 十分早いので加速はしない
+				BMvTbl.SetVector({ x=vec_x, flags=_VecFlag_Add });
+				local xmax = now_vec.x + vec_x - 4000;
+				BMvTbl.SetVector_MaxX( xmax ); // 徐々に減速するタイプなのでXMAXも更新
+			}
+			break;
+		}
+	}
+};
 
 
 //-----------------------------------------------------------------------------
@@ -359,6 +452,7 @@ t.Mv_Skill_CancelRoll <-
 {
 	function Init_After()
 	{
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_EnableZurashiDashCancel ); // （VOが出しにくいので）必殺技からもズラし押しで別行動にいける
 	}
 	function FrameUpdate_After()
 	{
@@ -370,30 +464,6 @@ t.Mv_Atk_6C_6C <- t.Mv_Skill_CancelRoll;
 t.Mv_Atk_6C_6C.atkflags <- def_AtkTmplFlags_Enable;
 t.Mv_Atk_6C_6C.flags <- def_TmplFlags_Add; // 追加技
 t.Mv_Atk_6C_6C.usepat <- "CancelRoll"; // 同じ
-
-t.Mv_Atk_StdBandC <-
-{
-	function Finalize()
-	{
-		BMvTbl.SetNextMoveTable("Mv_Neutral");
-	}
-}
-
-t.Mv_Atk_AirBandC <-
-{
-	function Finalize()
-	{
-		BMvTbl.SetNextMoveTable("Mv_Neutral");
-	}
-}
-
-t.Mv_Atk_CroBandC <-
-{
-	function Finalize()
-	{
-		BMvTbl.SetNextMoveTable("Mv_Neutral");
-	}
-}
 
 //-----------------------------------------------------------------------------
 // 通常技
@@ -477,8 +547,7 @@ local func_SetDahDirectOrder = function()
 	if( ap > def_PP_Cha_DahActionPointLimit || ap < 0 ) return 0;
 	// ↑cmdのチェックと同じにするとよさそう
 	
-	local findobj = BMvCore.CFindObject(); // クラス生成
-	local dah = findobj.Get( def_Cha_ObjID_Dah ); // ID1を検索
+	local dah = BMvCore.CFindObject().Get( def_Cha_ObjID_Dah ); // ID1を検索
 	if( dah.isdone() )
 	{
 		if( dah.push() )
@@ -503,9 +572,13 @@ local func_SetDahVPCancel = function( _isVPCancel=1 )
 }
 
 //めんどくさいので暫定で全部同じ処理つくる
-local maketmpl_GroundCallSkill = function( _ordercode=1, _pattype="236" ) : (func_SetDirectActionPat, func_SetDahDirectOrder, func_SetDahVPCancel)
+local maketmpl_GroundCallSkill = function( _pattype="236" ) : (func_SetDirectActionPat, func_SetDahDirectOrder, func_SetDahVPCancel)
 {
 	local ret_tmpl = {};
+	
+	local mvParam = {
+		clearZurasiAtkComboLimit = 0,
+	}	
 	
 	local directpatA = "236TypeA";
 	local directpatB = "236TypeB";
@@ -533,6 +606,13 @@ local maketmpl_GroundCallSkill = function( _ordercode=1, _pattype="236" ) : (fun
 		directpatB = "214TypeB";
 		directpatC = "214TypeC";
 		break;
+	case "FF":
+		ret_tmpl.usepat = "214TypeA";
+		directpatA = "214TypeA";
+		directpatB = "214TypeB";
+		directpatC = "214TypeC";
+		mvParam.clearZurasiAtkComboLimit = 1;
+		break;
 	case "623EX":
 		ret_tmpl.usepat = "623TypeA";
 		directpatA = "623TypeA";
@@ -545,17 +625,58 @@ local maketmpl_GroundCallSkill = function( _ordercode=1, _pattype="236" ) : (fun
 		directpatC = "623EXTypeC";
 		*/
 		break;
+	case "2FF":
+		ret_tmpl.usepat = "2FFTypeA";
+		directpatA = "2FFTypeA";
+		directpatB = "2FFTypeB";
+		directpatC = "2FFTypeC";
+		break;
 	}
 	
-	ret_tmpl.Init_After <- function() : (func_SetDirectActionPat, directpatA, directpatB, directpatC )
+	ret_tmpl.Init_After <- function() : (func_SetDirectActionPat, directpatA, directpatB, directpatC, mvParam )
 	{
+		if( mvParam.clearZurasiAtkComboLimit )
+		{
+			// BズラしCでFFを出したとき、Bを使った扱いになってしまうなどの対応
+			// 前の行動がズラし押し可能で、2F以内で、前の行動が各種地上攻撃だったら処理をする
+			if( Battle_Std.ChangeMoveCodeEx_CheckFlag( 1, def_MC1_CmdLvDZ_OK ) && BMvTbl.GetMvStatusBF().MvCount <= 2 )
+			{
+				local changeMv = BMvTbl.ChangeMv_GetMvName();
+				if( changeMv == "Mv_Atk_StdB" )
+				{
+					_dpn("ClearComboLimit - B");
+					BMvTbl.ClearComboLimit(DEF_BS_CL_STDB);
+				}
+				else if( changeMv == "Mv_Atk_StdC" )
+				{
+					_dpn("ClearComboLimit - C");
+					BMvTbl.ClearComboLimit(DEF_BS_CL_STDC);
+				}
+				else if( changeMv == "Mv_Atk_Std6C" )
+				{
+					_dpn("ClearComboLimit - 6C");
+					BMvTbl.ClearComboLimit(DEF_BS_CL_ATK6C);
+				}
+				else if( changeMv == "Mv_Atk_CroB" )
+				{
+					_dpn("ClearComboLimit - 2B");
+					BMvTbl.ClearComboLimit(DEF_BS_CL_CROB);
+				}
+				else if( changeMv == "Mv_Atk_CroC" )
+				{
+					_dpn("ClearComboLimit - 2C");
+					BMvTbl.ClearComboLimit(DEF_BS_CL_CROC);
+				}
+			}
+		}
+		
 		Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoSkill|def_MC_EnableCansel_SkilltoAtk );
 		
 		func_SetDirectActionPat( directpatA, directpatB, directpatC );
 		//func_SetDirectActionPat( "236TypeB");
 		
 	}
-	ret_tmpl.FrameUpdate_After <- function() : (_ordercode, func_SetDahDirectOrder, func_SetDahVPCancel, isVPCancel)
+	ret_tmpl.FrameUpdate_After <- function() : (func_SetDahDirectOrder, func_SetDahVPCancel, isVPCancel)
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
@@ -570,55 +691,131 @@ local maketmpl_GroundCallSkill = function( _ordercode=1, _pattype="236" ) : (fun
 	return ret_tmpl;
 }
 
-t.Mv_Skill_236A <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_236A, "236" );
-t.Mv_Skill_236B <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_236B, "236" );
-t.Mv_Skill_236EX <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_236EX, "236" );
+t.Mv_Skill_236A <- maketmpl_GroundCallSkill( "236" );
+t.Mv_Skill_236B <- maketmpl_GroundCallSkill( "236" );
+t.Mv_Skill_236EX <- maketmpl_GroundCallSkill( "236" );
 
-t.Mv_Skill_623A <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_623A, "623" );
-t.Mv_Skill_623B <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_623B, "623" );
-t.Mv_Skill_623EX <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_623EX, "623EX" );
+t.Mv_Skill_623A <- maketmpl_GroundCallSkill( "623" );
+t.Mv_Skill_623B <- maketmpl_GroundCallSkill( "623" );
+t.Mv_Skill_623EX <- maketmpl_GroundCallSkill( "623EX" );
 
-t.Mv_Skill_214A <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_214A, "214" );
-t.Mv_Skill_214B <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_214B, "214" );
-t.Mv_Skill_214EX <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_214EX, "214" );
+t.Mv_Skill_214A <- maketmpl_GroundCallSkill( "214" );
+t.Mv_Skill_214B <- maketmpl_GroundCallSkill( "214" );
+t.Mv_Skill_214EX <- maketmpl_GroundCallSkill( "214" );
 
-t.Mv_Atk_StdBandC <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_421A, "214" );
-t.Mv_Atk_CroBandC <- maketmpl_GroundCallSkill( def_CHR_Dah_ActFlag_41236B, "623" );
+t.Mv_Atk_StdBandC <- maketmpl_GroundCallSkill( "FF" );
+t.Mv_Atk_CroBandC <- maketmpl_GroundCallSkill( "2FF" );
 
 //めんどくさいので暫定で全部同じ処理つくる
-local maketmpl_JumpCallSkill = function( _ordercode=1 ) : (func_SetDirectActionPat, func_SetDahDirectOrder, func_SetDahVPCancel)
+local maketmpl_JumpCallSkill = function( param={} ) : (func_SetDirectActionPat, func_SetDahDirectOrder, func_SetDahVPCancel)
 {
 	local ret_tmpl = {};
 	
 	ret_tmpl.usepat <- "J236TypeA";
 	
-	ret_tmpl.Init_Before <- function()
+	local mvParam = {
+		checkZurasiGroundAssault = 0,
+		clearZurasiAtkComboLimit = 0,
+		landDisableSSSkill = 0,
+	}
+	
+	switch( param.type )
 	{
-		//アサルトから飛んできたらフラグを立てる	
+	case "JFF":
+		mvParam.checkZurasiGroundAssault = 1;
+		mvParam.clearZurasiAtkComboLimit = 1;
+		mvParam.landDisableSSSkill = 1;
+		break;
+	}
+	
+	
+	
+	ret_tmpl.Init_Before <- function() : (mvParam)
+	{
+		//アサルトから飛んできたらフラグを立てる
+		//地上アサルトからなのにキャンセルが色々できてしまうとまずいため
+		
+		//B+Cの処理が増えているので、前がアサルトジャンプ攻撃のときも含めるように変更
+		
+		local isFromGroundAssault = 0; // 地上アサルトからか
+		
+		// パターンの比較をすると、地上アサルトと空中アサルトで同じPATなので注意
 		local mvs = BMvTbl.GetMvStatus();
-		if( mvs.DataPattern==def_PAT_Mv_Assault  || mvs.DataPattern==def_PAT_Mv_Assault_Dodge )
+		if( mvs.DataPattern==def_PAT_Mv_Assault || mvs.DataPattern==def_PAT_Mv_Assault_Dodge ) // 地上アサルトっぽい
 		{
-			// _dp("\n アサルトから");
-			local type = BMvTbl.GetLP(1); //アサルトのmvからなら設定されているはず
-			if( type==1 ) //空中アサルトだったら
+			if(  Battle_Std.ChangeMoveCodeEx_CheckFlag( 7, def_MC7_StdAssult ) ) // 確実に地上アサルト
 			{
+				isFromGroundAssault = 1;
 			}
-			else //空中アサルト以外はキャンセル不可を設定するのだよ
+		}
+		
+		// 空中B+Cはズラし押しがあるので、JBやJCのPATから来ることもあるので色々チェック
+		if( mvParam.checkZurasiGroundAssault && !isFromGroundAssault )
+		{
+			// 押してるボタンの数も見たほうがいいかもしれないけどやってない
+			// B+CだけならとりあえずこれでOKだが、A+B+Cとか入ってくると処理が不足しているので拡張時に気をつけること
+
+			if( Battle_Std.ChangeMoveCodeEx_CheckFlag( 1, def_MC1_CmdLvDZ_OK ) && BMvTbl.GetMvStatusBF().MvCount <= 2 && Battle_Std.ChangeMoveCodeEx_CheckFlag( 2, def_MC2_FromAssault ) )
 			{
-				/*
-				Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag2 ); // ダハーカのキャンセルを受け取らないMv
-				if( Def_Dbg_AirAtkFlag ) _dm("アサルトによるダハーカのキャンセル受け取り拒否");
-				*/
-				
-				// ケイアスのみ
-				BMvTbl.SetAsStatusFlag( { normal=_CancelFlag_None, special=_CancelFlag_None, time=254, flag=_ClearFlag_ChangeMv }); //キャンセル不可
-				BMvTbl.SetAsFlag( { as_flags=_AsFlag_ChainShift, time=254, flag=_ClearFlag_ChangeMv } );
-				// if( Def_Dbg_AirAtkFlag ) _dm("アサルトによるキャンセル不可（ケイアス）");
+				// 前の行動が…
+				// ズラし押し対応MVで、Mvに入って2F以内で、しかもアサルトジャンプ攻撃だった
+
+				// これだけだと地上アサルトと空中アサルトの両方がひっかかるので、地上アサルトであるかを見る
+				// def_PP_AirAtkStatusのチェックを重点的に見る
+				if( Battle_Std.ChangeMoveCodeEx_CheckFlag( 0, def_MC_EnableAirAtkStatus ) )
+				{
+					if( Battle_Std.PP_CheckFlag( def_PP_AirAtkStatus, def_PP_AAS_inAssault ) ) // 各種アサルトからのジャンプ攻撃
+					{
+						if( Battle_Std.PP_CheckFlag( def_PP_AirAtkStatus, def_PP_AAS_inAirAssault ) ) // 空中アサルトからのジャンプ攻撃
+						{
+							// _dpn("空中アサルトっぽい");
+							
+						}
+						else
+						{
+							// _dpn("アサルトっぽい");
+							isFromGroundAssault = 1;
+						}
+					}
+				}
 			}
-		}	
+		}
+		
+		// アサルトによるキャンセル不可を設定
+		if( isFromGroundAssault )
+		{
+			BMvTbl.SetAsStatusFlag( { normal=_CancelFlag_None, special=_CancelFlag_None, time=254, flag=_ClearFlag_ChangeMv }); //キャンセル不可
+			BMvTbl.SetAsFlag( { as_flags=_AsFlag_ChainShift, time=254, flag=_ClearFlag_ChangeMv } );
+		}
+		
+		if( mvParam.clearZurasiAtkComboLimit )
+		{
+			// BズラしCでJFFを出したとき、JBを使った扱いになってしまうなどの対応
+			// 前の行動がズラし押し可能で、2F以内で、前の行動が各種ジャンプ攻撃だったら処理をする
+			if( Battle_Std.ChangeMoveCodeEx_CheckFlag( 1, def_MC1_CmdLvDZ_OK ) && BMvTbl.GetMvStatusBF().MvCount <= 2 )
+			{
+				local changeMv = BMvTbl.ChangeMv_GetMvName();
+				if( changeMv == "Mv_Atk_AirB" )
+				{
+					_dpn("ClearComboLimit - JB");
+					BMvTbl.ClearComboLimit(DEF_BS_CL_AIRB);
+				}
+				else if( changeMv == "Mv_Atk_AirC" )
+				{
+					_dpn("ClearComboLimit - JC");
+					BMvTbl.ClearComboLimit(DEF_BS_CL_AIRC);
+				}
+				else if( changeMv == "Mv_Atk_Air2C" )
+				{
+					_dpn("ClearComboLimit - J2C");
+					BMvTbl.ClearComboLimit(DEF_BS_CL_ATKJ2C);
+				}
+			}
+		}
+		
 		//ベクトル保存
 		local nowvec = BMvTbl.GetVector(0); // 現在のベクトルを得る
-		_dpn("nowvec:"+nowvec.y);
+		// _dpn("nowvec:"+nowvec.y);
 		BMvTbl.SetVector( { x=nowvec.x, addx=nowvec.addx, y=nowvec.y, addy=nowvec.addy, flags=_Vector_Keep } ); //保存
 	}
 	ret_tmpl.Init_After <- function() : (func_SetDirectActionPat)
@@ -632,7 +829,7 @@ local maketmpl_JumpCallSkill = function( _ordercode=1 ) : (func_SetDirectActionP
 
 		BMvTbl.SetLP(0,0); //ベクトル戻したかどうか
 	}
-	ret_tmpl.FrameUpdate_After <- function() : (_ordercode, func_SetDahDirectOrder, func_SetDahVPCancel)
+	ret_tmpl.FrameUpdate_After <- function() : (func_SetDahDirectOrder, func_SetDahVPCancel, mvParam)
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
@@ -649,6 +846,16 @@ local maketmpl_JumpCallSkill = function( _ordercode=1 ) : (func_SetDirectActionP
 			func_SetDahVPCancel(); // VORPAL時は空振りキャンセル可能
 			break;	
 		}
+		
+		if( mvParam.landDisableSSSkill )
+		{
+			// 着地時にステアエンダーを不可にする
+			// これを入れないと、JFF>着地ボタンダッシュができずに操作性が悪いのでキャンセル自体廃止した
+			if( BMvTbl.GetMvStatus().isLanding )
+			{
+				Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_DisableDirectSSSkill ); // ステアエンダーを不可にする
+			}
+		}
 	}
 	ret_tmpl.LastUpdate_After <- function()
 	{
@@ -663,23 +870,23 @@ local maketmpl_JumpCallSkill = function( _ordercode=1 ) : (func_SetDirectActionP
 	return ret_tmpl;
 }
 
-t.Mv_Skill_J236A <- maketmpl_JumpCallSkill();
-t.Mv_Skill_J236B <- maketmpl_JumpCallSkill();
-t.Mv_Skill_J236EX <- maketmpl_JumpCallSkill();
+t.Mv_Skill_J236A <- maketmpl_JumpCallSkill( { type="J236A" } );
+t.Mv_Skill_J236B <- maketmpl_JumpCallSkill( { type="J236B" } );
+t.Mv_Skill_J236EX <- maketmpl_JumpCallSkill( { type="J236EX" } );
 
-t.Mv_Skill_J623A <- maketmpl_JumpCallSkill();
-t.Mv_Skill_J623B <- maketmpl_JumpCallSkill();
-t.Mv_Skill_J623EX <- maketmpl_JumpCallSkill();
+t.Mv_Skill_J623A <- maketmpl_JumpCallSkill( { type="J623A" } );
+t.Mv_Skill_J623B <- maketmpl_JumpCallSkill( { type="J623B" } );
+t.Mv_Skill_J623EX <- maketmpl_JumpCallSkill( { type="J623EX" } );
 
-t.Mv_Skill_J214A <- maketmpl_JumpCallSkill();
-t.Mv_Skill_J214B <- maketmpl_JumpCallSkill();
-t.Mv_Skill_J214EX <- maketmpl_JumpCallSkill();
+t.Mv_Skill_J214A <- maketmpl_JumpCallSkill( { type="J214A" } );
+t.Mv_Skill_J214B <- maketmpl_JumpCallSkill( { type="J214B" } );
+t.Mv_Skill_J214EX <- maketmpl_JumpCallSkill( { type="J214EX" } );
 
-t.Mv_Skill_J0202A <- maketmpl_JumpCallSkill();
-t.Mv_Skill_J0202B <- maketmpl_JumpCallSkill();
-t.Mv_Skill_J0202EX <- maketmpl_JumpCallSkill();
+t.Mv_Skill_J0202A <- maketmpl_JumpCallSkill( { type="J22A" } );
+t.Mv_Skill_J0202B <- maketmpl_JumpCallSkill( { type="J22B" } );
+t.Mv_Skill_J0202EX <- maketmpl_JumpCallSkill( { type="J22EX" } );
 
-t.Mv_Atk_AirBandC <- maketmpl_JumpCallSkill();
+t.Mv_Atk_AirBandC <- maketmpl_JumpCallSkill( { type="JFF" } );
 
 local maketmpl_CallHidingDahSkill = function( param={} ) : (dah_Status, func_SetDirectActionPat, func_SetDahDirectOrder, func_SetDahVPCancel)
 {
@@ -687,30 +894,46 @@ local maketmpl_CallHidingDahSkill = function( param={} ) : (dah_Status, func_Set
 	
 	local mvParam = {
 		changePat_RiseMode = 0,
+		risePat = 0,
 	}
 	
 	switch( param.type )
 	{
 	case "A":
-		mvParam.changePat_RiseMode = 1;
+		// mvParam.changePat_RiseMode = 1;
+		mvParam.risePat = "R_0202A";
 		break;
 	case "B":
-		mvParam.changePat_RiseMode = 1;
+		// mvParam.changePat_RiseMode = 1;
+		mvParam.risePat = "R_0202B";
 		break;
 	case "EX":
-		mvParam.changePat_RiseMode = 1;
+		// mvParam.changePat_RiseMode = 1;
+		mvParam.risePat = "R_0202EX";
 		break;
 	}
 	
 	ret_tmpl.Init_After <- function() : (dah_Status, func_SetDirectActionPat, mvParam)
 	{
 		//備えろ中なら別の行動に
+		//備えろの準備もあるので性能低下を廃止
+		/*
 		if( mvParam.changePat_RiseMode )
 		{
 			if( dah_Status.check(def_PPFlag_Cha_DS_Rising) )
 			{
 				func_SetDirectActionPat( "623TypeA", "623TypeB", "623TypeC" );
 			}
+		}
+		*/
+
+		// 備えろ中は別のPATで性能を調整
+		if( mvParam.risePat )
+		{
+			if( dah_Status.check(def_PPFlag_Cha_DS_Rising) )
+			{
+				BMvTbl.SetPattern(mvParam.risePat);
+			}			
 		}
 	}
 	ret_tmpl.FrameUpdate_After <- function() : (func_SetDahDirectOrder, func_SetDahVPCancel)
@@ -993,8 +1216,7 @@ t.Mv_DahIcon <-
 				local player = BMvCore.GetPlayerCharaData();
 				if( player.push() )
 				{
-					local findobj = BMvCore.CFindObject(); // クラス生成
-					local dah = findobj.Get( def_Cha_ObjID_Dah ); // ID1を検索
+					local dah = BMvCore.CFindObject().Get( def_Cha_ObjID_Dah ); // ID1を検索
 					if( dah.push() )
 					{
 						local dah_mvs = BMvTbl.GetMvStatus();
@@ -1051,6 +1273,13 @@ t.Mv_Dah_Init <-
 		
 		BMvTbl.SetPP(def_PP_Cha_DahMode,1); //出現した状態
 		BMvTbl.SetFinalize();
+		
+		// 端リスタートしたときにありえない座標にいくことを緩和
+		// トレーニングモードでのみ有効
+		if( BMvTbl.GetMvStageStatus().IsTrainingBattle() )
+		{
+			BtlPl.SetPos_ExcessGamenHajiX( { off_x=100*128, flags=def_SetPos_FrontOnly } ); // ざっくりそれっぽい座標へ
+		}
 	}
 	function Finalize()
 	{
@@ -1239,7 +1468,7 @@ local dah_breath_totalframe = 130;
 local dah_CheckYarare = function()
 {
 	local mvs = BMvTbl.GetMvStatus();
-	local startup = ( mvs.Param1 & 4 );//飛び道具無敵
+	local startup = ( mvs.Param1 & 4 );//飛び道具無敵　※未使用
 	local vp_muteki = ( mvs.Param1 & 8 );//VP中の無敵
 	local mn_muteki = ( mvs.Param1 & 16 );//とにかく無敵
 	
@@ -1277,9 +1506,37 @@ local dah_CheckYarare = function()
 		}
 		*/
 		
-		local check_flag = Battle_Std.CheckObjectisYarare();
+		local check_flag = Battle_Std.CheckObjectisYarare(); // (1<<0):やられ (1<<1):相殺
 		// _dpn("check_flag:"+check_flag);
-		if( check_flag&(1<<0) ) return 1; // やられのときは1を返すが、相殺のときは0のまま
+		if( check_flag&(1<<0) ) // やられ
+		{
+			return 1; // やられのときは1を返すが、相殺のときは0のまま
+		}
+		else if( check_flag&(1<<1) ) // やられではなく相殺
+		{
+			// 相殺だけしたんだけど、もしやられ判定がダハーカについていたらやられ扱いにする
+			// こうしておかないと、大きめにつけている相殺判定がバリアーみたく動作してしまう
+			local is_exist_kurai = BMvEff.IsKuraiRect();
+			if( is_exist_kurai )
+			{
+				//相手の飛び道具が自分の相殺判定に触れているかチェック
+				//ここでチェックするのはかなり不安だ
+				local enemy = BMvEff.CheckHantei( { src=[ _Hantei_Etc, 3, 1 ], dst=[ _Hantei_Attack, 0, -1 ], flags=_HC_EnemyPc|_HC_EnemyObj } );
+				if( enemy.push() )
+				{
+					local sousaied = Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_Sousai_MySubSuccess );
+					
+					enemy.pop();
+					if( sousaied )
+					{
+						// 攻撃出現とか見ないとダメな気もするが、相殺したら０になってるので不可
+						// 触れた判定が相殺処理をやっているっぽかったらほぼ相殺のはず
+						//_dpn("やられ扱いにする");
+						return 1; // やられ扱いにします
+					}
+				}
+			}
+		}
 		
 		return 0;
 	}
@@ -1680,13 +1937,16 @@ local dah_GetActionCode = function( flags=0, call_action=0 ) : (dah_CheckYarare)
 					// 殴られたMvであることを記憶
 					Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // 殴られ済みのMv
 					
+					// 通常時もダメージを受けないように変更
+					/*
 					// VORPAL時はダメージを受けないです
 					if( BMvEff.GRD_GetJudgeResult() <= 0 ) // VORPALではない
 					{
 						BMvEff.SetHpGauge( { value=-300 } ); // ケイアスがダメージを受ける
 					}
+					*/
 
-					BMvTbl.SetPP(def_PP_Cha_DahActionPoint,-180); //ダメージによるクールタイム
+					BMvTbl.SetPP(def_PP_Cha_DahActionPoint,-150); //ダメージによるクールタイム 1.12:-180
 					
 					// 適当にヒットエフェクトを出す（どんな攻撃でも共通のダハーカ専用のもの）
 					// SEはパターンに入ってる
@@ -2804,7 +3064,7 @@ local makemv_dah_atk = function( param={} ) : ( dah_GetActionCode, dah_SetNextMo
 	
 	retmv.Init <- function() : ( pat, ap, callact, auto_direction, type,SetDahAtkPattern, rise_pat)
 	{
-		if( auto_direction ) BMvTbl.SetMuki( _Direction_Auto ); //技の発動時は相手の方を向き直す
+		if( auto_direction ) Battle_Std.SetMukiAuto( { CheckEnemyVector=1 } ); //技の発動時は相手の方を向き直す
 		
 		// 190206追加　ダハーカ立ちあがりから出すと性能変化
 		local isRiseAtk = SetDahAtkPattern(pat,rise_pat);
@@ -2834,9 +3094,22 @@ local makemv_dah_atk = function( param={} ) : ( dah_GetActionCode, dah_SetNextMo
 		if( type ) BMvTbl.SetMvAction( type );
 		
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Body, time=255, flag=_ClearFlag_ChangeMv } ); // デフォルト属性
+		
+		Battle_Std.MoveCode.AddFlag( def_MC_Sousai_NoSubHitCount ); // 相殺時ヒット消費しない
 	}
-	retmv.Update <- function() : (dah_GetActionCode, callact)
+	retmv.Update <- function() : (dah_GetActionCode, callact, auto_direction)
 	{
+		// Initで振り向くだけだと振り向き処理の後に重なりが出現して方向がおかしくなるケースがあるため、2F目にもう一度振り向かせる
+		if( auto_direction ) 
+		{
+			local mvs = BMvTbl.GetMvStatus();
+			if( mvs.MvCount==1 )
+			{
+				_dpn("振り向き");
+				Battle_Std.SetMukiAuto( { CheckEnemyVector=1 } ); //技の発動時は相手の方を向き直す
+			}
+		}
+		
 		// local ngaction = callact|def_CHR_Dah_ActFlag_DahLimitVanish;
 		local ngaction = def_CHR_Dah_ActFlag_DahLimitVanish; // 01/31:同じ技でも反応するように
 		local actioncode = dah_GetActionCode( ngaction );
@@ -2887,10 +3160,7 @@ t.Mv_Dah_AirUpperAtk <- makemv_dah_atk( { pat="Dah_AirUpperAtk", ap=200, callact
 
 t.Mv_Dah_StdUpperAtk.FrameUpdate <- function()
 {
-	Battle_Std.JumpFrameID_NotHoldButton({ mask=(1<<1), checkid=50, jumpid=51, endid=60, flags=def_JFN_SetExtendFlagPlayer }); //ボタンホールドしてなかったらIDジャンプ
-	
-	// 190215追加　立ちあがりから出した時
-	Battle_Std.JumpFrameID_NotHoldButton({ mask=(1<<1), checkid=150, jumpid=151, endid=160, flags=def_JFN_SetExtendFlagPlayer }); //ボタンホールドしてなかったらIDジャンプ
+	Battle_Std.JumpFrameID_NotHoldButton({ mask=(1<<1), checkid=[50,150], jumpid=[51,151], endid=[60,160], flags=def_JFN_SetExtendFlagPlayer }); //ボタンホールドしてなかったらIDジャンプ
 }
 
 t.Mv_Dah_StdDashAtkEX_Appear <- makemv_dah_atk_appear( { atkmv="Mv_Dah_StdDashAtkEX", type=def_MVA_EXSkill } );
@@ -3433,14 +3703,14 @@ local makemv_dah_HidingAtk = function( param={} ) : (dah_GetActionCode, dah_SetN
 		}
 		if( ( frameid == 100 || frameid == 101 ) && mvs.isFrameUpdate )
 		{
-			BMvTbl.SetMuki( _Direction_Auto ); // 相手の方を向く
+			Battle_Std.SetMukiAuto( { CheckEnemyVector=1 } ); // 相手の方を向く
 		}
 
 		if( ( frameid == 150 || frameid == 151 ) && mvs.isFrameUpdate )
 		{
 			if( Battle_Std.CheckEnemyisBound() )
 			{
-				BMvTbl.SetMuki( _Direction_Auto ); // 相手の方を向く
+				Battle_Std.SetMukiAuto( { CheckEnemyVector=1 } ); // 相手の方を向く
 			}
 		}		
 		
@@ -3511,7 +3781,13 @@ t.Mv_Dah_StdBreathAtkA.FrameUpdate <- function()
 	switch( Battle_Std.GetUpdateFrameID() )
 	{
 	case 100:
-		Battle_Std.CreateFireBall( { x=160, y=-130, mv="Mv_FireBall_DahBreathA", pat = "FB_StdBreath", ball=3, } );
+		local eff = Battle_Std.CreateFireBall( { x=160, y=-130, mv="Mv_FireBall_DahBreathA", pat = "FB_StdBreath", ball=3, } );
+		if( eff.push() )
+		{
+			// ダハーカに追従するように変更（もともとダハーカのPAT変更で消滅処理があるので弱体化にはなってないはず）
+			BMvEff.SetObjectFlags( { flags=_ObjFlags_NoGround|_ObjFlags_ParentMove|_ObjFlags_EraseParentPatChange } );
+			eff.pop();
+		}
 		break;
 	}
 }
@@ -3525,6 +3801,18 @@ t.Mv_Dah_StdDiveAtkB.FrameUpdate <- function()
 	switch( Battle_Std.GetUpdateFrameID() )
 	{
 	case 10: 
+		break;
+	case 20:
+		//移動開始　壁までの距離を見て28Fくらいで張り付くように加速する
+		//※1.05までの中央リスタート直後の位置関係だと加速しないギリギリの値になるようにしている
+		local now_vec = BMvTbl.GetVector();
+		local vec_x = Battle_Std.GetFrontCornerDistance()/28  - now_vec.x; // 28F後に到達
+		
+		// 遠かったら加速
+		if( vec_x < 0 ) vec_x = 0; //減速はしない
+		if( vec_x > 10000 ) vec_x = 10000; // 上限　備えろでステージ端に固定して反対の画面端までギリギリ届くくらいの値
+		// _dpn("vec_x:"+vec_x);
+		BMvTbl.SetVector({ x=vec_x, flags=_VecFlag_Add });
 		break;
 	case 100: //壁はりつき
 		break;	
@@ -3792,8 +4080,7 @@ t.Mv_Obj_Eff_BarrierAtk <-
 			BMvTbl.SetLP(1,2); // 消える絵まで飛んでる
 			
 			// 本もまだあったら消える
-			local findobj = BMvCore.CFindObject();
-			local book_eff = findobj.Get( def_Cha_ObjID_BarrierBook );
+			local book_eff = BMvCore.CFindObject().Get( def_Cha_ObjID_BarrierBook );
 			if( book_eff.push() )
 			{
 				local mvs = BMvTbl.GetMvStatus();
@@ -3811,6 +4098,9 @@ t.Mv_Obj_Eff_BarrierAtk <-
 		if( BMvTbl.GetLP(2)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(2,1); // 反射エフェクトをよんだ
+			
+			BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
+			
 			//
 			local eff = BMvEff.CreateObject( { start_pat="Eff_RefBarrier1" } );
 			if( eff.push() )
@@ -3864,8 +4154,7 @@ t.Mv_Obj_Eff_BarrierAtk <-
 				BMvTbl.SetLP(1,2); // 更新
 				
 				// 本もまだあったら消える
-				local findobj = BMvCore.CFindObject();
-				local book_eff = findobj.Get( def_Cha_ObjID_BarrierBook );
+				local book_eff = BMvCore.CFindObject().Get( def_Cha_ObjID_BarrierBook );
 				if( book_eff.push() )
 				{
 					local mvs = BMvTbl.GetMvStatus();
@@ -4008,7 +4297,7 @@ t.Mv_Skill_41236SP_Hit <-
 			{
 				if( BMvCore.PushCharaData( enemy ) )
 				{
-					BMvTbl.SetWallCount( 0 ); // バウンド回数リセット
+					// BMvTbl.SetWallCount( 0 ); // バウンド回数リセット
 					Battle_Std.InitVector();
 					BMvTbl.SetVector( { y=-10000, addy=0, flags=_Vector_Div } );
 					//BMvTbl.SetVector( { y=-256, flags=_Vector_Normal } );
@@ -4018,8 +4307,7 @@ t.Mv_Skill_41236SP_Hit <-
 			}
 			// ここでダハーカに対して命令予約を入れる
 			// 命令予約があった場合優先して発動する
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local dah = findobj.Get( def_Cha_ObjID_Dah ); // ID1を検索
+			local dah = BMvCore.CFindObject().Get( def_Cha_ObjID_Dah ); // ID1を検索
 			if( dah.isdone() )
 			{
 				if( dah.push() )
@@ -4616,8 +4904,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 			BMvEff.SetCamera_Focus( { num=1, zoom=1.0, time=[30,999,30], type_in=1 } );
 			break;
 		case 240:
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local dah = findobj.Get( def_Cha_ObjID_IWE_DahMoya );
+			local dah = BMvCore.CFindObject().Get( def_Cha_ObjID_IWE_DahMoya );
 			if( dah.push() )
 			{
 				BMvTbl.JumpFrameID(100); // うごけー
@@ -4649,8 +4936,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 				enemy.pop();
 			}
 			//Battle_Std.CreateObjectEX( { pat=613, setx=0, sety=0, objectflags=_ObjFlags_NoCamera } );
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local bgscreen = findobj.Get( def_Cha_ObjID_IWE_RedBoard );
+			local bgscreen = BMvCore.CFindObject().Get( def_Cha_ObjID_IWE_RedBoard );
 			if( bgscreen.push() )
 			{
 				BMvEff.CreateObject( { mvname="Mv_Null_IWEDahSnakeRush" } ); // 動き回る蛇生成オブジェ
@@ -4659,8 +4945,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 			break;
 		case 420:
 			// フィニッシュの横切る顔表示
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local bgscreen = findobj.Get( def_Cha_ObjID_IWE_RedBoard );
+			local bgscreen = BMvCore.CFindObject().Get( def_Cha_ObjID_IWE_RedBoard );
 			if( bgscreen.push() )
 			{
 				local eff = BMvEff.CreateObject( { mvname="Mv_Obj_IWE_FinishRect" } );

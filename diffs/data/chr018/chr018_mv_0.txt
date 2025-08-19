@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 //★専用仕様
@@ -92,8 +91,7 @@ Freeze.SetDebugParam <- function()
 	local player = BMvCore.GetPlayerCharaData(); // プレイヤーからデバッグオブジェクトを検索
 	if( player.push() )
 	{
-		local findobj = BMvCore.CFindObject(); // クラス生成
-		local debobj = findobj.Get(DEF_ID_DEBUG); // デバッグオブジェクトのIDを検索
+		local debobj = BMvCore.CFindObject().Get(DEF_ID_DEBUG); // デバッグオブジェクトのIDを検索
 		if(debobj.push())
 		{
 			BMvTbl.SetMoveCode(mvcode);
@@ -259,7 +257,7 @@ t.Mv_Obj_FreezeAtk <- maketmpl_FreezeAtk({ type="First" });
 t.Mv_Obj_FreezeAtkChase <- maketmpl_FreezeAtk({ type="Chase" });
 
 
-
+// ★★キャラ追加時確認★★
 // 氷棺のサイズ指定。登場キャラクター分定義する(未定義だと拡縮無し)
 local enemy_iceCoffin_scale = {
 	[Def_ChrNo_Hyd] = { scalex=10000, scaley=10000 },
@@ -286,6 +284,9 @@ local enemy_iceCoffin_scale = {
 	[Def_ChrNo_Tsu] = { scalex=10000, scaley=10000 },
 	[Def_ChrNo_Kag] = { scalex=10000, scaley=10000 },
 	[Def_ChrNo_Kuo] = { scalex=10000, scaley=10000 },
+	[Def_ChrNo_Udu] = { scalex=10000, scaley=10000 },
+	[Def_ChrNo_Ogr] = { scalex=11000, scaley=11000 },
+	[Def_ChrNo_Izu] = { scalex=10000, scaley=10000 },
 }
 // 氷棺やられ中の相手に追従するエフェクト
 // 関係ないやられになったらすぐ壊れる
@@ -647,6 +648,12 @@ t.Mv_Atk_StdBandC_Add <-
 				
 				// 相手の近くに出す
 				BtlOb.SetPos_WithInRange_Enemy({ sx=0, ex=300, sy=-600, ey=-300 });
+				
+				// 240528 相手がやられ中は前方向にだけ更にサーチ
+				if( Battle_Std.CheckEnemyisDamage() )
+				{
+					BtlOb.SetPos_WithInRange_Enemy({ sx=0, ex=200, sy=0, ey=0 });
+				}
 				obj.pop();
 			}
 			break;
@@ -1175,6 +1182,7 @@ t.Mv_AniSet_Bind <- Battle_Std.MakeMv.SetCaptureCharaAnime( { animation =
 ] } );
 
 
+// ★★キャラ追加時確認★★
 // 吹雪のサイズ指定。登場キャラクター分定義する(未定義だと拡縮無し)
 local enemy_storm_scale = {
 	[Def_ChrNo_Hyd] = { posx=10, scalex=10000, scaley=10000 },
@@ -1201,6 +1209,9 @@ local enemy_storm_scale = {
 	[Def_ChrNo_Tsu] = { posx=0, scalex=10000, scaley=10000 },
 	[Def_ChrNo_Kag] = { posx=0, scalex=10000, scaley=10000 },
 	[Def_ChrNo_Kuo] = { posx=0, scalex=10000, scaley=10000 },
+	[Def_ChrNo_Udu] = { posx=0, scalex=10000, scaley=10000 },
+	[Def_ChrNo_Ogr] = { posx=0, scalex=10500, scaley=10500 },
+	[Def_ChrNo_Izu] = { posx=0, scalex=10000, scaley=10000 },
 }
 
 t.Mv_Throw_F_Hit <- 
@@ -1464,6 +1475,8 @@ t.Mv_Atk_Std4C <-
 	function Init_After()
 	{
 		BMvTbl.SetLP(0,0); // 氷でロック中にあてると1
+		
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=20, time=255, flag=_ClearFlag_ChangeMv } ); // 4C_Cが必ず繋がる、4C_Cがバウンド消費技なので許容
 	}
 	function FrameUpdate_After()
 	{
@@ -1517,9 +1530,12 @@ t.Mv_Atk_4C_4C <-
 	function Init_After() // 
 	{
 		Battle_Std.InitCharaVector() //慣性を残したベクトル初期化
-		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel );
 		
 		// BMvTbl.SetLP(0,0); // 派生前の4Cを氷でロック中にあてると1
+	}
+	function Start_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel ); // ツールでEX可でも空振りEX不可
 	}
 	function FrameUpdate_After()
 	{
@@ -1867,6 +1883,7 @@ t.Mv_FireBall_236B <-
 				{
 					// 爆破用のパターンに飛ぶ
 					BMvTbl.SetPattern( "236B_Bakuha" );
+					Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ExtendAction );
 					BMvTbl.SetLP(0,2); // 爆破した
 				}
 				else
@@ -1944,6 +1961,11 @@ t.Mv_FireBall_236B_Blocked <-
 		else if( BMvTbl.GetLP(0)==1 ) // 弾が飛んでいる
 		{
 			BMvTbl.JumpFrameID(1000); // 羽が消えた状態で自然に消える
+			BMvTbl.SetLP(0,3); // 消滅
+		}
+		else if( BMvTbl.GetLP(0)==2 ) // 弾が爆破に進んでいる
+		{
+			BMvTbl.JumpFrameID(900); // 判定のないFRAまで進める
 			BMvTbl.SetLP(0,3); // 消滅
 		}
 	}
@@ -2041,6 +2063,8 @@ local maketmpl_SkillIcePillar = function( param={} )
 	ret_tmpl.Init_After <- function() : (mvparam)
 	{
 		BMvTbl.SetLP(0,0); // 投げた杖をキャッチしたか（子のオブジェクトから書き換える）　0：何もしてない　1：杖がフェードし始めた　2：キャッチ準備中 3:キャッチした　4:杖消えた
+
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
 	}
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
@@ -2294,6 +2318,7 @@ local maketmpl_IcePillar = function( param={} ) : (Freeze)
 		hitstop = 16, // ヒットストップ時間
 		ice_continuation = 0, // 氷棺継続フラグ
 		isEX = 0,
+		seach_enemy = 0, // やられ中は相手X位置完全サーチ
 	}
 	
 	switch( param.type )
@@ -2308,6 +2333,7 @@ local maketmpl_IcePillar = function( param={} ) : (Freeze)
 		mvparam.add_guard = 21;
 		mvparam.ice_continuation = 1;
 		mvparam.isEX = 1;
+		mvparam.seach_enemy = 1;
 		break;
 	}
 	
@@ -2488,6 +2514,18 @@ local maketmpl_IcePillar = function( param={} ) : (Freeze)
 		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
+		case 10:
+			if( mvparam.seach_enemy )
+			{
+				if( Battle_Std.CheckEnemyisDamage() )
+				{
+					_dpn("やられ中は相手X完全サーチ");
+					// 相手の位置をサーチする
+					local epos = Battle_Std.GetEnemyPosition();
+					BMvTbl.SetPosition({x=epos.x});
+				}
+			}
+			break;
 		case 500: // 氷柱消える
 			ToVanish(); //LP1!=2ならLP1=2にして弾制限を解除して重なりの重みも初期化
 			break;
@@ -3223,7 +3261,7 @@ local maketmpl_ObjSnowBlossom = function( param={} )
 	// 目標座標を変える
 	local mvparam =
 	{
-		beam_atk = "Mv_Obj_Beam_Atk",
+		beam_atk = "Mv_AtkObj_Beam_Atk",
 		shot_type = 0,
 	}
 	
@@ -3236,7 +3274,7 @@ local maketmpl_ObjSnowBlossom = function( param={} )
 	case "iB":
 		break;
 	case "EX":
-		mvparam.beam_atk = "Mv_Obj_Beam_AtkEX";
+		mvparam.beam_atk = "Mv_AtkObj_Beam_AtkEX";
 		mvparam.shot_type = 1; //乱射タイプ
 		break;
 	}
@@ -3432,6 +3470,7 @@ local maketmpl_SnowBlossomBeam = function( param={} ) : (Freeze)
 	{
 		Battle_Std.MoveCode.AddFlag( def_MC_Sousai ); // 相殺される
 		Battle_Std.MoveCode.AddFlag( def_MC_FireBall ); // 飛び道具フラグ
+		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
 		
 		// 親を見てフラグを引き継ぐ
 		local oya = BMvCore.GetParentCharaData();
@@ -3465,6 +3504,11 @@ local maketmpl_SnowBlossomBeam = function( param={} ) : (Freeze)
 	}
 	ret_tmpl.HitInterrupt_After <- function() : (Freeze, mvparam)
 	{
+		if( Battle_Std.CheckDamageTiming() )
+		{
+			BMvTbl.AddComboRate(); // コンボレート加算
+		}
+		
 		Freeze.Set();
 		local freeze_flag = Battle_Std.MoveCode.CheckFlag( def_MC_CharaFlag2 ); // 凍結状態を発生させたMvかどうか
 		local ice_flag = Battle_Std.MoveCode.CheckFlag( def_MC_CharaFlag1 ); // 氷棺やられを発生させたMvかどうか
@@ -3492,15 +3536,15 @@ local maketmpl_SnowBlossomBeam = function( param={} ) : (Freeze)
 	
 	return ret_tmpl;
 }
-t.Mv_Obj_Beam_Atk <- maketmpl_SnowBlossomBeam({ type="Normal"});
-t.Mv_Obj_Beam_AtkEX <- maketmpl_SnowBlossomBeam({ type="EX"});
+t.Mv_AtkObj_Beam_Atk <- maketmpl_SnowBlossomBeam({ type="Normal"});
+t.Mv_AtkObj_Beam_AtkEX <- maketmpl_SnowBlossomBeam({ type="EX"});
 
 
 //-----------------------------------------------------------------------------
 // J41236攻
 //-----------------------------------------------------------------------------
 
-local maketmpl_SkillAirIceShower = function( param={} )
+local maketmpl_SkillAirIceShowerMng = function( param={} )
 {
 	local ret_tmpl = {};
 	
@@ -3529,16 +3573,23 @@ local maketmpl_SkillAirIceShower = function( param={} )
 	
 	ret_tmpl.Init_After <- function() : (mvparam)
 	{
-
+		// MV変更やPAT変更では消えない(氷結管理のため)
+		// 親に追従しないと1.21以前と発生位置がズレる
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_ParentMove|_ObjFlags_NoGround|_ObjFlags_EraseParentDamage } );
+		
+		// 1.21と揃えるためにEX必殺技属性なども一応引き継ぐ
+		Battle_Std.PassPlayerToFireBallMvCode();// 親から引き継ぐコード
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
+		// 1.21以前の性能に揃えるため、親のMV変更時は飛び道具を生成しない
+		// 現実的に発生しない状況だとは思われる
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100:
 		case 110:
-			if( mvparam.balls )
+			if( mvparam.balls && BMvTbl.CheckMvUniqueID( { datatype=_DataType_Player } ) )
 			{
 				// 相手の位置をサーチする
 				local muki = BMvTbl.GetMuki();
@@ -3547,7 +3598,7 @@ local maketmpl_SkillAirIceShower = function( param={} )
 				local tpos = (epos.x-pos.x)/128*muki;
 				if( tpos < 0 ) tpos = 0;// 手前すぎるサーチに制限をかける
 				
-				_dpn("tpos="+tpos);
+				// _dpn("tpos="+tpos);
 				
 				for( local i=0; i<mvparam.balls.len(); i++ )
 				{
@@ -3576,6 +3627,48 @@ local maketmpl_SkillAirIceShower = function( param={} )
 	
 	return ret_tmpl;
 }
+
+t.Mv_Obj_MngJ41236EX <- maketmpl_SkillAirIceShowerMng( { type="AirEX" } ); // 雨マネージャ
+
+local maketmpl_SkillAirIceShower = function( param={} )
+{
+	local ret_tmpl = {};
+	
+	local mvparam =
+	{
+		ballsmng = 0,
+	}
+	
+	switch( param.type )
+	{
+	case "EX":
+		break;	
+	case "AirEX":
+		mvparam.ballsmng = { mvname= "Mv_Obj_MngJ41236EX" };
+		break;
+	}
+	
+	ret_tmpl.Init_After <- function() : (mvparam)
+	{
+
+	}
+	
+	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
+	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 100:
+			if( mvparam.ballsmng )
+			{
+				BMvEff.CreateObject( mvparam.ballsmng );
+			}
+			break;
+		}
+	}
+	
+	return ret_tmpl;
+}
+
 
 t.Mv_Skill_J41236EX <- maketmpl_SkillAirIceShower( { type="AirEX" } ); // 雨
 
@@ -3686,6 +3779,15 @@ t.Mv_Skill_41236SP <-
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
+		case 50:// 攻撃出現手前
+			// 相手がやられ中ならすぐ攻撃出現に飛ばす
+			if( Battle_Std.CheckEnemyisDamage() )
+			{
+				BMvTbl.JumpFrameID(60);
+			}
+			break;
+		case 60:// 攻撃出現
+			break;
 		case 100: // 吹雪開始
 			// ロック判定は空振りしたあと
 			// 吹雪オブジェクト生成
@@ -4015,6 +4117,21 @@ local maketmpl_IceRock = function( param={} ) : (homingEnemy)
 		if( setpos.y >= 0 ) setpos.y = -128; //　地面に埋まらないように1ドット分浮かす
 		BMvTbl.SetPosition({ x=setpos.x, y=setpos.y });
 	}
+	ret_tmpl.FrameUpdate_After <- function()
+	{
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.isLanding )
+		{
+			BMvTbl.SetLP(0,1); // ホーミング終了したかどうか　0：ホーミングしていい　1：ホーミングしない
+		}
+
+		switch( Battle_Std.GetUpdateFrameID( mvs ) )
+		{
+		case 512: // 着地orヒット分岐先
+			BMvTbl.SetLP(0,1); // ホーミング終了したかどうか　0：ホーミングしていい　1：ホーミングしない
+			break;
+		}
+	}
 	ret_tmpl.Update_After <- function() : (mvparam,homingEnemy)
 	{
 		if( BMvTbl.GetLP(0)==0 ) // ホーミングする
@@ -4223,7 +4340,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 		BMvEff.SetCamera_Quake( { time=0, type=2, clear=0, } ); //揺らし
 		
 		BMvTbl.SetPosition( { x=-250*128*BMvTbl.GetMuki() } );
-		BMvEff.ThrowParam( { x=400, y=-300, } );
+		BMvEff.ThrowParam( { x=280, y=-300, } );
 		BMvEff.ThrowRelease( { type="追撃ダウン", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
 		
 		
@@ -4253,6 +4370,7 @@ t.Mv_Obj_Eff_IWE_Storm <-
 t.Mv_Obj_Eff_IWE_StubHit <- {};
 
 
+// ★★キャラ追加時確認★★
 // 氷の十字架のサイズ指定。登場キャラクター分定義する(未定義だと拡縮無し)
 local enemy_ice_scale = {
 	[Def_ChrNo_Hyd] = { scalex=10000, scaley=10000 },
@@ -4276,6 +4394,10 @@ local enemy_ice_scale = {
 	[Def_ChrNo_Wag] = { scalex=10000, scaley=10000 },
 	[Def_ChrNo_Mik] = { scalex=12000, scaley=12000 },
 	[Def_ChrNo_Lnd] = { scalex=11000, scaley=11000 },
+	[Def_ChrNo_Kuo] = { scalex=10000, scaley=10000 },
+	[Def_ChrNo_Udu] = { scalex=10000, scaley=10000 },
+	[Def_ChrNo_Ogr] = { scalex=12000, scaley=12000 },
+	[Def_ChrNo_Izu] = { scalex=10000, scaley=10000 },
 }
 
 // 十字架が出る前の煙
@@ -4446,7 +4568,7 @@ t.Mv_Obj_Eff_IWE_Finish <-
 		local enemy = BMvCore.GetEnemyCharaData();
 		if( enemy.push() )
 		{
-			BMvTbl.SetHan6LayerMask( {  val = (1<<0)|(1<<1)|(1<<2) } ); // キャラを非表示にする
+			BMvTbl.SetHan6LayerMask( {  val = (1<<0)|(1<<1)|(1<<2)|(1<<3)|(1<<4) } ); // キャラを非表示にする
 			enemy.pop();
 		}
 	}

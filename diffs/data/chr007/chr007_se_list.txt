@@ -15,15 +15,15 @@ SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
 SeList_Table.Status.resize(910); // てきとう
 local st = SeList_Table.Status; // 登録しやすいように
 
-st[0] = { volumetype=0, path=2, file="SE_MagicExist", type=0, category=2, }; 
-st[1] = { volumetype=0, path=2, file="SE_LightBall", type=0, category=2, }; 
-st[2] = { volumetype=0, path=2, file="SE_LaserBeam", type=0, category=2, }; 
-st[3] = { volumetype=0, path=2, file="SE_AppearBit", type=0, category=2, }; 
-st[4] = { volumetype=0, path=2, file="SE_VanishVit", type=0, category=2, }; 
-st[5] = { volumetype=0, path=2, file="SE_ScratchDash", type=0, category=2, }; 
-st[6] = { volumetype=0, path=2, file="SE_SpecialLaserBeam", type=0, category=2, }; 
+st[0] = { volumetype=0, path=2, file="SE_MagicExist", type=0, category=-1, }; 
+st[1] = { volumetype=0, path=2, file="SE_LightBall", type=0, category=-1, }; 
+st[2] = { volumetype=0, path=2, file="SE_LaserBeam", type=0, category=-1, }; 
+st[3] = { volumetype=0, path=2, file="SE_AppearBit", type=0, category=-1, }; 
+st[4] = { volumetype=0, path=2, file="SE_VanishVit", type=0, category=-1, }; 
+st[5] = { volumetype=0, path=2, file="SE_ScratchDash", type=0, category=-1, }; 
+st[6] = { volumetype=0, path=2, file="SE_SpecialLaserBeam", type=0, category=-1, }; 
 
-st[7] = { volumetype=0, path=2, file="SE_AppearBit", type=0, category=2, }; //B+Cの発射音
+st[7] = { volumetype=0, path=2, file="SE_AppearBit", type=0, category=-1, }; //B+Cの発射音
 st[8] = { volumetype=0, path=2, file="SE_SwingLightSword", type=1, category=-1, }; //ブレード飛ばし系の通常攻撃(立ちBやしゃがみBやC)のブレードSE
 
 st[9] = { volumetype=0, path=2, file="SE_BombEnergy", type=1, category=-1, }; //飛び道具ヒットＳＥ
@@ -33,38 +33,38 @@ st[11] = { volumetype=0, path=2, file="SE_MagicExist", type=1, category=-1, }; /
 st[12] = { volumetype=0, path=2, file="SE_LaserBeam", type=1, category=-1, }; //IWX 羽ささる音
 st[14] = { volumetype=0, path=2, file="SE_EarthQuake", type=1, category=-1, }; //IWX最後前のゆれ
 st[15] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWX最後の爆発
-st[16] = { volumetype=0, path=2, file="SE_LaserBeam", type=0, category=2, }; //IWXとびだすところ
+st[16] = { volumetype=0, path=2, file="SE_LaserBeam", type=0, category=-1, }; //IWXとびだすところ
 
 
 //登場
-st[100] = { volumetype=1, path=1, file="vat_010_b_2000", type=0, category=1, }; //「能力の調査確認を開始」
-st[101] = { volumetype=1, path=1, file="vat_010_b_2001", type=0, category=1, }; //「オブリテレート タスクへ移行」
-st[102] = { volumetype=1, path=1, file="vat_010_b_2002", type=0, category=1, }; //「掃討を開始します」
+st[100] = { volumetype=1, path=1, file="vat_010_b_2000", type=0, category=1, userparam=144 }; //「能力の調査確認を開始」
+st[101] = { volumetype=1, path=1, file="vat_010_b_2001", type=0, category=1, userparam=121 }; //「オブリテレート タスクへ移行」
+st[102] = { volumetype=1, path=1, file="vat_010_b_2002", type=0, category=1, userparam=101 }; //「掃討を開始します」
 
 //登場 特殊
 //対ハイド
-st[105] = { volumetype=1, path=1, file="vat_010_b_2015", type=0, category=1, }; //「貴方を倒し先へ進む、これは私自身の意思……」（ハイド「一番やりにくい相手だな、こりゃ」）
+st[105] = { volumetype=1, path=1, file="vat_010_b_2015", type=0, category=1, userparam=272 }; //「貴方を倒し先へ進む、これは私自身の意思……」（ハイド「一番やりにくい相手だな、こりゃ」）
 
 //対クオン
-st[107] = { volumetype=1, path=1, file="vat_010_b_2018", type=0, category=1, }; //（クオン「彼の時は世話になったな、天の御使(みつか)い」）「廻(めぐ)る縁(えにし)。今は相対する者」
+st[107] = { volumetype=1, path=1, file="vat_010_b_2018", type=0, category=1, userparam=190 }; //（クオン「彼の時は世話になったな、天の御使(みつか)い」）「廻(めぐ)る縁(えにし)。今は相対する者」
 
 //ラウンド勝利
-st[114] = { volumetype=1, path=1, file="vat_010_b_2100", type=0, category=1, }; //「コンプリート アン アサインド ア タスク…。余裕余裕…」
-st[116] = { volumetype=1, path=1, file="vat_010_b_2101_b", type=0, category=1, }; //「対象の評価を下方修正」
+st[114] = { volumetype=1, path=1, file="vat_010_b_2100", type=0, category=1, userparam=257 }; //「コンプリート アン アサインド ア タスク…。余裕余裕…」
+st[116] = { volumetype=1, path=1, file="vat_010_b_2101_b", type=0, category=1, userparam=137 }; //「対象の評価を下方修正」
 
 //決着勝利 汎用
-st[118] = { volumetype=1, path=1, file="vat_010_b_2111", type=0, category=1, }; //「ふわあぁ～…　ねむねむ」
-st[119] = { volumetype=1, path=1, file="vat_010_b_2112", type=0, category=1, }; //「タスクの完遂を確認。通常モードへ移行します」
+st[118] = { volumetype=1, path=1, file="vat_010_b_2111", type=0, category=1, userparam=185 }; //「ふわあぁ～…　ねむねむ」
+st[119] = { volumetype=1, path=1, file="vat_010_b_2112", type=0, category=1, userparam=261 }; //「タスクの完遂を確認。通常モードへ移行します」
 
 //決着勝利 辛勝
-st[121] = { volumetype=1, path=1, file="vat_010_b_2120", type=0, category=1, }; //「掃討を完了しました。損傷軽微です」
+st[121] = { volumetype=1, path=1, file="vat_010_b_2120", type=0, category=1, userparam=226 }; //「掃討を完了しました。損傷軽微です」
 
 //決着勝利 楽勝
-st[123] = { volumetype=1, path=1, file="vat_010_b_2123", type=0, category=1, }; //「ふぁぁぁ…あふ（あくびです）」
+st[123] = { volumetype=1, path=1, file="vat_010_b_2123", type=0, category=1, userparam=185 }; //「ふぁぁぁ…あふ（あくびです）」
 
 //決着勝利 掛け合い
 //対ハイド
-st[127] = { volumetype=1, path=1, file="vat_010_b_2127", type=0, category=1, }; //「戦力測定終了。やはり貴方をこの先へと向かわせるのは危険」
+st[127] = { volumetype=1, path=1, file="vat_010_b_2127", type=0, category=1, userparam=338 }; //「戦力測定終了。やはり貴方をこの先へと向かわせるのは危険」
 
 //タイムアップ判定負け
 st[130] = { volumetype=1, path=1, file="vat_010_b_2200", type=0, category=1, }; //「タイムアウト…」

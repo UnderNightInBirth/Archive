@@ -348,6 +348,7 @@ local t =
 		function CmdBeforeFunc() : (HoldCheck)
 		{
 			if( !Battle_Std.CheckBackStageDistance( 64 ) ) return 0;
+			return 1;
 		},
 		CmdCheck = { SkillType = "AddCommand", MvCheck={ Only = ["Mv_Dash_B"], SkillFail="Mv_Skill_ChangeCorner"}, ParamFlagCheck = { Only = { [2]=4 } } },
 		UpdateTable = { name = "Mv_Skill_ChangeCorner", }		
@@ -457,6 +458,7 @@ local t =
 		{
 			if( BMvTbl.AddAirCount( 3, 0 ) ) return 0;
 			
+			/*
 			// ワープ系と同じ制限をかける
 			if( BMvEff.GRD_GetJudgeResult() <= 0 )
 			{
@@ -468,6 +470,7 @@ local t =
 				// ヴォーパル
 				if( BMvTbl.AddAirCount( 1, 0 ) ) return 0;
 			}
+			*/
 			
 			return 1;
 		}
@@ -528,7 +531,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}	
 	},
 	

@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 
@@ -81,6 +80,7 @@ local maketmpl_SkillAvoidAtk = function( param={} )
 		ball_mv=0,
 		ball_pat=0,
 		muteki_ok=0,//無敵引き継いでいいか
+		muki_auto=0, // 発動後1F後も振り向きをするか
 	}
 	
 	switch( param.type )
@@ -89,6 +89,7 @@ local maketmpl_SkillAvoidAtk = function( param={} )
 		mvparam.use_pat="B+C_Add5";
 		mvparam.use_pat_v="V_B+C_Add5";
 		mvparam.muteki_ok=1;
+		mvparam.muki_auto = 1;
 		break;
 	case "6":
 		mvparam.use_pat="B+C_Add6";
@@ -96,6 +97,7 @@ local maketmpl_SkillAvoidAtk = function( param={} )
 		mvparam.ball_mv="Mv_FireBall_BandCAdd6Atk";
 		mvparam.ball_pat="FB_BandCAdd6Atk";
 		mvparam.muteki_ok=1;
+		mvparam.muki_auto = 1;
 		break;
 	}
 	
@@ -131,12 +133,35 @@ local maketmpl_SkillAvoidAtk = function( param={} )
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
+		if( mvparam.muki_auto )
+		{
+			// 移動ベクトルが入るフレームで振り向くと逆向きに移動するのでこの処理中はベクトルいれないようにしたい
+			local mvs = BMvTbl.GetMvStatus();
+			if( mvs.MvCount <= 1 ) // 1F目と2F目に振り向き処理
+			{
+				// _dpn("振り向き:"+mvs.MvCount);
+				BMvTbl.SetMuki(_Direction_Auto);
+			}
+		}
+		
+		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100: // 射撃
 			if( mvparam.ball_mv )
 			{
-				Battle_Std.CreateFireBall({ x=0, y=-290, mv=mvparam.ball_mv, pat=mvparam.ball_pat });
+				local isDodgeSuccessful = ( BMvTbl.GetLP(0)==1 )? 1 : 0; // 避け成功していた
+				local ball = Battle_Std.CreateFireBall({ x=0, y=-290, mv=mvparam.ball_mv, pat=mvparam.ball_pat });
+				if( ball.push() )
+				{
+					// 避け成功時は一方的に弾相殺するレーザーを撃つ
+					if( isDodgeSuccessful )
+					{
+						_dpn("避け成功時");
+						Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する＆自分のヒット数減らない
+					}
+					ball.pop();
+				}
 			}
 			break;
 		case 200: // 撃ち終わり
@@ -159,7 +184,7 @@ local maketmpl_SkillAvoidAtk = function( param={} )
 		//無敵を消す
 		BMvEff.SetPlayerTimer( { muteki_dage=0, muteki_nage=0 } );
 		
-		Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+		Battle_Std.NoCansel_NoAttackHit( { check_mvdamage=1 } ); //何かでキャンセルしなかった場合追撃不能にする
 	}
 	
 	return ret_tmpl;
@@ -168,7 +193,13 @@ local maketmpl_SkillAvoidAtk = function( param={} )
 t.Mv_Atk_StdBandC_AddAtk6 <- maketmpl_SkillAvoidAtk({ type="6" });
 t.Mv_Atk_StdBandC_AddAtk5 <- maketmpl_SkillAvoidAtk({ type="5" });
 
-t.Mv_FireBall_BandCAdd6Atk <- {};
+t.Mv_FireBall_BandCAdd6Atk <- {
+	function Init_After()
+	{
+		// 通常時から相殺すると強すぎる
+		// Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する＆自分のヒット数減らない
+	}
+};
 t.Mv_FireBall_BandCAdd6Atk_Sousai <-
 {
 	function Init_After()
@@ -299,7 +330,7 @@ t.Mv_Atk_CroA <-
 {
 	function Init_After()
 	{
-		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
+		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs|Def_HitCheckFlag_LightLegs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵と小足無敵にスカる
 	}
 }
 
@@ -679,7 +710,8 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		ball_angle_r = 2900, // 左手銃弾の射出角度
 		ball_speed = 0,
 		ball_pat = "FB_214",
-		ball_mv = "Mv_FireBall_214A",
+		ball_mv_1 = "Mv_FireBall_214A1",
+		ball_mv_2 = "Mv_FireBall_214A2",
 		ball_frame_l = 30, // 地面にバウンドしてから爆発までのフレーム
 		ball_frame_r = 30, // 地面にバウンドしてから爆発までのフレーム
 		// ball_reverse = 0, //弾の向きを反転するかどうか
@@ -700,7 +732,8 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		mvparam.ball_target_l = { x=600*128, y=-250*128 }; // 後ろ受け身にギリギリ届く（起き上がり後に下がられると当たらない）
 		mvparam.ball_target_r = { x=250*128, y=-300*128 }; // その場受け身の位置に着弾する
 		mvparam.ball_speed = 3000;
-		mvparam.ball_mv = "Mv_FireBall_214A";
+		mvparam.ball_mv_1 = "Mv_FireBall_214A1";
+		mvparam.ball_mv_2 = "Mv_FireBall_214A2";
 		mvparam.ball_frame_l = 44+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
 		mvparam.ball_frame_r = 56+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
 		break;
@@ -712,7 +745,8 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		mvparam.ball_angle_l = -4200;
 		mvparam.ball_angle_r = -2900;
 		mvparam.ball_speed = 3000;
-		mvparam.ball_mv = "Mv_FireBall_214B";
+		mvparam.ball_mv_1 = "Mv_FireBall_214B1";
+		mvparam.ball_mv_2 = "Mv_FireBall_214B2";
 		// mvparam.ball_reverse = 1;
 		mvparam.ball_frame_l = 36+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
 		mvparam.ball_frame_r = 44+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
@@ -722,7 +756,8 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		mvparam.ball_target_l = { x=150*128, y=-300*128 }; // 相手の奥で爆破
 		mvparam.ball_target_r = { x=-200*128, y=-350*128 }; // 相手の手前で爆破
 		mvparam.ball_speed = 3000;
-		mvparam.ball_mv = "Mv_FireBall_3CAdd";
+		mvparam.ball_mv_1 = "Mv_FireBall_3CAdd1";
+		mvparam.ball_mv_2 = "Mv_FireBall_3CAdd2";
 		mvparam.addskill = 1;
 		mvparam.noFurimuki = 1;
 		mvparam.ball_frame_l = 36+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
@@ -733,7 +768,8 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		mvparam.ball_target_r = { x=200*128, y=-350*128 }; // アサルトJAが通ると拾える
 		mvparam.ball_speed = 12000;
 		mvparam.ball_pat = "FB_214EX";
-		mvparam.ball_mv = "Mv_FireBall_214EX";
+		mvparam.ball_mv_1 = "Mv_FireBall_214EX1";
+		mvparam.ball_mv_2 = "Mv_FireBall_214EX2";
 		mvparam.karaburi_cs = 1;
 		mvparam.ball_EX = 1;
 		mvparam.ball_frame_l = 25-9; // EX版は判定ツール上のDelay9F増加を帳消し
@@ -746,7 +782,8 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		mvparam.ball_target_l = { x=600*128, y=-250*128 }; // J236Bの着地をフォロー
 		mvparam.ball_target_r = { x=250*128, y=-300*128 }; // J236Aからのバックジャンプをフォロー
 		mvparam.ball_speed = 3000;
-		mvparam.ball_mv = "Mv_FireBall_J214A";
+		mvparam.ball_mv_1 = "Mv_FireBall_J214A1";
+		mvparam.ball_mv_2 = "Mv_FireBall_J214A2";
 		mvparam.ball_frame_l = 40+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
 		mvparam.ball_frame_r = 56+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
 		break;
@@ -758,7 +795,8 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		mvparam.ball_angle_l = -4200;
 		mvparam.ball_angle_r = -2900;
 		mvparam.ball_speed = 3000;
-		mvparam.ball_mv = "Mv_FireBall_J214B";
+		mvparam.ball_mv_1 = "Mv_FireBall_J214B1";
+		mvparam.ball_mv_2 = "Mv_FireBall_J214B2";
 		// mvparam.ball_reverse = 1;
 		mvparam.ball_frame_l = 36+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
 		mvparam.ball_frame_r = 44+7; // 判定ツール上のDelay9F増加と合わせて16F遅く
@@ -768,7 +806,8 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		mvparam.ball_target_r = { x=200*128, y=-350*128 }; // J236からのジャンプをフォロー
 		mvparam.ball_speed = 12000;
 		mvparam.ball_pat = "FB_214EX";
-		mvparam.ball_mv = "Mv_FireBall_J214EX";
+		mvparam.ball_mv_1 = "Mv_FireBall_J214EX1";
+		mvparam.ball_mv_2 = "Mv_FireBall_J214EX2";
 		mvparam.karaburi_cs = 1;
 		mvparam.ball_EX = 1;
 		mvparam.ball_frame_l = 25-9; // EX版は判定ツール上のDelay9F増加を帳消し
@@ -799,7 +838,7 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 		
 		// 必殺技から通常技と必殺技への派生を可能にする
 		Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoAtk|def_MC_EnableCansel_SkilltoSkill );
-		
+
 		if( mvparam.addskill )
 		{
 			local nowvec = BMvTbl.GetVector({ flags=_Vector_Keep });
@@ -836,13 +875,13 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 			// 左
 			ShootFireBall({ target_x=mvparam.ball_target_l.x, target_y=mvparam.ball_target_l.y,
 			ball_pos_x=mvparam.ball_pos_l.x, ball_pos_y=mvparam.ball_pos_l.y,
-			ball_mv=mvparam.ball_mv, ball_pat=mvparam.ball_pat,
+			ball_mv=mvparam.ball_mv_1, ball_pat=mvparam.ball_pat,
 			ball_slot=mvparam.ball_slot,
 			ball_angle=mvparam.ball_angle_l, ball_vec=mvparam.vec_l, ball_frame=mvparam.ball_frame_l, eff_pat=mvparam.eff_pat_l });
 			// 右
 			ShootFireBall({ target_x=mvparam.ball_target_r.x, target_y=mvparam.ball_target_r.y,
 			ball_pos_x=mvparam.ball_pos_r.x, ball_pos_y=mvparam.ball_pos_r.y,
-			ball_mv=mvparam.ball_mv, ball_pat=mvparam.ball_pat,
+			ball_mv=mvparam.ball_mv_2, ball_pat=mvparam.ball_pat,
 			ball_slot=mvparam.ball_slot,
 			ball_angle=mvparam.ball_angle_r, ball_vec=mvparam.vec_r, ball_frame=mvparam.ball_frame_r, eff_pat=mvparam.eff_pat_r });
 			
@@ -852,13 +891,13 @@ local maketmpl_SkillFlashShot = function( param={} ) : (ShootFireBall)
 			// 左
 			ShootFireBall({ target_x=mvparam.extend.ball_target_l.x, target_y=mvparam.extend.ball_target_l.y,
 			ball_pos_x=mvparam.ball_pos_l.x, ball_pos_y=mvparam.ball_pos_l.y,
-			ball_mv=mvparam.ball_mv, ball_pat=mvparam.ball_pat,
+			ball_mv=mvparam.ball_mv_1, ball_pat=mvparam.ball_pat,
 			ball_slot=mvparam.ball_slot,
 			ball_angle=mvparam.ball_angle_l, ball_vec=mvparam.vec_l, ball_frame=mvparam.ball_frame_l, eff_pat=mvparam.eff_pat_l });
 			// 右
 			ShootFireBall({ target_x=mvparam.extend.ball_target_r.x, target_y=mvparam.extend.ball_target_r.y,
 			ball_pos_x=mvparam.ball_pos_r.x, ball_pos_y=mvparam.ball_pos_r.y,
-			ball_mv=mvparam.ball_mv, ball_pat=mvparam.ball_pat,
+			ball_mv=mvparam.ball_mv_2, ball_pat=mvparam.ball_pat,
 			ball_slot=mvparam.ball_slot,
 			ball_angle=mvparam.ball_angle_r, ball_vec=mvparam.vec_r, ball_frame=mvparam.ball_frame_r, eff_pat=mvparam.eff_pat_r });
 			
@@ -991,8 +1030,6 @@ local maketmpl_flashbomb = function( param={} )
 		// BMvTbl.SetLP(4,0); // Y
 		// BMvTbl.SetLP(5,0); // 着地から爆発までのフレーム
 		
-		// LP6以降は使用不可
-		
 		local eff = BMvEff.CreateObject({ x=0, y=0, mvname="Mv_Obj_Eff_214Ball" }); // 照明弾見た目
 		if( eff.push() )
 		{
@@ -1002,10 +1039,14 @@ local maketmpl_flashbomb = function( param={} )
 		
 		// 各種補正は最初の１ヒットのみ
 		BMvTbl.SetNoHoseiFlag( {  val=1, time=254, flag=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } );
+		
+		if( Def_Sys_CheckObjectEnemyGuardMuki ) Battle_Std.InvalidateObjectMixupInit_SetLP(6); // オブジェクト表裏を無効化
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
+		if( Def_Sys_CheckObjectEnemyGuardMuki ) Battle_Std.InvalidateObjectMixupUpdate_SetLP(6); // オブジェクト表裏を無効化
+		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100:
@@ -1088,6 +1129,13 @@ local maketmpl_flashbomb = function( param={} )
 			}
 		}
 	}
+	ret_tmpl.HitInterrupt_After <- function() : (mvparam)
+	{
+		if( Battle_Std.CheckDamageTiming() )
+		{
+			BMvTbl.AddComboRate(); // コンボレート加算
+		}
+	}
 	ret_tmpl.Sousai <- function()
 	{
 		BMvTbl.JumpFrameID(900);
@@ -1100,13 +1148,21 @@ local maketmpl_flashbomb = function( param={} )
 	
 	return ret_tmpl;
 }
-t.Mv_FireBall_214A <- maketmpl_flashbomb({ type="A" });
-t.Mv_FireBall_214B <- maketmpl_flashbomb({ type="B" });
-t.Mv_FireBall_214EX <- maketmpl_flashbomb({ type="EX" });
-t.Mv_FireBall_3CAdd <- maketmpl_flashbomb({ type="Add" });
-t.Mv_FireBall_J214A <- maketmpl_flashbomb({ type="AirA" });
-t.Mv_FireBall_J214B <- maketmpl_flashbomb({ type="AirB" });
-t.Mv_FireBall_J214EX <- maketmpl_flashbomb({ type="AirEX" });
+t.Mv_FireBall_214A1 <- maketmpl_flashbomb({ type="A" });
+t.Mv_FireBall_214B1 <- maketmpl_flashbomb({ type="B" });
+t.Mv_FireBall_214EX1 <- maketmpl_flashbomb({ type="EX" });
+t.Mv_FireBall_3CAdd1 <- maketmpl_flashbomb({ type="Add" });
+t.Mv_FireBall_J214A1 <- maketmpl_flashbomb({ type="AirA" });
+t.Mv_FireBall_J214B1 <- maketmpl_flashbomb({ type="AirB" });
+t.Mv_FireBall_J214EX1 <- maketmpl_flashbomb({ type="AirEX" });
+
+t.Mv_FireBall_214A2 <- maketmpl_flashbomb({ type="A" });
+t.Mv_FireBall_214B2 <- maketmpl_flashbomb({ type="B" });
+t.Mv_FireBall_214EX2 <- maketmpl_flashbomb({ type="EX" });
+t.Mv_FireBall_3CAdd2 <- maketmpl_flashbomb({ type="Add" });
+t.Mv_FireBall_J214A2 <- maketmpl_flashbomb({ type="AirA" });
+t.Mv_FireBall_J214B2 <- maketmpl_flashbomb({ type="AirB" });
+t.Mv_FireBall_J214EX2 <- maketmpl_flashbomb({ type="AirEX" });
 
 // 飛んでいく弾の見た目
 t.Mv_Obj_Eff_214Ball <-
@@ -1187,6 +1243,7 @@ local maketmpl_SkillMoveShotAddSt = function( param={} )
 		{
 			BMvTbl.SetFinalize(256);
 		}
+		_dpn( format("[%3d_%3d] ID:%d",mvs.DataPattern, mvs.DataFrame, mvs.FrameID ) );
 	}
 	ret_tmpl.LastUpdate_After <- function() : (mvparam)
 	{
@@ -1225,6 +1282,7 @@ local maketmpl_SkillMoveShotAdd = function( param={} )
 		setMuteki = 0, // でかかりにの無敵をつけるかどうか　無敵F
 		cancel_ok = 0, // 必殺技へのキャンセル可能
 		hitflag = 0,
+		check_enemyland = 0, // 敵が着地しそうなら発生が早くなる
 	}
 	
 	switch( param.type )
@@ -1238,6 +1296,7 @@ local maketmpl_SkillMoveShotAdd = function( param={} )
 		mvparam.furimuki = 1;
 		mvparam.cancel_ok = 1;
 		mvparam.hitflag=_HitCheckFlag_Legs;
+		mvparam.check_enemyland = 1;
 		break;
 	// case "C"://C派生は214攻のmaketmplを使うのでここは入ってこない
 		// mvparam.crouch = 0;
@@ -1291,16 +1350,46 @@ local maketmpl_SkillMoveShotAdd = function( param={} )
 	{
 		//1回だけだと多分相手のノックバックとかの影響で座標がズレたりして
 		//予定してた振り向き方向と逆になってしまうケースが有るっぽいので1F目と2F目に振り向きを行う
+		local mvs = BMvTbl.GetMvStatus();
 		if( mvparam.furimuki )
 		{
-			local mvs = BMvTbl.GetMvStatus();
 			if( mvs.MvCount < 2 )
 			{
 				// _dp("\n ふりむき");
 				BMvTbl.SetMuki( _Direction_Auto ); // 振り向き
 			}
 		}
-	
+		
+		if( mvparam.check_enemyland )
+		{
+			if( mvs.Param2&1 )
+			{
+				if( Battle_Std.CheckEnemyisDamage() )
+				{
+					// 特殊判定に触れている近い敵で処理
+					// 特殊判定にする意味はないが、判定データをみたときに違和感に気が付きやすくするためこの処理にしている
+					local enemy = BMvEff.CheckHantei( { src=[ _Hantei_Etc, 0, 1 ], dst=[ _Hantei_Kurai, 0, -1 ], flags=_HC_EnemyPc } );
+					if( enemy.push() )
+					{
+						local epos = BMvTbl.GetPosition();
+						local evec = BMvTbl.GetVector( { flags=_Vector_Bound } );
+						enemy.pop();
+						
+						// こういう処理をすると1Pと2Pで結果が変わってしまう
+						// 強引だがプレイヤーサイドを見て調整
+						local next_posy = epos.y + (evec.y * 2) + (evec.addy *( (BMvTbl.GetPlayerSide()==0)? 2 : 0) ); // 相手側の処理なので2F後で測定
+						
+						_dpn("チェック中:"+epos.y/128+" next_posy:"+next_posy/128+" evec:"+evec.y+", "+evec.addy );
+						// if( epos.y < 0 && epos.y > -50*128 )
+						if( epos.y < 0 && epos.y > -50*128 && next_posy >= 0 )
+						{
+							_dpn("発生はやく");
+							BMvTbl.JumpFrameID(100); // 発生へ
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	ret_tmpl.Finalize <- function() : (mvparam)
@@ -1352,6 +1441,9 @@ t.Mv_Skill_3C_AddA <-
 		BMvTbl.SetVector({ x=nowvec.x, addx=nowvec.addx, flags=_Vector_Div }); // x方向の慣性だけちょっと減速しつつ再現
 		
 		BMvEff.SetExist( { level=_Exist_NoKasanariHantei, mode=_ExistMode_Add } ); //重なり判定無し
+		
+		// 修正が完璧ではないので一旦コメントアウト
+		// Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_StrictFurimukiCheckNextMv ); // 次の行動はInitの振り向きチェックを厳密にやる
 	}
 	function FrameUpdate_After()
 	{
@@ -1359,6 +1451,8 @@ t.Mv_Skill_3C_AddA <-
 		{
 		case 100:		
 			BMvEff.SetExist( { level=_Exist_NoKasanariHantei, mode=_ExistMode_Erase } ); //重なり判定消去戻し
+			// 修正が完璧ではないので一旦コメントアウト
+			// Battle_Std.MoveCodeEx.DelFlag( 5, def_MC5_StrictFurimukiCheckNextMv ); // 次の行動はInitの振り向きチェックを厳密にやるを消す
 			break;
 		}
 	}
@@ -1424,7 +1518,7 @@ local maketmpl_SkillShotCombination = function( param={} )
 	switch( param.type )
 	{
 	case "A":
-		mvparam.sousaiflg = ( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する
+		mvparam.sousaiflg = ( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する＆自分のヒット数減らない
 		break;
 	case "B":
 		mvparam.sousaiflg = (def_MC_Sousai|def_MC_FireBallRect); // 相殺される・飛び道具判定モーション
@@ -1493,6 +1587,7 @@ local maketmpl_EffectShotCombinationEX = function( param={} )
 	
 	local mvparam =
 	{
+		finishHitID = 0,
 	}
 	
 	switch( param.type )
@@ -1502,6 +1597,7 @@ local maketmpl_EffectShotCombinationEX = function( param={} )
 	case "2":
 		break;
 	case "3":
+		mvparam.finishHitID = { check=100, jump=500 };
 		break;
 	}
 
@@ -1509,6 +1605,19 @@ local maketmpl_EffectShotCombinationEX = function( param={} )
 	
 	ret_tmpl.Init_After <- function() : (mvparam)
 	{
+		
+	}
+	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
+	{
+		if( mvparam.finishHitID && BMvTbl.GetMvStatus().FrameID==mvparam.finishHitID.check )
+		{
+			local hitcount = BMvTbl.CalcHitValue(0);
+			// _dpn("hitcount:"+hitcount);
+			if( hitcount == 1 )
+			{
+				BMvTbl.JumpFrameID(mvparam.finishHitID.jump);
+			}
+		}
 		
 	}
 	ret_tmpl.HitInterrupt_After <- function() : (mvparam)
@@ -1532,9 +1641,14 @@ local maketmpl_EffectShotCombinationEX = function( param={} )
 		
 	ret_tmpl.Sousai <- function()
 	{
-		BMvTbl.SetFinalize();
+		//AtkCountZeroを使うとヒット時の見た目があまりよくない
+		local hitcount = BMvTbl.CalcHitValue(0);
+		if( hitcount <= 0 )
+		{
+			BMvTbl.JumpFrameID(900);
+		}
 	}
-
+	
 	return ret_tmpl;
 }
 t.Mv_FireBall_236EX1 <- maketmpl_EffectShotCombinationEX({ type="1" });
@@ -1549,7 +1663,7 @@ local maketmpl_SkillShotCombinationAddSt = function( param={} )
 	local mvparam =
 	{
 		nextmv=0,
-		beam=1,
+		beam=0,
 	}
 	
 	switch( param.type )
@@ -1635,7 +1749,7 @@ local maketmpl_SkillShotCombinationAdd = function( param={} )
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
 		if( mvparam.beam )
 		{
-			Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する
+			Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する＆自分のヒット数減らない
 			// BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
 		}
 	}
@@ -1666,7 +1780,40 @@ t.Mv_Skill_236_Add_AddA <- maketmpl_SkillShotCombinationAdd({ type="Add_Add" });
 //-----------------------------------------------------------------------------
 // J236攻
 //-----------------------------------------------------------------------------
-local maketmpl_SkillAirDash = function( param={} )
+
+//画面端に相手がいたら隙間をつくる
+//端に向かって移動する相手に対応
+local hazienemy_shift = function( shift_x=1 )
+{
+	local ret = 0;
+	local enemy = BMvCore.GetNearEnemyCharaData(); // 敵情報を得る
+	if( enemy.push() )
+	{
+		local pos = BMvTbl.GetPosition(0);
+		//画面端にくっついているようなら
+		if( pos.x == def_POS_GamenHajiX || pos.x == -def_POS_GamenHajiX )
+		{
+			//1F後の移動距離を算出して加算する
+			local vec = BMvTbl.GetVector( { flags=_Vector_Normal });
+			
+			// local nextf_addxpos = (vec.x + vec.addx);
+			local nextf_addxpos = (vec.x + vec.addx);
+			_dpn("nextf_addxpos:"+nextf_addxpos);// 座標計算に使うときは向きに注意
+			if( nextf_addxpos > 0) nextf_addxpos = 0; // 前には加算しない 保険
+			
+			local shift_val = shift_x*128-(nextf_addxpos);
+			_dpn("shift_val:"+shift_val);
+			// 1ドット+相手の1F移動距離分の隙間作成
+			BMvTbl.SetPosition( {x=shift_val, flags=( _Position_Add | _Position_ChangeMuki) } ); //
+			ret = 1;
+		}
+		
+		enemy.pop();
+	}
+	return ret;
+}
+
+local maketmpl_SkillAirDash = function( param={} ) : (hazienemy_shift)
 {
 	local ret_tmpl = {};
 	
@@ -1674,6 +1821,7 @@ local maketmpl_SkillAirDash = function( param={} )
 	{
 		karaburi_cs = 1,
 		warp = 0,
+		hazishift = 0,
 	}
 	
 	switch( param.type )
@@ -1684,6 +1832,7 @@ local maketmpl_SkillAirDash = function( param={} )
 		break;
 	case "C":
 		mvparam.warp = 1;
+		mvparam.hazishift = 1;
 		break;
 	}
 	
@@ -1708,7 +1857,7 @@ local maketmpl_SkillAirDash = function( param={} )
 		BMvTbl.ClearComboLimit(-1);
 	}
 	
-	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
+	ret_tmpl.FrameUpdate_After <- function() : (mvparam, hazienemy_shift)
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
@@ -1729,6 +1878,16 @@ local maketmpl_SkillAirDash = function( param={} )
 					move_x = x_max; // 移動しすぎないように制限
 				}
 				BMvTbl.SetPosition( { x=move_x, flags=_Position_Add|_Position_ChangeMuki } );
+			}
+			break;
+		case 90: // 振り向き直前
+			// C版のみ端に潜り込めるようにする
+			if( mvparam.warp )
+			{
+				hazienemy_shift( 1 ); //画面端に相手がいたら隙間をつくる
+				
+				// 端で214Xのガードバックと同時に端で重なったときに、振り向きを行いながら表落ちしてしまうのを修正 ワーグナー236_Add(make_tmpl_SwPowAddAtk)から移植
+				BMvEff.SetPositionBufferFlag(0);//コンボ中に同座標扱いにしないで位置関係を更新する
 			}
 			break;
 		case 100: //振り向く
@@ -1915,14 +2074,14 @@ local maketmpl_SkillAntiAirWhip = function( param={} )
 			if( epos.y != 0) // 相手が空中の時
 			{
 				local enemy = BMvCore.GetNearEnemyCharaData(); // 相手情報取得
-				if( enemy.IsDone )
+				if( enemy.isdone() )
 				{
 					local posst = BMvEff.GetPointStatus( { target=enemy } ); // 位置情報取得
 						
-					local xLen = posst.pos_x/128;
+					local xLen = posst.pos_x*BMvTbl.GetMuki()/128;
 					local yLen = -posst.pos_y/128;
-					// _dp("\n 相手とのX距離 : "+xLen );
-					// _dp("\n 相手とのY距離 : "+yLen );
+					// _dpn("相手とのX距離 : "+xLen );
+					// _dpn("相手とのY距離 : "+yLen );
 					
 					// 近い時
 					if( !Battle_Std.CheckEnemyisBound() && xLen < 100 && yLen < 300 )
@@ -1971,7 +2130,7 @@ local maketmpl_SkillAntiAirWhip = function( param={} )
 	{
 		if( mvparam.noCancelNoAtkHit )
 		{
-			Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+			Battle_Std.NoCansel_NoAttackHit( { check_mvdamage=1 } ); //何かでキャンセルしなかった場合追撃不能にする
 		}
 		if( mvparam.csAntenHosei )
 		{
@@ -2446,7 +2605,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 		BMvEff.SetCamera_Quake( { time=0, type=2, clear=0, } ); //揺らし
 		
 		BMvTbl.SetPosition( { x=-250*128*BMvTbl.GetMuki() } );
-		BMvEff.ThrowParam( { x=600, y=-400, } );
+		BMvEff.ThrowParam( { x=264, y=-400, } );
 		BMvEff.ThrowRelease( { type="追撃ダウン", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
 		
 		BMvEff.SetCamera_FocusKeep( 0 );

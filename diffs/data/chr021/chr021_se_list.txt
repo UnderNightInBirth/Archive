@@ -23,53 +23,53 @@ st[50] = { volumetype=0, path=0, file="SE050_SlideDash", type=1, category=-1, };
 st[60] = { volumetype=0, path=0, file="SE051", type=1, category=-1, }; //キャノン発射SE
 
 //登場
-st[100] = { volumetype=1, path=1, file="mik_010_b_2000", type=0, category=1, };	//「おいーっす！」
-st[101] = { volumetype=1, path=1, file="mik_010_b_2001", type=0, category=1, };	//「ミカちゃん参上っ！」
-st[102] = { volumetype=1, path=1, file="mik_010_b_2002", type=0, category=1, };	//「アチシがお相手するんよ～！」
-st[103] = { volumetype=1, path=1, file="mik_010_b_2003", type=0, category=1, };	//「ミカちゃんです！よろしくぅー！」
-st[104] = { volumetype=1, path=1, file="mik_010_b_2004", type=0, category=1, };	//「ちょっと通らせて貰います！」
+st[100] = { volumetype=1, path=1, file="mik_010_b_2000", type=0, category=1, userparam=80 };	//「おいーっす！」
+st[101] = { volumetype=1, path=1, file="mik_010_b_2001", type=0, category=1, userparam=79 };	//「ミカちゃん参上っ！」
+st[102] = { volumetype=1, path=1, file="mik_010_b_2002", type=0, category=1, userparam=125 };	//「アチシがお相手するんよ～！」
+st[103] = { volumetype=1, path=1, file="mik_010_b_2003", type=0, category=1, userparam=120 };	//「ミカちゃんです！よろしくぅー！」
+st[104] = { volumetype=1, path=1, file="mik_010_b_2004", type=0, category=1, userparam=104 };	//「ちょっと通らせて貰います！」
 
-st[106] = { volumetype=1, path=1, file="mik_010_b_2005_m", type=0, category=1, };	//「あだ」「覚悟するんゆー！」
-st[109] = { volumetype=1, path=1, file="mik_010_b_2007_m", type=0, category=1, };	//「ぶっ」「勝負するんゆー！」
-st[112] = { volumetype=1, path=1, file="mik_010_b_2009_m", type=0, category=1, };	//「いでっ」「いざ尋常に成敗いたす！」
+st[106] = { volumetype=1, path=1, file="mik_010_b_2005_m", type=0, category=1, userparam=130 };	//「あだ」「覚悟するんゆー！」
+st[109] = { volumetype=1, path=1, file="mik_010_b_2007_m", type=0, category=1, userparam=149 };	//「ぶっ」「勝負するんゆー！」
+st[112] = { volumetype=1, path=1, file="mik_010_b_2009_m", type=0, category=1, userparam=180 };	//「いでっ」「いざ尋常に成敗いたす！」
 
 //登場 特殊
-st[120] = { volumetype=1, path=1, file="mik_010_b_2012", type=0, category=1, };	//（対オリエ）「へっ、お前ばかりに良いかっこはさせられねぇ！」
-st[121] = { volumetype=1, path=1, file="mik_010_b_2015", type=0, category=1, }	//（対ワレン「良かろう！　我らが共通言語、拳でな！）
-st[122] = { volumetype=1, path=1, file="mik_010_b_2018", type=0, category=1, };	//（対カグヤ）「ミカちゃん、ここは勝たせて貰います！！」
+st[120] = { volumetype=1, path=1, file="mik_010_b_2012", type=0, category=1, userparam=211 };	//（対オリエ）「へっ、お前ばかりに良いかっこはさせられねぇ！」
+st[121] = { volumetype=1, path=1, file="mik_010_b_2015", type=0, category=1, userparam=226 };	//（対ワレン「良かろう！　我らが共通言語、拳でな！）
+st[122] = { volumetype=1, path=1, file="mik_010_b_2018", type=0, category=1, userparam=155 };	//（対カグヤ）「ミカちゃん、ここは勝たせて貰います！！」
 
 //ラウンド勝利
-st[140] = { volumetype=1, path=1, file="mik_010_b_2100", type=0, category=1, };	//「全速～、前進んゆー！」
-st[141] = { volumetype=1, path=1, file="mik_010_b_2101", type=0, category=1, };	//「勝利のぶいっ！」
-st[142] = { volumetype=1, path=1, file="mik_010_b_2102", type=0, category=1, };	//「決まったんゆー！」
-st[143] = { volumetype=1, path=1, file="mik_010_b_2103", type=0, category=1, };	//「勝ったんよー！」
-st[144] = { volumetype=1, path=1, file="mik_010_b_2104", type=0, category=1, };	//「よっしゃー！　つぎつぎ！！」
+st[140] = { volumetype=1, path=1, file="mik_010_b_2100", type=0, category=1, userparam=154 };	//「全速～、前進んゆー！」
+st[141] = { volumetype=1, path=1, file="mik_010_b_2101", type=0, category=1, userparam=74 };	//「勝利のぶいっ！」
+st[142] = { volumetype=1, path=1, file="mik_010_b_2102", type=0, category=1, userparam=88 };	//「決まったんゆー！」
+st[143] = { volumetype=1, path=1, file="mik_010_b_2103", type=0, category=1, userparam=73 };	//「勝ったんよー！」
+st[144] = { volumetype=1, path=1, file="mik_010_b_2104", type=0, category=1, userparam=102 };	//「よっしゃー！　つぎつぎ！！」
 
 //決着勝利 汎用
-st[150] = { volumetype=1, path=1, file="mik_010_b_2111", type=0, category=1, };	//「やったやったー！（次に続く）」
-st[151] = { volumetype=1, path=1, file="mik_010_b_2112", type=0, category=1, };	//「って…（次に続く）」
-st[152] = { volumetype=1, path=1, file="mik_010_b_2113", type=0, category=1, };	//「あいたー…」
-st[153] = { volumetype=1, path=1, file="mik_010_b_2114", type=0, category=1, };	//「うははははーっ！（次に続く）」
-st[154] = { volumetype=1, path=1, file="mik_010_b_2115", type=0, category=1, };	//「あれぇ？（次に続く）」
-st[155] = { volumetype=1, path=1, file="mik_010_b_2116", type=0, category=1, };	//「うごぉ…」
+st[150] = { volumetype=1, path=1, file="mik_010_b_2111", type=0, category=1, userparam=92 };	//「やったやったー！（次に続く）」
+st[151] = { volumetype=1, path=1, file="mik_010_b_2112", type=0, category=1, userparam=58 };	//「って…（次に続く）」
+st[152] = { volumetype=1, path=1, file="mik_010_b_2113", type=0, category=1, userparam=67 };	//「あいたー…」
+st[153] = { volumetype=1, path=1, file="mik_010_b_2114", type=0, category=1, userparam=106 };	//「うははははーっ！（次に続く）」
+st[154] = { volumetype=1, path=1, file="mik_010_b_2115", type=0, category=1, userparam=46 };	//「あれぇ？（次に続く）」
+st[155] = { volumetype=1, path=1, file="mik_010_b_2116", type=0, category=1, userparam=53 };	//「うごぉ…」
 
 //決着勝利 辛勝
-st[158] = { volumetype=1, path=1, file="mik_010_b_2120", type=0, category=1, };	//「大ー勝ー利ー！（次に続く）」
-st[159] = { volumetype=1, path=1, file="mik_010_b_2121", type=0, category=1, };	//「おっ？（次に続く）」
-st[160] = { volumetype=1, path=1, file="mik_010_b_2122", type=0, category=1, };	//「なんでぇー…」
+st[158] = { volumetype=1, path=1, file="mik_010_b_2120", type=0, category=1, userparam=131 };	//「大ー勝ー利ー！（次に続く）」
+st[159] = { volumetype=1, path=1, file="mik_010_b_2121", type=0, category=1, userparam=33 };	//「おっ？（次に続く）」
+st[160] = { volumetype=1, path=1, file="mik_010_b_2122", type=0, category=1, userparam=80 };	//「なんでぇー…」
 
 //決着勝利 楽勝
-st[164] = { volumetype=1, path=1, file="mik_010_b_2123", type=0, category=1, };	//「アチシの敵じゃないんゆー！（次に続く）」
-st[165] = { volumetype=1, path=1, file="mik_010_b_2124", type=0, category=1, };	//「えっ？（次に続く）」
-st[166] = { volumetype=1, path=1, file="mik_010_b_2125", type=0, category=1, };	//「ぎゃふん！」
+st[164] = { volumetype=1, path=1, file="mik_010_b_2123", type=0, category=1, userparam=134 };	//「アチシの敵じゃないんゆー！（次に続く）」
+st[165] = { volumetype=1, path=1, file="mik_010_b_2124", type=0, category=1, userparam=32 };	//「えっ？（次に続く）」
+st[166] = { volumetype=1, path=1, file="mik_010_b_2125", type=0, category=1, userparam=58 };	//「ぎゃふん！」
 
 //決着勝利 掛け合い
-st[170] = { volumetype=1, path=1, file="mik_010_b_2127", type=0, category=1, };	//「オリエっちに勝ったー！（次に続く）」
-st[171] = { volumetype=1, path=1, file="mik_010_b_2128", type=0, category=1, };	//「あれ？（次に続く）」
-st[172] = { volumetype=1, path=1, file="mik_010_b_2129", type=0, category=1, };	//「こんな罰はひどいんゆー…」
+st[170] = { volumetype=1, path=1, file="mik_010_b_2127", type=0, category=1, userparam=119 };	//「オリエっちに勝ったー！（次に続く）」
+st[171] = { volumetype=1, path=1, file="mik_010_b_2128", type=0, category=1, userparam=35 };	//「あれ？（次に続く）」
+st[172] = { volumetype=1, path=1, file="mik_010_b_2129", type=0, category=1, userparam=159 };	//「こんな罰はひどいんゆー…」
 
-st[174] = { volumetype=1, path=1, file="mik_010_b_2132", type=0, category=1, };	//「後衛に負けるわけないんゆー！（次に続く）」
-st[176] = { volumetype=1, path=1, file="mik_010_b_2134", type=0, category=1, };	//「人を呪わば穴ふたつー…」
+st[174] = { volumetype=1, path=1, file="mik_010_b_2132", type=0, category=1, userparam=154 };	//「後衛に負けるわけないんゆー！（次に続く）」
+st[176] = { volumetype=1, path=1, file="mik_010_b_2134", type=0, category=1, userparam=159 };	//「人を呪わば穴ふたつー…」
 
 //タイムアップ判定負け
 st[180] = { volumetype=1, path=1, file="mik_010_b_2200", type=0, category=1, };	//「なっー！　ぐぬぬぬぬ…」
@@ -142,7 +142,7 @@ st[291] = { volumetype=1, path=1, file="mik_010_b_2901", type=0, category=1, pri
 st[300] = { volumetype=1, path=1, file="mik_010_b_2950", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 };	//「よいしょ！」
 
 //振り向き
-st[310] = { volumetype=1, path=1, file="mik_010_b_3000", type=0, category=1, };	//「む」
+st[310] = { volumetype=1, path=1, file="mik_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki };	//「む」
 
 //待機モーション
 st[320] = { volumetype=1, path=1, file="mik_010_b_3100", type=0, category=1, };	//「ばっちこーい！」

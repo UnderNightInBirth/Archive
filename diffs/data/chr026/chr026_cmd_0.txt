@@ -1,0 +1,269 @@
+//コマンドテーブル skillは格ゲーコマンド表記
+btl_debPrint2("\n[IZU_CommandTable]");
+
+local t =
+{
+	Skill_41236SP = {},
+	Skill_41236SP_ABC = {},
+	
+	Skill_63214EX = {},
+
+	Skill_236EX = {},
+	Skill_236BorC = {},
+	Skill_236A = {},
+	
+	Skill_236A_Add =
+	{
+		num = def_CN_Skill_AddCommand1,
+		command = ["A","B","C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		flags = [ "lastdelay" ],
+		CmdCheck = 
+		{
+			HitStatus = "Hit",
+			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=8 } },
+			MvCheck = { Only = ["Mv_Skill_236A"] },
+		},
+	},	
+	Skill_236B_Add =
+	{
+		num = def_CN_Atk_AddCommand1, // レバーなしなのでスマートステアより優先度低く
+		command = ["A","B","C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		flags = [ "lastdelay" ],
+		CmdCheck = 
+		{
+			HitStatus = "Hit",
+			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=8 } },
+			MvCheck = { Only = ["Mv_Skill_236B"] },
+		},
+	},	
+	
+	Skill_236_Add_AddA =
+	{
+		num = def_CN_Skill_AddCommand3,
+		command = ["A"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		flags = [ "lastdelay" ],
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) != 1) // 出現中＆非アクティブじゃないと出せない
+			{
+				return 0;
+			}
+			return 1;
+		}
+		CmdCheck = 
+		{
+			HitStatus = "Hit",
+			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=8 } },
+			MvCheck = { Only = ["Mv_Skill_236A_Add","Mv_Skill_236B_Add"] },
+		},
+	},
+	Skill_236_Add_AddB =
+	{
+		num = def_CN_Skill_AddCommand4,
+		command = ["B"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		flags = [ "lastdelay" ],
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) != 1) // 出現中＆非アクティブじゃないと出せない
+			{
+				return 0;
+			}
+			return 1;
+		}
+		CmdCheck = 
+		{
+			HitStatus = "Hit",
+			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=8 } },
+			MvCheck = { Only = ["Mv_Skill_236A_Add","Mv_Skill_236B_Add"] },
+		},
+	},
+	Skill_236_Add_AddC =
+	{
+		num = def_CN_Skill_AddCommand5,
+		command = ["C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		flags = [ "lastdelay" ],
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) != 1) // 出現中＆非アクティブじゃないと出せない
+			{
+				return 0;
+			}
+			return 1;
+		}
+		CmdCheck = 
+		{
+			HitStatus = "Hit",
+			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=8 } },
+			MvCheck = { Only = ["Mv_Skill_236A_Add","Mv_Skill_236B_Add"] },
+		},
+	},
+	
+	Skill_0202EX = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) == 2 ) return 0; // 攻撃中なのでダメ
+			return 1;
+		}
+	},	
+	Skill_0202BorC = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) == 2 ) return 0; // 攻撃中なのでダメ
+			return 1;
+		}
+	},
+	Skill_0202A = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) == 2 ) return 0; // 攻撃中なのでダメ
+			return 1;
+		}
+	},
+	
+	Skill_214EX = {
+		CmdCheck = { BallLimit = { [2] = 1 } },
+	},
+	Skill_214BorC = {
+		CmdCheck = { BallLimit = { [1] = 1 } },
+	},	
+	Skill_214A = {}, // 弾制限なし
+	
+	Skill_J236EX = { },
+	Skill_J236BorC = { },
+	Skill_J236A = {},
+	
+	Atk_B_B = {},
+	Atk_B_B_B = {},
+	Atk_C_C = {},
+	
+	Atk_Cro3C = {},	
+
+	Atk_StdBandC = {
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) != 0) // 出現中
+			{
+				return 0;
+			}
+			return 1;
+		}
+	},
+	
+	// いつでも出せるけど発生とかいじるタイプ
+	// 性能が強すぎる
+	// コンボリミットはB+Cと共通なので一応注意すること
+	Atk_CroBandC = {
+		command="6+B+C",
+		CmdCheck = { SkillType = "None" }, // キャンセルでは出せない
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) != 1) // 出現中＆非アクティブじゃないと出せない
+			{
+				return 0;
+			}
+			return 1;
+		}
+	},
+	Atk_AirBandC = {
+		command=">+B+C",
+		// CmdCheck = { SkillType = "None" }, // キャンセルでは出せない
+		function CmdBeforeFunc()
+		{
+			if( BMvTbl.GetPP(def_ACS_IZU_ElefeeMode) != 1) // 出現中＆非アクティブじゃないと出せない
+			{
+				return 0;
+			}
+			if( BMvTbl.AddAirCount( 0, 0 ) ) return 0; // 何度も出せると凄いので回数制限
+
+			if( BMvEff.GRD_GetJudgeResult() <= 0 )
+			{
+				// 通常
+				if( BMvTbl.AddAirCount( 1, 0 ) ) return 0; // 地上→空中を不可に
+			}
+			return 1;
+		}
+	},
+	
+	Skill_FFDash_AddA =
+	{
+		num = def_CN_Skill_AddCommand6,
+		command = ["A"],
+		flags = [ "lastdelay" ],
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=8 } },
+			MvCheck = { Only = ["Mv_Atk_CroBandC"] },
+		},
+	},	
+	Skill_FFDash_AddB =
+	{
+		num = def_CN_Skill_AddCommand7,
+		command = ["B"],
+		flags = [ "lastdelay" ],
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=8 } },
+			MvCheck = { Only = ["Mv_Atk_CroBandC"] },
+		},
+	},	
+	Skill_FFDash_AddC =
+	{
+		num = def_CN_Skill_AddCommand8,
+		command = ["C"],
+		flags = [ "lastdelay" ],
+		CmdCheck = 
+		{
+			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=8 } },
+			MvCheck = { Only = ["Mv_Atk_CroBandC"] },
+		},
+	},		
+}
+
+local ar =
+[
+	{
+		CheckMoveName="Mv_Atk_StdA",
+		UpdateMoveName="Mv_Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_StdB",
+		UpdateMoveName="Mv_Atk_B_B",
+		ResetTmplName="Atk_StdB",
+	},
+	{
+		CheckMoveName="Mv_Atk_B_B",
+		UpdateMoveName="Mv_Skill_236B",
+		ResetTmplName="Atk_B_B",
+	},
+	{
+		CheckMoveName="Mv_Skill_236B",
+		UpdateMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_236A",
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			FrameIDCheck = { Only=[100] },
+		}
+		CmdTmplFlags=def_CMDFlags_AnnounceSmaetSteer, //スマートステアアナウンスの追加
+	},
+	{
+		CheckMoveName="Mv_Skill_SSRelayAtk",
+		ResetTmplName="Skill_SSRelayAtk",
+		UpdateMoveName="Mv_Skill_41236SP",
+		CmdCheck = 
+		{
+			SkillType = "SpSpecial",
+			HitStatus="Damage",
+			Cost = { ComboGauge = "OverLiberate" },
+		}
+	},
+
+]
+Battle_Std.MakeStdCombo( t, ar );
+
+CHR026_CommandTable <- Battle_Std.MakeCommandTable( { command=t } );

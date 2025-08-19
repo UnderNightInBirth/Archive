@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 
@@ -260,6 +259,12 @@ t.Mv_Throw_F_Hit_Add4 <-
 		Battle_Std.MoveCode.AddFlag( def_MC_Throw ); // 行動コード(投げ)を設定
 		BMvTbl.SetMvAction( def_MVA_Throw );
 		
+		// この処理を入れないと通常投げのゲージ回収制限がかかったままになる
+		if( Def_Sys_SetSpGaugeLimit_Throw )
+		{
+	        BMvEff.SpGauge_SetLimitCombo( { time=0 } ); //ゲージ増加制限を消す
+        }
+
 		BMvTbl.SetLP(0, BMvTbl.GetPP(def_TS_Bya_ThrowType) ); // 0:デフォ 1:遠くに 2:近くに
 	}
 	function FrameUpdate()
@@ -299,7 +304,13 @@ t.Mv_Throw_F_Hit_Add4 <-
 	{
 		//通常投げ始動は最低保証に制限をかける
 		Battle_Std.SetSpHosyoHosei( { type="Throw" } );
-		
+
+		if( Def_Sys_SetSpGaugeLimit_Throw )
+		{
+			// 241212 通常投げ後のコンボだけゲージ増加制限をかける
+	        BMvEff.SpGauge_SetLimitCombo( { val=Def_Sys_SetSpGaugeLimit_Throw, time=0 } ); //ゲージ増加制限
+        }
+
 		if( BMvTbl.FromFinalize() == 1 )
 		{
 			// 硬直後減らしすぎた結果、罠に当たる前にここにきてしまう
@@ -365,6 +376,14 @@ t.Mv_Null_BackThrow_NoAtkCheck <-
 
 t.Mv_Standby <-
 {
+}
+
+t.Mv_Convert <-
+{
+	function Init_After()
+	{
+		BMvTbl.AddAirCount( 0, -10 ); // 214攻・J214攻の空中回数制限リセット
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -497,9 +516,6 @@ t.Mv_WinPattern <-
 	{
 		BMvTbl.SetLP(1,0); // 停止アニメまで進めたかどうか
 		
-		local last_se_num = BMvTbl.GetPP(def_PP_LastPlaySound);
-		// BMvTbl.SetLP(2,last_se_num);
-		
 		local mvs = BMvTbl.GetMvStatus();
 		if( mvs.DataPattern==52 )
 		{
@@ -515,7 +531,13 @@ t.Mv_WinPattern <-
 			{
 				BMvTbl.SetLP(1,1);
 				BMvTbl.JumpFrameID( 256 ); // 停止
-				Battle_Std.TypeSE_Play({ type="決着勝利_笑い_Init" });
+				local last_se_num = BMvTbl.GetPP(def_PP_LastPlaySound);
+				// _dpn("last_se_num:"+last_se_num);
+				
+				if( last_se_num == 141 ) // 指をささないverにする音声
+				{
+					BMvTbl.SetPattern(931);
+				}
 			}
 		}
 	}
@@ -547,7 +569,7 @@ local maketmpl_Skill_MoveSlash1st = function( param={} )
 		break;
 	case "EX":
 		mvparam.hitlock = 45; // power
-		mvparam.hitlock_FirstPow = 70; // 初段のみ
+		mvparam.hitlock_FirstPow = 80; // 初段のみ 1.05:70
 		mvparam.hitMuteki = 120;
 		break;
 	}
@@ -827,6 +849,8 @@ t.Mv_Skill_41236SP <-
 	}
 	function FrameUpdate_After()
 	{
+		Battle_Std.EnemyGuardShield_ThroughRemoveBound( { Param1=1, Hosei=79 } ); // ガードシールド中はBound空振りを無くして掴む
+		
 		local mvs = BMvTbl.GetMvStatus();
 		// 相手がのけぞり中だったらFrameID110、それ以外だったら100で処理
 		if( mvs.FrameID == 50 )
@@ -997,7 +1021,7 @@ t.Mv_Skill_41236SP_End <-
 }
 
 //-----------------------------------------------------------------------------
-// 214攻
+// 各種罠の定義
 //-----------------------------------------------------------------------------
 
 local makemv_WebTrap = function( param={} )
@@ -1026,6 +1050,10 @@ local makemv_WebTrap = function( param={} )
 	local use_atkst = _PosState_Always; // 状態が一致で攻撃開始する
 	local use_GRDMinusType = 0;
 	
+	local mvparam = {
+		checkDashMvHantei = 0, // ダッシュだけ検知するでかい特殊判定を見る（これとは別にダッシュMVだったら攻撃判定は大きくなる）
+	}
+	
 	switch( param.type )
 	{
 	case "A":
@@ -1037,6 +1065,7 @@ local makemv_WebTrap = function( param={} )
 		use_tobislot = def_TS_Bya_WebTrap;
 		use_webst = _PosState_Air;
 		use_atkst = _PosState_Always;
+		mvparam.checkDashMvHantei = 1; // 主に影響のあるこれだけ
 		break;
 	case "C":
 		use_tobislot = def_TS_Bya_WebTrap;
@@ -1094,6 +1123,7 @@ local makemv_WebTrap = function( param={} )
 		BMvTbl.SetLP(1,0); // コンボ中の発動かどうか
 
 		// BMvTbl.SetLP(2,0); // 623EXヒット中の設置かどうか(親から受ける)
+		BMvTbl.SetLP(3,0); // 相手のダッシュに触れたか（判定拡大するかどうか）
 		
 		if( Def_Sys_CheckObjectEnemyGuardMuki ) Battle_Std.InvalidateObjectMixupInit_SetLP(5); // オブジェクト表裏を無効化
 	}
@@ -1125,6 +1155,8 @@ local makemv_WebTrap = function( param={} )
 		
 		local isVorpal = ( BMvEff.GRD_GetJudgeResult() > 0 );
 		
+		// たぶん、特殊判定0は現在は使ってなさそう（旧処理のときは見てたが、今はやられを見ている）
+		// そのためUNI2から壊しにくく性能が向上しているはず
 		if( Def_Sys_NewTrapYarareCheck )
 		{
 			// XXX:おかしい
@@ -1193,7 +1225,7 @@ local makemv_WebTrap = function( param={} )
 		}
 		return 0;
 	}
-	ret_tmpltbl.Main.FrameUpdate <- function() : (use_tobislot, check_Yarare, use_atkst)
+	ret_tmpltbl.Main.FrameUpdate <- function() : (use_tobislot, check_Yarare, use_atkst, mvparam)
 	{
 		local mvs = BMvTbl.GetMvStatus();
 		local enemy_is_damage = Battle_Std.CheckEnemyisDamage();
@@ -1246,13 +1278,34 @@ local makemv_WebTrap = function( param={} )
 		
 		if( enemy_is_damage || trapset_complate )
 		{
-			local enemy = BMvEff.CheckHantei( { src=[ _Hantei_Kurai, 0, -1 ], dst=[ _Hantei_Kurai, 0, -1 ], flags=_HC_EnemyPc } );
+			local dashcore_isdone = 0; // ダッシュ検知の大きな判定のcoreを使っていい＆有効か
+			
+			local enemy_dashonly = BMvEff.CheckHantei( { src=[ _Hantei_Etc, 1, 1 ], dst=[ _Hantei_Kurai, 0, -1 ], flags=_HC_EnemyPc } ); // ダッシュの検知（特殊判定1を見る）
+			if( mvparam.checkDashMvHantei ) // 今のところ地上B版のみ
+			{
+				if( enemy_dashonly.push() )
+				{
+					local mvname = BMvTbl.GetMvName();
+					enemy_dashonly.pop();
+					
+					if( mvname=="Mv_DashWait_F" || mvname=="Mv_Dash_F" || mvname == "Mv_DashStop_F")
+					{
+						dashcore_isdone = 1;
+					}
+				}
+			}
+			// _dpn("dashcore_isdone:"+dashcore_isdone);
+			
+			local enemy_normal = BMvEff.CheckHantei( { src=[ _Hantei_Kurai, 0, -1 ], dst=[ _Hantei_Kurai, 0, -1 ], flags=_HC_EnemyPc } ); // 通常の検知（食らい判定を全て見る）
+			local enemy = ( dashcore_isdone )? enemy_dashonly : enemy_normal; // 相手がダッシュ中ででかい特殊判定に触れているときは雑な検知のcoreを使うが、それ以外のときはシビアな通常検知のcoreを使う
 			if( enemy.push() )
 			{
+				// 上の処理は使うcoreを決めるだけなので、実際の検知は以下でしっかりやること
 				local mutekitime = BMvEff.GetPlayerMuteki( 1 );
 				local bs = BtlMvStd.GetBoundStatus();
 				
 				local atkst = BCMDTbl.CheckPosState( use_atkst );
+				local mvname = BMvTbl.GetMvName();
 				
 				enemy.pop();
 				
@@ -1263,7 +1316,13 @@ local makemv_WebTrap = function( param={} )
 						// _dp("\n コンボ中の発動っぽい");
 						BMvTbl.SetLP(1,1); // コンボ中の発動
 					}
-				
+					
+					// ダッシュ中に触れたら攻撃判定でかくする（Mv名じゃなくてフラグで判定できるならそうする）
+					if( dashcore_isdone || mvname=="Mv_DashWait_F" || mvname=="Mv_Dash_F" || mvname == "Mv_DashStop_F")
+					{
+						// _dpn("でかくする");
+						BMvTbl.SetLP(3,1);
+					}
 					BMvTbl.SetFinalize( 100 );
 				}
 				return;
@@ -1290,7 +1349,17 @@ local makemv_WebTrap = function( param={} )
 	{
 		BMvTbl.SetMvAction( def_MVA_Skill );
 		BMvTbl.TobiParam_Func( { slot=def_TS_Bya_WebTrapAtk, val=1, type=_ValAdd } );
-		BMvTbl.JumpFrameID( 666 );
+		if( BMvTbl.GetLP(3)==0 )
+		{
+			//普通の発動
+			BMvTbl.JumpFrameID( 666 );
+		}
+		else
+		{
+			//ダッシュに触れて発動（ちょっとでかい）
+			BMvTbl.JumpFrameID( 777 );
+		}
+		
 	}
 	ret_tmpltbl.Atk.FrameUpdate <- function() : (check_Yarare)
 	{
@@ -1471,6 +1540,10 @@ t.Mv_J214CNetAtk <- web_tmpl.Atk;
 t.Mv_J214CNetVanish <- web_tmpl.Vanish;
 
 
+//-----------------------------------------------------------------------------
+// 214攻などの罠設置行動部分
+//-----------------------------------------------------------------------------
+
 local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 {
 	local ret_tmpl = {};
@@ -1489,7 +1562,7 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 	local set_webtraptype = 0; // 罠 0:A 1:B 2:C 10:JA 11:JB 12:JC
 	local mask_button = 0;
 	
-	// その他？主に派生用パラメータ
+	// その他？主に派生用パラメータだけど統合したい
 	local mvParam = {
 		crouchEnd = 0,
 		slowVector = 0, // 最初に減速する
@@ -1498,6 +1571,9 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 		
 		AirAddC = 0, // AirAddC用処理色々…
 		airdive = 0,
+		
+		extendVector = 0, // タメ版の移動量定義
+		extendMoveTrapVal = 0, // タメ版の罠あり時の移動補正
 	};
 	
 	
@@ -1512,6 +1588,7 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 		trap_pos.y = -200<<7;
 		set_webtraptype = 0; // 罠 0:A 1:B 2:C 10:JA 11:JB 12:JC
 		mask_button = (1<<0);
+		mvParam.extendVector = { x=2500, y=-2800, addx=0, addy=200, flags=_Vector_Normal };
 		break;
 	case "B":
 		use_netpat = "Net214B";
@@ -1522,6 +1599,8 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 		trap_pos.y = -300<<7;
 		set_webtraptype = 1; // 罠 0:A 1:B 2:C 10:JA 11:JB 12:JC
 		mask_button = (1<<1);
+		mvParam.extendVector = { x=2900, y=-2950, addx=0, addy=210, flags=_Vector_Normal };
+		mvParam.extendMoveTrapVal = { x=300, y=-150, addx=0, addy=10 }; // 加算値
 		break;
 	case "C":
 		use_netpat = "Net214C";
@@ -1532,6 +1611,8 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 		trap_pos.y = -400<<7;
 		set_webtraptype = 2; // 罠 0:A 1:B 2:C 10:JA 11:JB 12:JC
 		mask_button = (1<<2);
+		mvParam.extendVector = { x=3300, y=-3100, addx=0, addy=220, flags=_Vector_Normal };
+		mvParam.extendMoveTrapVal = { x=600, y=-300, addx=0, addy=20 }; // 加算値
 		break;
 	case "AirA":
 		use_netpat = "Net214A";
@@ -1542,6 +1623,7 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 		trap_pos.y = -200<<7;
 		set_webtraptype = 10; // 罠 0:A 1:B 2:C 10:JA 11:JB 12:JC
 		mask_button = (1<<0);
+		mvParam.extendVector = { x=2500, y=-2800, addx=0, addy=200, flags=_Vector_Normal };
 		break;
 	case "AirB":
 		use_netpat = "Net214B";
@@ -1552,6 +1634,8 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 		trap_pos.y = -100<<7;
 		set_webtraptype = 11; // 罠 0:A 1:B 2:C 10:JA 11:JB 12:JC
 		mask_button = (1<<1);
+		mvParam.extendVector = { x=2900, y=-2950, addx=0, addy=210, flags=_Vector_Normal };
+		mvParam.extendMoveTrapVal = { x=300, y=-150, addx=0, addy=10 }; // 加算値
 		break;
 	case "AirC":
 		use_netpat = "Net214C";
@@ -1562,6 +1646,8 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 		trap_pos.y = 0<<7;
 		set_webtraptype = 12; // 罠 0:A 1:B 2:C 10:JA 11:JB 12:JC
 		mask_button = (1<<2);
+		mvParam.extendVector = { x=3300, y=-3100, addx=0, addy=220, flags=_Vector_Normal };
+		mvParam.extendMoveTrapVal = { x=600, y=-300, addx=0, addy=20 }; // 加算値
 		break;
 	case "AirAddB":
 		use_netpat = "Net214B";
@@ -1739,6 +1825,7 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 				
 				local vec_x = kyori_x*BMvTbl.GetMuki()/time;
 				local vec_y = kyori_y/time;
+				local vec_addy = 180;
 				
 				if( vec_x >= 0 )
 				{
@@ -1755,8 +1842,27 @@ local maketmpl_Skill_SetWebTrap = function( param={} ) : (call_movering)
 				// Y方向は必ず上に飛ぶ
 				if( vec_y < -y_max ) vec_y = -y_max;
 				if( vec_y >= -y_min ) vec_y = -y_min;
-				BMvTbl.SetVector({ x=vec_x, y=vec_y, addy=180, flags=_Vector_Normal });
+				
+				// ABCで動きに差をつけるための加算値
+				if( mvParam.extendMoveTrapVal )
+				{
+					vec_x += mvParam.extendMoveTrapVal.x;
+					vec_y += mvParam.extendMoveTrapVal.y;
+					vec_addy += mvParam.extendMoveTrapVal.addy;
+				}
+				
+				BMvTbl.SetVector({ x=vec_x, y=vec_y, addy=vec_addy, flags=_Vector_Normal });
 			}
+			else
+			{
+				// 罠がないとき
+				// 移動量をスクリプト管理に変更(PATにも移動量は定義してあるがこっち優先)
+				if( mvParam.extendVector )
+				{
+					BMvTbl.SetVector( mvParam.extendVector );
+				}
+			}
+			
 			call_movering();
 			break;
 		case 200: // インクリース版派生受付中
@@ -1807,239 +1913,13 @@ t.Mv_Skill_236Add_JAddTrapA <- maketmpl_Skill_SetWebTrap( { type="AirA", usepat=
 t.Mv_Skill_236Add_JAddTrapB <- maketmpl_Skill_SetWebTrap( { type="AirB", usepat="J214B" } );
 t.Mv_Skill_236Add_JAddTrapC <- maketmpl_Skill_SetWebTrap( { type="AirC", usepat="J214C" } );
 
+// 214[X]からの派生
 t.Mv_Skill_i214_JAddB <- maketmpl_Skill_SetWebTrap( { type="AirAddB", usepat="i214_JAddB" } );
 t.Mv_Skill_i214_JAddC <- maketmpl_Skill_SetWebTrap( { type="AirAddC", usepat="i214_JAddC" } );
-//-----------------------------------------------------------------------------
-// J214攻
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// 623攻
+// FF
 //-----------------------------------------------------------------------------
-local maketmpl_Skill_Jump2WebTrap = function( param={} )
-{
-	local ret_tmpl = {};
-	
-	
-	local check_id = 1; // チェックする罠ID 1:A罠 2:B罠 3:C罠
-	switch( param.type )
-	{
-	case "FF":
-		check_id = 1;
-		break;
-	case "A":
-		check_id = 1;
-		ret_tmpl.usepat <- "214_AddJump";
-		break;
-	case "B":
-		check_id = 2;
-		ret_tmpl.usepat <- "214_AddJump";
-		break;
-	case "C":
-		check_id = 3;
-		ret_tmpl.usepat <- "214_AddJump";
-		break;
-	case "AirFF":
-		check_id = 1;
-		break;
-	case "AirA":
-		check_id = 1;
-		ret_tmpl.usepat <- "214_JAddJump";
-		break;
-	case "AirB":
-		check_id = 2;
-		ret_tmpl.usepat <- "214_JAddJump";
-		break;
-	case "AirC":
-		check_id = 3;
-		ret_tmpl.usepat <- "214_JAddJump";
-		break;
-	case "AirAdd":
-		check_id = 1;
-		ret_tmpl.usepat <- "214_JAddJump";
-		break;
-	}
-	
-	ret_tmpl.Init_After <- function()
-	{
-		BMvTbl.SetLP(0,0); // X座標
-		BMvTbl.SetLP(1,0); // Y座標
-		BMvTbl.SetLP(2,0); // 罠の近くまでいったかどうか
-	}
-	
-	ret_tmpl.FrameUpdate_After <- function() : (check_id)
-	{
-
-		switch( Battle_Std.GetUpdateFrameID() )
-		{
-		case 100: // ジャンプのところ
-			BMvTbl.AddAirCount( 1, 1 ); // スロット１で空中で何度も出せない制限をかける
-			// 罠に向かってジャンプする
-			// _dp("\n 探す罠:"+check_id );
-			local findobj = BMvCore.CFindObject();
-			local findchara = findobj.Get( check_id );
-			if( findchara.push() )
-			{
-				// _dp("\n 罠があったのでそこへ行くよ");
-				local wanapos = BMvTbl.GetPosition( 0 ); // 一回座標にした方が補正処理かきやすい
-				findchara.pop();
-				
-				BMvTbl.SetLP( 0, wanapos.x/128 );
-				BMvTbl.SetLP( 1, wanapos.y/128 );
-				
-				BMvTbl.SetVector( { x=0, y=0, addy=0, flags=_Vector_Normal } );
-				
-				local posst = BMvEff.GetPointStatus( { position=wanapos } );
-				if( posst.pos_x*BMvTbl.GetMuki() < 0 )
-				{
-					BMvTbl.SetMuki( _Direction_Reverse );
-				}
-				
-				// 自分より後ろの罠だったら？があるからな
-				// wanapos.x -= 50*128*BMvTbl.GetMuki(); // 少し後ろに到達させる
-				
-				// 移動フレームが固定だと気持ち悪いので、可変にする
-				/*
-				local posst = BMvEff.GetPointStatus( { position=wanapos } );
-				local x_kyori = posst.pos_x*BMvTbl.GetMuki(); // 罠までの距離（キャラの向き含む）
-				local y_kyori = posst.pos_y+(200<<7); // キャラの足元だと位置がアレなのでズラす
-				local x_pow = 3000;
-				local frame = x_kyori/x_pow; // 到達にかかるであろうフレーム
-				if( frame == 0 ) frame = 1;
-				if( frame < 0 ) frame *= -1;
-				local x_vec = x_kyori/frame*2;
-				local x_vec_max = 10000;
-				local x_vec_min = 2000;
-				if( x_vec > x_vec_max )
-				{
-					x_vec = x_vec_max;
-				}
-				else if( x_vec < -x_vec_max )
-				{
-					x_vec = -x_vec_max;
-				}
-				else if( x_vec > 0 && x_vec < x_vec_min )
-				{
-					_dp("\n 最低修正");
-					x_vec = x_vec_min;
-				}
-				else if( x_vec < 0 && x_vec > -x_vec_min )
-				{
-					_dp("\n 最低修正２");
-					x_vec = -x_vec_min;
-				}
-				local x_add = -x_vec/frame;
-				local x_kanseivec = x_vec/10;
-				
-				BMvTbl.SetVector( { x=x_kanseivec, flags=_Vector_Normal } ); // ツールのベクトルを消しつつ少し行き過ぎるベクトルに
-				BMvTbl.SetVector( { x=x_vec, addx=x_add, flags=_Vector_Div } );
-				*/
-
-				// local y_add = 200;
-				// local y_vec = 3000; // 開始Ｙベクトル
-				
-				// y_vec = -(-(y_add*frame*frame)/2 - y_kyori)/frame;
-				
-				// BMvTbl.SetVector( { y=y_vec, addy=y_add, flags=_Vector_Normal } );
-				
-				// y_kyori = (-y_vec*frame) - (y_add*frame*frame)/2; // これだけされても最後はy_kyoriにいかないとだめ
-				// -y_vec*frame = -(y_add*frame*frame)/2 - y_kyori;
-				// -y_vec = (-(y_add*frame*frame)/2 - y_kyori)/frame;
-				
-				// local y_vec = -2800;
-				// local homingpow = y_kyori/32;
-				
-				// _dp("\n 罠の高さ:"+y_kyori +" ドット:"+y_kyori/128+" homingpow:"+homingpow );
-
-				// local homing_max = 10;
-				// if( homingpow > homing_max ) homingpow = homing_max;
-				// if( homingpow < -homing_max ) homingpow = -homing_max;
-				
-				// y_vec += homingpow // てきとう！
-				
-				
-				
-				// 罠に向かってベクトルを与える？
-				/*
-				local posst = BMvEff.GetPointStatus( { position=wanapos } );
-				local x_kyori = posst.pos_x*BMvTbl.GetMuki();
-				local frame = 20; // 到達フレーム
-				local x_vec = x_kyori/frame*2;
-				local x_vec_max = 10000;
-				if( x_vec > x_vec_max ) x_vec = x_vec_max;
-				if( x_vec < -x_vec_max ) x_vec = -x_vec_max;
-				local x_add = -x_vec/frame;
-				local x_kanseivec = x_vec/10;
-				BMvTbl.SetVector( { x=x_kanseivec, flags=_Vector_Normal } ); // ツールのベクトルを消す（少し行き過ぎる）
-				BMvTbl.SetVector( { x=x_vec, addx=x_add, flags=_Vector_Div } );
-				// if( x_kyori < 0 ) BMvTbl.SetMuki( _Direction_Reverse ); // 後ろへのジャンプは見た目がやばいので反転
-				// 攻撃時向きがアレなのでとりあえず反転を消す
-				// ※着地時に相手の方を向きなおします
-				*/
-			}
-			else
-			{
-				// 罠がない時の目標
-				local pos = BMvTbl.GetPosition();
-				BMvTbl.SetLP(0, (pos.x/128) + (300*BMvTbl.GetMuki()) );
-				BMvTbl.SetLP(1, (pos.y/128) + (-200) );
-			}
-			break;
-		}
-		
-		local mvs = BMvTbl.GetMvStatus();
-		if( BMvTbl.GetLP(2)==0 && mvs.CallCount == 0 && ( mvs.FrameID == 100 || mvs.FrameID == 200 || mvs.FrameID == 250 ) && mvs.isLanding == 0 && mvs.MvCount < 60 )
-		{
-			// LPの座標にホーミングしてみる
-			local t_pos = BMvTbl.CCharaPosition();
-			t_pos.x = ( BMvTbl.GetLP(0) - ( 50 * BMvTbl.GetMuki() ) ) *128;
-			t_pos.y = ( BMvTbl.GetLP(1) + 50 )*128;
-			
-			local posst = BMvEff.GetPointStatus( { position=t_pos } );
-			local x_kyori = posst.pos_x*BMvTbl.GetMuki()-(150<<7); // 罠までの距離（キャラの向き含む）
-			local y_kyori = posst.pos_y+(20<<7); 
-			
-			// _dp("\n うごけー:"+x_kyori+", "+y_kyori+" : "+posst.distance );
-			
-			local par = 8;
-			local x_vec = x_kyori/par;
-			local y_vec = y_kyori/par;
-			/*
-			local x_max = 3500;
-			if( x_vec > x_max ) x_vec = x_max;
-			if( x_vec < -x_max ) x_vec = -x_max;
-			if( y_vec > x_max ) y_vec = x_max;
-			if( y_vec < -x_max ) y_vec = -x_max;
-			*/
-			// BMvTbl.SetPosition( { x=x_kyori/par, y=y_kyori/par, flags=_Position_Add|_Position_ChangeMuki } );
-			// BMvTbl.SetVector( { x=x_vec, y=y_vec, addy=180, flags=_Vector_Normal } );
-
-			local _speed = 3000;
-			local distance = posst.distance/128;
-			if( distance < 90 )
-			{
-				BMvTbl.SetLP(2,1); // 終わり
-			}
-
-			_speed = distance / 90 * 2000;
-			if( _speed < 2000 ) _speed = 2000;
-			
-			local max = 3500;
-			if( _speed > max ) _speed = max;
-			if( _speed < -max ) _speed = -max;
-			// if( _speed > -1000 ) _speed = -1000;
-			local vec = BMvEff.GetVector_FromAngle( { angle = posst.angle, speed = _speed } );
-			BMvTbl.SetVector( { x=vec.x, y=vec.y, addy=200, flags=_Vector_Normal|_VecFlag_NoMuki } );
-		}		
-	}
-	return ret_tmpl;	
-}
-
-
-// t.Mv_Skill_214_JAddJump <- maketmpl_Skill_Jump2WebTrap( { type="AirAdd" } );
-
-// t.Mv_Atk_StdBandC <- maketmpl_Skill_Jump2WebTrap( { type="FF" } );
-// t.Mv_Atk_AirBandC <- maketmpl_Skill_Jump2WebTrap( { type="AirFF" } );
 
 t.Mv_Atk_StdBandC <-
 {
@@ -2052,7 +1932,13 @@ t.Mv_Atk_StdBandC <-
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100:
-			local eff = BMvEff.CreateObject( { mvname="Mv_Obj_BandC_trap", x=300<<7, y=-200<<7 } );
+			// 少し前にエフェクトを呼ぶが、相手が近いときは距離を抑える
+			local kyori = Battle_Std.GetEnemyDistance();
+			local xpos = 300*128; // 予定座標
+			if( xpos > kyori ) xpos = kyori; // 予定座標が相手までの距離より大きい（相手が近い）なら相手までの距離に変更
+			if( xpos < 200*128 ) xpos = 200*128; // 距離の下限
+
+			local eff = BMvEff.CreateObject( { mvname="Mv_Obj_BandC_trap", x=xpos, y=-200<<7 } );
 			if( eff.push() )
 			{
 				Battle_Std.AddXPos_CheckFrontStage( 0, 0 ); // X移動距離, ステージ端とこれ以上近づかない距離
@@ -2080,7 +1966,13 @@ t.Mv_Atk_StdBandC <-
 			}
 			break;
 		case 200: // ため
-			local eff = BMvEff.CreateObject( { mvname="Mv_Obj_BandC_i_trap", x=600<<7, y=-200<<7 } );
+			// 少し前にエフェクトを呼ぶが、相手が近いときは距離を抑える
+			local kyori = Battle_Std.GetEnemyDistance();
+			local xpos = 600*128; // 予定座標
+			if( xpos > kyori ) xpos = kyori; // 予定座標が相手までの距離より大きい（相手が近い）なら相手までの距離に変更
+			if( xpos < 200*128 ) xpos = 200*128; // 距離の下限
+		
+			local eff = BMvEff.CreateObject( { mvname="Mv_Obj_BandC_i_trap", x=xpos, y=-200<<7 } );
 			if( eff.push() )
 			{
 				Battle_Std.AddXPos_CheckFrontStage( 0, 0 ); // X移動距離, ステージ端とこれ以上近づかない距離
@@ -2106,7 +1998,16 @@ t.Mv_Atk_StdBandC <-
 				
 				eff.pop();
 			}
-			break;			
+			break;	
+		case 1000: // 着地硬直
+			// インクリース版はDAMAGE時硬直を2F短く(DCで拾える)
+			local hs = BMvTbl.GetMvHitStatus();
+			if( hs.Type&_HitType_Damage && Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_ExtendAction ) ) // 念の為インクリース版に限定
+			{
+				_dpn("ダメージを与えていたので硬直2F短く");
+				BMvTbl.SetMoveableFlag( { move=1, time=254, flag=_ClearFlag_ChangeMv } ); // Mv中行動可能にする
+			}
+			break;	
 		}
 	}
 	function HitInterrupt_After()
@@ -2126,6 +2027,10 @@ t.Mv_Atk_StdBandC <-
 
 t.Mv_Obj_BandC_trap <- {};
 t.Mv_Obj_BandC_i_trap <- {};
+
+//-----------------------------------------------------------------------------
+// 214攻 派生ジャンプ部分
+//-----------------------------------------------------------------------------
 
 local maketmpl_Skill_WebTrapAddJump = function( param={} ) : (call_movering)
 {
@@ -2219,6 +2124,8 @@ t.Mv_Skill_214_JAddJumpA <- maketmpl_Skill_WebTrapAddJump( { type="A" } );
 t.Mv_Skill_214_JAddJumpB <- maketmpl_Skill_WebTrapAddJump( { type="B" } );
 t.Mv_Skill_214_JAddJumpC <- maketmpl_Skill_WebTrapAddJump( { type="C" } );
 
+// 214派生ジャンプからの攻撃
+
 t.Mv_Skill_214_JAddA <-
 {
 	function Init_After()
@@ -2271,10 +2178,30 @@ t.Mv_Skill_214_JAddD <-
 	}
 }
 
-t.Mv_Skill_i214_JAddA <- t.Mv_Skill_214_JAddA;
+// 214[X]からの派生
+t.Mv_Skill_i214_JAddA <- 
+{
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_Shield_CanselNG ); // シールドされるとキャンセル不能
+		BMvTbl.SetHitCheckFlag( { type=1, val=Def_HitCheckFlag_AirDive, time=255, flag=_ClearFlag_ChangeMv } ); // 空突無敵にスカる
+	}
+	function FrameUpdate_After()
+	{
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvs.isLanding ) // 着地時
+		{
+			local hs = BMvTbl.GetMvHitStatus();
+			if( hs.Type & _HitType_Damage ) // ダメージを与えていた
+			{
+				BMvTbl.JumpFrameID(500); // 着地硬直が少ない方へ
+			}
+		}
+	}
+}
 
 //-----------------------------------------------------------------------------
-// 412364
+// 623
 //-----------------------------------------------------------------------------
 
 local maketmpl_Skill_DashKieru = function( param={} )
@@ -2333,6 +2260,7 @@ local maketmpl_Skill_DashKieru = function( param={} )
 		switch( Battle_Std.GetUpdateFrameID( mvs ) )
 		{
 		case 50: // AとBの投げ部分
+			Battle_Std.EnemyGuardShield_ThroughRemoveBound( { Param1=1 } ); // ガードシールド中はBound空振りを無くして掴む
 			break;
 		case 100: // AとBの設置ポイント
 			local setpos = ( BMvTbl.GetLP(1) == 0 )? net_pos_x : net_pos_x_feint;
@@ -2350,8 +2278,7 @@ local maketmpl_Skill_DashKieru = function( param={} )
 		case 210: // EXの設置ポイント
 			// EXの投げ部分がつかんでいたら設置しない
 			local extrap_is_hit = 0;
-			local findobj = BMvCore.CFindObject();
-			local findchara = findobj.Get(5); // EX罠を検索
+			local findchara = BMvCore.CFindObject().Get(5); // EX罠を検索
 			if( findchara.push() )
 			{
 				if( BMvTbl.GetLP(0) == 1 ) extrap_is_hit = 1;
@@ -2461,6 +2388,10 @@ t.Mv_AtkObj_623EX_Obj <-
 		
 		// 呼び出し時はまだ無敵ではないのでここで追加
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_Muteki );
+	}
+	function FrameUpdate_After()
+	{
+		Battle_Std.EnemyGuardShield_ThroughRemoveBound( { Param1=1 } ); // ガードシールド中はBound空振りを無くして掴む
 	}
 	function HitInterrupt_After()
 	{
@@ -2799,8 +2730,7 @@ t.Mv_Obj_SpBigBya <-
 		case 500: // 爪出現開始
 			BMvTbl.SetVector( { y=1200, flags=_Vector_Normal } );
 			// BMvTbl.SetVector( { y=3000, addy=-120, flags=_Vector_Div } );
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(8);
+			local findchara = BMvCore.CFindObject().Get(8);
 			if( findchara.push() )
 			{
 				BMvTbl.SetVector( { y=1320, flags=_Vector_Normal } );
@@ -2814,8 +2744,7 @@ t.Mv_Obj_SpBigBya <-
 		case 600: // 停止
 			BMvTbl.SetVector( { y=0, flags=_Vector_Normal } );
 			BMvTbl.SetVector( { y=512, addy=-32, flags=_Vector_Div } );
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(8);
+			local findchara = BMvCore.CFindObject().Get(8);
 			if( findchara.push() )
 			{
 				BMvTbl.SetVector( { y=0, flags=_Vector_Normal } );

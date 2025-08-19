@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 local t = {};
@@ -93,12 +92,12 @@ ChrFunc.FF_StickMove <- function() : (stickMoveVecTbl)
 			local stickVecMax = BMvEff.GetVector_FromAngle( { angle = param.angle*2, speed = param.maxPow } );
 			
 			// 前進してる時はX方向だけ加速
-			local forward_xrate = 125; // 加速する倍率
+			local forward_xrate = 80; // 加速する倍率　1.12:125
 			local forward_xMaxrate = 125; // 加速する倍率
 			
 			if( BMvEff.GRD_GetJudgeResult() > 0 ) //ＶＯＲＰＡＬ状態
 			{
-				forward_xrate = 175;
+				forward_xrate = 125; // 1.12:175
 				forward_xMaxrate = 175;
 			}
 			
@@ -534,6 +533,7 @@ t.Mv_Atk_FFBase <-
 		BMvTbl.AddAirCount( CDef_Kuo_ACS_FF, 1 );
 		BMvTbl.AddAirCount( def_AC_Assault, 1 ); // アサルトカウンタ加算して再度使えないように
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_AirAssult ); // 空中アサルト扱い（補正をかけるため）
+		Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_DisableChangeGRD_AssultOverheadF ); // 発生Fに応じたアサルト中段ガード時のGRD増加量を無効にする
 		
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // FF状態
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag2 ); // FF中にレバーでぐりぐり動く
@@ -617,6 +617,7 @@ t.Mv_Atk_FFBase <-
 	function Update_After() : (ChrFunc)
 	{
 		local ffVec = ChrFunc.FF_GetVec();
+		ffVec.x = ffVec.x * 70 / 100; // 横の移動量を少し落とす
 		BMvTbl.SetVector( { x=ffVec.x, addx=-ffVec.x/10, y=ffVec.y, addy=-ffVec.y/10, flags=_Vector_Div } );
 	}
 	function HitInterrupt_After()
@@ -665,10 +666,25 @@ t.Mv_Atk_AirBandC_End <-
 		
 		BMvTbl.SetVector( { x=0, y=vec_y, addx=0, addy=150, flags=_Vector_Normal } );
 		BMvTbl.SetVector( { x=vec_x, addx=-vec_x/50, flags=_Vector_Div } );
+		
+		BMvTbl.SetFinalizeCode(0); //初期状態が0でない＋GetFinalizeCodeで分岐してるので初期化
+	}
+	function FrameUpdate_After()
+	{
+		local mvs = BMvTbl.GetMvStatus();
+		//着地
+		if( mvs.isLanding )
+		{
+			BMvTbl.SetFinalizeCode(256); //着地したらNeutralにいく
+		}
 	}
 	function Finalize() // 
 	{
-		BMvTbl.SetNextMoveTable( "Mv_Atk_FF_ToStand" );
+		Battle_Std.SwitchNextMoveTable("Mv_Atk_FF_ToStand",[256,"Mv_Neutral"]); //デフォ,[code,mv]...
+	}
+	function LastUpdate_After()
+	{
+		BMvTbl.SetFinalizeCode(0); // 使ったので初期化
 	}
 }
 
@@ -714,6 +730,7 @@ t.Mv_Atk_FF_WalkF <-
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // FF状態
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag2 ); // FF中にレバーでぐりぐり動く
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_AirAssult ); // 空中アサルト扱い（補正をかけるため）
+		Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_DisableChangeGRD_AssultOverheadF ); // 発生Fに応じたアサルト中段ガード時のGRD増加量を無効にする
 	}
 	function FrameUpdate_After() : (ChrFunc)
 	{
@@ -748,6 +765,7 @@ t.Mv_Atk_FF_WalkStopF <- // 前進停止
 		Battle_Std.JumpFrameIDEX(256, "FF_WalkF", 0); //設定FrameID, 上書きPattern, 失敗時FinalizeCode
 		Battle_Std.InitCharaVector(); //慣性を残したベクトル初期化
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_AirAssult ); // 空中アサルト扱い（補正をかけるため）
+		Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_DisableChangeGRD_AssultOverheadF ); // 発生Fに応じたアサルト中段ガード時のGRD増加量を無効にする
 	}
 	function FrameUpdate_After() : (ChrFunc)
 	{
@@ -778,6 +796,7 @@ t.Mv_Atk_FF_WalkB <-
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // FF状態
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag2 ); // FF中にレバーでぐりぐり動く
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_AirAssult ); // 空中アサルト扱い（補正をかけるため）
+		Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_DisableChangeGRD_AssultOverheadF ); // 発生Fに応じたアサルト中段ガード時のGRD増加量を無効にする
 	}
 	function FrameUpdate_After() : (ChrFunc)
 	{
@@ -812,6 +831,7 @@ t.Mv_Atk_FF_WalkStopB <- // 後退停止
 		Battle_Std.JumpFrameIDEX(256, "FF_WalkB", 0); //設定FrameID, 上書きPattern, 失敗時FinalizeCode
 		Battle_Std.InitCharaVector(); //慣性を残したベクトル初期化
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_AirAssult ); // 空中アサルト扱い（補正をかけるため）
+		Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_DisableChangeGRD_AssultOverheadF ); // 発生Fに応じたアサルト中段ガード時のGRD増加量を無効にする
 	}
 	function FrameUpdate_After() : (ChrFunc)
 	{
@@ -885,6 +905,7 @@ t.Mv_Skill_DashWarp <-
 	function Init_After()
 	{
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_EnableZurashiDashCancel ); // （VOが出しにくいので）必殺技からもズラし押しで別行動にいける
 	}
 }
 //-----------------------------------------------------------------------------
@@ -1075,6 +1096,26 @@ ChrFunc.KeepAirStateFrame <- function(_frame=1)
 	}
 }
 
+t.Mv_Barrier_Air <-
+{
+	function Init_Before()
+	{
+		// FFから出した時重力を入れる
+		// 永久浮遊防止だけど、他になにかあるクションがあるとダメなので結構綱渡りな仕様
+		local isFromFFMv = Battle_Std.ChangeMoveCodeEx_CheckFlag( 0, def_MC_CharaFlag1 );
+		if( isFromFFMv )
+		{
+			local limit_vecaddy = 100;
+			local vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+			if( vec.addy < limit_vecaddy )
+			{
+				_dpn("重力最低保証");
+				BMvTbl.SetVector( { addy=limit_vecaddy, flags=_Vector_Normal } );
+			}
+		}
+	}
+}
+
 t.Mv_Atk_AirA <-
 {
 	function Init_After() : (ChrFunc)
@@ -1205,8 +1246,10 @@ t.Mv_Atk_Cro3C <-
 {
 	function Init_After()
 	{
-		// ガード時でもEXキャンセルだけできるようにしている
-		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel ); // ツールでEX可でも空振りEX不可
+	}
+	function Start_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GuardChainShiftOK ); // ツールで「チェインシフト可能」がある時ならガードでCS可能なMV
 	}
 	function FrameUpdate_After()
 	{
@@ -1224,6 +1267,8 @@ t.Mv_Atk_Std6B <-
 }
 t.Mv_Atk_6B_6B <-
 {
+	atkflags = def_AtkTmplFlags_Enable,
+	flags = def_TmplFlags_Add, // 追加技
 	function Init_After() : (ChrFunc)
 	{
 		// 剣の攻撃に削りダメージ付与
@@ -1235,6 +1280,7 @@ t.Mv_Atk_Std6C <-
 {
 	function Init_After()
 	{
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
 	}
 	function FrameUpdate_After()
 	{
@@ -1278,6 +1324,7 @@ t.Mv_FireBall_6C <-
 		if( BMvTbl.CheckMvUniqueID( { datatype=_DataType_Player } ) != 1 )
 		{
 			BMvTbl.JumpFrameID(900);
+			BMvEff.SetObjectFlags( { flags=_ObjFlags_MoveTimeStopAll } );
 		}
 	}
 	function Sousai()
@@ -1472,7 +1519,7 @@ local maketmpl_SkillAirSlash = function( param={} ) : (ChrFunc)
 	{
 		ballMv = 0,
 		ballPat = 0,
-		ballUseLimitNum = 1,
+		// ballUseLimitNum = 1, // 未使用
 	}
 	
 	switch( param.type )
@@ -1581,7 +1628,7 @@ local maketmpl_SkillThrowCircleBall = function( param={} ) : (ChrFunc)
 		mvparam.ballVec = { x=2500, y=-1500, flags=_Vector_Normal };
 		mvparam.isEx = 1;
 		break;
-	case "AirC":
+	case "AirC": // FF>4BC
 		mvparam.ballMv = "Mv_FireBall_J214C";
 		mvparam.ballPat = "FB_J214C";
 		mvparam.ballUseLimitNum = 3;
@@ -1821,7 +1868,7 @@ local maketmpl_SkillVerticalStrike = function( param={} )
 		mvparam.seach_epos = 1;//サーチにする
 		break;
 	case "AddA":
-		mvparam.ball = { x=450, y=0, mv="Mv_FireBall_236AddA", pat="FB_236Add", flags=def_BallFlags_NoAddHitComboRate };
+		mvparam.ball = { x=450, y=0, mv="Mv_FireBall_236AddA", pat="FB_236AAdd", flags=def_BallFlags_NoAddHitComboRate };
 		mvparam.hit_search = 1;
 		break;
 	case "AddB":
@@ -1961,7 +2008,7 @@ local maketmpl_SkillAirVerticalStrike = function( param={} ) : (ChrFunc)
 		mvparam.seach_epos = 1;//サーチにする
 		break;
 	case "AddA":
-		mvparam.ball = { x=450, y=0, mv="Mv_FireBall_J236AddA", pat="FB_236Add", flags=def_BallFlags_NoAddHitComboRate };
+		mvparam.ball = { x=450, y=0, mv="Mv_FireBall_J236AddA", pat="FB_236AAdd", flags=def_BallFlags_NoAddHitComboRate };
 		mvparam.hit_search = 1; // 直前の236がHit時のみサーチ
 		break;
 	case "AddB":
@@ -2134,6 +2181,7 @@ local maketmpl_SkillWarp = function( param={} ) : (ChrFunc,hazienemy_shift)
 		search_kyori = 0, // 相手サーチしていい距離
 		move_enemy = 0, // 半ロックするか
 		skilltoany = 0, // 必殺技やジャンプでキャンセル可能か
+		shodan_airshield = 0, // 初段を空中シールド取ったら全ガード可能にする
 	}
 	
 	switch( param.type )
@@ -2148,6 +2196,7 @@ local maketmpl_SkillWarp = function( param={} ) : (ChrFunc,hazienemy_shift)
 		mvparam.insulator = 1;
 		mvparam.move_enemy = 50;
 		mvparam.skilltoany = 1;
+		mvparam.shodan_airshield = 1;
 		break;
 	case "EX":
 		mvparam.warp_x = 150;
@@ -2235,6 +2284,11 @@ local maketmpl_SkillWarp = function( param={} ) : (ChrFunc,hazienemy_shift)
 		if( mvparam.dmg_mv )
 		{
 			Battle_Std.SetThrowHitFinalize(100); // ヒット分岐ファイナライズ
+		}
+		if( mvparam.shodan_airshield )
+		{
+			// 屈ガード＋空ガード可能に（空ガードは全段シールド取らないでいいように追加）
+			BMvTbl.SetAtkGuardFlag( { guard=_GuardFlag_GuardCrouch|_GuardFlag_GuardAir, time=64, flag=_ClearFlag_ChangeMv } );
 		}
 	}
 	ret_tmpl.LastUpdate_After <- function() : (mvparam)
@@ -2409,6 +2463,16 @@ local maketmpl_SkillAirWarp = function( param={} ) : (ChrFunc,hazienemy_shift)
 			BMvTbl.SetPosition({ x=epos.x+set_posx, y=0 });
 			BMvTbl.SetMuki( _Direction_Reverse );
 			break;
+		case 300:
+			// J623A、FF_J2BC 動作後立ち上がり
+			// 250608 Hit時は硬直減少
+			local hs = BMvTbl.GetMvHitStatus();
+			_dpn("hs="+hs);
+			if( hs.Type&_HitType_Damage )
+			{
+				BMvTbl.SetMoveableFlag( { move=1, time=254, flag=_ClearFlag_ChangeMv } ); // Mv中行動可能にする
+			}
+			break;
 		}
 	}
 	ret_tmpl.HitInterrupt_After <- function() : (mvparam)
@@ -2433,6 +2497,7 @@ local maketmpl_SkillAirWarp = function( param={} ) : (ChrFunc,hazienemy_shift)
 
 	ret_tmpl.LastUpdate_After <- function() : (mvparam)
 	{
+		BMvEff.SetGuardPlusFlag( 0 ); // 振り向き時のガード方向修正を無効化とか色々を消す
 	}
 	
 	return ret_tmpl;
@@ -2570,6 +2635,8 @@ t.Mv_Skill_41236SP_Hit <-
 		
 		BMvEff.CreateObject( { x=x_pos*128, y=-248*128, mvname="Mv_Obj_Eff_IW_Bind" } ); //相手の座標に出す
 		BMvTbl.SetLP(1,x_pos*128); // 距離を記憶
+
+		BMvEff.CutInProc_SetResourceView( { mode=0 } ); // 軽量化のため謎空間を表示しない
 	}
 	function ReleaseEnemy()
 	{
@@ -2640,6 +2707,7 @@ t.Mv_Skill_41236SP_End <-
 	flags = def_TmplFlags_NoAddComboRate, // コンボレートを加算しない
 	function Init_After()
 	{
+		BMvEff.CutInProc_SetResourceView( { mode=1 } ); // 謎空間を戻す
 	}
 	function FrameUpdate_After()
 	{
@@ -2736,10 +2804,6 @@ t.Mv_AniSet_HaraFukitobiYarare <- Battle_Std.MakeMv.SetCaptureCharaAnime( { anim
 	{ Data = [331,3,4], RelJump=-1 },
 ] } );
 
-t.Mv_AniSet_fuyuu <- Battle_Std.MakeMv.SetCaptureCharaAnime( { animation = [
-	{ Data = [290,0,3], RelJump=0, Vector = { x=0, y=0, addy=0, flags=_Vector_Div }},
-] } );
-
 
 t.Mv_Skill_IWEXIST_Hit <-
 {
@@ -2772,12 +2836,15 @@ t.Mv_Skill_IWEXIST_Hit <-
 			local pos = BMvTbl.GetPosition();
 			BMvEff.SetCamera_Focus( { num=0, zoom=1.0, time=[0,999,30] } );
 			BMvEff.SetCamera_Focus( { num=1, x=pos.x, y=0, zoom=1.0, time=[1,999,30], type_in=1 } );
+
+			BMvEff.CutInProc_SetResourceView( { mode=0 } ); // 軽量化のため謎空間を表示しない
 			break;
 		case 200: // ここから別パターン
 			BMvEff.CreateObject( { mvname="Mv_Obj_IWEBigKuo" } );
 			// ここから相手を画面中央へ
-			BMvEff.CreateObject( { mvname="Mv_AniSet_fuyuu" } );
-			BMvEff.ThrowParam( { x=0, y=-80, } ); //敵の座標を設定(自分からみてで指定できてる)
+			Battle_Std.MakeMv.LastCharaAnimeEnd(1);
+
+			BMvEff.ThrowParam( { x=36, y=-80, pattern=290 } ); //敵の座標を設定(自分からみてで指定できてる)
 			
 			local enemy = BMvCore.GetNearEnemyCharaData();
 			if( enemy.push() )
@@ -2842,6 +2909,7 @@ t.Mv_Skill_IWEXIST_End <-
 {
 	function Init_After()
 	{
+		BMvEff.CutInProc_SetResourceView( { mode=1 } ); // 謎空間を戻す
 		BMvEff.FadeProc_Set({type=0, time=[0,2,10] color=0xFFFFFF}); // 2F稼ぐ
 	}
 }
@@ -2886,7 +2954,8 @@ t.Mv_Obj_Eff_IWE_Finish <-
 {
 	function Init_After()
 	{
-		BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange } );
+		BMvEff.ObjProcFlags_Set( { flags=_ObjProcFlags_EraseChangeParentMv } );
+		// BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange } );
 		local c_pos = BMvEff.GetCameraRect( { flags=_GetPos_TrueCamera|_GetPos_NoMuki } ); //カメラから見た画面中央を取得
 		BMvTbl.SetPosition({x=(c_pos.sx+c_pos.ex)/2,y=(c_pos.sy+c_pos.ey)/2}); // 画面中央に表示
 	}

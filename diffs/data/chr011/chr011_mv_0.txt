@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 
@@ -22,6 +21,48 @@ t.Mv_Atk_StdBandC <-
 	{
 		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する＆自分のヒット数減らない
 		BMvTbl.SetLP(0,0); // 飛び道具相殺したか
+		
+		// BズラしCでFFを出したとき、Bを使った扱いになってしまうなどの対応
+		// 前の行動がズラし押し可能で、2F以内で、前の行動が各種地上攻撃だったら処理をする
+		if( Battle_Std.ChangeMoveCodeEx_CheckFlag( 1, def_MC1_CmdLvDZ_OK ) && BMvTbl.GetMvStatusBF().MvCount <= 2 )
+		{
+			local changeMv = BMvTbl.ChangeMv_GetMvName();
+			if( changeMv == "Mv_Atk_StdB" )
+			{
+				_dpn("ClearComboLimit - B");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_STDB);
+			}
+			else if( changeMv == "Mv_Atk_StdC" )
+			{
+				_dpn("ClearComboLimit - C");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_STDC);
+			}
+			else if( changeMv == "Mv_Atk_CroB" )
+			{
+				_dpn("ClearComboLimit - 2B");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_CROB);
+			}
+			else if( changeMv == "Mv_Atk_CroC" )
+			{
+				_dpn("ClearComboLimit - 2C");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_CROC);
+			}
+			else if( changeMv == "Mv_Atk_Std6B" )
+			{
+				_dpn("ClearComboLimit - 6B");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_ATK6B);
+			}
+			else if( changeMv == "Mv_Atk_Std6C" )
+			{
+				_dpn("ClearComboLimit - 6C");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_ATK6C);
+			}
+			else if( changeMv == "Mv_Atk_Std3C" )
+			{
+				_dpn("ClearComboLimit - 3C");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_ATK3C);
+			}
+		}
 	}
 	function FrameUpdate_After()
 	{
@@ -39,6 +80,7 @@ t.Mv_Atk_StdBandC <-
 		if( BMvTbl.GetLP(0)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(0,1); // 飛び道具相殺処理した
+			BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 		}
 		
 		// 相殺していないときは頭無敵のみ
@@ -85,6 +127,7 @@ t.Mv_Obj_BandCAtk <-
 		if( BMvTbl.GetLP(0)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(0,1); // 飛び道具相殺処理した
+			BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 			
 			// 親に相殺を伝える
 			local player = BMvCore.GetPlayerCharaData();
@@ -423,9 +466,42 @@ t.Mv_Atk_AirC <-
 
 t.Mv_Atk_DashStdB <-
 {
+	function Init_After()
+	{
+		BMvTbl.SetLP(0,0); // キャンセルフレーム（1=最速 2=1Fディレイ）
+		BMvTbl.SetLP(1,0); // 計測開始
+		BMvTbl.SetLP(2,0); // ガードされたか
+	}
+	function Update_After()
+	{
+		// 攻撃発生後＆ガードされた
+		if( BMvTbl.GetLP(1)==1 && BMvTbl.GetLP(2)==1 )
+		{
+			local mvs = BMvTbl.GetMvStatus();
+			if( mvs.isUpdate ) // ヒットストップ中じゃなかったら(※1F目は絶対に入る)
+			{
+				local frame = BMvTbl.AddLP(0,1); // ディレイ具合を記憶
+				//_dpn("ディレイフレーム:"+(frame-1));
+			}
+		}
+	}
 	function FrameUpdate_After()
 	{
 		Battle_Std.SetHitMuteki( 1, 32, _HitCheckFlag_Legs ); // Param1 & 32 の時、足無敵
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 100: // 攻撃発生タイミング
+			BMvTbl.SetLP(1,1); // 計測開始
+			break;
+		}
+	}
+	function HitInterrupt_After()
+	{
+		if( Battle_Std.CheckGuardTiming() )
+		{
+			BMvTbl.SetLP(2,1); // ガードされたか
+		}
 	}
 }
 
@@ -433,11 +509,37 @@ t.Mv_Atk_DashStdC <-
 {
 	function Init_After()
 	{
-		// Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_Shield_CanselNG ); // シールドされるとキャンセル不能
+		BMvTbl.SetLP(0,0); // キャンセルフレーム（1=最速 2=1Fディレイ）
+		BMvTbl.SetLP(1,0); // 計測開始
+		BMvTbl.SetLP(2,0); // 初段がガードされたか
+
+		// 初段シールドでもキャンセル不能にした
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_Shield_CanselNG ); // シールドされるとキャンセル不能
+	}
+	function Update_After()
+	{
+		// 初段が攻撃発生後＆ガードされた
+		if( BMvTbl.GetLP(1)==1 && BMvTbl.GetLP(2)==1 )
+		{
+			local mvs = BMvTbl.GetMvStatus();
+			
+			if( mvs.isUpdate ) // ヒットストップ中じゃなかったら(※1F目は絶対に入る)
+			{
+				local frame = BMvTbl.AddLP(0,1); // ディレイ具合を記憶
+				//_dpn("ディレイフレーム:"+(frame-1));
+			}
+		}
 	}
 	function FrameUpdate_After()
 	{
 		Battle_Std.SetHitMuteki( 1, 32, _HitCheckFlag_Legs ); // Param1 & 32 の時、足無敵
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 100: // 攻撃発生タイミング
+			BMvTbl.SetLP(1,1); // 計測開始
+			break;
+		}
 		
 		local mvs = BMvTbl.GetMvStatus();
 		if( mvs.isLanding )
@@ -460,9 +562,18 @@ t.Mv_Atk_DashStdC <-
 	{
 		if( Battle_Std.CheckHitTiming() )
 		{
-			// そもそも空中シールドも取れないのでこの処理不要では…？
 			// 空ガード可能に（空ガードは全段シールド取らないでいいように追加）
-			BMvTbl.SetAtkGuardFlag( { guard=_GuardFlag_GuardAir, time=64, flag=_ClearFlag_ChangeMv } );
+			// ※この処理は不要なので廃止
+			// BMvTbl.SetAtkGuardFlag( { guard=_GuardFlag_GuardAir, time=64, flag=_ClearFlag_ChangeMv } );
+		}
+		
+		if( Battle_Std.CheckGuardTiming() )
+		{
+			local mvs = BMvTbl.GetMvStatus();
+			if( mvs.FrameID == 100 || mvs.FrameID == 110 )
+			{
+				BMvTbl.SetLP(2,1); // 初段がガードされたか
+			}
 		}
 	}
 }
@@ -537,6 +648,13 @@ t.Mv_Atk_C_C <- //C追加C
 	function Init_After()
 	{
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
+		
+		// タメCからきたらリーチの長いバージョンに変化
+		local fromExtend = Battle_Std.ChangeMoveCodeEx_CheckFlag( 1, def_MC1_ExtendAction );
+		if( fromExtend )
+		{
+			BMvTbl.JumpFrameID(1000);
+		}
 	}
 }
 
@@ -1420,7 +1538,10 @@ t.Mv_Skill_236B <-
 				}
 				break;
 			}
-		}		
+		}
+		
+		// コンボ中＋前の攻撃がヒットしているときはスっぽ抜けないようにコンボ中は大きめの判定に分岐
+		Battle_Std.JumpFrameID_MvDamage( { CheckFrameID=190, JumpFrameID=210 } ); // ダメージ情報があるときFrameIDを変える
 		
 		if( s.isFrameUpdate )
 		{
@@ -1495,6 +1616,8 @@ t.Mv_Skill_236EX <-
 {
 	function Init_After() : (elt_checkbullet,elt_getspbullet)
 	{
+		BMvTbl.SetLP(0,0); // 引き寄せたか
+		
 		if( elt_checkbullet()==0 ) return; //残り弾丸チェック 無ければFinalize(-100)して先へ進めない
 		local spbullet = elt_getspbullet(); //強化弾丸数を取得
 		if( spbullet==0 ) //強化０
@@ -1552,6 +1675,19 @@ t.Mv_Skill_236EX <-
 			if( s.FrameID != 100 )
 			{
 				BMvEff.SetCharaFlash( { color = 0x00106F, type = 1, time = 0 } ); //点滅消去
+			}
+		}
+	}
+	function HitInterrupt_After()
+	{
+		if( Battle_Std.CheckDamageTiming() )
+		{
+			// 250609 半ロックを追加
+			if( BMvTbl.GetLP(0)==0 )
+			{
+				_dpn("初回ヒットのみ引き寄せ");
+				Battle_Std.SetPosition_DamageHanteiRect({ power=30, flags=(1<<0) }); // X座標無効
+				BMvTbl.SetLP(0,1); // 引き寄せた
 			}
 		}
 	}
@@ -1765,12 +1901,19 @@ t.Mv_Skill_BulletReload_X <-
 //-----------------------------------------------------------------------------
 
 //タマが満タン状態でリロードをした時
+//このMVは直接しないこと
 t.Mv_Skill_BulletReload_NoReload <-
 {
 	flags = def_TmplFlags_ChangeStatusOnly, //状態の移行のみを行う
 	function Init_After() //状態の移行のみに
 	{
+		// BMvTbl.SetLP(3,0); // 妙なキャンセルなのを記憶　前のMVで指定される
+		local isExReloadCancel = BMvTbl.GetLP(3);
 		BMvTbl.SetPattern("0202C_NoReload");
+		if( isExReloadCancel )
+		{
+			BMvTbl.JumpFrameID(100); // アニメ調整
+		}
 	}
 }
 
@@ -1792,8 +1935,17 @@ t.Mv_Skill_0202C <-
 		BMvTbl.SetPP( def_PP_Elt_ReloadTmp0, 0 );
 		BMvTbl.SetPP( def_PP_Elt_ReloadTmp1, 0 );
 		
+		// 623EXのヒット分岐やIWからのフレームジャンプも追加
+		BMvTbl.SetLP(3,0); // 妙なキャンセルなのを記憶
+		local isExReloadCancel = Battle_Std.IsMatchChangeMvNameArray( ["Mv_Skill_41236SP","Mv_Skill_623EX_Hit"] );
+		if( isExReloadCancel )
+		{
+			BMvTbl.SetLP(3,1); // 妙なキャンセルなのを記憶（満タンリロード先で使用）
+		}
+
 		//弾丸が満タンだったら別のmvにいこう
-		if( BMvTbl.GetPP( def_PP_Elt_Bullet )==0 )
+		//236EXのあとは必ず1つ使うので入らない
+		if( BMvTbl.GetPP( def_PP_Elt_Bullet )==0 ) // 使った数が0
 		{
 			BMvTbl.SetFinalize(256);
 			return;
@@ -1803,7 +1955,7 @@ t.Mv_Skill_0202C <-
 		BMvTbl.SetLP(1,99); // 何フレーム目から行動可能になるかオフセット予約 39+この値
 
 		//236EXからきてたらフレームジャンプしよう
-		if( BMvTbl.GetLP(0)==1 )
+		if( BMvTbl.GetLP(0)==1 || isExReloadCancel )
 		{
 			BMvTbl.AddLP(2,-11); // ジャンプする分、11F減る
 			BMvTbl.JumpFrameID(200);
@@ -2019,6 +2171,7 @@ t.Mv_Skill_623EX <-
 {
 	function Init_After()
 	{
+		BMvTbl.SetPP(def_PP_Elt_SkillAddReload,0); // 追加リロードコマンドステータス 1:22Cが入った
 		BMvTbl.SetLP(0,0);//引き寄せ処理を行ったかどうか
 	}
 	function HitInterrupt_After() // 
@@ -2111,7 +2264,15 @@ t.Mv_Skill_623EX_Hit <-
 	}
 	function Finalize()
 	{
-		BMvTbl.SetNextMoveTable("Mv_Skill_623EX_HitEnd");
+		// ヒット後にリロードへ行けるように
+		if( BMvTbl.GetPP(def_PP_Elt_SkillAddReload) == 1 )
+		{
+			BMvTbl.SetNextMoveTable("Mv_Skill_0202C");
+		}
+		else
+		{
+			BMvTbl.SetNextMoveTable("Mv_Skill_623EX_HitEnd");
+		}
 	}
 	function LastUpdate_After()
 	{
@@ -2125,6 +2286,7 @@ t.Mv_Skill_623EX_Hit <-
 	}
 }
 
+// ここまでいくとリロードには行けないでいいかな
 t.Mv_Skill_623EX_HitEnd <-
 {
 	flags = def_TmplFlags_NoAddComboRate, // コンボレートを加算しない
@@ -2409,6 +2571,7 @@ t.Mv_Skill_AerialJump <-
 		if( s.isFrameUpdate && s.FrameID==100 ) //飛び上がるところ
 		{
 			BMvEff.CreateObject( { mvname="Mv_AerialStatusObject" } ); //エリアル状態で持続するオブジェクトを生成
+			BMvTbl.SetPP(def_PP_JumpFrame,0);//離陸から何フレームかを記憶する
 			
 			//相手の高さに応じてベクトルを変化させる
 			//設定しなくてもツールで-4500/190は入る
@@ -2468,9 +2631,28 @@ t.Mv_Skill_214A <-
 	function Init_After()
 	{
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
+		BMvTbl.SetLP(2,0); // XXX:暗転ロックバグ応急措置　ガードされたら1
+	}
+	function FrameUpdate_After()
+	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 1001:
+			// ガード時に２ヒットにする
+			// 判定データ側でやると暗転ロックバグがおきるため、スクリプトで攻撃出現1追加
+			if( BMvTbl.GetLP(2)==1 )
+			{
+				BMvTbl.CalcHitValue(1);
+			}
+			break;
+		}
 	}
 	function HitInterrupt_After() // ヒット分岐
 	{
+		if( Battle_Std.CheckGuardTiming() )
+		{
+			BMvTbl.SetLP(2,1); // ガードされた
+		}
 		Battle_Std.SetThrowHitFinalize(256); // ヒット分岐ファイナライズ
 	}
 	function Finalize() // 
@@ -2513,13 +2695,30 @@ t.Mv_Skill_214B <-
 	{
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
 		BMvTbl.SetLP(0,0); // 金投げを記憶
+		BMvTbl.SetLP(2,0); // XXX:暗転ロックバグ応急措置　ガードされたら1
 	}
 	function FrameUpdate_After()
 	{
 		Battle_Std.SetPattern_NotHoldButton( { CheckFrameID=50, ButtonMask=(1<<1), SetPattern="214B_End", EndFrameID=60 } );
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 1001:
+			// ガード時に２ヒットにする
+			// 判定データ側でやると暗転ロックバグがおきるため、スクリプトで攻撃出現1追加
+			if( BMvTbl.GetLP(2)==1 )
+			{
+				BMvTbl.CalcHitValue(1);
+			}
+			break;
+		}
 	}
 	function HitInterrupt_After() // ヒット分岐
 	{
+		if( Battle_Std.CheckGuardTiming() )
+		{
+			BMvTbl.SetLP(2,1); // ガードされた
+		}
 		if( Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_ExtendAction ) )
 		{
 			Battle_Std.SetThrowHitFinalize(512,700,300,300,300); // 投げ,　強引投げ, コンボ投げ, リジェクト＆投げを投げぬけ可, 投げ抜け失敗フレーム中
@@ -2566,7 +2765,7 @@ t.Mv_Skill_214B_Hit <-
 	}
 	function LastUpdate_After()
 	{
-		Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+		Battle_Std.NoCansel_NoAttackHit( { check_nosidou={ hosei=83 } } ); //何かでキャンセルしなかった場合追撃不能にする・始動時は追撃可能
 	}
 }
 
@@ -2592,6 +2791,9 @@ t.Mv_Skill_214B2_Hit <-
 	flags = def_TmplFlags_NoAddComboRate, // コンボレートを加算しない
 	function Init_After()
 	{
+		// TechWait処理を通らないときはこれが必要になる
+		Battle_Std.ThrowTech.ShiftOverGamenHajiX(); //相手が画面外にいたら自分の座標ごと補正をかける
+		
 		BMvEff.ThrowChara_SetCamera( 1 ); //つかみ中でも相手をカメラに含める
 		if( BMvTbl.GetLP(0) == 1 )
 		{
@@ -2619,10 +2821,30 @@ t.Mv_Skill_214EX <-
 {
 	function Init_After()
 	{
+		BMvTbl.SetPP(def_PP_Elt_SkillAddReload,0); // 追加リロードコマンドステータス 1:22Cが入った
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
+		BMvTbl.SetLP(2,0); // XXX:暗転ロックバグ応急措置　ガードされたら1
+	}
+	function FrameUpdate_After()
+	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 1001:
+			// ガード時に２ヒットにする
+			// 判定データ側でやると暗転ロックバグがおきるため、スクリプトで攻撃出現1追加
+			if( BMvTbl.GetLP(2)==1 )
+			{
+				BMvTbl.CalcHitValue(1);
+			}
+			break;
+		}
 	}
 	function HitInterrupt_After() // ヒット分岐
 	{
+		if( Battle_Std.CheckGuardTiming() )
+		{
+			BMvTbl.SetLP(2,1); // ガードされた
+		}
 		Battle_Std.SetThrowHitFinalize(256); // ヒット分岐ファイナライズ
 	}
 	function Finalize() // 
@@ -2716,8 +2938,103 @@ t.Mv_Skill_J214A <-
 {
 	function Init_After()
 	{
+		local tmpLP0 = BMvTbl.GetLP(0); // ディレイフレーム
+		local tmpLP2 = BMvTbl.GetLP(2); // 今のうちに記憶
+		
+		BMvTbl.SetLP(0,0); // 遅延フレーム予約がある＆何フレーム遅らせるか
+		BMvTbl.SetLP(1,0); // 攻撃発生タイミングで攻撃出現をクリアしていたら1
+		
 		// Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_Shield_CanselNG ); // シールドされるとキャンセル不能
 		BMvTbl.SetHitCheckFlag( { type=1, val=Def_HitCheckFlag_AirDive, time=255, flag=_ClearFlag_ChangeMv } ); // 空突無敵にスカる
+		
+		// 66B>J214Aや66C>J214Aのとき、特定のキャラ相手に過剰に強すぎることへの対応
+		// 前の行動をチェック
+		local lastMvName = BMvTbl.ChangeMv_GetMvName();
+		if( lastMvName == "Mv_Atk_DashStdB" || lastMvName == "Mv_Atk_DashStdC" )
+		{
+			local mvs_bf = BMvTbl.GetMvStatusBF();
+			local isCheckTiming = (mvs_bf.Param2&1); // ダッシュB、ダッシュCのParam2&1から飛んできたときだけ処理する
+			local delayFrame = tmpLP0-1; // ディレイフレーム
+			local isGuard = tmpLP2; // ガードされたか
+			
+			if( isGuard && isCheckTiming )
+			{
+				if( lastMvName == "Mv_Atk_DashStdB" )
+				{
+					local lagFrame = 0;
+					if( delayFrame <= 1 ) // 1Fディレイ以下
+					{
+						lagFrame = 3; // (3F経過で着地するので)空振りする
+					}
+					else if( delayFrame <= 4 ) // 2～4Fディレイ
+					{
+						lagFrame = 1; // 1F遅れてあたる
+					}
+					else // 5F以上ディレイ
+					{
+						lagFrame = 0; // すぐあたる
+					}
+					BMvTbl.SetLP(0,lagFrame); // 遅らせるフレームを記憶
+					_dpn("★発生遅延予約:"+lagFrame);					
+				}
+				else if( lastMvName == "Mv_Atk_DashStdC" )
+				{
+					// ダッシュCからは必ず空振りする
+					_dpn("delayFrame:"+delayFrame);
+					local lagFrame = 7; // 着地までのフレーム
+					BMvTbl.SetLP(0,lagFrame); // 遅らせるフレームを記憶
+					_dpn("★発生遅延予約:"+lagFrame);					
+				}
+			}
+		}
+	}
+	function Update_After()
+	{
+		if( BMvTbl.GetLP(1) == 1 ) // 攻撃が発生した＆攻撃出現をクリアしている
+		{
+			if( BMvTbl.GetLP(0) > 0 ) // 遅延フレーム予約がある
+			{
+				local kyori = Battle_Std.GetEnemyDistance();
+				local left = BMvTbl.AddLP(0,-1); // 遅延フレームを減らす
+				
+				// ここは保険処理で、基本的には入ってこない
+				// こっちの想定しない当て方があったとき、ド密着なのにスカるとバグっぽいので近すぎるときは復活させる処理
+				local x_reach = 63*128; //エルトナムのリーチ63ドット
+				local vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+				local x_len = kyori - (x_reach + vec.x); // リーチを加味した残り距離
+				//相手のやられ（通常）　　立ち： 60　しゃがみ： 70
+				//相手のやられ（デカ）　　立ち： 70　しゃがみ： 90
+				//相手のやられ（ワレン）　立ち：120　しゃがみ：120
+				
+				// _dpn("残り:"+left+" kyori:"+kyori/128+" x_len:"+x_len/128);
+				if( left <= 0 || x_len < 60*128 ) // 終わった or あまりにも密着である場合は復活
+				{
+					BMvTbl.SetLP(0,0); // 予約クリア　※leftがLP0なのでやる必要はない
+					local mvs = BMvTbl.GetMvStatus();
+					if( mvs.Param2&1 ) // 攻撃中
+					{
+						_dpn("★攻撃発生を再開させる");
+						BMvTbl.CalcHitValue(1); // 発生を戻す
+					}
+				}
+			}
+		}
+	}
+	function FrameUpdate_After()
+	{
+		local mvs = BMvTbl.GetMvStatus();
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 100:
+			// 攻撃発生タイミング
+			if( BMvTbl.GetLP(0) != 0 ) // 遅延予約あり
+			{
+				BMvTbl.SetLP(1,1); // 攻撃発生タイミングで攻撃出現をクリアしていたら1
+				BMvTbl.CalcHitValue(-10000); // クリア
+			}
+			break;
+		}
 	}
 	function HitInterrupt_After() // ヒット分岐
 	{
@@ -2726,7 +3043,7 @@ t.Mv_Skill_J214A <-
 	function Finalize()
 	{
 		Battle_Std.SwitchNextMoveTable("Mv_Neutral", [256,"Mv_Skill_J214A_Hit"] ); //デフォ,[code,mv]...
-	}	
+	}
 }
 
 t.Mv_Skill_J214B <- 
@@ -2774,13 +3091,17 @@ local maketmpl_J214_Hit = function( param={} )
 		releaseParam = { type="小腹吹き飛び", airrecover=35, flags=_ThrowRelease_NoGroundRecover|_ThrowRelease_NoAttackHit|_ThrowRelease_NoWallRecover },
 		// releaseParamとは異なる関数なので注意
 		cancelReleaseParam = { pat=350, x=0, y=-100, type="小腹吹き飛び", airrecover=0, flags=_ThrowRelease_NoGroundRecover|_ThrowRelease_NoWallRecover },
+		noSetUseExSkillFlag = 0,
+		setGRDLimit = 0,
+		isSS = 0,
 	}
 	
 	switch( param.type )
 	{
 	case "A":
 		// Aは追撃できない
-		mvparam.noAttackHit = 1; // キャンセルしないと追撃できない＆開放時に追撃不能にしている
+		mvparam.noAttackHit = { check_nosidou={ hosei=70 } }; // キャンセルしないと追撃できないが始動時は追撃可能
+		mvparam.releaseParam = { type="小腹吹き飛び", airrecover=35, flags=_ThrowRelease_NoGroundRecover|_ThrowRelease_NoWallRecover };
 		break;
 	case "B":
 		mvparam.noAttackHit = 0;
@@ -2788,20 +3109,38 @@ local maketmpl_J214_Hit = function( param={} )
 		break;
 	case "SS":
 		// SSはキャンセルではIWに行けるようにする
-		mvparam.noAttackHit = 1; // キャンセルしないと追撃できない
+		mvparam.noAttackHit = {}; // キャンセルしないと追撃できない
 		mvparam.throwParam = { pattern = 350, x=0, y=-25 };
 		mvparam.releaseParam = { type=269, flags=_ThrowRelease_NoGroundRecover };
-		mvparam.cancelReleaseParam = { pat=350, x=0, y=-100, type=269, airrecover=0, flags=_ThrowRelease_NoGroundRecover|_ThrowRelease_NoWallRecover };
+		mvparam.cancelReleaseParam = { pat=350, x=0, y=-100, type=269, airrecover=0, flags=_ThrowRelease_NoGroundRecover|_ThrowRelease_NoWallRecover|_ThrowRelease_NoVecTimeHosei };
+		mvparam.noSetUseExSkillFlag = 1;
+		mvparam.setGRDLimit = 1;
+		mvparam.isSS = 1;
 		break;
 	}
 	
 	rettmpl.flags <- def_TmplFlags_NoAddComboRate; // コンボレートを加算しない
 	
-	rettmpl.Init_After <- function()
+	rettmpl.Init_After <- function() : (mvparam)
 	{
 		BMvEff.ThrowParam( { pattern = 320, x=0, y=0, hantei_rect=[ "Etc", 9 ], flags = ( _Position_CaptureChara ) } ); //位置を調整
 		BMvTbl.SetLP(1,0); //つかみ開放まで進んだかどうか
 		Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag2 ); //エリアル属性を解除するMv
+		
+		if( mvparam.noSetUseExSkillFlag )
+		{
+			Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_NoSetUseExSkillFlag ); // EX技扱いだがEX技の保証補正制限はかけない
+		}
+		if( mvparam.setGRDLimit )
+		{
+			BMvTbl.SetGrdLimit( 1 ); // 行動中自分と相手のＧＲＤの増減を止める
+		}
+		
+		// ステアエンダーのときは受身不能時間を固定にする
+		if( mvparam.isSS )
+		{
+			BMvTbl.SetForceUkemiTimeLimitFlag( { val=31, time=255, flag=_ClearFlag_ChangeMv } );
+		}
 	}
 	
 	rettmpl.FrameUpdate_After <- function() : (mvparam)
@@ -2826,6 +3165,11 @@ local maketmpl_J214_Hit = function( param={} )
 				BMvEff.ThrowRelease( mvparam.releaseParam );
 				
 				BMvTbl.SetLP(1,1); //つかみ開放まで進んだ
+				
+				if( mvparam.setGRDLimit )
+				{
+					BMvTbl.SetGrdLimit( 0 ); // 行動中自分と相手のＧＲＤの増減を止めるを解除
+				}
 				break;
 			}
 		}
@@ -2846,7 +3190,7 @@ local maketmpl_J214_Hit = function( param={} )
 	
 		if( mvparam.noAttackHit )
 		{
-			Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+			Battle_Std.NoCansel_NoAttackHit( mvparam.noAttackHit ); //何かでキャンセルしなかった場合追撃不能にする
 		}
 	}
 	
@@ -2952,7 +3296,7 @@ t.Mv_Skill_SSRelayAtk <-
 {
 	function Init_After()
 	{
-		
+		BMvTbl.SetLP(0,0); // ヒット分岐したか
 	}
 	function FrameUpdate_After()
 	{
@@ -2973,12 +3317,22 @@ t.Mv_Skill_SSRelayAtk <-
 	}
 	function HitInterrupt_After() // ヒット分岐
 	{
-		Battle_Std.SetThrowHitFinalize(256); // ヒット分岐ファイナライズ
+		if( Battle_Std.SetThrowHitFinalize(256) ) // ヒット分岐ファイナライズ
+		{
+			BMvTbl.SetLP(0,1); // ヒット分岐したか
+		}
 	}
 	function Finalize()
 	{
 		Battle_Std.SwitchNextMoveTable("Mv_Neutral", [256,"Mv_Skill_SSRelayAtk_Hit"] ); //デフォ,[code,mv]...
-	}	
+	}
+	function LastUpdate_After()
+	{
+		if( BMvTbl.GetLP(0)==0 )
+		{
+			Battle_Std.SSRelayAtk_NoAttackHit_UseLP(); // ステアエンダーで抜けるときに必ずやる追撃不可能処理(LP使用)
+		}
+	}
 }
 t.Mv_Skill_SSRelayAtk_Hit <- maketmpl_J214_Hit( { type="SS" } );
 
@@ -2988,6 +3342,10 @@ t.Mv_Skill_SSRelayAtk_Hit <- maketmpl_J214_Hit( { type="SS" } );
 
 t.Mv_Skill_41236SP <- 
 {
+	function Init_After()
+	{
+		BMvTbl.SetPP(def_PP_Elt_SkillAddReload,0); // 追加リロードコマンドステータス 1:22Cが入った
+	}
 	function FrameUpdate_After() // 
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
@@ -3007,7 +3365,18 @@ t.Mv_Skill_41236SP <-
 			break;
 		case 5110: // 発射終了して戻り始め
 			break;
+		case 6000:
+			// ここで追加コマンドあったらリロードへ移動する
+			if( BMvTbl.GetPP(def_PP_Elt_SkillAddReload) == 1 )
+			{
+				BMvTbl.SetFinalize(100); // リロードへ
+			}
+			break;
 		}
+	}
+	function Finalize()
+	{
+		Battle_Std.SwitchNextMoveTable("Mv_Neutral", [100,"Mv_Skill_0202C"] ); //デフォ,[code,mv]...
 	}
 }
 

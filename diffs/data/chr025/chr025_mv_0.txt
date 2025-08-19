@@ -216,7 +216,23 @@ t.Mv_AtkObj_CaptureBomb <-
 			// 定期的にもやもやを呼んだり爆発前に相手を光らせる処理
 			if( mvs.FrameCallCount==0 )
 			{
-				BMvTbl.AddLP(1,1); // // マインが何フレーム待機したか
+				local framecount_ok = 1;
+				local player = BMvCore.GetPlayerCharaData();
+				if( player.push() )
+				{
+					local nocount_flag = Battle_Std.MoveCodeEx.CheckFlag( 0, def_MC_CharaFlag2 ); // マインのカウントを進めない行動
+					player.pop();
+					
+					// 点滅前のときだけはカウントを進めない
+					if( nocount_flag && BMvTbl.GetLP(2)==0 )
+					{
+						framecount_ok = 0;
+					}
+				}
+				if( framecount_ok )
+				{
+					BMvTbl.AddLP(1,1); // // マインが何フレーム待機したか
+				}
 			}
 			local wait_frame = BMvTbl.GetLP(1); // マインが何フレーム待機したか
 
@@ -459,7 +475,8 @@ t.Mv_Atk_AirBandC <-
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100:
-			Battle_Std.CreateFireBall({ x=50, y=-250, mv="Mv_FireBall_AirBandC", pat = "FB_JB+C", angle=3600, vec = Battle_Std.GetVector_FromAngle({ angle=3600, speed=18000, }) });
+			// 250609 1.24 angle=3600
+			Battle_Std.CreateFireBall({ x=50, y=-250, mv="Mv_FireBall_AirBandC", pat = "FB_JB+C", angle=3500, vec = Battle_Std.GetVector_FromAngle({ angle=3500, speed=18000, }) });
 			
 			// 空中は一回まで(Initでやるとずらし押しとかでも消費してしまうのでここでやる)
 			BMvTbl.AddAirCount( def_ACS_OGR_JBandC, 1 ); // 回数制限をかける
@@ -666,6 +683,10 @@ t.Mv_Atk_CroC <-
 	{
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
 	}
+	function FrameUpdate_After()
+	{
+		Battle_Std.JumpFrameID_MvDamage( { CheckFrameID=109, JumpFrameID=120 } ); // ダメージ情報があるときFrameIDを変える
+	}
 }
 
 t.Mv_Atk_AirA <- {};
@@ -845,6 +866,7 @@ local maketmpl_SkillMovePunch = function( param={} )
 	{
 		lockmv = 0, // つかみ判定でヒット分岐する
 		hitjump = 0, // ヒット時にFrameIDジャンプ+座標移動
+		guard_cs = 0, // ツールで「チェインシフト可能」がある時ならガードでCS可能なMV
 	}
 	
 	switch( param.type )
@@ -857,16 +879,22 @@ local maketmpl_SkillMovePunch = function( param={} )
 	case "EX":
 		mvparam.lockmv = "Mv_Skill_214EX_Hit";
 		mvparam.hitjump = { CheckID=100, JumpID=110, OffX=250*128 };
+		mvparam.guard_cs = 1;
 		break;
 	}
 	
 	ret_tmpl.flags <- def_TmplFlags_NoSurinuke;
 	
-	ret_tmpl.Init_After <- function()
+	ret_tmpl.Init_After <- function() : (mvparam)
 	{
 		BMvTbl.SetHan6LayerMask( { val = (1<<1) } ); // 裏周りレイヤーは基本的に消しておく
 		
 		BMvTbl.SetLP(0,0); // 突進して裏に行く処理をupdateでするか
+		
+		if( mvparam.guard_cs )
+		{
+			Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GuardChainShiftOK ); // ツールで「チェインシフト可能」がある時ならガードでCS可能なMV
+		}
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
@@ -1162,7 +1190,15 @@ t.Mv_Skill_236A_Add <-
 	{
 		if( Battle_Std.CheckDamageTiming() )
 		{
-			Battle_Std.SetPosition_DamageHanteiRect({ power=50 }); //引き寄せ半ロック
+			local mvs = BMvTbl.GetMvStatus();
+			if( mvs.FrameID == 100 )
+			{
+				Battle_Std.SetPosition_DamageHanteiRect({ power=100, flags=(1<<1) }); //引き寄せ半ロック・Y無効
+			}
+			else
+			{
+				Battle_Std.SetPosition_DamageHanteiRect({ power=50 }); //引き寄せ半ロック
+			}
 		}
 		if( Battle_Std.CheckHitTiming_FrameID(100) )
 		{
@@ -1348,22 +1384,25 @@ local maketmpl_CommandThrowHit = function( param={} ) : (TimeBomb)
 	{
 		hit_bomb = "Mv_AtkObj_CommandThrowBomb",
 		no_attackhit = 0,
+		ukemiTimeLimit = 0,
 	}
 	
 	switch( param.type )
 	{
 	case "A":
 		mvparam.no_attackhit = 1;
+		mvparam.ukemiTimeLimit = 30;
 		break;
 	case "B":
 		mvparam.no_attackhit = 1;
+		mvparam.ukemiTimeLimit = 30;
 		break;
 	case "EX":
 		mvparam.hit_bomb = "Mv_AtkObj_CommandThrowBombEX";
 		break;
 	}
 	
-	ret_tmpl.Init_After <- function()
+	ret_tmpl.Init_After <- function() : (mvparam,)
 	{
 		// 各種補正は最初の１ヒットのみ
 		// BMvTbl.SetNoHoseiFlag( {  val=1, time=254, flag=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } );
@@ -1371,6 +1410,11 @@ local maketmpl_CommandThrowHit = function( param={} ) : (TimeBomb)
 		// すでにあるマインは一度消して再度つける
 		// 理想を言えばマインがあるときは専用演出に行ったりしてほしいが、どうせ再度マインつけるだけなのでイマイチ
 		Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag1 ); // マインが消滅する行動
+		
+		if( mvparam.ukemiTimeLimit )
+		{
+			BMvTbl.SetForceUkemiTimeLimitFlag( { val=mvparam.ukemiTimeLimit, time=255, flag=_ClearFlag_ChangeMv } ); // 受身不能時間の最低保障値
+		}
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam, TimeBomb)
@@ -1644,6 +1688,11 @@ local maketmpl_SkillAirSlash = function( param={} )
 				BMvTbl.SetLP(0,1); //ベクトル戻した
 			}
 			break;
+		case 300:
+			// J236Bのみ
+			_dpn("猶予増加");
+			BMvTbl.SetCommandLongDelay(1); //受付時間増加（先行入力用）
+			break;
 		}
 		
 		if( mvparam.hitcheck_muteki )
@@ -1746,7 +1795,9 @@ local maketmpl_AirSlashBall = function( param={} )
 		local set_vec = { x=vec.x*par/100, addx=vec.addx*par/100, y=vec.y*par/100, addy=vec.addy*par/100 };
 		BMvTbl.SetVector( { x=set_vec.x, y=set_vec.y, addx=set_vec.addx, addy=set_vec.addy, flags=_Vector_Normal } );
 		
-		if( mvparam.hitjumpid )
+		// 処理順的にHitTimingが先なので、消滅に進んでいたら行わない
+		local mvs = BMvTbl.GetMvStatus();
+		if( mvparam.hitjumpid && mvs.FrameID != 1000 )
 		{
 			BMvTbl.JumpFrameID(mvparam.hitjumpid);
 		}
@@ -1759,7 +1810,7 @@ local maketmpl_AirSlashBall = function( param={} )
 		if( leftHitCount == 0 )
 		{
 			local mvs = BMvTbl.GetMvStatus();
-			if( mvs.FrameID != 100 )
+			if( mvs.FrameID != 1000 )
 			{
 				BMvTbl.JumpFrameID(1000); // 爆発
 			}
@@ -1842,7 +1893,7 @@ t.Mv_AtkObj_222EX_AtkRect <-
 	function Init_After()
 	{
 		BMvTbl.SetNoHoseiFlag( {  val=1, time=254, flag=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } ); // ONCE補正
-		BMvEff.SetObjectFlags( { flags=_ObjFlags_EraseParentPatChange|_ObjFlags_NoGround|_ObjFlags_ParentMove } );
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_NoGround|_ObjFlags_EraseParentDamage  } ); // MEMO:本体に追従するとガードシールドに弱すぎる
 
 		BMvTbl.SetLP(0,0); // １回だけ横に引き寄せる
 	}
@@ -1853,7 +1904,7 @@ t.Mv_AtkObj_222EX_AtkRect <-
 		case 100:
 			// 攻撃開始
 			// ここまでは本体に追従する
-			BMvEff.EraseObjectFlags( { flags=_ObjFlags_EraseParentPatChange|_ObjFlags_ParentMove } );
+			// BMvEff.EraseObjectFlags( { flags=_ObjFlags_EraseParentPatChange } ); // MEMO:追従一旦オフ
 			break;
 		}
 	}
@@ -1939,7 +1990,8 @@ t.Mv_Skill_41236SP_Hit <-
 		BMvEff.SetCamera_Clipping( 0 ); //画面端のクリッピング補正を切る
 		BMvEff.SetExist( { level = _Exist_NoWall, mode=_ExistMode_Set } ); // 壁チェックを無くす
 		
-		Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag1 ); // マインが消滅する行動
+		// Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag1 ); // マインが消滅する行動
+		Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag2 ); // マインのカウントを進めない行動
 	}
 	function FrameUpdate_After()
 	{
@@ -2007,6 +2059,7 @@ t.Mv_Skill_41236SP_End <-
 	flags = def_TmplFlags_NoAddComboRate|def_TmplFlags_NoFurimuki, // コンボレートを加算しない,振り向かない
 	function Init_After()
 	{
+		Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag2 ); // マインのカウントを進めない行動
 	}
 	function FrameUpdate_After()
 	{
@@ -2050,7 +2103,8 @@ t.Mv_Skill_IWEXIST_Hit <-
 		BMvEff.CreateObject( { mvname="Mv_Obj_IWEEnemyBind1" } );
 		BMvEff.CreateObject( { mvname="Mv_Obj_IWEEnemyBind2" } );
 		
-		Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag1 ); // マインが消滅する行動
+		// Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag1 ); // マインが消滅する行動
+		Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag2 ); // マインのカウントを進めない行動
 		
 		BMvTbl.SetLP(0,0); // 1:終わり
 	}
@@ -2233,7 +2287,12 @@ t.Mv_Obj_IWEDoor <-
 	}
 }
 
-t.Mv_Skill_IWEXIST_End <- {};
+t.Mv_Skill_IWEXIST_End <- {
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 0, def_MC_CharaFlag2 ); // マインのカウントを進めない行動
+	}
+}
 
 
 CHR025_MoveTable <- Battle_Std.MakeMoveTable( t, CHR025_CommandTable, Def_ChrNo_Ogr );

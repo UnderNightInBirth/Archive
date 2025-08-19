@@ -218,7 +218,7 @@ st[298] = { volumetype=1, path=1, file="ogr_010_b_4301", type=0, category=1, pri
 st[299] = { volumetype=1, path=1, file="ogr_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1, }; //「いっ」
 
 // 中攻撃ダメージ
-st[302] = { volumetype=1, path=1, file="ogr_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「ぐっ」
+// st[302] = { volumetype=1, path=1, file="ogr_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「ぐっ」
 st[303] = { volumetype=1, path=1, file="ogr_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「つっ」
 st[304] = { volumetype=1, path=1, file="ogr_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; //「がっ」
 

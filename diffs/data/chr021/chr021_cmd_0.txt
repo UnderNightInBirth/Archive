@@ -4,13 +4,21 @@ btl_debPrint2("\n[MIK_CommandTable]");
 
 local checkRocketMoveAdd = function( param={} )
 {
-	local checkHeight = 0;
+	local checkHeightDeficiency = 0; // 低すぎチェック
+	local checkHeightExcess = 0; // 高すぎチェック・デフォルトでON
+	
+	// 高度制限を完全に廃止
 	switch( param.move )
 	{
 	case "2":
 	case "1":
 	case "3":
-		checkHeight = 1;
+		// checkHeightDeficiency = 1;
+		break;
+	case "7":
+	case "8":
+	case "9":
+		checkHeightExcess = 1; // 画面外からさらに上に行こうとしていたらNGに
 		break;
 	}
 	
@@ -40,10 +48,15 @@ local checkRocketMoveAdd = function( param={} )
 	}
 	
 	// 高度制限をつける
-	if( checkHeight )
+	if( checkHeightDeficiency )
 	{
 		local height = -BMvTbl.GetPosition(0).y;
 		if( height < 25600 ) return 0;
+	}
+	if( checkHeightExcess )
+	{
+		local height = -BMvTbl.GetPosition(0).y;
+		if( height > 245760 ) return 0; // 1920*128
 	}
 	
 	return 1;
@@ -113,6 +126,11 @@ local t =
 				{
 					return 0;
 				}
+			}
+			if( BMvTbl.GetMvName()=="Mv_Skill_623A" && BMvTbl.GetPP( def_PP_StdComboChain ) >= 4 )
+			{
+				// スマートステア中なので失敗
+				return 0;
 			}
 			return 1;
 		}
@@ -629,14 +647,15 @@ local t =
 			MvCheck = { Only = ["Mv_Skill_0202A","Mv_Skill_0202B"],},
 			// HitStatus = "Hit",
 		},
-		function CmdBeforeFunc()
-		{
-			if( BMvTbl.GetMvName()=="Mv_Skill_0202A" && BMvTbl.GetPP( def_PP_StdComboChain ) >= 4 )
-			{
-				// スマートステア中なので失敗
-				return 0;
-			}
-		}
+		// function CmdBeforeFunc()
+		// {
+			// if( BMvTbl.GetMvName()=="Mv_Skill_0202A" && BMvTbl.GetPP( def_PP_StdComboChain ) >= 4 )
+			// {
+				// // スマートステア中なので失敗
+				// return 0;
+			// }
+			// return 1;
+		// }
 		UpdateTable = { name = "Mv_Skill_0202_Add", }
 	}
 }
@@ -654,13 +673,13 @@ local ar =
 	},
 	{
 		CheckMoveName="Mv_Atk_CroC",
-		UpdateMoveName="Mv_Skill_0202A",
+		UpdateMoveName="Mv_Skill_623A",
 		ResetTmplName="Atk_CroC",
 	},
 	{
-		CheckMoveName="Mv_Skill_0202A",
+		CheckMoveName="Mv_Skill_623A",
 		UpdateMoveName="Mv_Skill_SSRelayAtk",
-		ResetTmplName="Skill_0202A",
+		ResetTmplName="Skill_623A",
 		CmdCheck = 
 		{
 			SkillType = "AddCommand",
@@ -676,7 +695,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

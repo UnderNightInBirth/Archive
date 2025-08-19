@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 local t = {};
@@ -198,6 +197,13 @@ t.Mv_Skill_FFBase <-
 		{
 		case 10:// 行動可能になるとこ
 			BMvTbl.SetCommandLongDelay(2); //受付時間増加
+			break;
+		case 100:
+			// 相手がやられ中のときはすぐ派生出せるようにする
+			if( Battle_Std.CheckEnemyisDamage() )
+			{
+				BMvTbl.JumpFrameID(10);
+			}
 			break;
 		}
 	}
@@ -409,12 +415,12 @@ t.Mv_Atk_FF_AtkHop <-
 	}
 	function FrameUpdate_After()
 	{
-		Battle_Std.SetHitMuteki( 1, 32, _HitCheckFlag_Legs ); // Param1 & 32 の時、足無敵
+		Battle_Std.SetHitMuteki2_Param1( { [16]=_HitCheckFlag_FireBall, [32]=_HitCheckFlag_Legs } );
 		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 500:
-			BMvTbl.SetCommandLongDelay(2); //受付時間増加（先行入力用）
+			BMvTbl.SetCommandLongDelay(1); //受付時間増加（先行入力用）
 			break;
 		}
 	}
@@ -786,6 +792,8 @@ t.Mv_Atk_Air2C_Land <-
 	function Init_After()
 	{
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Body, time=255, flag=_ClearFlag_ChangeMv } ); // 体属性を設定
+		
+		Battle_Std.MoveCodeEx.DelFlag( 1, def_MC1_AtkJump ); // ジャンプ攻撃扱いのフラグを消す
 	}
 	function FrameUpdate_After()
 	{
@@ -1081,13 +1089,16 @@ local makeSkillTmpl_JumpCatchBombHitCombo = function( param={} )
 	local mvparam =
 	{
 		usePat = 0,
+		cpIdJump = 0, // CPの値を見て分岐するかどうか
 	}
 	
 	switch( param.type )
 	{
 	case "A":
+		mvparam.cpIdJump = 1
 		break;
 	case "B":
+		mvparam.cpIdJump = 1
 		break;
 	case "EX":
 		break;
@@ -1095,15 +1106,19 @@ local makeSkillTmpl_JumpCatchBombHitCombo = function( param={} )
 	
 	ret_tmpl.flags <- def_TmplFlags_NoClearVector|def_TmplFlags_NoAddComboRate, // ベクトル初期化無し,コンボレートを加算しない
 	
-	ret_tmpl.Init_After <- function()
+	ret_tmpl.Init_After <- function() : (mvparam)
 	{
-		local cp = BMvTbl.ComboPoint_Calc( { num=0 } );
-		local border_cp = 66;
-		local powerup = ( cp >= border_cp  )? 1 : 0; // 強い : 弱い ※1Pと2Pの差をなくすために同技制限は廃止
-		BMvTbl.SetLP(0,powerup); // 強いやつかどうか
-		if( powerup )
+		BMvTbl.SetLP(0,0); // 強化バージョンかどうか
+		if( mvparam.cpIdJump )
 		{
-			_dp("\n 強化バージョン");
+			local cp = BMvTbl.ComboPoint_Calc( { num=0 } );
+			local border_cp = 66;
+			local powerup = ( cp >= border_cp  )? 1 : 0; // 強い : 弱い ※1Pと2Pの差をなくすために同技制限は廃止
+			BMvTbl.SetLP(0,powerup); // 強化かどうかを記憶
+			if( powerup )
+			{
+				_dpn("強化バージョン");
+			}
 		}
 	}
 
@@ -1115,12 +1130,15 @@ local makeSkillTmpl_JumpCatchBombHitCombo = function( param={} )
 		case 0: //デフォルト
 			Battle_Std.ThrowParam_WithHanteiEtc(320);
 			break;
-		case 90: // 分岐
-			// CPの量に応じて分岐
+		case 90: // つかみ開放・分岐
 			if( mvs.isFrameUpdate )
 			{
-				local jumpID = ( BMvTbl.GetLP(0) == 1 )? 100 : 110; // 強い : 弱い
-				BMvTbl.JumpFrameID( jumpID );
+				// CPの量に応じて分岐
+				if( mvparam.cpIdJump )
+				{
+					local jumpID = ( BMvTbl.GetLP(0) == 1 )? 100 : 110; // 強い : 弱い
+					BMvTbl.JumpFrameID( jumpID );
+				}
 				BMvEff.ThrowParam( { x=200, y=0, } );
 				BMvEff.ThrowRelease( { type="腹やられ強", airrecover=0, flags=_ThrowRelease_NoGroundRecover } ); //離すだけ
 			}
@@ -1220,6 +1238,7 @@ local maketmpl_SkillDP = function( param={} )
 		karaburi_cs = 0, // ツールでCS可能なら空振りCS可能にする
 		hit_lock = 0, // ヒット時の引き寄せの力
 		noCancelNoAtkHit = 0, // キャンセルしないと追撃不能にする
+		bunki = 0, // ヒット分岐するかどうか
 	}
 	
 	switch( param.type )
@@ -1233,6 +1252,7 @@ local maketmpl_SkillDP = function( param={} )
 	case "EX":
 		mvparam.hit_lock = 50;
 		mvparam.noCancelNoAtkHit = 1;
+		mvparam.bunki = 1;
 		break;
 	}
 	
@@ -1242,11 +1262,25 @@ local maketmpl_SkillDP = function( param={} )
 		{
 			Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
 		}
+		
+		// 20240528追加
+		BMvTbl.SetLP(0,0); // 分岐条件の攻撃がヒットしたかどうか
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
 		Battle_Std.SetHitMuteki2_Param1( { [8]=_HitCheckFlag_Head, [64]=Def_HitCheckFlag_AirDive } );
+		
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 250:
+			// 20240528追加 ヒット分岐
+			if( mvparam.bunki && BMvTbl.GetLP(0)==1 )
+			{
+				BMvTbl.JumpFrameID(260);
+			}
+			break;
+		}
 	}
 	
 	ret_tmpl.HitInterrupt_After <- function() : (mvparam)
@@ -1257,6 +1291,13 @@ local maketmpl_SkillDP = function( param={} )
 			if( Battle_Std.CheckDamageTiming() )
 			{
 				Battle_Std.SetPosition_DamageHanteiRect({ power=mvparam.hit_lock });
+				
+				// 20240528追加
+				local mvs = BMvTbl.GetMvStatus();
+				if( mvparam.bunki && mvs.FrameID == 200 )
+				{
+					BMvTbl.SetLP(0,1); // 分岐の攻撃がヒットした
+				}
 			}
 		}
 	}
@@ -1600,7 +1641,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 		BMvEff.SetCamera_Quake( { time=0, type=2, clear=0, } ); //揺らし
 		
 		BMvTbl.SetPosition( { x=-250*128*BMvTbl.GetMuki() } );
-		BMvEff.ThrowParam( { x=600, y=-100, } );
+		BMvEff.ThrowParam( { x=461, y=-100, } );
 		BMvEff.ThrowRelease( { type="鋭角斜め下バウンド", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
 		
 		BMvEff.SetCamera_FocusKeep( 0 );

@@ -44,47 +44,47 @@ st[47] = { volumetype=0, path=2, file="SE_WhipHitC", type=1, category=-1, }; // 
 
 
 //登場
-st[100] = { volumetype=1, path=1, file="pho_010_b_2000", type=0, category=1, }; //「このアタシが見逃すとでも？」
-st[101] = { volumetype=1, path=1, file="pho_010_b_2001", type=0, category=1, }; //「フォノン様がお相手だ、覚悟しな」
-st[102] = { volumetype=1, path=1, file="pho_010_b_2002", type=0, category=1, }; //「…ったく、やかましい」
-st[103] = { volumetype=1, path=1, file="pho_010_b_2003", type=0, category=1, }; //「いくよ、ムーニー（ペットの蛇が鞭に変形する）」
-st[105] = { volumetype=1, path=1, file="pho_010_b_2004_b", type=0, category=1, }; //　ち…血の華…咲かせてやる　　（無理して気取ってる感じ）
-st[106] = { volumetype=1, path=1, file="pho_010_b_2005", type=0, category=1, }; //「かったるいけど、やるしかないな」
+st[100] = { volumetype=1, path=1, file="pho_010_b_2000", type=0, category=1, userparam=128 }; //「このアタシが見逃すとでも？」
+st[101] = { volumetype=1, path=1, file="pho_010_b_2001", type=0, category=1, userparam=175 }; //「フォノン様がお相手だ、覚悟しな」
+st[102] = { volumetype=1, path=1, file="pho_010_b_2002", type=0, category=1, userparam=102 }; //「…ったく、やかましい」
+st[103] = { volumetype=1, path=1, file="pho_010_b_2003", type=0, category=1, userparam=97 }; //「いくよ、ムーニー（ペットの蛇が鞭に変形する）」
+st[105] = { volumetype=1, path=1, file="pho_010_b_2004_b", type=0, category=1, userparam=179 }; //　ち…血の華…咲かせてやる　　（無理して気取ってる感じ）
+st[106] = { volumetype=1, path=1, file="pho_010_b_2005", type=0, category=1, userparam=156 }; //「かったるいけど、やるしかないな」
 
 //登場 特殊
 //対ナナセ
-st[111] = { volumetype=1, path=1, file="pho_010_b_2012", type=0, category=1, }; //（ナナセ「あー、先輩！」）「余計なことは喋るなよぉ…？」
+st[111] = { volumetype=1, path=1, file="pho_010_b_2012", type=0, category=1, userparam=151 }; //（ナナセ「あー、先輩！」）「余計なことは喋るなよぉ…？」
 
 //対ツルギ
-st[113] = { volumetype=1, path=1, file="pho_010_b_2015", type=0, category=1, }; //（ツルギ「良い機会だ。お前の実力、見せてくれよ」）「暑苦しいヤロウだ、あとで泣くなよ～？」
+st[113] = { volumetype=1, path=1, file="pho_010_b_2015", type=0, category=1, userparam=213 }; //（ツルギ「良い機会だ。お前の実力、見せてくれよ」）「暑苦しいヤロウだ、あとで泣くなよ～？」
 
 
 //ラウンド勝利
-st[131] = { volumetype=1, path=1, file="pho_010_b_2100_b", type=0, category=1, }; //　「まだ行けるよな？（死んでないだろ、起き上がれよ）」
-st[132] = { volumetype=1, path=1, file="pho_010_b_2101", type=0, category=1, }; //「なんだ、大したことねーな」
-st[133] = { volumetype=1, path=1, file="pho_010_b_2102", type=0, category=1, }; //「よぅし、良い感じ～」
+st[131] = { volumetype=1, path=1, file="pho_010_b_2100_b", type=0, category=1, userparam=96 }; //　「まだ行けるよな？（死んでないだろ、起き上がれよ）」
+st[132] = { volumetype=1, path=1, file="pho_010_b_2101", type=0, category=1, userparam=129 }; //「なんだ、大したことねーな」
+st[133] = { volumetype=1, path=1, file="pho_010_b_2102", type=0, category=1, userparam=120 }; //「よぅし、良い感じ～」
 
 //ラウンド勝利 掛け合い
 //対ナナセ
-st[138] = { volumetype=1, path=1, file="pho_010_b_2106", type=0, category=1, }; //「もう少し叩いて念入りに記憶を…」
+st[138] = { volumetype=1, path=1, file="pho_010_b_2106", type=0, category=1, userparam=184 }; //「もう少し叩いて念入りに記憶を…」
 
 //決着勝利 汎用
-st[140] = { volumetype=1, path=1, file="pho_010_b_2111", type=0, category=1, }; //「ふん、雑魚だな」
-st[141] = { volumetype=1, path=1, file="pho_010_b_2112", type=0, category=1, }; //「アタシの名、刻んどきな」
-st[142] = { volumetype=1, path=1, file="pho_010_b_2113", type=0, category=1, }; //「見掛け倒しなやつ」
+st[140] = { volumetype=1, path=1, file="pho_010_b_2111", type=0, category=1, userparam=111 }; //「ふん、雑魚だな」
+st[141] = { volumetype=1, path=1, file="pho_010_b_2112", type=0, category=1, userparam=125 }; //「アタシの名、刻んどきな」
+st[142] = { volumetype=1, path=1, file="pho_010_b_2113", type=0, category=1, userparam=109 }; //「見掛け倒しなやつ」
 
 //決着勝利 辛勝
-st[145] = { volumetype=1, path=1, file="pho_010_b_2120", type=0, category=1, }; //「ははっ、危なかったわ」
+st[145] = { volumetype=1, path=1, file="pho_010_b_2120", type=0, category=1, userparam=158 }; //「ははっ、危なかったわ」
 
 //決着勝利 楽勝
-st[149] = { volumetype=1, path=1, file="pho_010_b_2123", type=0, category=1, }; //「大したこと無くて助かったわ～」
+st[149] = { volumetype=1, path=1, file="pho_010_b_2123", type=0, category=1, userparam=143 }; //「大したこと無くて助かったわ～」
 
 //決着勝利 掛け合い
 //対ナナセ
-st[154] = { volumetype=1, path=1, file="pho_010_b_2127", type=0, category=1, }; //「念のため、息の根止めとくか……」
+st[154] = { volumetype=1, path=1, file="pho_010_b_2127", type=0, category=1, userparam=155}; //「念のため、息の根止めとくか……」
 
 //対ツルギ
-st[156] = { volumetype=1, path=1, file="pho_010_b_2129", type=0, category=1, }; //「っしゃあ！見たか、アタシの実力！」
+st[156] = { volumetype=1, path=1, file="pho_010_b_2129", type=0, category=1, userparam=208 }; //「っしゃあ！見たか、アタシの実力！」
 
 //タイムアップ判定負け
 st[160] = { volumetype=1, path=1, file="pho_010_b_2200", type=0, category=1, }; //「ぐぬぬ…」
@@ -166,7 +166,7 @@ st[270] = { volumetype=1, path=1, file="pho_010_b_2900", type=0, category=1,  pr
 st[271] = { volumetype=1, path=1, file="pho_010_b_2901", type=0, category=1,  prio=Def_SEP_ThrowTech, check=1 }; //「ゲスが！」
 
 //振り向き
-st[280] = { volumetype=1, path=1, file="pho_010_b_3000", type=0, category=1, }; //「む」
+st[280] = { volumetype=1, path=1, file="pho_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki }; //「む」
 
 //待機モーション
 st[290] = { volumetype=1, path=1, file="pho_010_b_3100", type=0, category=1, }; //「挑発のつもりかぁ？」

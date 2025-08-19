@@ -688,6 +688,8 @@ local t =
 	{
 		num = def_CN_Skill_AddCommand10, name = "Cmd_Add_4C_4B", command = [ "4+B" ],
 		flags = [ "lastdelay" ],
+		// めくりヒット時に4C>6Bが出せなくなるため廃止
+		// commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand", ParamFlagCheck = { Only = { [2]=1 } },
@@ -1069,11 +1071,13 @@ local t =
 		function CmdBeforeFunc() : (BattouFunc)
 		{
 			if( !BattouFunc.Check.IsMode() ) return 0;
-			local hs = BMvTbl.GetMvHitStatus();
-			if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
-			{
-				if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
-			}
+			
+			// 241023 コンボ中の風越制限廃止
+			// local hs = BMvTbl.GetMvHitStatus();
+			// if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
+			// {
+				// if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
+			// }
 			return 1;
 		},
 		CmdCheck = 
@@ -1092,11 +1096,13 @@ local t =
 		function CmdBeforeFunc() : (BattouFunc)
 		{
 			if( !BattouFunc.Check.IsMode() ) return 0;
-			local hs = BMvTbl.GetMvHitStatus();
-			if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
-			{
-				if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
-			}
+			
+			// 241023 コンボ中の風越制限廃止
+			// local hs = BMvTbl.GetMvHitStatus();
+			// if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
+			// {
+				// if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
+			// }
 			return 1;
 		},
 		CmdCheck = 
@@ -1115,11 +1121,13 @@ local t =
 		function CmdBeforeFunc() : (BattouFunc)
 		{
 			if( !BattouFunc.Check.IsMode() ) return 0;
-			local hs = BMvTbl.GetMvHitStatus();
-			if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
-			{
-				if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
-			}
+			
+			// 241023 コンボ中の風越制限廃止
+			// local hs = BMvTbl.GetMvHitStatus();
+			// if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
+			// {
+				// if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
+			// }
 			return 1;
 		},
 		CmdCheck = 
@@ -1141,11 +1149,13 @@ local t =
 		{
 			if( BMvTbl.AddAirCount( 0, 0 ) >= 1 ) return 0;
 			if( !BattouFunc.Check.IsMode() ) return 0;
-			local hs = BMvTbl.GetMvHitStatus();
-			if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
-			{
-				if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
-			}
+			
+			// 241023 コンボ中の風越制限廃止
+			// local hs = BMvTbl.GetMvHitStatus();
+			// if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
+			// {
+				// if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
+			// }
 			if( Battle_Std.MoveCode.CheckFlag( def_MC_Shielded ) ) return 0; // シールドとられるとできない
 			return 1;
 		},
@@ -1171,11 +1181,13 @@ local t =
 		{
 			if( BMvTbl.AddAirCount( 0, 0 ) >= 1 ) return 0;
 			if( !BattouFunc.Check.IsMode() ) return 0;
-			local hs = BMvTbl.GetMvHitStatus();
-			if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
-			{
-				if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
-			}
+			
+			// 241023 コンボ中の風越制限廃止
+			// local hs = BMvTbl.GetMvHitStatus();
+			// if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
+			// {
+				// if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
+			// }
 			if( Battle_Std.MoveCode.CheckFlag( def_MC_Shielded ) ) return 0; // シールドとられるとできない
 			return 1;
 		},
@@ -1201,11 +1213,13 @@ local t =
 		{
 			if( BMvTbl.AddAirCount( 0, 0 ) >= 1 ) return 0;
 			if( !BattouFunc.Check.IsMode() ) return 0;
-			local hs = BMvTbl.GetMvHitStatus();
-			if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
-			{
-				if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
-			}
+			
+			// 241023 コンボ中の風越制限廃止
+			// local hs = BMvTbl.GetMvHitStatus();
+			// if( hs.Type & _HitType_Damage && hs.isCatchFlag==0 )
+			// {
+				// if( Battle_Std.EnemyDamageFlag_Check( def_DF_JumpCanseled ) ) return 0; // コンボ中はジャンプキャンセル１回のみ
+			// }
 			if( Battle_Std.MoveCode.CheckFlag( def_MC_Shielded ) ) return 0; // シールドとられるとできない
 			return 1;
 		},
@@ -1516,7 +1530,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

@@ -5,16 +5,26 @@ local t =
 {
 	Atk_StdBandC = {},
 	Atk_StdBandC_AddAtk6 = {
-		num = def_CN_Skill_AddCommand2, name = "Cmd_Atk_StdBandC_AddAtk6", command = ["6+A","6+B","6+C"],
+		num = def_CN_Skill_AddCommand2, name = "Cmd_Atk_StdBandC_AddAtk6", command = ["6+A","6+B","6+C","6+A@L,9@","6+B@L,9@","6+C@L,9@"],
 		flags = [ "lastdelay" ],
 		function CmdBeforeFunc()
 		{
+			if( !Battle_Std.IsMatchMvNameArray("Mv_Atk_StdBandC") ) return 0;
+			
+			// 猶予長いバージョンは避けるのに成功してるときだけ
+			local cmd_pos = BCMDTbl.GetSuccessButtonPos();
+			if( cmd_pos > 3 )
+			{
+				if( BMvTbl.GetLP(0)==0 ) return 0; // よけるのに成功してないとダメ
+			}
+			
 			// 避け成功時のみParam2&1でも派生が出せる
 			local mvs = BMvTbl.GetMvStatus();
 			if( mvs.Param2&1 )
 			{
 				if( BMvTbl.GetLP(0)==0 ) return 0; // よけるのに成功してないとダメ
 			}
+			return 1;
 		}
 		CmdCheck = 
 		{
@@ -26,16 +36,26 @@ local t =
 	},
 
 	Atk_StdBandC_AddAtk5 = {
-		num = def_CN_Skill_AddCommand4, name = "Cmd_Atk_StdBandC_AddAtkN", command = ["A","B","C"],
+		num = def_CN_Skill_AddCommand4, name = "Cmd_Atk_StdBandC_AddAtkN", command = ["A","B","C","A@L,9@","B@L,9@","C@L,9@"],
 		flags = [ "lastdelay" ],
 		function CmdBeforeFunc()
 		{
+			if( !Battle_Std.IsMatchMvNameArray("Mv_Atk_StdBandC") ) return 0;
+			
+			// 猶予長いバージョンは避けるのに成功してるときだけ
+			local cmd_pos = BCMDTbl.GetSuccessButtonPos();
+			if( cmd_pos >= 3 )
+			{
+				if( BMvTbl.GetLP(0)==0 ) return 0; // よけるのに成功してないとダメ
+			}
+			
 			// 避け成功時のみParam2&1でも派生が出せる
 			local mvs = BMvTbl.GetMvStatus();
 			if( mvs.Param2&1 )
 			{
 				if( BMvTbl.GetLP(0)==0 ) return 0; // よけるのに成功してないとダメ
 			}
+			return 1;
 		}
 		CmdCheck = 
 		{
@@ -56,6 +76,7 @@ local t =
 	Skill_236_AddB = {
 		num = def_CN_Skill_AddCommand5,
 		command = ["6+A","6+B","6+C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -67,6 +88,7 @@ local t =
 	Skill_236_AddA = {
 		num = def_CN_Skill_AddCommand6,
 		command = ["6+A","6+B","6+C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -78,6 +100,7 @@ local t =
 	Skill_236_Add_AddA = {
 		num = def_CN_Skill_AddCommand7,
 		command = ["6+A","6+B","6+C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		CmdCheck = 
 		{
 			SkillType = "AddCommand"
@@ -390,7 +413,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 

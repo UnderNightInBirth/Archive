@@ -34,38 +34,38 @@ st[75] = { volumetype=0, path=2, file="SE_SpecialAirWindShort", type=1, category
 
 // ●バトル
 // 登場
-st[100] = { volumetype=1, path=1, file="nan_010_b_2000", type=0, category=1, }; //「この風の流れ…やる気なのねっ！」
-st[101] = { volumetype=1, path=1, file="nan_010_b_2001", type=0, category=1, }; //「あたしの力、見せてあげるわ！」
+st[100] = { volumetype=1, path=1, file="nan_010_b_2000", type=0, category=1, userparam=175 }; //「この風の流れ…やる気なのねっ！」
+st[101] = { volumetype=1, path=1, file="nan_010_b_2001", type=0, category=1, userparam=154 }; //「あたしの力、見せてあげるわ！」
 
 // 登場 特殊
 // 対ハイド
-st[106] = { volumetype=1, path=1, file="nan_010_b_2012", type=0, category=1, }; //「見つけた…　覚悟なさい、城戸ハイド！」
+st[106] = { volumetype=1, path=1, file="nan_010_b_2012", type=0, category=1, userparam=225 }; //「見つけた…　覚悟なさい、城戸ハイド！」
 
 // 対フォノン
-st[108] = { volumetype=1, path=1, file="nan_010_b_2015", type=0, category=1, }; //「あー先輩！」
+st[108] = { volumetype=1, path=1, file="nan_010_b_2015", type=0, category=1, userparam=96 }; //「あー先輩！」
 
 
 // ラウンド勝利
-st[117] = { volumetype=1, path=1, file="nan_010_b_2100_b", type=0, category=1, }; //「よしっ！」
-st[118] = { volumetype=1, path=1, file="nan_010_b_2101", type=0, category=1, }; //「やったね！」
+st[117] = { volumetype=1, path=1, file="nan_010_b_2100_b", type=0, category=1, userparam=51 }; //「よしっ！」
+st[118] = { volumetype=1, path=1, file="nan_010_b_2101", type=0, category=1, userparam=60 }; //「やったね！」
 
 // 決着勝利 汎用
-st[121] = { volumetype=1, path=1, file="nan_010_b_2111", type=0, category=1, }; //「早速伝えなきゃーっと…（発信）　あーもしもしー？　あたしだけどー」
-st[122] = { volumetype=1, path=1, file="nan_010_b_2112", type=0, category=1, }; //「（携帯をいじりだす）今のうちにーっと。（ソーシャル系のゲームをやっている）」
-st[123] = { volumetype=1, path=1, file="nan_010_b_2113", type=0, category=1, }; //「（携帯をいじりだす）虚ろの夜、なうっと。」
+st[121] = { volumetype=1, path=1, file="nan_010_b_2111", type=0, category=1, userparam=304 }; //「早速伝えなきゃーっと…（発信）　あーもしもしー？　あたしだけどー」
+st[122] = { volumetype=1, path=1, file="nan_010_b_2112", type=0, category=1, userparam=133 }; //「（携帯をいじりだす）今のうちにーっと。（ソーシャル系のゲームをやっている）」
+st[123] = { volumetype=1, path=1, file="nan_010_b_2113", type=0, category=1, userparam=172 }; //「（携帯をいじりだす）虚ろの夜、なうっと。」
 
 // 決着勝利 辛勝
-st[126] = { volumetype=1, path=1, file="nan_010_b_2120", type=0, category=1, }; //「（携帯をいじりだす）今の攻撃メモメモっと。」
+st[126] = { volumetype=1, path=1, file="nan_010_b_2120", type=0, category=1, userparam=175 }; //「（携帯をいじりだす）今の攻撃メモメモっと。」
 
 // 決着勝利 楽勝
-st[129] = { volumetype=1, path=1, file="nan_010_b_2123", type=0, category=1, }; //「（携帯をいじりだす）大勝利、なうっと。」
+st[129] = { volumetype=1, path=1, file="nan_010_b_2123", type=0, category=1, userparam=131 }; //「（携帯をいじりだす）大勝利、なうっと。」
 
 // 決着勝利 掛け合い
 // 対ハイド
-st[134] = { volumetype=1, path=1, file="nan_010_b_2127", type=0, category=1, }; //「やった！覚悟を決めなさい！城戸ハイド！」
+st[134] = { volumetype=1, path=1, file="nan_010_b_2127", type=0, category=1, userparam=237 }; //「やった！覚悟を決めなさい！城戸ハイド！」
 
 // 対フォノン
-st[136] = { volumetype=1, path=1, file="nan_010_b_2130", type=0, category=1, }; //「（携帯をいじりだす）先輩撃退っと！そろそろこの設定(ごっこ)もしんどいなぁ…」
+st[136] = { volumetype=1, path=1, file="nan_010_b_2130", type=0, category=1, userparam=334 }; //「（携帯をいじりだす）先輩撃退っと！そろそろこの設定(ごっこ)もしんどいなぁ…」
 
 // タイムアップ判定負け
 st[140] = { volumetype=1, path=1, file="nan_010_b_2200", type=0, category=1, }; //「むー…。ぷいっ」

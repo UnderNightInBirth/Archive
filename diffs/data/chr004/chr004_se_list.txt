@@ -25,59 +25,62 @@ st[72] = { volumetype=0, path=2, file="SE_ShotSpecialHoly", type=1, category=-1,
 st[73] = { volumetype=0, path=0, file="SE071_KO", type=1, category=-1, }; //相手に剣が刺さった時　：ヒット音の派手なもの。KO音とか。
 
 //登場
-st[100] = { volumetype=1, path=1, file="ori_010_b_2000", type=0, category=1, }; //「正義の名の下に、貴方を救済します」
-st[102] = { volumetype=1, path=1, file="ori_010_b_2001_b", type=0, category=1, }; //「貴方にはここで引いていただきます」
-st[103] = { volumetype=1, path=1, file="ori_010_b_2002", type=0, category=1, }; //「定めに従い光の鉄槌を」
+st[100] = { volumetype=1, path=1, file="ori_010_b_2000", type=0, category=1, userparam=200 }; //「正義の名の下に、貴方を救済します」
+st[102] = { volumetype=1, path=1, file="ori_010_b_2001_b", type=0, category=1, userparam=135 }; //「貴方にはここで引いていただきます」
+st[103] = { volumetype=1, path=1, file="ori_010_b_2002", type=0, category=1, userparam=146 }; //「定めに従い光の鉄槌を」
 
 //登場 特殊
 
 //対ワーグナー
-st[108] = { volumetype=1, path=1, file="ori_010_b_2012", type=0, category=1, }; //（ワーグナー「謀らずとも機は熟したようだな」）「えぇ、少し不本意だけれどね」
+st[108] = { volumetype=1, path=1, file="ori_010_b_2012", type=0, category=1, userparam=191 }; //（ワーグナー「謀らずとも機は熟したようだな」）「えぇ、少し不本意だけれどね」
 
 //対ハイド
-st[110] = { volumetype=1, path=1, file="ori_010_b_2015", type=0, category=1, }; //「今すぐ立ち去りなさい…さもなければ…」
-st[111] = { volumetype=1, path=1, file="ori_010_b_2016", type=0, category=1, }; //「これも定め…なのかな」
-st[113] = { volumetype=1, path=1, file="ori_010_b_2017", type=0, category=1, }; //（ハイド「……黙って退いちゃくれねぇか？）「出来ません、貴方もそうであるように」
+st[110] = { volumetype=1, path=1, file="ori_010_b_2015", type=0, category=1, userparam=203 }; //「今すぐ立ち去りなさい…さもなければ…」
+st[111] = { volumetype=1, path=1, file="ori_010_b_2016", type=0, category=1, userparam=158 }; //「これも定め…なのかな」
+st[113] = { volumetype=1, path=1, file="ori_010_b_2017", type=0, category=1, userparam=205 }; //（ハイド「……黙って退いちゃくれねぇか？）「出来ません、貴方もそうであるように」
 
 //対リンネ
-st[115] = { volumetype=1, path=1, file="ori_010_b_2019", type=0, category=1, }; //「あなたを糾(ただ)さねばなりません」
+st[115] = { volumetype=1, path=1, file="ori_010_b_2019", type=0, category=1, userparam=117 }; //「あなたを糾(ただ)さねばなりません」
 
 //対ミカ
-st[117] = { volumetype=1, path=1, file="ori_010_b_2023", type=0, category=1, }; //（ミカ「へっ、お前ばかりに良いかっこはさせられねぇ！」）「その気持ちだけで十分だよ、ミカ」
+st[117] = { volumetype=1, path=1, file="ori_010_b_2023", type=0, category=1, userparam=178 }; //（ミカ「へっ、お前ばかりに良いかっこはさせられねぇ！」）「その気持ちだけで十分だよ、ミカ」
 
 //対メルカヴァ
-st[120] = { volumetype=1, path=1, file="ori_010_b_2026", type=0, category=1, }; //「貴方の中にある想いも、ここで潰えましょう」（メルカヴァ「それは思い上がりというものだ、小娘……）
+st[120] = { volumetype=1, path=1, file="ori_010_b_2026", type=0, category=1, userparam=234 }; //「貴方の中にある想いも、ここで潰えましょう」（メルカヴァ「それは思い上がりというものだ、小娘……）
 
 //対クオン
-st[122] = { volumetype=1, path=1, file="ori_010_b_2029", type=0, category=1, }; //「リヒトクライスの名において貴方を！」（クオン「止められるかい、僕を……」）
+st[122] = { volumetype=1, path=1, file="ori_010_b_2029", type=0, category=1, userparam=163 }; //「リヒトクライスの名において貴方を！」（クオン「止められるかい、僕を……」）
 
 //対カグヤ
-st[124] = { volumetype=1, path=1, file="ori_010_b_2032", type=0, category=1, }; //（カグヤ「ここから先は汚れ仕事。私に任せておきなさい」）「いつまでも、貴女に甘えていられないから」
+st[124] = { volumetype=1, path=1, file="ori_010_b_2032", type=0, category=1, userparam=199 }; //（カグヤ「ここから先は汚れ仕事。私に任せておきなさい」）「いつまでも、貴女に甘えていられないから」
 
 //ラウンド勝利
-st[140] = { volumetype=1, path=1, file="ori_010_b_2100", type=0, category=1, }; //「立ちなさい！まだ終わってはいません！」
-st[141] = { volumetype=1, path=1, file="ori_010_b_2101", type=0, category=1, }; //「勝敗は決しました」
+st[140] = { volumetype=1, path=1, file="ori_010_b_2100", type=0, category=1, userparam=173 }; //「立ちなさい！まだ終わってはいません！」
+st[141] = { volumetype=1, path=1, file="ori_010_b_2101", type=0, category=1, userparam=103 }; //「勝敗は決しました」
 
 //決着勝利 汎用
-st[150] = { volumetype=1, path=1, file="ori_010_b_2111", type=0, category=1, }; //「これで…良かったのよね」
-st[151] = { volumetype=1, path=1, file="ori_010_b_2112", type=0, category=1, }; //「この戦いに意味はあったのでしょうか」
+st[150] = { volumetype=1, path=1, file="ori_010_b_2111", type=0, category=1, userparam=164 }; //「これで…良かったのよね」
+st[151] = { volumetype=1, path=1, file="ori_010_b_2112", type=0, category=1, userparam=154 }; //「この戦いに意味はあったのでしょうか」
 
 //決着勝利 辛勝
-st[154] = { volumetype=1, path=1, file="ori_010_b_2120", type=0, category=1, }; //「あ、あっぶなかったぁ…」
+st[154] = { volumetype=1, path=1, file="ori_010_b_2120", type=0, category=1, userparam=220 }; //「あ、あっぶなかったぁ…」
 
 //決着勝利 楽勝
-st[158] = { volumetype=1, path=1, file="ori_010_b_2123_b", type=0, category=1, }; //「これが背負うものの差です…」
+st[158] = { volumetype=1, path=1, file="ori_010_b_2123_b", type=0, category=1, userparam=121 }; //「これが背負うものの差です…」
 
 //決着勝利 掛け合い
 //対ハイド
-st[164] = { volumetype=1, path=1, file="ori_010_b_2127_a", type=0, category=1, }; //「私は私の使命を果たします…」
-st[165] = { volumetype=1, path=1, file="ori_010_b_2127_b", type=0, category=1, }; //「ごめんね、城戸くん…」
+st[164] = { volumetype=1, path=1, file="ori_010_b_2127_a", type=0, category=1, userparam=147 }; //「私は私の使命を果たします…」
+st[165] = { volumetype=1, path=1, file="ori_010_b_2127_b", type=0, category=1, userparam=109 }; //「ごめんね、城戸くん…」
 
 //対ワーグナー
-st[167] = { volumetype=1, path=1, file="ori_010_b_2130", type=0, category=1, }; //「ごめんね、エリカ。ここから先は私に任せて。」
+st[167] = { volumetype=1, path=1, file="ori_010_b_2130", type=0, category=1, userparam=272 }; //「ごめんね、エリカ。ここから先は私に任せて。」
 
 //対メルカヴァ
-st[170] = { volumetype=1, path=1, file="ori_010_b_2133_b", type=0, category=1, }; //「これで…本当に良かったのかな…」
+st[170] = { volumetype=1, path=1, file="ori_010_b_2133_b", type=0, category=1, userparam=195 }; //「これで…本当に良かったのかな…」
+
+//対ウヅキ
+st[172] = { volumetype=1, path=1, file="ori_010_b_2035", type=0, category=1, userparam=167 }; //「これが、死を連れ添う者……！」
 
 //タイムアップ判定負け
 st[180] = { volumetype=1, path=1, file="ori_010_b_2200", type=0, category=1, }; //「嘘…」

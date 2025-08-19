@@ -127,6 +127,11 @@ t.Mv_Atk_StdBandC <-
 		
 		BMvTbl.SetLP(0,0); // 飛び道具消したかどうか
 	}
+	function Start_After()
+	{
+		// 240522 ツールで「EXキャンセル」があっても空振り時は出せない（iFF用）
+		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel );
+	}
 	function FrameUpdate_After() : (setSousaiBonus)
 	{
 		Battle_Std.JumpFrameID_NotHoldAllButton({ mask=(1<<1)|(1<<2), checkid=[100,200], jumpid=[101,101], endid=250 }); //ボタンホールドしてなかったらIDジャンプ
@@ -136,8 +141,10 @@ t.Mv_Atk_StdBandC <-
 		if( BMvTbl.GetLP(0)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(0,1); // 消した
+			BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 			
 			setSousaiBonus( Def_Sys_FF_RecoverGRD ); // GRD増加、空振り必殺キャンセル可能に
+			Battle_Std.MoveCodeEx.DelFlag( 2, def_MC2_NoWhiffEXCancel ); // 弾相殺したら空振り扱いでもEXキャンセル可能に
 		}	
 	}
 	function HitInterrupt_After() : (addKezuriDamage)
@@ -213,7 +220,8 @@ local maketmpl_SkillCrossBlade = function( param={} ) : (setSousaiBonus)
 		if( BMvTbl.GetLP(1)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(1,1); // 消した
-		}	
+			// BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
+		}
 		
 		local update_id = Battle_Std.GetUpdateFrameID();
 		switch( update_id )
@@ -699,6 +707,12 @@ t.Mv_Atk_DashStdB <- {};
 
 t.Mv_Atk_DashStdC <- 
 {
+	function Init_After()
+	{
+		BMvTbl.SetHan6LayerMask( { val = (1<<1) } ); // 背面を非表示
+		
+		BMvTbl.SetLP(0,0); // 振り向き処理を行ったか
+	}
 	function FrameUpdate_After()
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
@@ -706,39 +720,40 @@ t.Mv_Atk_DashStdC <-
 		case 50: //ここから収束
 			local nowvec = BMvTbl.GetVector(0); // 現在のベクトルを得る（パターン変更後だと初期化されてるかも）
 			Battle_Std.InitVector(); // ベクトル初期化
-			BMvTbl.SetVector( { x=nowvec.x, addx=(-nowvec.x/20), flags=_Vector_Div } ); //20Fで収束ベクトルを登録			
+			BMvTbl.SetVector( { x=nowvec.x, addx=(-nowvec.x/20), flags=_Vector_Div } ); //20Fで収束ベクトルを登録
+			if( Battle_Std.CheckEnemyisDamage() ) BMvTbl.JumpFrameID(51); // コンボ中は大きな判定へ
+			break;
+		case 51: // コンボ中判定
 			break;
 		case 100:  //分岐
-			if( BMvTbl.CheckFurimuki() )
+			if( BMvTbl.GetLP(0)==0 && BMvTbl.CheckFurimuki() )
 			{
-				if (BMvTbl.JumpFrameID(256) == -1)
-				{
-					_dem("【警告】飛び先のフレームIDが無い");
-				}
+				BMvTbl.SetHan6LayerMask( { val = (1<<0) } ); // 正面を非表示
 				BMvTbl.SetMuki(_Direction_Reverse);
+				BMvTbl.SetLP(0,1); // 振り向き処理を行ったか
 			}
 			break;
 		}
-		
-		Battle_Std.SetHitMuteki( 1, 32, _HitCheckFlag_Legs ); // Param1 & 32 の時、足無敵
 	}
 	function HitInterrupt_After() : (addKezuriDamage)
 	{
 		if( Battle_Std.CheckHitTiming() )
 		{
-			if( BMvTbl.CheckFurimuki() )
+			if( BMvTbl.GetLP(0)==0 && BMvTbl.CheckFurimuki() )
 			{
-				if (BMvTbl.JumpFrameID(512) == -1)
-				{
-					_dem("【警告】飛び先のフレームIDが無い");
-				}
+				BMvTbl.SetHan6LayerMask( { val = (1<<0) } ); // 正面を非表示
 				BMvTbl.SetMuki(_Direction_Reverse);
-			}		
+				BMvTbl.SetLP(0,1); // 振り向き処理を行ったか
+			}
 		}
 		if( Battle_Std.CheckGuardTiming() )
 		{
 			addKezuriDamage( 100, 200 ); //削りダメージ加算　通常, VP
 		}
+	}
+	function LastUpdate_After()
+	{
+		BMvTbl.SetHan6LayerMask( { val=0 } ); // 全て表示
 	}
 }
 
@@ -1417,6 +1432,10 @@ t.Mv_Skill_0202B <- maketmpl_SkillThrustGroundWave( { type="B" } );
 
 t.Mv_Skill_0202EX <-
 {
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_GuardChainShiftOK ); // ツールで「チェインシフト可能」がある時ならガードでCS可能なMV
+	}
 	function FrameUpdate_After()
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
@@ -1653,7 +1672,7 @@ t.Mv_Skill_623B <-
 		{
 			if( Battle_Std.CheckDamageTiming() )
 			{
-				Battle_Std.SetPosition_DamageHanteiRect({ power=50, distance=500*128, flags=(1<<1)|(1<<2) }); // 高さ無効、地上でも引き寄せ
+				Battle_Std.SetPosition_DamageHanteiRect({ power=85, flags=(1<<1)|(1<<2) }); // 高さ無効、地上でも引き寄せ
 				BMvTbl.SetLP(0,1);
 			}
 		}
@@ -1687,7 +1706,7 @@ t.Mv_Skill_623EX <- {
 		{
 			if( Battle_Std.CheckDamageTiming() )
 			{
-				Battle_Std.SetPosition_DamageHanteiRect({ power=50, distance=500*128, flags=(1<<1)|(1<<2) }); // 高さ無効、地上でも引き寄せ
+				Battle_Std.SetPosition_DamageHanteiRect({ power=85, flags=(1<<1)|(1<<2) }); // 高さ無効、地上でも引き寄せ
 				
 				BMvTbl.SetLP(0,1);
 			}
@@ -1778,7 +1797,7 @@ t.Mv_Skill_41236EX <-
 			// １回目のヒットだけ引き寄せる処理
 			if( BMvTbl.GetLP(0)==0 )
 			{
-				Battle_Std.SetPosition_DamageHanteiRect({ power=50, flags=(1<<1)|(1<<2) }); // 高さ無効、地上でも引き寄せ
+				Battle_Std.SetPosition_DamageHanteiRect({ power=85, flags=(1<<1)|(1<<2) }); // 高さ無効、地上でも引き寄せ
 
 				BMvTbl.SetLP(0,1);
 			}
@@ -1812,7 +1831,8 @@ t.Mv_Skill_41236EX_Hit <-
 	function LastUpdate_After()
 	{
 		Battle_Std.CSAntenGaesi_DamageHosei(); // CSからの暗転返しで出したら補正をかける
-	}	
+		Battle_Std.NoCansel_NoAttackHit( { check_mvdamage=1, set_hosei=0 } ); //何かでキャンセルしなかった場合追撃不能にする(MVのダメージをチェック)
+	}
 }
 
 t.Mv_Obj_41236EX_Tama <-
@@ -2080,8 +2100,8 @@ t.Mv_Skill_IWEXIST_Hit <-
 	
 		//つかみ開放
 		//BMvEff.SetCamera_Focus( { zoom=1.0, time=[0,0,30] } ); //カメラ固定
-		BMvEff.ThrowParam( { x=100, y=-1224, } );
-		BMvEff.ThrowRelease( { type="斜め下バウンド", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
+		BMvEff.ThrowParam( { x=280, y=-1224, } );
+		BMvEff.ThrowRelease( { type="鋭角斜め下バウンド", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
 		Battle_Std.FinalizeIWExistSkill();
 	}	
 }

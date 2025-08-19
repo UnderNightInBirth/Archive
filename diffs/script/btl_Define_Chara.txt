@@ -24,6 +24,7 @@ const Def_ChrNo_Chr022	= 22;
 const Def_ChrNo_Chr023	= 23;
 const Def_ChrNo_Chr024	= 24;
 const Def_ChrNo_Chr025	= 25;
+const Def_ChrNo_Chr026	= 26;
 
 //キャラクター識別子
 const Def_ChrNo_Hyd		= 0;
@@ -52,6 +53,7 @@ const Def_ChrNo_Kag		= 22;
 const Def_ChrNo_Kuo		= 23;
 const Def_ChrNo_Pho		= 24;
 const Def_ChrNo_Ogr		= 25;
+const Def_ChrNo_Izu		= 26;
 
 //-----------------------------------------------------------------------------
 //キャラ固有定義関係 defc_***　(def_***は古い定義)
@@ -193,6 +195,15 @@ const def_PP_Ogr_BombSnapReady = 4;
 
 const def_ACS_OGR_JBandC = 0;
 
+const def_ACS_IZU_ElefeeMode = 0; // エレフィの状態
+const def_ACS_IZU_ElefeeMoveDivFrame = 1; // エレフィ追従時の分割フレーム強さ
+const def_ACS_IZU_ElefeeFlagsTmp = 2; // エレフィの状態のフラグテンポラリ
+const def_ACS_IZU_ElefeeFlags = 3; // エレフィの状態のフラグ
+	const def_PPFlag_Izu_EF_NoFinalize_UQChange = 1; // UniqID変化でFinalizeしない
+	const def_PPFlag_Izu_EF_NoUpdate_InitUQ = 2; // InitでUniqIDの更新をしない
+	const def_PPFlag_Izu_EF_NoActive = 4; // Active状態にしない
+	const def_PPFlag_Izu_EF_Event = 16; // 勝利などのイベント用（アイコンをデフォルト状態にする）
+const def_ACS_IZU_ElefeeMoveAddDivFrame = 4; // エレフィ追従時の分割フレームに一時的に加算する値。毎フレーム減算される。
 
 // SP(ラウンド経過でリセットされない)
 // BMvTbl.SetSP(defc_SP_Udu_ThrowItem,0)

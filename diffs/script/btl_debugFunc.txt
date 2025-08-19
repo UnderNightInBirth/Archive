@@ -60,7 +60,7 @@ function Output_Debug_Function()
 	*/
 	
 	//‚»‚Ì‚Q
-	local chrnum = 13;
+	local chrnum = 26;
 	local target_table = Battle_Std.SeTable[chrnum];
 	local usevoice = array(1500, 0); 
 	foreach( i,v in target_table )
@@ -286,6 +286,12 @@ function _dp(str)
 function _dpn(str)
 {
 	btl_debPrint2( "\n"+str );
+}
+
+function _dpn_ml(str)
+{
+	_dpn(str);
+	debugfontL.draw_message( str );
 }
 
 //ƒ[ƒJƒ‹ŠÂ‹«‚Ì‚İprint

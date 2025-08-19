@@ -110,8 +110,9 @@ Battle_Std.ThrowTech.CheckTechImpossible <- function( _setCharaFlash = 1 ) //‘Š
 	return false;
 }
 
-Battle_Std.ThrowTech.ShiftOverGamenHajiX <- function() //‘Šè‚ª‰æ–Ê’[‚¾‚Á‚½‚ç–„‚Ü‚ç‚È‚¢‚æ‚¤‚É‚Â‚©‚İ‘¤‚Æ‹L‰¯‚µ‚Ä‚½À•W‚ğƒYƒ‰‚·
+Battle_Std.ThrowTech.ShiftOverGamenHajiX <- function( param={} ) //‘Šè‚ª‰æ–Ê’[‚¾‚Á‚½‚ç–„‚Ü‚ç‚È‚¢‚æ‚¤‚É‚Â‚©‚İ‘¤‚ÌÀ•W‚ğƒYƒ‰‚·
 {
+	local flags = ("flags" in param)? param.flags : 0;
 	local epos = Battle_Std.GetEnemyPosition();		//‘Šè‚ÌÀ•W		
 	local sa_x = 0;
 	//_dm("À•W:"+epos.x);
@@ -126,10 +127,19 @@ Battle_Std.ThrowTech.ShiftOverGamenHajiX <- function() //‘Šè‚ª‰æ–Ê’[‚¾‚Á‚½‚ç–„‚
 	//_dm("·F"+sa_x);
 	if( sa_x != 0 )
 	{
+		// _dpn("–„‚Ü‚Á‚Ä‚¢‚é‚Ì‚Å•â³");
 		BMvTbl.SetPosition( { x=-sa_x, flags=_Position_Add } );
-		local pposx = BMvTbl.GetPP( def_PP_PlayerPosX ); //•Û‘¶‚µ‚Ä‚ ‚é©•ª‚ÌÀ•W‚ğæ“¾
-		pposx -= sa_x; //‚±‚Á‚¿‚àƒYƒ‰‚·
-		BMvTbl.SetPP( def_PP_PlayerPosX, pposx );		//©•ª‚ÌÀ•W‚ğXV		
+		
+		// ƒRƒ}“Š‚°‚©‚çŒÄ‚Î‚ê‚é‚Æ‚«‚Í‚±‚±‚Íˆ—‚·‚é‚±‚Æ‚É‚µ‚½
+		// ƒƒŒƒ“‚âƒGƒ‹ƒgƒiƒ€‚ÌƒRƒ}“Š‚°‚Ì“Š‚°”²‚¯Œã‚Ì“WŠJ‚ª•Ï‚í‚è‚·‚¬‚é‚½‚ß
+		if( flags&(1<<0) )
+		{
+			// “Š‚°”²‚¯Œã‚Í‘O‚Ìó‹µ‚ğÄŒ»‚µ‚½‚¢‚Ì‚ÅA•Û‘¶‚µ‚Ä‚ ‚éÀ•W‚ÍXV‚µ‚È‚¢‚Ì‚ª³‚µ‚¢
+			// ‚È‚ñ‚Ì‚½‚ß‚Ìˆ—‚¾‚Á‚½‚Ì‚©‚Í­‚µ‹C‚É‚È‚é‚ªAÅ‰‚©‚ç‚±‚Ìˆ—‚¾‚Á‚½‚Ì‚Åƒ~ƒX‚Á‚Û‚¢
+			local pposx = BMvTbl.GetPP( def_PP_PlayerPosX ); //•Û‘¶‚µ‚Ä‚ ‚é©•ª‚ÌÀ•W‚ğæ“¾
+			pposx -= sa_x; // ‚±‚Á‚¿‚àƒYƒ‰‚·
+			BMvTbl.SetPP( def_PP_PlayerPosX, pposx ); // ©•ª‚ÌÀ•W‚ğXV
+		}
 	}
 }
 
@@ -1337,6 +1347,7 @@ Battle_Std.AttackImpact_StdFunc <- function(info)
 		{
 			_dp("\n n“®‚Åƒqƒbƒg‚µ‚½");
 			Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_SidouHitSkill ); // n“®‚Å‚ ‚Ä‚½‹Zƒtƒ‰ƒO‚ğ‚½‚Ä‚é
+			Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SidouHitSkillTmp );
 			
 			//n“®‚É“ü‚Á‚Ä‚­‚éˆ—
 			//–³“G‹Zn“®‚Í•ÛØ‚ªƒLƒc‚­‚È‚é
@@ -1380,6 +1391,7 @@ Battle_Std.AttackImpact_StdFunc <- function(info)
 					{
 						_dp("\n ƒvƒŒƒCƒ„[‚ª©•ª©g”­¶‚³‚¹‚½s“®’†");
 						Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_SidouHitSkill ); // n“®‚Å‚ ‚Ä‚½‹Zƒtƒ‰ƒO‚ğ‚½‚Ä‚é
+						Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SidouHitSkillTmp ); // n“®ƒqƒbƒg‚Ìˆê“I‚È‹L‰¯
 						if( is_set_muteki_hosei )
 						{
 							Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_MutekiSidou );
@@ -1393,6 +1405,7 @@ Battle_Std.AttackImpact_StdFunc <- function(info)
 					if( oya.push() )
 					{
 						Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_SidouHitSkill ); // n“®‚Å‚ ‚Ä‚½‹Zƒtƒ‰ƒO‚ğ‚½‚Ä‚é
+						Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SidouHitSkillTmp ); // n“®ƒqƒbƒg‚Ìˆê“I‚È‹L‰¯
 						if( is_set_muteki_hosei )
 						{
 							Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_MutekiSidou );
@@ -1410,6 +1423,7 @@ Battle_Std.AttackImpact_StdFunc <- function(info)
 									if( sofubo.push() )
 									{
 										Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_SidouHitSkill ); // n“®‚Å‚ ‚Ä‚½‹Zƒtƒ‰ƒO‚ğ‚½‚Ä‚é
+										Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SidouHitSkillTmp ); // n“®ƒqƒbƒg‚Ìˆê“I‚È‹L‰¯
 										if( is_set_muteki_hosei )
 										{
 											Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_MutekiSidou );
@@ -2134,7 +2148,13 @@ Battle_Std.DamageImpact_StdFunc <- function(info)
 					{
 						// _dp("\n ƒAƒTƒ‹ƒg•â³“K—p");
 						Battle_Std.ComboPoint_Multi( def_CPH_AssaultHit ); // ƒRƒ“ƒ{ƒ|ƒCƒ“ƒg‚ğæZ
-						BMvEff.ComboView_Set( { val=def_HOSEI_AssaultHit, type=1 } ); // •â³‚ğæZ
+						
+						// def_PP_AirAtkStatus ‚Æ def_MC_EnableAirAtkStatus ‚ª—LŒø‚Ì‚Æ‚«‚¾‚¯g‚¦‚éˆ—‚È‚Ì‚Å’ˆÓ
+						local assualtHosei = BMvTbl.GetPP(def_PP_AssultAirAtkHosei);
+						local useHoseiVal = ( assualtHosei != 0 )? assualtHosei : def_HOSEI_AssaultHit; // ‰Šú’l
+						_dpn("ƒAƒTƒ‹ƒg•â³iæZjF"+useHoseiVal);
+	
+						BMvEff.ComboView_Set( { val=useHoseiVal, type=1 } ); // •â³‚ğæZ
 					}
 				}
 				
@@ -2806,12 +2826,6 @@ Battle_Std.InitIWExistSkill <- function()
 	
 	BMvTbl.SetMvAction( def_MVA_LASkill );
 
-	if( BMvTbl.GetPP( def_PP_IWEXS_ChgVO_Hit ) )
-	{
-		// ‘¦€‚·‚é‚h‚v‚w‚Ì‚¾‚¯Á‚·
-		BMvEff.Cockpit_SetView( { mode=0 } ); //ƒQ[ƒW—Ş‚Ì•\¦İ’è@mode 0:”ñ•\¦ 1:•\¦
-	}
-	
 	if( Battle_Std.GS_CheckFlag( def_PP_GS_VorpalDyingIWEAtk ) ) // VP’†‚ÌIWE‚©‚Ç‚¤‚©
 	{
 		if( Def_Sys_BoostDamageVorpalIWE )
@@ -2950,12 +2964,6 @@ Battle_Std.FinalizeIWExistSkill <- function()
 	BMvEff.Cockpit_SetView( { mode=1 } ); //ƒQ[ƒW—Ş‚Ì•\¦İ’è@mode 0:”ñ•\¦ 1:•\¦
 	BMvEff.CutInProc_SetResourceView( { mode=1 } ); // “ä‹óŠÔ‚Ì”ñ•\¦‚ğ”O‚Ìˆ×–ß‚·
 	
-	if( BMvTbl.GetPP( def_PP_IWEXS_ChgVO_Hit ) )
-	{
-		// ‘¦€‚·‚é‚h‚v‚w‚Ì‚¾‚¯ƒRƒ“ƒ{•\¦‚ğÁ‚·
-		BMvEff.ComboView_Clear(); // ƒRƒ“ƒ{‚ğØ‚éiƒRƒ“ƒ{I—¹ó‘Ô‚É‚·‚éj
-	}	
-
 	BMvEff.CutInProc_Erase(); //ƒJƒbƒgƒCƒ“‚ğÁ‹‚·‚é
 	BMvEff.SetObjectRender( { type=0 } ); //‰‰o’†Á‚µ‚Ä‚¢‚½‚à‚Ì‚ğ•œŠˆ
 
@@ -3019,6 +3027,21 @@ Battle_Std.SetInstantCameraFocus <- function( _frame )
 	BMvEff.SetCamera_Focus( { charapos=0, zoom=-0.1, time=[10,_frame-10,15], type_in=3, type_out=1
 	x=target_pos.x, y=target_pos.y } ); //ƒJƒƒ‰W’†
 	// ¦ƒJƒbƒgƒCƒ“’†‚ÉƒJƒbƒgƒCƒ“‚Å‚æ‚èŠg‘å‚³‚ê‚é
+	
+	// ˆÃ“]‚µ‚½uŠÔ‚É”í’e‚·‚é‚±‚Æ‚ª‚ ‚é‚Ì‚Å‚»‚Ìƒ`ƒFƒbƒN‚ğs‚¤
+	// ‚±‚Ìƒ`ƒFƒbƒN‚ğ‚µ‚È‚¢‚ÆƒIƒŠƒG‚Ì236BC‚İ‚½‚­‚‘¬‚ÅˆÚ“®‚·‚é‹Z‚Ì‚Æ‚«‚ÉƒJƒƒ‰ˆÊ’u‚ªŒÅ’è‚Å‚¿‚å‚Á‚Æ‚¨‚©‚µ‚­‚È‚é
+	if( Def_Sys_FixCameraFocusBug_OnHitDuringExCutinMove )
+	{
+		local eff = BMvEff.CreateObject( { mvname="Mv_Null_AntenStopBoundCheckObject" } );
+		if( eff.push() )
+		{
+			BMvEff.SetObjectFlags( { flags=_ObjFlags_NoRender } );
+			BMvEff.SetExist( { level = _Exist_NoHantei } );
+			BMvTbl.SetPosition( {y=1024, flags=_Position_CaptureShift } );
+		
+			eff.pop();
+		}
+	}
 }
 
 //flags : (1<<0) : ƒJƒbƒgƒCƒ“‰æ‘œ‚ğ•\¦‚µ‚È‚¢‚ÅEX‹Zˆµ‚¢‚É‚à‚µ‚È‚¢
@@ -5237,10 +5260,11 @@ Battle_Std.GetParentMigiAngle <- function()
 }
 
 
+// ¦‘Šè‚ª‹ó’†‚Ì‚Æ‚«‚Íƒtƒ‰ƒOw’è‚µ‚È‚¢‚Æˆ—‚ª‘–‚ç‚È‚¢
 // flag & (1<<0) : ‘Î‹ó‹Zİ’èi‘Šè‚ª‹ó’†‚Å‚â‚ç‚ê‚¶‚á‚È‚¢‚·‚è”²‚¯‚È‚¢‚æ‚¤‚É‚·‚éj
 // flag & (1<<1) : ª‚Ìˆ—{‹ó’†‚â‚ç‚êƒ`ƒFƒbƒN‚ğ–³Œø‰»
 //’nã“¯m‚Ì‚·‚è”²‚¯‚È‚¢‚æ‚¤‚È•â³‚ª‚©‚©‚éEff6-12
-Battle_Std.AddToolShift_NoSurinuke <- function(plus_x=0, flag=0)
+Battle_Std.AddToolShift_NoSurinuke <- function(plus_x=0, flag=0, limit_y=300)
 {	
 	local pos = BMvTbl.GetPosition( 0 );
 	if( pos.y != 0) 
@@ -5269,7 +5293,7 @@ Battle_Std.AddToolShift_NoSurinuke <- function(plus_x=0, flag=0)
 				// _dp("\n ‘Šè‚Æ‚ÌY‹——£ : "+yLen );
 				
 				// 300ƒhƒbƒgˆÈ“à
-				if( (!Battle_Std.CheckEnemyisBound() || flag & (1<<1) ) && yLen < 300 )
+				if( (!Battle_Std.CheckEnemyisBound() || flag & (1<<1) ) && yLen < limit_y )
 				{
 					checkNearTaiku = 1;
 					
@@ -6112,7 +6136,7 @@ Battle_Std.GetHanteiRect_Player <- function( tbl )
 Battle_Std.SetPosition_DamageHanteiRect <- function( tbl={} )
 {
 	/* tblƒXƒƒbƒg
-	power 0`100@F@–Ú•W‚É‘Î‚µ‚Ä‚Ç‚ñ‚¾‚¯Šñ‚¹‚é‚©
+	power 0`100@F@–Ú•W‚É‘Î‚µ‚Ä‚Ç‚ñ‚¾‚¯Šñ‚¹‚é‚©@¦tablew’è‚à‚ ‚é
 	CheckAttackRectFrame : 0,1 UŒ‚”»’è‚ª‚ ‚éƒtƒŒ[ƒ€‚µ‚©Œ©‚È‚¢
 	distance : ‘Šè‚Æ‚Ì‹——£‚ª‚±‚êˆÈ“à‚¾‚Á‚½‚çŠñ‚¹‚éi0‚¾‚ÆŒ©‚È‚¢j
 	*/
@@ -6196,13 +6220,73 @@ Battle_Std.MoveEnemyEtcRect <- function( power, _flags=0 )
 			pos2.addx = pos.x;  pos2.addy = pos.y;  // ‰ÁZ’l‚¾‚¯‚Ç‚àI“_‚Æ‚µ‚Äˆµ‚¤
 			local posst = BMvEff.GetPointStatus( { points=pos2 } ); // ˆÊ’uî•ñæ“¾
 			
-			tpos.x = epos.x + (posst.pos_x*power/100);
-			tpos.y = epos.y + (posst.pos_y*power/100);			
+			// «—ˆ“I‚É‚ÍX‚Ì¶‰E‚¾‚Á‚½‚èAY‚Ìã‰º‚¾‚Á‚½‚è‚Å•Ê‚Ì‹z‚¢‚İ—Í‚ğİ’è‚Å‚«‚Ä‚à‚¢‚¢‚©‚È‚Æ‚¢‚¤‹C‚ª‚·‚é
+			// w’è•û–@‚Í]—ˆ’Ê‚è‚Ìint‚ÆA×‚©‚­w’è‚Å‚«‚étable‚Ì‚Q‚Â‚ª‚ ‚é
+			local pow_param = { x=0, y=0 };
+			if( typeof power == "table")
+			{
+				pow_param = power;
+			}
+			else
+			{
+				pow_param.x = power;
+				pow_param.y = power;
+			}
+
+			// æ‚Éflags‚Ìİ’è‚ğæ“¾‚µ‚ÄApow_param‚Ì’l‚ğXV‚·‚é
+			local noX = (_flags&(1<<0));
+			local noY = (_flags&(1<<1));
+			if( noX ) pow_param.x = 0;
+			if( noY ) pow_param.y = 0;
+
+			// ‚±‚Ì‚ ‚Æ‚Ì‹z‚¢Šñ‚¹ˆ——p‚ÉXV
+			if( pow_param.x == 0 ) noX = true;
+			if( pow_param.y == 0 ) noY = true;
+			
+			// _dpn("pow_param:"+pow_param.x+", "+pow_param.y);
+			
+			tpos.x = epos.x + (posst.pos_x*pow_param.x/100);
+			tpos.y = epos.y + (posst.pos_y*pow_param.y/100);			
 
 			//ÅŒã‚ÉƒGƒ‰[•â³
 			//‰æ–ÊŠO‚¾‚Á‚½‚ç•â³
 			if( tpos.x > def_POS_GamenHajiX ) tpos.x= def_POS_GamenHajiX;
 			if( tpos.x < -def_POS_GamenHajiX ) tpos.x= -def_POS_GamenHajiX;
+
+			//SidouHit`‚Ín“®‹Z‚Ìƒqƒbƒg’†‚¸‚Á‚Æ—LŒø‚È‚Ì‚Åg‚Á‚Ä‚Ü‚¹‚ñ
+			local p_is_sidou = ( Battle_Std.CheckEnemyisDamage() )? 0 : 1; // ‘Šè‚ª”ñ‚â‚ç‚ê‚Å“ü‚Á‚Ä‚«‚½‚çn“®‚ÌuŠÔ
+			local pos_side = ( p_pos_buf < e_pos_buf )? 0 : 1; // 0:©•ª|‘Šè 1:‘Šè|©•ª
+			local now_pos_side = ( ppos.x < epos.x )? 0 : 1; // 0:©•ª|‘Šè 1:‘Šè|©•ª
+			
+			local shift_type = 0;
+			if( ppos.x > pos.x || ( (ppos.x==pos.x) && pos_side == 1 ) )
+			{
+				shift_type = 1;//EP
+			}
+			else
+			{
+				shift_type = 0;//PE
+			}
+
+			// n“®‹Z‚Ì‚ ‚Ä‚½uŠÔ•ˆÊ’uŠÖŒW‚ª“ü‚ê‘Ö‚í‚è‚»‚¤‚È‚çˆÊ’uŠÖŒW‚ğ1F‚¾‚¯XV‚·‚é
+			// ‚±‚ê‚ğ“ü‚ê‚È‚¢‚Æ”w–Ê“–‚Ä‚Åè‘O‚ÉˆÊ’u‚ğƒYƒ‰‚µ‚½‚Æ‚«A”w–Ê“–‚Ä‚Ìó‘Ô‚Ån‚Ü‚Á‚Ä‚µ‚Ü‚Á‚ÄƒRƒ“ƒ{Œã‚ÌˆÊ’uŠÖŒW‚ª‚¨‚©‚µ‚­‚È‚é
+			local is_update_position_buffer = 0;
+			// _dpn("p_is_sidou:"+p_is_sidou+" pos_side:"+pos_side+" shift_type:"+shift_type);
+			if( p_is_sidou && pos_side != shift_type )
+			{
+				/*
+				if( _DevWindows )
+				{
+					local debug_str = "FixMoveEnemyBug:BufferUpdate";
+					_dpn(debug_str);
+					debugfontL.draw_message( debug_str );
+				}
+				*/
+				is_update_position_buffer = 1; // XV‚·‚é‚Ì‚ğ‹L‰¯
+				BMvEff.SetPositionBufferFlag(0);//1F‚¾‚¯ƒRƒ“ƒ{’†‚É“¯À•Wˆµ‚¢‚É‚µ‚È‚¢‚ÅˆÊ’uŠÖŒW‚ğXV‚·‚é
+			}
+			
+			local stage_corner_shift_error = 0; // ‰æ–Ê’[‚Ì‚¹‚¢‚ÅˆÊ’uŠÖŒWXV‚Å‚«‚È‚³‚»‚¤
 			
 			// ˆÚ“®æ‚Épl_kasanari‚ª‚ ‚Á‚½‚ç•â³‚ğ‚©‚¯‚é
 			
@@ -6210,8 +6294,6 @@ Battle_Std.MoveEnemyEtcRect <- function( power, _flags=0 )
 			
 			if( enemy.push() )
 			{
-				local noX = (_flags&(1<<0));
-				local noY = (_flags&(1<<1));
 				local okGroundXY = (_flags&(1<<2)); // ’nã‚Å‚à‚±‚Ìˆ—‚É“ü‚Á‚Ä‚­‚é
 				local noGroundX = (_flags&(1<<3)); // (1<<2)‚Æˆê‚Ég‚¤
 				local noGroundY = (_flags&(1<<4)); // (1<<2)‚Æˆê‚Ég‚¤
@@ -6250,7 +6332,6 @@ Battle_Std.MoveEnemyEtcRect <- function( power, _flags=0 )
 					if( !(p_kasa.sx > e_kasa.ex || p_kasa.sy > e_kasa.ey || p_kasa.ex < e_kasa.sx || p_kasa.ey < e_kasa.sy) )
 					{
 						// _dp("\n d‚È‚Á‚Ä‚é");
-						local pos_side = ( p_pos_buf < e_pos_buf )? 0 : 1; // 0:©•ª|‘Šè 1:‘Šè|©•ª
 						local c_pos = BMvTbl.GetPosition(); // ˆÊ’uæ“¾
 						local same_pos = (p_kasa.sx == e_kasa.sx)? 1 : 0;//“¯‚¶À•W‚Ì‚Æ‚«‚¾‚¯Apos_side(1F‘O‚ÌˆÊ’uŠÖŒW)‚ğQÆ‚·‚é
 						//_dpn("same_pos:"+same_pos+" pos_side:"+pos_side );
@@ -6261,17 +6342,9 @@ Battle_Std.MoveEnemyEtcRect <- function( power, _flags=0 )
 						// 0:©•ª|‘Šè 1:‘Šè|©•ª
 						//P “Á@¨@PE 0
 						//“Á P@¨@EP 1
-						local shift_type = 0;
 						if( newkasanariShift )
 						{
-							if( ppos.x > pos.x || ( (ppos.x==pos.x) && pos_side == 1 ) )
-							{
-								shift_type = 1;//EP
-							}
-							else
-							{
-								shift_type = 0;//PE
-							}
+							// shift_type ‚Ìˆ—‚Í‘O‚É‚â‚Á‚Ä‚ ‚é
 						}
 						else
 						{
@@ -6293,18 +6366,27 @@ Battle_Std.MoveEnemyEtcRect <- function( power, _flags=0 )
 							}
 						}
 						
-						
 						if( shift_type == 1 ) // E P
 						{
-							// _dp("\n EP:"+(e_kasa.ex - p_kasa.sx)/128 );
+							// _dpn("EP:"+(e_kasa.ex - p_kasa.sx)/128 );
 							c_pos.x -= e_kasa.ex - p_kasa.sx;
+							// _dp(" -> "+c_pos.x);
 							BMvTbl.SetPosition( { x=c_pos.x } ); // ’²®
+							if( c_pos.x <= -def_POS_GamenHajiX && ppos.x == -def_POS_GamenHajiX )
+							{
+								stage_corner_shift_error = 101;
+							}
 						}
 						else // P E
 						{
-							// _dp("\n PE:"+(e_kasa.sx - p_kasa.ex)/128 );
+							// _dpn("PE:"+(e_kasa.sx - p_kasa.ex)/128 );
 							c_pos.x -= e_kasa.sx - p_kasa.ex;
+							// _dp(" -> "+c_pos.x);
 							BMvTbl.SetPosition( { x=c_pos.x } ); // ’²®
+							if( c_pos.x >= def_POS_GamenHajiX && ppos.x == def_POS_GamenHajiX )
+							{
+								stage_corner_shift_error = 100;
+							}
 						}
 						// _dpn( "ˆÚ“®æ -> "+c_pos.x );
 					}
@@ -6312,6 +6394,21 @@ Battle_Std.MoveEnemyEtcRect <- function( power, _flags=0 )
 				}
 				
 				enemy.pop();
+				
+				// ˆÊ’uŠÖŒW‚ğXV‚µ‚æ‚¤‚Æ‚µ‚½‚ªƒXƒe[ƒWŠO‚È‚Ì‚Å“¯À•W‚É‚È‚Á‚Ä‚µ‚Ü‚¢“ü‚è‚ß‚È‚¢‚Ì‚ğC³
+				if( Def_Sys_FixMoveEnemyStageCornerBug && is_update_position_buffer )
+				{
+					if( stage_corner_shift_error == 100 ) // P E
+					{
+						_dpn_ml("FixMoveEnemyBug:©P E |");
+						BMvTbl.SetPosition( { x=-1, flags=_Position_Add } );
+					}
+					else if( stage_corner_shift_error == 101 ) // E P
+					{
+						_dpn_ml("FixMoveEnemyBug:| E P¨");
+						BMvTbl.SetPosition( { x=1, flags=_Position_Add } );
+					}
+				}
 			}
 			// Battle_Std.SetEnemyPosition( tpos );
 			
@@ -6795,6 +6892,7 @@ Battle_Std.NoCansel_NoAttackHit <- function( tbl={} )
 	local no_atk_hit = ("noattackhit" in tbl)? tbl.noattackhit : 1; //’ÇŒ‚•s”\‚É‚·‚é‚©‚Ç‚¤‚©@ƒfƒtƒH‚Í1
 	local no_zurasi_hosei = ("no_zurasi_hosei" in tbl)? tbl.no_zurasi_hosei : 0;
 	local check_mvdamage = ("check_mvdamage" in tbl)? tbl.check_mvdamage : 0; // MV‚ªƒ_ƒ[ƒW‚Ì‚Æ‚«‚¾‚¯’ÇŒ‚•s”\‚É‚·‚é
+	local check_nosidou = ("check_nosidou" in tbl)? tbl.check_nosidou : 0; // un“®‚¶‚á‚È‚¢v‚Æ‚«‚¾‚¯’ÇŒ‚•s”\‚É‚·‚é
 
 	//NoAttackHit
 	if( Battle_Std.CheckNoCansel() ) //ƒLƒƒƒ“ƒZƒ‹‚µ‚È‚¢‚ÅFinalize‚µ‚½
@@ -6803,6 +6901,21 @@ Battle_Std.NoCansel_NoAttackHit <- function( tbl={} )
 		// _dm("NoCansel_NoAttackHit ƒLƒƒƒ“ƒZƒ‹‚µ‚È‚©‚Á‚½");
 		if( no_atk_hit==1 ) //’ÇŒ‚•s‰Â‚É‚·‚é
 		{
+			local set_noatk = 1;
+			local set_damage_hosei = 0;
+			local set_cp_hosei = 0;
+			
+			if( check_nosidou )
+			{
+				if( Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_SidouHitSkill ) )
+				{
+					_dpn("n“®‚È‚Ì‚Å’ÇŒ‚•s”\‚É‚µ‚È‚¢");
+					set_noatk = 0;
+					set_damage_hosei = ( "hosei" in check_nosidou )? check_nosidou.hosei : 0;
+					set_cp_hosei = ( "cp" in check_nosidou )? check_nosidou.cp : 0;
+				}
+			}
+			
 			if( check_mvdamage ) // MV‚ªƒ_ƒ[ƒW‚Ì‚Æ‚«‚¾‚¯’ÇŒ‚•s”\‚É‚·‚é
 			{
 				local hitStatusDamage = 0;
@@ -6815,17 +6928,38 @@ Battle_Std.NoCansel_NoAttackHit <- function( tbl={} )
 				// hitstatusŒŸ’m‚¾‚ÆƒtƒŠ[ƒ‚[ƒVƒ‡ƒ“‚É‚Íƒqƒbƒgî•ñ‚ª‚È‚©‚Á‚½‚è‚·‚é‚Ì‚Å‚±‚Ìˆ—‚ª•K—v
 				local hitStatusDamageFlag = Battle_Std.MoveCode.CheckFlag( def_MC_HitStatus_Damage ); // ‚±‚Ìs“®‚Åƒ_ƒ[ƒW‚µ‚½‚©
 				
+				
 				// _dpn("ƒ_ƒ[ƒWƒ`ƒFƒbƒN:"+hitStatusDamage+", "+hitStatusDamageFlag);
 
 				// UŒ‚‚ªƒ_ƒ[ƒW‚µ‚½‚Æ‚«‚¾‚¯’ÇŒ‚•s”\‚É‚·‚éi‹óU‚è‚âƒK[ƒhŒã‚Ìİ’uƒqƒbƒg‚ÅŒŸ’m‚³‚ê‚È‚¢‚æ‚¤‚Éj
 				if( hitStatusDamage || hitStatusDamageFlag )
 				{
-					Battle_Std.EnemyNoAttackHit(); // ‘Šè‚ğ’ÇŒ‚•s”\‚É‚·‚é
+					// ‚ ‚Æ‚Ìˆ—‚Åset_noatk=1‚Å’ÇŒ‚•s‰Â‚É‚³‚ê‚é
 				}
+				else
+				{
+					_dpn("MV‚ªƒ_ƒ[ƒW‚¶‚á‚È‚¢‚Ì‚Å’ÇŒ‚•s”\‚É‚µ‚È‚¢");
+					set_noatk = 0;
+					set_damage_hosei = ( "hosei" in check_mvdamage )? check_mvdamage.hosei : 0;
+				}
+			}
+			
+			if( set_noatk )
+			{
+				Battle_Std.EnemyNoAttackHit(); // ‘Šè‚ğ’ÇŒ‚•s”\‚É‚·‚é
 			}
 			else
 			{
-				Battle_Std.EnemyNoAttackHit(); // ‘Šè‚ğ’ÇŒ‚•s”\‚É‚·‚é
+				if( set_damage_hosei )
+				{
+					_dpn("æZ•â³:"+set_damage_hosei);
+					BMvEff.ComboView_Set( { val=set_damage_hosei, type=1 } ); // æZ•â³
+				}
+				if( set_cp_hosei )
+				{
+					_dpn("CP•â³:"+set_cp_hosei);
+					Battle_Std.ComboPoint_Multi( set_cp_hosei ); // ƒRƒ“ƒ{ƒ|ƒCƒ“ƒg‚ğæZ
+				}
 			}
 		}
 	}
@@ -6916,15 +7050,19 @@ Battle_Std.ThrowMv_CanselRelease <- function( tbl={} )
 
 //ƒWƒƒƒ“ƒvUŒ‚Init‚ÅƒXƒe[ƒ^ƒXİ’è
 //ƒWƒƒƒ“ƒvUŒ‚i’…’n‚ÌMv‚ª•Ï‰»‚·‚éUŒ‚j‚ÌMv‚©‚ç‚µ‚©‚æ‚ñ‚Å‚Í‚¢‚¯‚È‚¢
-Battle_Std.SetStatus_AirAtkStatus <- function()
+Battle_Std.SetStatus_AirAtkStatus <- function( param={} )
 {
 	BMvTbl.SetPP(def_PP_AirAtkStatus,0); //ƒWƒƒƒ“ƒvUŒ‚ƒXƒe[ƒ^ƒX‰Šú‰»
+	BMvTbl.SetPP(def_PP_AssultAirAtkHosei,0); // ‹ó’†ƒAƒTƒ‹ƒg•â³w’è‰Šú‰»
 	
 	// ‚±‚Ìˆ—‚Íˆê’UƒIƒt‚É‚µ‚Ä‚¨‚­i‚ ‚Á‚Ä‚à‚È‚­‚Ä‚à’á‹óƒAƒTƒ‹ƒg‚Ì«”\‚É·‚ªo‚È‚©‚Á‚½‚Ì‚Åj
 	// def_MC3_EnableJumpFramePP‚ÍƒWƒƒƒ“ƒv‚ÌMV‚Å‚¾‚¯—LŒø‚¾‚ªAƒWƒƒƒ“ƒv‚©‚çƒWƒƒƒ“ƒvUŒ‚‚ğƒYƒ‰‚µ‰Ÿ‚µ‚µ‚ÄƒAƒTƒ‹ƒg‚¾‚µ‚½‚Æ‚«‚àg‚¢‚½‚¢‚Ì‚Å‹L‰¯‚µ‚Ä‚¨‚­
 	// Battle_Std.PassBeforeMoveCodeEx( 3, def_MC3_EnableJumpFramePP ); // JumpFrame‚ª—LŒø‚ÈMV‚Å‚ ‚é‚±‚Æ‚ÌˆøŒp‚¬
 	
 	Battle_Std.MoveCode.AddFlag( def_MC_EnableAirAtkStatus ); // AirAtkStatus‚ª—LŒø‚ÈMv‚Æ‚·‚é
+
+	local assaultHosei = ( "AssaultHosei" in param )? param.AssaultHosei : 0;
+	Battle_Std.SetAssultAirAtkHosei_InAAS( assaultHosei ); // AirAtkStatus‚ª—LŒø‚ÈMv‚È‚çƒAƒTƒ‹ƒg‚Ìƒ_ƒ[ƒW•â³‚ğ—\–ñ
 	
 	//ƒAƒTƒ‹ƒg‚©‚ç”ò‚ñ‚Å‚«‚½‚çƒtƒ‰ƒO‚ğ—§‚Ä‚é	
 	local mvs = BMvTbl.GetMvStatus();
@@ -8445,6 +8583,36 @@ Battle_Std.SetVector_YVecFrameLanding <- function( _frame=22 )
 		// BMvTbl.SetVector( { y=vec.y, addy=-vec.y/count, flags=_Vector_Div } );
 	}
 }
+
+// FrameUpdate‚È‚Ç‚Åƒqƒbƒgî•ñ‚ª‚ ‚é‚©Œ©‚é‚¾‚¯‚Ì‚à‚Ì
+// ”»’èƒc[ƒ‹‚Ìƒqƒbƒg•ªŠò‚É‹ß‚¢‚ªA“–‚Äg‚Éæ‚ç‚ê‚½‚Æ‚«‚Í“ü‚ç‚È‚¢
+Battle_Std.CheckDamageHitStatus <- function()
+{
+	local mvhs = BMvTbl.GetMvHitStatus();
+	if( mvhs.Type&_HitType_Damage && mvhs.isCatchFlag == 0 )
+	{
+		return 1;
+	}
+	return 0;
+}
+
+// g‚¢‚â‚·‚¢ƒqƒbƒg•ªŠòˆ—
+// TODO:‚»‚Ì‚¤‚¿hint—\–ñ‚à“ü‚ê‚Ä‚¨‚«‚½‚¢
+Battle_Std.JumpFrameID_CheckDamageHitStatus <- function( param={} )
+{
+	local CheckFrameID = ("CheckFrameID" in param)? param.CheckFrameID : 0;
+	local JumpFrameID = ("JumpFrameID" in param)? param.JumpFrameID : 0;
+	if( CheckFrameID == 0 || JumpFrameID == 0 ) return 0;
+	
+	local mvs = BMvTbl.GetMvStatus();
+	if( mvs.FrameID == CheckFrameID && Battle_Std.CheckDamageHitStatus() )
+	{
+		BMvTbl.JumpFrameID( JumpFrameID );
+		return 1;
+	}
+	return 0;
+}
+
 
 // HitInterrupt‚Åg‚¤‚à‚Ì
 // UŒ‚‚ª‚ ‚½‚éƒ^ƒCƒ~ƒ“ƒO‚Å‚P‚ğ•Ô‚·
@@ -10281,6 +10449,7 @@ Battle_Std.PassHitMoveCodes <- function()
 	// _dpn("PassHitMoveCodes()");
 	Battle_Std.PassBeforeMoveCodeEx( 2, def_MC2_CounterHit ); // ƒJƒEƒ“ƒ^[ƒqƒbƒgˆøŒp‚¬
 	Battle_Std.PassBeforeMoveCodeEx( 1, def_MC1_SidouHitSkill ); // n“®‹Z‚Å‚ ‚é‚±‚Æ‚ÌˆøŒp‚¬
+	Battle_Std.PassBeforeMoveCodeEx( 2, def_MC2_SidouHitSkillTmp ); // n“®‹Z‚Å‚ ‚é‚±‚Æ‚ÌˆøŒp‚¬
 	Battle_Std.PassBeforeMoveCodeEx( 7, def_MC7_ThrowCounter ); // “Š‚°‚Åd’¼‚ğ’Í‚ñ‚¾‚±‚Æ‚ÌˆøŒp‚¬
 	Battle_Std.PassBeforeMoveCodeEx( 7, def_MC7_Muteki ); // –³“G‹Zˆµ‚¢‚Å‚ ‚é‚±‚Æ‚Ìˆø‚«Œp‚¬
 	Battle_Std.PassBeforeMoveCodeEx( 7, def_MC7_MutekiAnnounce ); // –³“G‹ZƒAƒiƒEƒ“ƒX‚ğo‚µI‚¦‚½‚±‚Æ‚Ìˆø‚«Œp‚¬
@@ -10305,6 +10474,7 @@ Battle_Std.PassLandMoveCodes <- function()
 	Battle_Std.PassBeforeMoveCodeEx( 1, def_MC1_AtkJump );
 
 	Battle_Std.PassBeforeMoveCodeEx( 1, def_MC1_SidouHitSkill ); // n“®‹Z‚Å‚ ‚é‚±‚Æ‚ÌˆøŒp‚¬
+	Battle_Std.PassBeforeMoveCodeEx( 2, def_MC2_SidouHitSkillTmp ); // n“®‹Z‚Å‚ ‚é‚±‚Æ‚ÌˆøŒp‚¬
 
 	Battle_Std.PassBeforeMoveCodeEx( 7, def_MC7_Muteki ); // –³“G‹Zˆµ‚¢‚Å‚ ‚é‚±‚Æ‚Ìˆø‚«Œp‚¬
 	Battle_Std.PassBeforeMoveCodeEx( 7, def_MC7_MutekiAnnounce ); // –³“G‹ZƒAƒiƒEƒ“ƒX‚ğo‚µI‚¦‚½‚±‚Æ‚Ìˆø‚«Œp‚¬
@@ -11039,6 +11209,7 @@ Battle_Std.PassPlayerToFireBallMvCode <- function()
 		local oya_code = {
 			[0] = BMvTbl.GetMoveCodeEx( 0 ),
 			[1] = BMvTbl.GetMoveCodeEx( 1 ),
+			[2] = BMvTbl.GetMoveCodeEx( 2 ),
 			[3] = BMvTbl.GetMoveCodeEx( 3 ),
 			[4] = BMvTbl.GetMoveCodeEx( 4 ),
 			[5] = BMvTbl.GetMoveCodeEx( 5 ),
@@ -11061,6 +11232,7 @@ Battle_Std.PassPlayerToFireBallMvCode <- function()
 			//[5,def_MC5_ArcDriveSkill],
 			[5,def_MC5_FromSidouAddSkill],
 			[1,def_MC1_SidouHitSkill],
+			[2,def_MC2_SidouHitSkillTmp],
 		]
 		foreach( slot, val in pass_codes )
 		{
@@ -11340,12 +11512,13 @@ Battle_Std.CallSystemHereYouAre <- function()
 	}
 }
 
+// ’j«‚©‚Ç‚¤‚©i–¢g—pj
 Battle_Std.EnemyIsMan <- function()
 {
 	return !Battle_Std.EnemyIsWoman();
 }
 
-// —«‚©‚Ç‚¤‚©
+// —«‚©‚Ç‚¤‚©i–¢g—pj
 Battle_Std.EnemyIsWoman <- function()
 {
 	local e_num = Battle_Std.GetEnemyCharaNo();
@@ -11362,6 +11535,7 @@ Battle_Std.EnemyIsWoman <- function()
 	|| e_num == Def_ChrNo_Mik
 	|| e_num == Def_ChrNo_Kag
 	|| e_num == Def_ChrNo_Pho
+	|| e_num == Def_ChrNo_Izu
 	)
 	{
 		// _dpn("—«");
@@ -11923,6 +12097,149 @@ Battle_Std.EasyCheckSPActionProduction <- function()
 		if( mva == def_MVA_LASkill ) return 1;
 	}
 	return 0;
+}
+
+// ƒXƒeƒAƒGƒ“ƒ_[‚Å”²‚¯‚é‚Æ‚«‚É•K‚¸‚â‚é’ÇŒ‚•s‰Â”\ˆ—
+// LPEx(1,2)‚ğQÆ‚µ‚Ä‚¢‚é‚Ì‚Å’ˆÓ
+Battle_Std.SSRelayAtk_NoAttackHit_UseLP <- function()
+{
+	local hitst = BMvTbl.GetMvHitStatus();
+	if( BMvTbl.GetLPEx(1,2) == 0 && !(hitst.Type&_HitType_Damage) )
+	{
+		// ”­“®‚É‘Šè‚ª‚â‚ç‚ê’†‚Å‚Í‚È‚­Aƒ_ƒ[ƒW•â³‚Ì”{—¦‚ğ‚©‚¯‚Ä‚¢‚È‚¢@•@©•ª‚Éƒ_ƒ[ƒWî•ñ‚ª‚È‚¢
+		_dpn("’ÇŒ‚•s‰Â‚É‚µ‚È‚¢");
+	}
+	else
+	{
+		// MvˆÚs‚µ‚È‚¢‹Z‚È‚ç’ÇŒ‚•s”\‚É‚·‚é(ˆÚs‚·‚é‹Z‚ÍŒÂ•Ê‚É‘Î‰)
+		Battle_Std.NoCansel_NoAttackHit( { no_zurasi_hosei = 1 } ); //‰½‚©‚ÅƒLƒƒƒ“ƒZƒ‹‚µ‚È‚©‚Á‚½ê‡’ÇŒ‚•s”\‚É‚·‚é
+	}
+}
+
+// •KE‹Z‚Æ‚©‚æ‚­‚ ‚és“®‚Å‚ÌI—¹æ•ªŠò
+Battle_Std.SetNextMvFromPosState <- function()
+{
+	//ƒLƒƒƒ‰‚Ì—§‚¿‚µ‚á‚ª‚İ‚È‚Ç‚Ìó‘Ô‚ğŒ©‚Ä•ªŠò
+	if( BCMDTbl.CheckPosState( _PosState_Stand ) )
+	{
+		BMvTbl.SetNextMoveTable( "Mv_Neutral" );
+	}
+	else
+	{
+		//‚µ‚á‚ª‚İ‚â‹ó’†‚Ìê‡‚Í‚±‚±
+		//‹ó’†‚Í‚È‚¢‚Í‚¸‚È‚Ì‚ÆA‘å”¼‚Í—§‚¿‚È‚Ì‚Å‚±‚Ìˆ—‡
+		BMvTbl.SetNextMoveTable( "Mv_Crouch_Wait" );
+	}
+}
+
+
+// ƒqƒbƒg‚¾‚¯‘å‚«‚È”»’è‚Ì‚ ‚éFrameID‚É”ò‚Î‚µ‚½‚¢‚Æ‚«‚Ég‚¤
+Battle_Std.JumpFrameID_MvDamage <- function( param={} )
+{
+	local CheckFrameID = ( "CheckFrameID" in param )? param.CheckFrameID : 0;
+	local JumpFrameID = ( "JumpFrameID" in param )? param.JumpFrameID : 0;
+	if( CheckFrameID == 0 || JumpFrameID == 0 ) return 0; // ‚â‚é‚±‚Æ‚È‚¢
+
+	local mvs = BMvTbl.GetMvStatus();
+	if( mvs.FrameID == CheckFrameID )
+	{
+		local mvhs = BMvTbl.GetMvHitStatus();
+		if( mvhs.Type & _HitType_Damage )
+		{
+			BMvTbl.JumpFrameID( JumpFrameID );
+			return 1;
+		}
+	}
+	return 0;
+}
+
+Battle_Std.SetAssultAirAtkHosei_InAAS <- function( _hosei )
+{
+	if( Battle_Std.MoveCode.CheckFlag( def_MC_EnableAirAtkStatus ) )
+	{
+		_hosei = Battle_Std.Math_Clamp( _hosei, 0, 100 ); // ”ÍˆÍ§ŒÀ
+		BMvTbl.SetPP(def_PP_AssultAirAtkHosei,_hosei);
+		// _dpn("ƒAƒTƒ‹ƒgƒ_ƒ[ƒW•â³—\–ñƒZƒbƒg:"+_hosei);
+	}
+}
+
+
+// ‚±‚Ìè‚ÌŒvZŒn‚ÌŠÖ”‚Ü‚Æ‚ß‚½ƒe[ƒuƒ‹ì‚Á‚½‚Ù‚¤‚ª‚¢‚¢‚©‚à
+
+
+// A‚©‚çB‚Ö‚Ì•âŠÔ@par“‚¾‚¯Šñ‚¹‚é
+Battle_Std.Math_Lerp <- function(a, b, par)
+{
+	return (( a * (100 - par) + ( b * par ) ) / 100).tointeger(); // lÌŒÜ“ü
+}
+
+// w’è”ÍˆÍ“à‚Éû‚ß‚é
+Battle_Std.Math_Clamp <- function(value, min, max)
+{
+	return value < min ? min : value > max ? max : value;
+}
+
+// ‘å‚«‚¢•û‚ğ‘I‚Ô
+Battle_Std.Math_Max <- function(a, b) { return a > b ? a : b; }
+
+// ¬‚³‚¢•û‚ğ‘I‚Ô
+Battle_Std.Math_Min <- function(a, b) { return a < b ? a : b; }
+
+// a?b‚ÌŠÔ‚ÅAvalue‚Í‚Ç‚ê‚­‚ç‚¢‚© 100%=100
+// ƒI[ƒo[‚·‚ê‚Î1000‚Æ‚©‚É‚à‚È‚é‚Ì‚Å’ˆÓ
+Battle_Std.Math_InverseLerp <- function(a, b, value)
+{
+	if (a == b) return 0;
+	return ((value - a) * 100 / (b - a));
+}
+
+// ‚ ‚é”ÍˆÍ‚Ì’l‚ğA•Ê‚Ì”ÍˆÍ‚Éƒ}ƒbƒsƒ“ƒO
+Battle_Std.Math_Remap <- function(inMin, inMax, outMin, outMax, value)
+{
+	local par = Math_InverseLerp(inMin, inMax, value); // 0?100
+	return Math_Lerp(outMin, outMax, par);
+}
+
+/*
+// A‚©‚çB‚Ö‚Ì‚È‚ß‚ç‚©‚È•âŠÔ(‰ÁŒ¸‘¬)
+// ŒvZã‚Ífloatg‚í‚´‚é‚ğ‚¦‚È‚¢‚Ì‚Å“¯ŠúƒYƒŒ‚·‚é‚©‚à‚µ‚ê‚È‚¢
+Battle_Std.Math_SmoothStep <- function(a, b, t)
+{
+	t = Math_Clamp(t, 0, 100);
+	local ft = t / 100.0;
+	ft = ft * ft * (3 - 2 * ft); // ‹Èü•âŠÔ
+	return ((a * (1 - ft) + b * ft) + 0.5).tointeger(); // lÌŒÜ“ü
+}
+
+// Œ¸‘¬@¦“¯ŠúƒYƒŒ‚·‚é‚©‚à‚µ‚ê‚È‚¢
+//uŠ„‡i0`100jv‚ğ“ü—Í‚µ‚ÄA•ÏŒ`‚³‚ê‚½Š„‡i0`100j‚ğ•Ô‚·
+Battle_Std.Math_EaseOut <- function(t)
+{
+	t = Math_Clamp(t, 0, 100);
+	local ft = t / 100.0;
+	ft = 1.0 - (1.0 - ft) * (1.0 - ft); // = 1 - (1 - t)^2
+	return (ft * 100).tointeger();
+}
+
+// ‰Á‘¬@¦“¯ŠúƒYƒŒ‚·‚é‚©‚à‚µ‚ê‚È‚¢
+//uŠ„‡i0`100jv‚ğ“ü—Í‚µ‚ÄA•ÏŒ`‚³‚ê‚½Š„‡i0`100j‚ğ•Ô‚·
+Battle_Std.Math_EaseIn <- function(t)
+{
+	t = Math_Clamp(t, 0, 100);
+	local ft = t / 100.0;
+	ft = ft * ft; // = t^2
+	return (ft * 100).tointeger();
+}
+*/
+
+// ”ÍˆÍ‚ğ’´‚¦‚½‚çŠª‚«–ß‚·iƒ‹[ƒvj
+// max‚Æ“¯‚¶’l‚Ü‚Å‚Í‚¢‚©‚È‚¢
+// Šp“xi0`360“xj‚âƒCƒ“ƒfƒbƒNƒX‚È‚Ç‚ÌzŠÂˆ—
+Battle_Std.Math_Wrap <- function(value, min, max)
+{
+	local range = max - min;
+	if( range == 0 ) return min; // ‚ ‚é‚¢‚Í 0
+	return ((value - min) % range + range) % range + min;
 }
 
 print("\n btl_MvFunc.....OK");

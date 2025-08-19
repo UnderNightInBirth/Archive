@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 
 local t = {};
@@ -85,7 +84,8 @@ local maketmpl_SkillRollingBombPunch = function( param={} ) : (setSousaiBonus)
 		case 100: // 攻撃
 			break;
 		case 110: // 爆発
-			Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_FireBallRect ); // 相殺される・飛び道具判定モーション
+			// 250526 相殺でヒット数を減算しない技に変更
+			Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_FireBallRect|def_MC_Sousai_NoSubHitCount ); // 相殺される・飛び道具判定モーション・相殺でヒット数を減算しない
 			BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); //  弾無敵にスカる
 			break;	
 		case 150:
@@ -101,6 +101,7 @@ local maketmpl_SkillRollingBombPunch = function( param={} ) : (setSousaiBonus)
 			if( BMvTbl.GetLP(2)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 			{
 				BMvTbl.SetLP(2,1); // 消した
+				// BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 				
 				setSousaiBonus(); // GRD増加、空振り必殺キャンセル可能に
 			}
@@ -134,7 +135,8 @@ t.Mv_Skill_0202_Add <-
 {
 	function Init_After()
 	{
-		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_FireBallRect ); // 相殺される・飛び道具判定モーション
+		// 250526 相殺でヒット数を減算しない技に変更
+		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_FireBallRect|def_MC_Sousai_NoSubHitCount ); // 相殺される・飛び道具判定モーション・相殺でヒット数を減算しない
 
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
 		
@@ -150,6 +152,7 @@ t.Mv_Skill_0202_Add <-
 		if( BMvTbl.GetLP(2)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(2,1); // 消した
+			// BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 			
 			setSousaiBonus(); // GRD増加、空振り必殺キャンセル可能に
 		}		
@@ -463,6 +466,7 @@ t.Mv_Atk_AirC <-
 			if( BMvTbl.GetLP(2)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 			{
 				BMvTbl.SetLP(2,1); // 消した
+				// BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 				
 				setSousaiBonus(); // GRD増加、空振り必殺キャンセル可能に
 			}
@@ -563,6 +567,7 @@ t.Mv_Atk_B_B <-
 		if( BMvTbl.GetLP(2)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(2,1); // 消した
+			// BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 			
 			setSousaiBonus(); // GRD増加、空振り必殺キャンセル可能に
 		}		
@@ -623,9 +628,10 @@ t.Mv_Atk_StdBandC <-
 {
 	function Init_After()
 	{
-		BMvTbl.SetLP(0,0); // ヒットしたかどうか
+		BMvTbl.SetLP(0,0); // ヒットorガードしたかどうか
 		
 		BMvTbl.SetForceUkemiTimeLimitFlag( { val=15, time=255, flag=_ClearFlag_ChangeMv } );
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
 	}
 	function FrameUpdate_After()
 	{
@@ -660,9 +666,9 @@ t.Mv_Atk_StdBandC <-
 	}
 	function HitInterrupt_After()
 	{
-		if( Battle_Std.CheckDamageTiming() )
+		if( Battle_Std.CheckHitTiming() )
 		{
-			BMvTbl.SetLP(0,1); // ヒットを記憶
+			BMvTbl.SetLP(0,1); // ヒットorガードを記憶
 		}
 	}
 }
@@ -671,9 +677,10 @@ t.Mv_Atk_AirBandC <-
 {
 	function Init_After()
 	{
-		BMvTbl.SetLP(0,0); // ヒットしたかどうか
+		BMvTbl.SetLP(0,0); // ヒットorガードしたかどうか
 		
 		BMvTbl.SetForceUkemiTimeLimitFlag( { val=15, time=255, flag=_ClearFlag_ChangeMv } );
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
 	}
 	function FrameUpdate_After()
 	{
@@ -708,9 +715,9 @@ t.Mv_Atk_AirBandC <-
 	}
 	function HitInterrupt_After()
 	{
-		if( Battle_Std.CheckDamageTiming() )
+		if( Battle_Std.CheckHitTiming() )
 		{
-			BMvTbl.SetLP(0,1); // ヒットを記憶
+			BMvTbl.SetLP(0,1); // ヒットorガードを記憶
 		}
 	}
 }
@@ -788,6 +795,10 @@ t.Mv_Skill_CircleEX <-
 		Battle_Std.ThrowTech.SetThrowMvFlag_AutoDel(8); //指定フレームだけ投げ属性（投げ抜けを受け付ける）
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_SkillThrow );
 	}
+	function FrameUpdate_After()
+	{
+		Battle_Std.EnemyGuardShield_ThroughRemoveBound( { Param1=1 } ); // ガードシールド中はBound空振りを無くして掴む
+	}
 	function HitInterrupt_After()
 	{
 		Battle_Std.SetThrowHitFinalize(256);
@@ -861,6 +872,8 @@ t.Mv_Skill_CircleEX_Hit <-
 		
 		BMvTbl.SetLP(5,0); // 1回目のスコア
 		BMvTbl.SetLP(6,0); // 2回目のスコア（1回目がいいと値が増える）
+		
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=45, time=255, flag=_ClearFlag_ChangeMv } ); // 受身不能時間の最低保障値
 	}
 	function FrameUpdate_After() : (tuikaParam, getLvJumpID)
 	{
@@ -960,11 +973,12 @@ t.Mv_Skill_CircleEX_Hit <-
 					local lastScore = ( usest.lastScoreLP!=-1 )? BMvTbl.GetLP( usest.lastScoreLP ) : 0; // 前回のスコア
 					local score = 0;
 					local sa_abs = abs(sa);
-					if( sa_abs <= 1 )
+					if( sa_abs <= 3 )
 					{
 						score = 2;
+						Battle_Std.GRD_AddValue( { val=2500, boundplus=1 } ); // GRD増加
 					}
-					else if( sa_abs <= 4 )
+					else if( sa_abs <= 5 )
 					{
 						score = 1;
 					}
@@ -1183,6 +1197,10 @@ local makeSkillTmpl_RollingMoveAtkAddRolling = function( param = {} )
 		BMvTbl.SetLP(0,0); // 引き寄せでヒットしたら1
 		
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CmdLvDZ_OK );//CVO出せなくて詰むので
+		
+		// 623空振りから236Cなどと入れると、派生即EXキャンセルになるのを防ぐ
+		// 5Fで十分だが念のため6Fにしておく
+		BMvTbl.SetCommandShortDelay(6); // 一定時間lastdelayの効果を短くする
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
@@ -1437,8 +1455,7 @@ t.Mv_Skill_41236SP_Hit <-
 			local pos = BMvTbl.GetPosition();
 			BMvTbl.SetLP(0,pos.x);
 			
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(1);
+			local findchara = BMvCore.CFindObject().Get(1);
 			if( findchara.push() )
 			{
 				BMvTbl.JumpFrameID( 900 ); // スクロールを消滅へ
@@ -1470,8 +1487,7 @@ t.Mv_Skill_41236SP_Hit <-
 		case 800: // 着地爆発
 			BMvEff.ThrowChara_SetJoint(0); //くっつけかり
 			
-			local findobj = BMvCore.CFindObject(); // クラス生成
-			local findchara = findobj.Get(2);
+			local findchara = BMvCore.CFindObject().Get(2);
 			if( findchara.push() )
 			{
 				BMvTbl.JumpFrameID( 900 ); // スクロールを消滅へ
@@ -1573,12 +1589,14 @@ local makeSkillTmpl_JumpCatchBomb = function( param={} )
 		mvparam.techMv2 = "Mv_Skill_214A_TechWait2";
 		mvparam.comboMv = "Mv_Skill_214A_Hit";
 		mvparam.comboMv2 = "Mv_Skill_214A_Hit";
+		mvparam.legsMuteki = 1;
 		break;
 	case "B":
 		mvparam.techMv = "Mv_Skill_214B_TechWait";
 		mvparam.techMv2 = "Mv_Skill_214B_TechWait2";
 		mvparam.comboMv = "Mv_Skill_214B_Hit";
 		mvparam.comboMv2 = "Mv_Skill_214B_Hit";
+		mvparam.legsMuteki = 1;
 		break;
 	case "EX":
 		mvparam.techMv = "Mv_Skill_214EX_TechWait";
@@ -1789,6 +1807,9 @@ local makeSkillTmpl_JumpCatchBombHitCombo = function( param={} )
 				if( BMvTbl.GetLP(1)==1 )
 				{
 					BMvEff.CreateObject( { start_pat="CatchCharge", x=105, y=-426, flags=_Position_ToolShift } );
+					
+					// GRD増加
+					Battle_Std.GRD_AddValue( { val=2000, boundplus=1 } ); // GRD増加
 				}
 			}
 			break;
@@ -1843,6 +1864,10 @@ local make_tmpl_MoveAtk = function( param={} )
 		isAirSkill = 0,
 		
 		shiftEnemy = ("shiftEnemy"in param)? param.shiftEnemy : 0,
+		
+		moveGuri = 0, // レバー左右でグリグリ動く
+		
+		head_muteki = 0,
 	}
 	
 	switch( param.type )
@@ -1850,6 +1875,7 @@ local make_tmpl_MoveAtk = function( param={} )
 	case "A":
 		break;
 	case "B":
+		mvparam.head_muteki = 1;
 		break;
 	case "EX":
 		mvparam.isEx = 1;
@@ -1971,6 +1997,7 @@ local make_tmpl_MoveAtk = function( param={} )
 		mvparam.rocketEff.angle = 0.0;
 		mvparam.movePower.par = 50;
 		mvparam.autoMuki = 1;
+		mvparam.moveGuri = { max=1600, min=-1600, plus=128 };
 		break;
 	case "2":
 		if( isAdd )
@@ -2049,6 +2076,8 @@ local make_tmpl_MoveAtk = function( param={} )
 		
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_Shield_CanselNG ); // シールドされるとキャンセル不能＆行動可能が行動不能に
 		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_EnableCansel_AddCommand );
+
+		Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_ChainShiftOK_NoShield ) // ツールでCS可なら空振りCS可能（シールド時は不可）
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
@@ -2057,6 +2086,7 @@ local make_tmpl_MoveAtk = function( param={} )
 		// 8 : 　※追加受け付けをダメージ時のみにする
 		// 2 : 移動エフェクトよんでいい
 		// 4 : 重なり消していいタイミング
+		// 16: 左右移動受付
 		local mvs = BMvTbl.GetMvStatus();
 		if( mvparam.hitKasanariErase )
 		{
@@ -2080,6 +2110,16 @@ local make_tmpl_MoveAtk = function( param={} )
 					eff.pop();
 				}
 			}
+		}
+		
+		if( mvparam.moveGuri && mvs.Param2 & 16 && mvs.FrameCallCount==0 )
+		{
+			Battle_Std.SetJumpCtrlVector( mvparam.moveGuri ); // レバーで左右に動く
+		}
+		
+		if( mvparam.head_muteki )
+		{
+			Battle_Std.SetHitMuteki2_Param1( { [8]=_HitCheckFlag_Head, [64]=Def_HitCheckFlag_AirDive } );
 		}
 		
 		switch( Battle_Std.GetUpdateFrameID() )

@@ -204,8 +204,22 @@ local t =
 	Skill_214_AddJump = {
 		num = def_CN_Skill_AddCommand27, command = ["^"],
 		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
-		CmdCheck = { SkillType = "AddCommand", HitStatus="Damage", MvCheck = { Only = ["Mv_Skill_214A_AddB"] }, },
+		CmdCheck = { SkillType = "AddCommand", HitStatus="Damage", MvCheck = { Only = "Mv_Skill_214A_AddB" }, },
 	}
+	
+	// A派生の意味がなくなるし動きも変なので破棄
+	/*
+	Skill_214B_AddJump = {
+		num = def_CN_Skill_AddCommand28, command = ["^"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", HitStatus="Damage", MvCheck = { Only = "Mv_Skill_214B_AddB" }, },
+	}
+	Skill_214C_AddJump = {
+		num = def_CN_Skill_AddCommand29, command = ["^"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
+		CmdCheck = { SkillType = "AddCommand", HitStatus="Damage", MvCheck = { Only = "Mv_Skill_214C_AddB" }, },
+	}
+	*/
 
 	//棺からの攻撃
 	Skill_OCA_AtkD = {
@@ -284,7 +298,7 @@ local t =
 
 	// これは必殺技扱い（無敵アナウンスとか出す＋技っぽいので）
 	Skill_OnCoffinA_ToWarpB = {
-		num = def_CN_Skill_AddCommand25, command = ["4D"],
+		num = def_CN_Skill_AddCommand25, command = ["4D","@H,4D@"], // 250611 ホールド4Dでも可能に
 		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc() : (Coffin)
 		{
@@ -297,7 +311,7 @@ local t =
 	}
 
 	Skill_OnCoffinB_ToWarpB = {
-		num = def_CN_Skill_AddCommand26, posstatus = _PosState_Always, command = ["4D"],
+		num = def_CN_Skill_AddCommand26, posstatus = _PosState_Always, command = ["4D","@H,4D@"], // 250611 ホールド4Dでも可能に
 		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc() : (Coffin)
 		{

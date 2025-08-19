@@ -15,97 +15,104 @@ SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
 SeList_Table.Status.resize(780); // 確保
 local st = SeList_Table.Status; // 登録しやすいように省略
 
-st[0] = { path=2, file="SE_InsulatorSwingA", type=1, category=2, }; 
-st[1] = { path=2, file="SE_InsulatorSwingB", type=1, category=2, }; 
-st[2] = { path=2, file="SE_InsulatorSwingC", type=1, category=2, }; 
+st[0] = { path=2, file="SE_InsulatorSwingA", type=1, category=-1, }; 
+st[1] = { path=2, file="SE_InsulatorSwingB", type=1, category=-1, }; 
+st[2] = { path=2, file="SE_InsulatorSwingC", type=1, category=-1, }; 
 
-st[10] = { path=2, file="SE_SheatheSword", type=1, category=-2, }; //VP中FF
-st[11] = { path=2, file="SE_ShotLightWing", type=1, category=-2, }; //FFで浮くSE
-st[12] = { path=2, file="SE_SpecialAirWindShort", type=1, category=-2, }; //竜巻
-st[13] = { path=2, file="SE_ShotDiscBall", type=1, category=2, }; //214発射音
-st[14] = { path=2, file="SE_ApperLightBlade", type=1, category=-2, }; //214発射音
-st[15] = { path=2, file="SE_VanishDiscBall", type=1, category=2, };
-st[16] = { path=2, file="SE_Hari_Vanish", type=1, category=-2, }; //ワープ
-st[17] = { path=2, file="SE_SpecialBomb", type=1, category=2, }; //IW用爆発
-st[18] = { path=2, file="SE_SpecialBombLong", type=1, category=-2, }; //放出
-st[19] = { path=2, file="SE_BombInsulator", type=1, category=-2, }; // IWE爆発
-st[20] = { path=2, file="SE_ApperLightWall", type=1, category=-2, };
-st[21] = { path=2, file="SE_VoidBind", type=1, category=-2, }; //IWの拘束
-st[22] = { path=2, file="SE_BombInsulatorShort", type=1, category=-2, }; // 236発射音
-st[23] = { path=2, file="SE_Bomb", type=1, category=-2, }; // IWEフィニッシュ前の爆発
-st[24] = { path=2, file="SE_BombEnergy", type=1, category=-2, }; // IW拘束球の収縮
+st[10] = { path=2, file="SE_SheatheSword", type=1, category=-1, }; //VP中FF
+st[11] = { path=2, file="SE_ShotLightWing", type=1, category=-1, }; //FFで浮くSE
+st[12] = { path=2, file="SE_SpecialAirWindShort", type=1, category=-1, }; //竜巻
+st[13] = { path=2, file="SE_ShotDiscBall", type=1, category=-1, }; //214発射音
+st[14] = { path=2, file="SE_ApperLightBlade", type=1, category=-1, }; //214発射音
+st[15] = { path=2, file="SE_VanishDiscBall", type=1, category=-1, };
+st[16] = { path=2, file="SE_Hari_Vanish", type=1, category=-1, }; //ワープ
+st[17] = { path=2, file="SE_SpecialBomb", type=1, category=-1, }; //IW用爆発
+st[18] = { path=2, file="SE_SpecialBombLong", type=1, category=-1, }; //放出
+st[19] = { path=2, file="SE_BombInsulator", type=1, category=-1, }; // IWE爆発
+st[20] = { path=2, file="SE_ApperLightWall", type=1, category=-1, };
+st[21] = { path=2, file="SE_VoidBind", type=1, category=-1, }; //IWの拘束
+st[22] = { path=2, file="SE_BombInsulatorShort", type=1, category=-1, }; // 236発射音
+st[23] = { path=2, file="SE_Bomb", type=1, category=-1, }; // IWEフィニッシュ前の爆発
+st[24] = { path=2, file="SE_BombEnergy", type=1, category=-1, }; // IW拘束球の収縮
 
 //●バトル
 //登場
-st[100] = { volumetype=1, path=1, file="kuo_010_b_2000", type=0, category=1, }; // 「その『命』摘み取らせて貰うよ」
-st[101] = { volumetype=1, path=1, file="kuo_010_b_2001", type=0, category=1, }; // 「それじゃあ始めよう、最後の夜をね」
-st[102] = { volumetype=1, path=1, file="kuo_010_b_2002", type=0, category=1, }; // 「この力の意味、身を以て知ると良い」
-st[103] = { volumetype=1, path=1, file="kuo_010_b_2003", type=0, category=1, }; // 「望み通り、全力で相手をしよう」
+st[100] = { volumetype=1, path=1, file="kuo_010_b_2000", type=0, category=1, userparam=174 }; // 「その『命』摘み取らせて貰うよ」
+st[101] = { volumetype=1, path=1, file="kuo_010_b_2001", type=0, category=1, userparam=202 }; // 「それじゃあ始めよう、最後の夜をね」
+st[102] = { volumetype=1, path=1, file="kuo_010_b_2002", type=0, category=1, userparam=210 }; // 「この力の意味、身を以て知ると良い」
+st[103] = { volumetype=1, path=1, file="kuo_010_b_2003", type=0, category=1, userparam=190 }; // 「望み通り、全力で相手をしよう」
 
 //登場 特殊
 //対セト
-st[108] = { volumetype=1, path=1, file="kuo_010_b_2012", type=0, category=1, }; // （セト「このときを、待ち兼ねたぞ……『永劫』！」）「僕もだ。役者が揃う、この瞬間をね……」
+st[108] = { volumetype=1, path=1, file="kuo_010_b_2012", type=0, category=1, userparam=255 }; // （セト「このときを、待ち兼ねたぞ……『永劫』！」）「僕もだ。役者が揃う、この瞬間をね……」
 
 //対ハイド
-st[110] = { volumetype=1, path=1, file="kuo_010_b_2015", type=0, category=1, }; // （ハイド「さぁ、幕と行こうぜ！」）「……久遠なる物語に終わりはない」
+st[110] = { volumetype=1, path=1, file="kuo_010_b_2015", type=0, category=1, userparam=145 }; // （ハイド「さぁ、幕と行こうぜ！」）「……久遠なる物語に終わりはない」
 
 //対ワレンシュタイン
-st[112] = { volumetype=1, path=1, file="kuo_010_b_2018", type=0, category=1, }; // （ワレン「この拳、受け取って貰うぞ！）「あぁ、待たせてしまったね。我が友よ」
+st[112] = { volumetype=1, path=1, file="kuo_010_b_2018", type=0, category=1, userparam=241 }; // （ワレン「この拳、受け取って貰うぞ！）「あぁ、待たせてしまったね。我が友よ」
 
 //対カーマイン
-st[114] = { volumetype=1, path=1, file="kuo_010_b_2021", type=0, category=1, }; // （カーマイン「気取ってんなよ、ガキが……」）「あぁ、見くびらないでくれよ、怖いお兄さん」
+st[114] = { volumetype=1, path=1, file="kuo_010_b_2021", type=0, category=1, userparam=279 }; // （カーマイン「気取ってんなよ、ガキが……」）「あぁ、見くびらないでくれよ、怖いお兄さん」
 
 //対オリエ
-st[117] = { volumetype=1, path=1, file="kuo_010_b_2024", type=0, category=1, }; // （オリエ「リヒトクライスの名において貴方を！」）「止められるかい、僕を……」
+st[117] = { volumetype=1, path=1, file="kuo_010_b_2024", type=0, category=1, userparam=138 }; // （オリエ「リヒトクライスの名において貴方を！」）「止められるかい、僕を……」
 
 //対リンネ
-st[119] = { volumetype=1, path=1, file="kuo_010_b_2027", type=0, category=1, }; // 「幾度繰り返せば良いのだろうな…」（リンネ「安心しろ、もうすぐ終わるさ」）
+st[119] = { volumetype=1, path=1, file="kuo_010_b_2027", type=0, category=1, userparam=140 }; // 「幾度繰り返せば良いのだろうな…」（リンネ「安心しろ、もうすぐ終わるさ」）
 
 //対メルカヴァ
-st[121] = { volumetype=1, path=1, file="kuo_010_b_2030", type=0, category=1, }; // （メルカヴァ「この世界を食らうのは我だ……っ！」）「収まりきるかい？　キミのその腹に」
+st[121] = { volumetype=1, path=1, file="kuo_010_b_2030", type=0, category=1, userparam=185 }; // （メルカヴァ「この世界を食らうのは我だ……っ！」）「収まりきるかい？　キミのその腹に」
 
 //対バティスタ
-st[124] = { volumetype=1, path=1, file="kuo_010_b_2033_b", type=0, category=1, }; // 「彼（か）の時は世話になったな、天の御使(みつか)い」（バティスタ「廻(めぐ)る縁(えにし)。今は相対する者」）
+st[124] = { volumetype=1, path=1, file="kuo_010_b_2033_b", type=0, category=1, userparam=219 }; // 「彼（か）の時は世話になったな、天の御使(みつか)い」（バティスタ「廻(めぐ)る縁(えにし)。今は相対する者」）
 
 //対ユズリハ
-st[126] = { volumetype=1, path=1, file="kuo_010_b_2036", type=0, category=1, }; // 「淀みは死、生きるとは変わること、だったね」（ユズリハ「だから変える、アンタの運命も」）
+st[126] = { volumetype=1, path=1, file="kuo_010_b_2036", type=0, category=1, userparam=263 }; // 「淀みは死、生きるとは変わること、だったね」（ユズリハ「だから変える、アンタの運命も」）
 
 //対ヒルダ
-st[128] = { volumetype=1, path=1, file="kuo_010_b_2039", type=0, category=1, }; // （ヒルダ「ホントここまで長かったわぁ…」）「永遠を望むなら、待つ事には慣れておくんだね」
+st[128] = { volumetype=1, path=1, file="kuo_010_b_2039", type=0, category=1, userparam=239 }; // （ヒルダ「ホントここまで長かったわぁ…」）「永遠を望むなら、待つ事には慣れておくんだね」
 
 //対ケイアス
-st[130] = { volumetype=1, path=1, file="kuo_010_b_2042", type=0, category=1, }; // （ケイアス「僕が勝ったら…、解ってるだろ？」）「勿論さ、受け入れよう全てを」
+st[130] = { volumetype=1, path=1, file="kuo_010_b_2042", type=0, category=1, userparam=213 }; // （ケイアス「僕が勝ったら…、解ってるだろ？」）「勿論さ、受け入れよう全てを」
 
 //対カグヤ
-st[132] = { volumetype=1, path=1, file="kuo_010_b_2045", type=0, category=1, }; // （カグヤ「言い残すことは、ありませんか？」）「無いよ。君に心配される必要は、ね」
+st[132] = { volumetype=1, path=1, file="kuo_010_b_2045", type=0, category=1, userparam=263 }; // （カグヤ「言い残すことは、ありませんか？」）「無いよ。君に心配される必要は、ね」
 
 //対エンキ
-st[135] = { volumetype=1, path=1, file="kuo_010_b_2048", type=0, category=1, }; // （エンキ「お前なら見せてくれるはずだ、答えを」）「人の身のまま、この領域へ踏み込むか…」
+st[135] = { volumetype=1, path=1, file="kuo_010_b_2048", type=0, category=1, userparam=213 }; // （エンキ「お前なら見せてくれるはずだ、答えを」）「人の身のまま、この領域へ踏み込むか…」
+
+//対ウヅキ
+st[137] = { volumetype=1, path=1, file="kuo_010_b_2051", type=0, category=1, userparam=120 }; // 「楽しんで貰えるよう、努めるよ」
+
+//対イズミ
+st[138] = { volumetype=1, path=1, file="kuo_010_b_2054", type=0, category=1, userparam=213}; // 「光栄だ 僕も本気でかかるとしよう……」
+
 
 //ラウンド勝利
-st[160] = { volumetype=1, path=1, file="kuo_010_b_2100", type=0, category=1, }; // 「まだ諦めてはいないんだろう？」
-st[161] = { volumetype=1, path=1, file="kuo_010_b_2101", type=0, category=1, }; // 「少々期待外れかな」
-st[162] = { volumetype=1, path=1, file="kuo_010_b_2102", type=0, category=1, }; // 「やれやれ、見込み違いか」
-st[163] = { volumetype=1, path=1, file="kuo_010_b_2103", type=0, category=1, }; // 「もっと君の力を見せて欲しいのだけどね」
+st[160] = { volumetype=1, path=1, file="kuo_010_b_2100", type=0, category=1, userparam=116 }; // 「まだ諦めてはいないんだろう？」
+st[161] = { volumetype=1, path=1, file="kuo_010_b_2101", type=0, category=1, userparam=115 }; // 「少々期待外れかな」
+st[162] = { volumetype=1, path=1, file="kuo_010_b_2102", type=0, category=1, userparam=164 }; // 「やれやれ、見込み違いか」
+st[163] = { volumetype=1, path=1, file="kuo_010_b_2103", type=0, category=1, userparam=180 }; // 「もっと君の力を見せて欲しいのだけどね」
 
 //決着勝利 汎用
-st[171] = { volumetype=1, path=1, file="kuo_010_b_2111_b", type=0, category=1, }; // 「君を超え、僕は先へと進ませて貰う」
-st[172] = { volumetype=1, path=1, file="kuo_010_b_2112", type=0, category=1, }; // 「見事な腕前だ。しかしそれでもまだ届かない」
-st[173] = { volumetype=1, path=1, file="kuo_010_b_2113", type=0, category=1, }; // 「ああ、力が満ちてくる……」
-st[174] = { volumetype=1, path=1, file="kuo_010_b_2114", type=0, category=1, }; // 「もうすぐ、全てが終わる……」
+st[171] = { volumetype=1, path=1, file="kuo_010_b_2111_b", type=0, category=1, userparam=215 }; // 「君を超え、僕は先へと進ませて貰う」
+st[172] = { volumetype=1, path=1, file="kuo_010_b_2112", type=0, category=1, userparam=287 }; // 「見事な腕前だ。しかしそれでもまだ届かない」
+st[173] = { volumetype=1, path=1, file="kuo_010_b_2113", type=0, category=1, userparam=165 }; // 「ああ、力が満ちてくる……」
+st[174] = { volumetype=1, path=1, file="kuo_010_b_2114", type=0, category=1, userparam=173 }; // 「もうすぐ、全てが終わる……」
 
 //決着勝利 辛勝
-st[177] = { volumetype=1, path=1, file="kuo_010_b_2120", type=0, category=1, }; // 「驚いたよ、僕をここまで追い詰めるなんて」
+st[177] = { volumetype=1, path=1, file="kuo_010_b_2120", type=0, category=1, userparam=224 }; // 「驚いたよ、僕をここまで追い詰めるなんて」
 
 //決着勝利 楽勝
-st[181] = { volumetype=1, path=1, file="kuo_010_b_2123_b", type=0, category=1, }; // 「理解できたかな、圧倒的な力の差を」
+st[181] = { volumetype=1, path=1, file="kuo_010_b_2123_b", type=0, category=1, userparam=240 }; // 「理解できたかな、圧倒的な力の差を」
 
 //決着勝利 掛け合い
 //対ハイド
-st[186] = { volumetype=1, path=1, file="kuo_010_b_2127", type=0, category=1, }; // 「さぁ、その力返してもらおうか」
+st[186] = { volumetype=1, path=1, file="kuo_010_b_2127", type=0, category=1, userparam=252 }; // 「さぁ、その力返してもらおうか」
 
 //対リンネ
-st[188] = { volumetype=1, path=1, file="kuo_010_b_2130", type=0, category=1, }; // 「ようやくだ。この力が一つになる時が来た」
+st[188] = { volumetype=1, path=1, file="kuo_010_b_2130", type=0, category=1, userparam=267 }; // 「ようやくだ。この力が一つになる時が来た」
 
 //タイムアップ判定負け
 st[191] = { volumetype=1, path=1, file="kuo_010_b_2200_b", type=0, category=1, }; // 「僕の負けか……そうか……」

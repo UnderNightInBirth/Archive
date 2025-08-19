@@ -15,10 +15,10 @@ SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
 SeList_Table.Status.resize(680); // てきとう
 local st = SeList_Table.Status; // 登録しやすいように
 
-st[0] = { volumetype=0, path=2, file="SE_ShotBall", type=0, category=2, }; 
-st[1] = { volumetype=0, path=2, file="SE_VisionDash", type=0, category=2, }; 
-st[10] = { volumetype=0, path=0, file="SE202_BladeC", type=0, category=3, }; //IWE用
-st[11] = { volumetype=0, path=0, file="SE202_BladeC", type=0, category=3, }; //IWE用とどめ
+st[0] = { volumetype=0, path=2, file="SE_ShotBall", type=0, category=-1, }; 
+st[1] = { volumetype=0, path=2, file="SE_VisionDash", type=0, category=-1, }; 
+st[10] = { volumetype=0, path=0, file="SE202_BladeC", type=0, category=-1, }; //IWE用
+st[11] = { volumetype=0, path=0, file="SE202_BladeC", type=0, category=-1, }; //IWE用とどめ
 st[12] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWXとどめ
 
 st[15] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWとどめ
@@ -27,59 +27,59 @@ st[20] = { volumetype=0, path=2, file="SE_ApperLightWall", type=1, category=-1, 
 
 
 // 登場
-st[100] = { volumetype=1, path=1, file="set_010_b_2000", type=0, category=1, }; //「命が惜しければ邪魔をするな。」
-st[101] = { volumetype=1, path=1, file="set_010_b_2001", type=0, category=1, }; //「無駄な抵抗はよせ」
-st[102] = { volumetype=1, path=1, file="set_010_b_2002", type=0, category=1, }; //「能書きはいい。構えろ」
+st[100] = { volumetype=1, path=1, file="set_010_b_2000", type=0, category=1, userparam=156 }; //「命が惜しければ邪魔をするな。」
+st[101] = { volumetype=1, path=1, file="set_010_b_2001", type=0, category=1, userparam=110 }; //「無駄な抵抗はよせ」
+st[102] = { volumetype=1, path=1, file="set_010_b_2002", type=0, category=1, userparam=148 }; //「能書きはいい。構えろ」
 
 // 登場 特殊
 // 対ハイド
-st[107] = { volumetype=1, path=1, file="set_010_b_2012", type=0, category=1, }; //「お前ごときが…フン！」 前作の対ハイドセリフ
-st[109] = { volumetype=1, path=1, file="set_010_b_2013", type=0, category=1, }; //（ハイド「ま、決着はつけなくちゃいけねぇよな」）「解りきったことだ。必要なかろう……」
+st[107] = { volumetype=1, path=1, file="set_010_b_2012", type=0, category=1, userparam=145 }; //「お前ごときが…フン！」 前作の対ハイドセリフ
+st[109] = { volumetype=1, path=1, file="set_010_b_2013", type=0, category=1, userparam=191 }; //（ハイド「ま、決着はつけなくちゃいけねぇよな」）「解りきったことだ。必要なかろう……」
 
 // 対リンネ
-st[112] = { volumetype=1, path=1, file="set_010_b_2016", type=0, category=1, }; //「俺が行くという約束、覚えていないか…？」（リンネ「あぁ、長生きすると物忘れが、な」）
+st[112] = { volumetype=1, path=1, file="set_010_b_2016", type=0, category=1, userparam=209 }; //「俺が行くという約束、覚えていないか…？」（リンネ「あぁ、長生きすると物忘れが、な」）
 
 // 対ワレン
-st[115] = { volumetype=1, path=1, file="set_010_b_2019", type=0, category=1, }; //（ワレン「その細き腕で、なにが斬れようよ」）「己を縛る鎖、断ち切れるさ……。」
+st[115] = { volumetype=1, path=1, file="set_010_b_2019", type=0, category=1, userparam=187 }; //（ワレン「その細き腕で、なにが斬れようよ」）「己を縛る鎖、断ち切れるさ……。」
 
 // 対ユズリハ
-st[118] = { volumetype=1, path=1, file="set_010_b_2022", type=0, category=1, }; //（ユズリハ「迷い、消えたみたいだね」）「ふっ、今の俺に迷いなど……」
+st[118] = { volumetype=1, path=1, file="set_010_b_2022", type=0, category=1, userparam=188 }; //（ユズリハ「迷い、消えたみたいだね」）「ふっ、今の俺に迷いなど……」
 
 // 対ケイアス
-st[121] = { volumetype=1, path=1, file="set_010_b_2025", type=0, category=1, }; //「ケイアス「どうだい？　再び手を組む最後のチャンス」）「フッ、割れた皿は元には戻るまい……」
+st[121] = { volumetype=1, path=1, file="set_010_b_2025", type=0, category=1, userparam=212 }; //「ケイアス「どうだい？　再び手を組む最後のチャンス」）「フッ、割れた皿は元には戻るまい……」
 
 // 対クオン
-st[124] = { volumetype=1, path=1, file="set_010_b_2031", type=0, category=1, }; //「このときを、待ち兼ねたぞ……『永劫』！」（クオン「僕もだ。役者が揃う、この瞬間をね……」）
+st[124] = { volumetype=1, path=1, file="set_010_b_2031", type=0, category=1, userparam=222 }; //「このときを、待ち兼ねたぞ……『永劫』！」（クオン「僕もだ。役者が揃う、この瞬間をね……」）
 
 // ラウンド勝利
-st[133] = { volumetype=1, path=1, file="set_010_b_2100", type=0, category=1, }; //「この程度で終わりか」
-st[134] = { volumetype=1, path=1, file="set_010_b_2101", type=0, category=1, }; //「拍子抜けだ」
-st[135] = { volumetype=1, path=1, file="set_010_b_2102", type=0, category=1, }; //「…迷いは判断を鈍らす」
+st[133] = { volumetype=1, path=1, file="set_010_b_2100", type=0, category=1, userparam=105 }; //「この程度で終わりか」
+st[134] = { volumetype=1, path=1, file="set_010_b_2101", type=0, category=1, userparam=78 }; //「拍子抜けだ」
+st[135] = { volumetype=1, path=1, file="set_010_b_2102", type=0, category=1, userparam=132 }; //「…迷いは判断を鈍らす」
 
 // ラウンド勝利 掛け合い
 // 対ハイド
-st[140] = { volumetype=1, path=1, file="set_010_b_2106", type=0, category=1, }; //「それでよく大口を叩けたものだ」
-st[141] = { volumetype=1, path=1, file="set_010_b_2107", type=0, category=1, }; //「立て。口だけで終わるつもりか？」
+st[140] = { volumetype=1, path=1, file="set_010_b_2106", type=0, category=1, userparam=178 }; //「それでよく大口を叩けたものだ」
+st[141] = { volumetype=1, path=1, file="set_010_b_2107", type=0, category=1, userparam=192 }; //「立て。口だけで終わるつもりか？」
 
 // 決着勝利 汎用
-st[144] = { volumetype=1, path=1, file="set_010_b_2111", type=0, category=1, }; //「背負ったものの差だ」
-st[145] = { volumetype=1, path=1, file="set_010_b_2112", type=0, category=1, }; //「終わらせる…この夜の『因果』、そのすべてを」
+st[144] = { volumetype=1, path=1, file="set_010_b_2111", type=0, category=1, userparam=109 }; //「背負ったものの差だ」
+st[145] = { volumetype=1, path=1, file="set_010_b_2112", type=0, category=1, userparam=246 }; //「終わらせる…この夜の『因果』、そのすべてを」
 
 // 決着勝利 辛勝
-st[148] = { volumetype=1, path=1, file="set_010_b_2120", type=0, category=1, }; //「これが『免罪』。『死(おわり)』に例外はない…」
+st[148] = { volumetype=1, path=1, file="set_010_b_2120", type=0, category=1, userparam=237 }; //「これが『免罪』。『死(おわり)』に例外はない…」
 
 // 決着勝利 楽勝
-st[151] = { volumetype=1, path=1, file="set_010_b_2123", type=0, category=1, }; //「抵抗など無駄と知れ」
+st[151] = { volumetype=1, path=1, file="set_010_b_2123", type=0, category=1, userparam=126 }; //「抵抗など無駄と知れ」
 
 // 決着勝利 掛け合い
 // 対ハイド
-st[156] = { volumetype=1, path=1, file="set_010_b_2127", type=0, category=1, }; //「そこで寝ていろ。すべてが終わるまでな」
+st[156] = { volumetype=1, path=1, file="set_010_b_2127", type=0, category=1, userparam=223 }; //「そこで寝ていろ。すべてが終わるまでな」
 
 // 対リンネ
-st[158] = { volumetype=1, path=1, file="set_010_b_2129", type=0, category=1, }; //「もう闘わなくていい。俺がすべての決着をつける…」
+st[158] = { volumetype=1, path=1, file="set_010_b_2129", type=0, category=1, userparam=296 }; //「もう闘わなくていい。俺がすべての決着をつける…」
 
 // 対クオン
-st[160] = { volumetype=1, path=1, file="set_010_b_2131", type=0, category=1, }; //「もう眠れ…お前の『罪』も俺が背負って進もう…」
+st[160] = { volumetype=1, path=1, file="set_010_b_2131", type=0, category=1, userparam=354 }; //「もう眠れ…お前の『罪』も俺が背負って進もう…」
 
 // タイムアップ判定負け
 st[163] = { volumetype=1, path=1, file="set_010_b_2200", type=0, category=1, }; //「くっ…」

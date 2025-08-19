@@ -39,50 +39,52 @@ st[67] = { volumetype=0, path=2, file="SE_SpecialBomb", type=1, category=-1, }; 
 
 //●バトル
 //登場
-st[100] = { volumetype=1, path=1, file="enk_010_b_2000_b", type=0, category=1, }; //「その力、試させてもらおう」
-st[101] = { volumetype=1, path=1, file="enk_010_b_2001", type=0, category=1, }; //「…参る！」
-st[102] = { volumetype=1, path=1, file="enk_010_b_2002", type=0, category=1, }; //「…風が、強いな」
-st[103] = { volumetype=1, path=1, file="enk_010_b_2003", type=0, category=1, }; //「さぁ、仕合おうぞ」
-st[104] = { volumetype=1, path=1, file="enk_010_b_2004", type=0, category=1, }; //「覚悟はできたか？」
-st[105] = { volumetype=1, path=1, file="enk_010_b_2005", type=0, category=1, }; //「待ち焦がれたぞ、この時を！」
-st[106] = { volumetype=1, path=1, file="enk_010_b_2006", type=0, category=1, }; //「時は満ちた」
+st[100] = { volumetype=1, path=1, file="enk_010_b_2000_b", type=0, category=1, userparam=148 }; //「その力、試させてもらおう」
+st[101] = { volumetype=1, path=1, file="enk_010_b_2001", type=0, category=1, userparam=53 }; //「…参る！」
+st[102] = { volumetype=1, path=1, file="enk_010_b_2002", type=0, category=1, userparam=111 }; //「…風が、強いな」
+st[103] = { volumetype=1, path=1, file="enk_010_b_2003", type=0, category=1, userparam=116 }; //「さぁ、仕合おうぞ」
+st[104] = { volumetype=1, path=1, file="enk_010_b_2004", type=0, category=1, userparam=88 }; //「覚悟はできたか？」
+st[105] = { volumetype=1, path=1, file="enk_010_b_2005", type=0, category=1, userparam=148 }; //「待ち焦がれたぞ、この時を！」
+st[106] = { volumetype=1, path=1, file="enk_010_b_2006", type=0, category=1, userparam=92 }; //「時は満ちた」
 
 //登場 特殊
 //対ゴルドー
-st[110] = { volumetype=1, path=1, file="enk_010_b_2012", type=0, category=1, }; //「強欲のものよ、いざ勝負っ！」
-st[112] = { volumetype=1, path=1, file="enk_010_b_2013", type=0, category=1, }; //（ゴルドー「お眼鏡に叶う者は見つかったかい？）「あぁ、今丁度な……」
+st[110] = { volumetype=1, path=1, file="enk_010_b_2012", type=0, category=1, userparam=146 }; //「強欲のものよ、いざ勝負っ！」
+st[112] = { volumetype=1, path=1, file="enk_010_b_2013", type=0, category=1, userparam=136 }; //（ゴルドー「お眼鏡に叶う者は見つかったかい？）「あぁ、今丁度な……」
 
 //対ヒルダ
-st[114] = { volumetype=1, path=1, file="enk_010_b_2015", type=0, category=1, }; //「まばゆき闇よ、いざ勝負っ！」
-st[116] = { volumetype=1, path=1, file="enk_010_b_2016", type=0, category=1, }; //（ヒルダ「今まで退屈だったでしょ～？」）「この瞬間のための、代償であろう」
+st[114] = { volumetype=1, path=1, file="enk_010_b_2015", type=0, category=1, userparam=145 }; //「まばゆき闇よ、いざ勝負っ！」
+st[116] = { volumetype=1, path=1, file="enk_010_b_2016", type=0, category=1, userparam=151 }; //（ヒルダ「今まで退屈だったでしょ～？」）「この瞬間のための、代償であろう」
 
 //対ケイアス
-st[118] = { volumetype=1, path=1, file="enk_010_b_2019_a", type=0, category=1, }; //「混沌のものよ、いざ勝負っ！」
-st[119] = { volumetype=1, path=1, file="enk_010_b_2019_b", type=0, category=1, }; //「混沌のものよ、いざ勝負っ！」
+st[119] = { volumetype=1, path=1, file="enk_010_b_2019_b", type=0, category=1, userparam=142 }; //「混沌のものよ、いざ勝負っ！」
 
 //対クオン
-st[121] = { volumetype=1, path=1, file="enk_010_b_2025", type=0, category=1, }; //「お前なら見せてくれるはずだ、答えを」（クオン「人の身のまま、この領域へ踏み込むか…」）
+st[121] = { volumetype=1, path=1, file="enk_010_b_2025", type=0, category=1, userparam=187 }; //「お前なら見せてくれるはずだ、答えを」（クオン「人の身のまま、この領域へ踏み込むか…」）
+
+//対ウヅキ
+st[123] = { volumetype=1, path=1, file="enk_010_b_2028", type=0, category=1, userparam=201 }; //「今の俺が相手なら、咎める者もなかろう」
 
 //ラウンド勝利
-st[140] = { volumetype=1, path=1, file="enk_010_b_2100", type=0, category=1, }; //「まだまだ未熟よ」
-st[141] = { volumetype=1, path=1, file="enk_010_b_2101", type=0, category=1, }; //「まるで戯(あそ)びだな」
-st[142] = { volumetype=1, path=1, file="enk_010_b_2102", type=0, category=1, }; //「その程度か？」
-st[143] = { volumetype=1, path=1, file="enk_010_b_2103", type=0, category=1, }; //「もっと本気を見せてみろ」
+st[140] = { volumetype=1, path=1, file="enk_010_b_2100", type=0, category=1, userparam=115 }; //「まだまだ未熟よ」
+st[141] = { volumetype=1, path=1, file="enk_010_b_2101", type=0, category=1, userparam=96 }; //「まるで戯(あそ)びだな」
+st[142] = { volumetype=1, path=1, file="enk_010_b_2102", type=0, category=1, userparam=81 }; //「その程度か？」
+st[143] = { volumetype=1, path=1, file="enk_010_b_2103", type=0, category=1, userparam=120 }; //「もっと本気を見せてみろ」
 
 //決着勝利 汎用
-st[150] = { volumetype=1, path=1, file="enk_010_b_2111", type=0, category=1, }; //「面白い。こうでなくては」
-st[151] = { volumetype=1, path=1, file="enk_010_b_2112", type=0, category=1, }; //「至らぬな。俺もお前も」
-st[152] = { volumetype=1, path=1, file="enk_010_b_2113", type=0, category=1, }; //「この勝負、忘れぬぞ」
+st[150] = { volumetype=1, path=1, file="enk_010_b_2111", type=0, category=1, userparam=125 }; //「面白い。こうでなくては」
+st[151] = { volumetype=1, path=1, file="enk_010_b_2112", type=0, category=1, userparam=158 }; //「至らぬな。俺もお前も」
+st[152] = { volumetype=1, path=1, file="enk_010_b_2113", type=0, category=1, userparam=125 }; //「この勝負、忘れぬぞ」
 
 //決着勝利 辛勝
-st[154] = { volumetype=1, path=1, file="enk_010_b_2120", type=0, category=1, }; //「この仕合、紙一重であった…」
+st[154] = { volumetype=1, path=1, file="enk_010_b_2120", type=0, category=1, userparam=173 }; //「この仕合、紙一重であった…」
 
 //決着勝利 楽勝
-st[156] = { volumetype=1, path=1, file="enk_010_b_2123", type=0, category=1, }; //「まだまだ未熟…出直すがいい。」
+st[156] = { volumetype=1, path=1, file="enk_010_b_2123", type=0, category=1, userparam=170 }; //「まだまだ未熟…出直すがいい。」
 
 //決着勝利 掛け合い
 //対忘却の螺旋(アムネジア)
-st[160] = { volumetype=1, path=1, file="enk_010_b_2127_b", type=0, category=1, }; //「世話になった身ではあるが勝負とあれば手は抜けんのでな」
+st[160] = { volumetype=1, path=1, file="enk_010_b_2127_b", type=0, category=1, userparam=267 }; //「世話になった身ではあるが勝負とあれば手は抜けんのでな」
 
 //タイムアップ判定負け
 st[170] = { volumetype=1, path=1, file="enk_010_b_2200", type=0, category=1, }; //「うぬ…」

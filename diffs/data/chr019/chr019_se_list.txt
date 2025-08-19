@@ -27,41 +27,44 @@ st[18] = { volumetype=0, path=2, file="SE_Hari_Vanish", type=1, category=-1, }; 
 st[19] = { volumetype=0, path=2, file="SE_ApperLightWall", type=1, category=-1, }; // 盾出現（光るとこ）
 
 // 登場
-st[100] = { volumetype=1, path=1, file="tur_010_b_2000", type=0, category=1, }; // 「おっしゃぁ！行くぜ！」
-st[101] = { volumetype=1, path=1, file="tur_010_b_2001", type=0, category=1, }; // 「よし！ケンカしようぜ！」
-st[102] = { volumetype=1, path=1, file="tur_010_b_2002", type=0, category=1, }; // 「いっちょこの若輩者に、ドぎつい稽古お願いしましょうか！」
-st[103] = { volumetype=1, path=1, file="tur_010_b_2003", type=0, category=1, }; // 「邪魔するってんらしょうがねえ、ぶん殴る！」
+st[100] = { volumetype=1, path=1, file="tur_010_b_2000", type=0, category=1, userparam=117 }; // 「おっしゃぁ！行くぜ！」
+st[101] = { volumetype=1, path=1, file="tur_010_b_2001", type=0, category=1, userparam=124 }; // 「よし！ケンカしようぜ！」
+st[102] = { volumetype=1, path=1, file="tur_010_b_2002", type=0, category=1, userparam=237 }; // 「いっちょこの若輩者に、ドぎつい稽古お願いしましょうか！」
+st[103] = { volumetype=1, path=1, file="tur_010_b_2003", type=0, category=1, userparam=189 }; // 「邪魔するってんらしょうがねえ、ぶん殴る！」
 
 // 登場 特殊
 // 対フォノン
-st[107] = { volumetype=1, path=1, file="tur_010_b_2012", type=0, category=1, }; // 「良い機会だ。お前の実力、見せてくれよ」
+st[107] = { volumetype=1, path=1, file="tur_010_b_2012", type=0, category=1, userparam=225 }; // 「良い機会だ。お前の実力、見せてくれよ」
 
 // 対ハイド
-st[110] = { volumetype=1, path=1, file="tur_010_b_2015", type=0, category=1, }; // 「運命の赤い糸、って言うんだよ」
+st[110] = { volumetype=1, path=1, file="tur_010_b_2015", type=0, category=1, userparam=179 }; // 「運命の赤い糸、って言うんだよ」
 
 // 対ユズリハ
-st[113] = { volumetype=1, path=1, file="tur_010_b_2018", type=0, category=1, }; // 「リーチとスピード…。近づけるかおい…？
+st[113] = { volumetype=1, path=1, file="tur_010_b_2018", type=0, category=1, userparam=218 }; // 「リーチとスピード…。近づけるかおい…？
 
 // ラウンド勝利
-st[124] = { volumetype=1, path=1, file="tur_010_b_2100", type=0, category=1, }; // 「おしっ、一本いただき！」
-st[125] = { volumetype=1, path=1, file="tur_010_b_2101", type=0, category=1, }; // 「へへっ、殴り合いなら負けねえよ」
-st[126] = { volumetype=1, path=1, file="tur_010_b_2102", type=0, category=1, }; // 「おいおい、油断しすぎだぜ？」
+st[124] = { volumetype=1, path=1, file="tur_010_b_2100", type=0, category=1, userparam=121 }; // 「おしっ、一本いただき！」
+st[125] = { volumetype=1, path=1, file="tur_010_b_2101", type=0, category=1, userparam=187 }; // 「へへっ、殴り合いなら負けねえよ」
+st[126] = { volumetype=1, path=1, file="tur_010_b_2102", type=0, category=1, userparam=152 }; // 「おいおい、油断しすぎだぜ？」
 
 // 決着勝利 汎用
-st[129] = { volumetype=1, path=1, file="tur_010_b_2111", type=0, category=1, }; // 「よっしゃぁ！正義は勝つ！」
-st[130] = { volumetype=1, path=1, file="tur_010_b_2112", type=0, category=1, }; // 「攻撃は最大の防御、ってね」
-st[131] = { volumetype=1, path=1, file="tur_010_b_2113", type=0, category=1, }; // 「どうだい？俺の拳は響くだろ？」
-st[132] = { volumetype=1, path=1, file="tur_010_b_2114", type=0, category=1, }; // 「お疲れさん。良い勝負だったぜ」
+st[129] = { volumetype=1, path=1, file="tur_010_b_2111", type=0, category=1, userparam=158 }; // 「よっしゃぁ！正義は勝つ！」
+st[130] = { volumetype=1, path=1, file="tur_010_b_2112", type=0, category=1, userparam=172 }; // 「攻撃は最大の防御、ってね」
+st[131] = { volumetype=1, path=1, file="tur_010_b_2113", type=0, category=1, userparam=182 }; // 「どうだい？俺の拳は響くだろ？」
+st[132] = { volumetype=1, path=1, file="tur_010_b_2114", type=0, category=1, userparam=159 }; // 「お疲れさん。良い勝負だったぜ」
 
 // 決着勝利 辛勝
-st[135] = { volumetype=1, path=1, file="tur_010_b_2120", type=0, category=1, }; // 「ナイスファイトだ！またやろうぜ！」
+st[135] = { volumetype=1, path=1, file="tur_010_b_2120", type=0, category=1, userparam=144 }; // 「ナイスファイトだ！またやろうぜ！」
 
 // 決着勝利 楽勝
-st[138] = { volumetype=1, path=1, file="tur_010_b_2123", type=0, category=1, }; // 「勝負は時の運ってね。こういうこともあるさ」
+st[138] = { volumetype=1, path=1, file="tur_010_b_2123", type=0, category=1, userparam=237 }; // 「勝負は時の運ってね。こういうこともあるさ」
 
 // 決着勝利 掛け合い
 // 対ハイド
-st[142] = { volumetype=1, path=1, file="tur_010_b_2127", type=0, category=1, }; // 「熱いケンカだったな！次も負けねえぜ！」
+st[142] = { volumetype=1, path=1, file="tur_010_b_2127", type=0, category=1, userparam=207 }; // 「熱いケンカだったな！次も負けねえぜ！」
+
+// 対イズミ
+st[143] = { volumetype=1, path=1, file="tur_010_b_2024", type=0, category=1, userparam=201 }; // 「ま 軽い試練だ 乗り越えてくれよ」
 
 // タイムアップ判定負け
 st[145] = { volumetype=1, path=1, file="tur_010_b_2200", type=0, category=1, }; // 「げげっ！時間切れぇ！？」

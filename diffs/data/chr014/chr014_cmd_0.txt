@@ -26,7 +26,6 @@ local t =
 				SkillType = "NoneDouji",
 				ComboLimit = DEF_BS_CL_ATKBANDC,
 				MvCheck={ Fail="Mv_Atk_StdBandC"},
-				flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck,
 			};
 			
 			if( Battle_Std.CmdCheck( checktbl1 ) == 1 ) // ç≈èâÇÃê¨å˜
@@ -74,7 +73,6 @@ local t =
 				SkillType = "NoneDouji",
 				ComboLimit = DEF_BS_CL_ATKBANDC,
 				MvCheck={ Fail="Mv_Atk_CroBandC"},
-				flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck,
 			};
 			
 			if( Battle_Std.CmdCheck( checktbl1 ) == 1 ) // ç≈èâÇÃê¨å˜
@@ -113,9 +111,8 @@ local t =
 			{
 				SkillType = "NoneDouji",
 				PosState="Air",
-				ComboLimit = DEF_BS_CL_ATKBANDC,
+				ComboLimit = DEF_BS_CL_ATKJBANDC,
 				MvCheck={ Fail="Mv_Atk_AirBandC"},
-				flags=Def_CmdCh_GenDoujiCheck|Def_CmdCh_KeepDoujiCheck,
 			};
 			
 			if( Battle_Std.CmdCheck( checktbl1 ) == 1 ) // ç≈èâÇÃê¨å˜
@@ -139,7 +136,7 @@ local t =
 			
 			local checktbl2 =
 			{
-				SkillType = "AddCommand", ComboLimit = DEF_BS_CL_ATKBANDC,
+				SkillType = "AddCommand", ComboLimit = DEF_BS_CL_ATKJBANDC,
 				MvCheck = { Only = ["Mv_Atk_AirBandC"] },
 			};
 			
@@ -269,7 +266,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 

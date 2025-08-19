@@ -390,6 +390,27 @@ t.Mv_Obj_Suka_Eff <-
 }
 
 //-----------------------------------------------------------------------------
+// スマートステア
+//-----------------------------------------------------------------------------
+t.Mv_Skill_SSRelayAtk <-
+{
+	function FrameUpdate_After()
+	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 10:
+			// スマートステア以外から出したら相手との距離を見て減速処理をする
+			local isDirectSS = BMvTbl.GetLPEx(1,1); // A+Bで直接出したか
+			if( isDirectSS )
+			{
+				Battle_Std.AddVector_TargetXLen( { x=300*128, xlen=100*128, power_minus=2500 } ); // 200より近いなら減速
+			}
+			break;
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
 // フォースファンクション
 //-----------------------------------------------------------------------------
 
@@ -461,8 +482,8 @@ t.Mv_Atk_CroBandC <-
 {
 	function Init_After()
 	{
-		BMvTbl.SetLP(0,0); //当身とったかどうか 1:当身成功
-		BMvTbl.SetLP(1,0); //当身とった回数（最大とれる回数制限用）
+		BMvTbl.SetLP(0,0); //当身とったかどうか 1:当身成功　※毎フレーム初期化されて当身成功した瞬間だけ1になる
+		BMvTbl.SetLP(1,0); //当身とった回数
 		
 		// CS可能ならCVO可能に（6FF用）
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_EnableCVO_OnlyCS );
@@ -472,12 +493,13 @@ t.Mv_Atk_CroBandC <-
 		Battle_Std.SetPattern_NotHoldButton( { ButtonMask=(1<<1)|(1<<2), CheckFrameID=50, EndFrameID=60, SetPattern="2+B+C_End", flags=Def_JFIDNHB_CheckAllButton } ); // ButtonMask, CheckFrameID, SetPattern
 		
 		BMvTbl.SetAtkCatchFlag( { hantei=5, catch_flags=_CatchFlag_AtkAllGuard|_CatchFlag_Invalid_Through_ExceptBound/*_CatchFlag_AtkStandGuard|_CatchFlag_AtkStandShield*/, success_flags=_CatchSuccess_HitSub|_CatchSuccess_HitSub_Enemy|_CatchSuccess_FlagHit_Enemy, time=20, flag=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } );
+		BMvTbl.SetLP(0,0); // 再度当身処理にいれるために初期化
 		
 		// 当身に成功していたら必殺Cを「いつでも」に変える
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
-		case 100:
-			if( BMvTbl.GetLP(0)==1 )// 当身に成功していた
+		case 100: // IC版攻撃タイミング
+			if( BMvTbl.GetLP(1) >= 1 )// 当身に一度でも成功していた
 			{
 				_dp("\n 相殺成功でキャンセル可能にした");
 				// 流石に必殺技のみに変更
@@ -496,7 +518,7 @@ t.Mv_Atk_CroBandC <-
 		if( mvs.Param1&4 )
 		{
 			//当身処理
-			if( BMvTbl.GetLP(0)==0 )
+			if( BMvTbl.GetLP(0)==0 && BMvTbl.GetLP(1)==0 ) // 初回のみ
 			{
 				local mvcode = 0;
 				local tuigeki_hantei = 0;
@@ -514,7 +536,11 @@ t.Mv_Atk_CroBandC <-
 				BMvTbl.SetPrio( _CharaPrio_Near ); // 取ったら一番手前に
 					
 				local st = BMvTbl.MvHitStatus();
-				st.Count = 7; // ヒットストップ発生
+				local isExtend = Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_ExtendAction );
+				
+				// 240527 溜めなし版はエンキドゥ側のヒットストップを7F→18Fに変更
+				st.Count = (isExtend)? 7 : 18; // ヒットストップ発生
+
 				BMvTbl.SetMvHitStatus( st ); // 弱いけど、確定しまくるのもよくなさそう
 				BMvTbl.ClearHitStatus(); //ヒット情報初期化
 				
@@ -537,8 +563,8 @@ t.Mv_Atk_CroBandC <-
 					ene.pop();
 				}
 				
-				BMvTbl.SetLP(0,1); // とったフラグをたてて、何度も入らないようにする
-				BMvTbl.AddLP(1,1); // とった回数を増やす。何回もとったら当身成功を終わらせる
+				BMvTbl.SetLP(0,1); // とったフラグをたてて、再度当身するまで入らないようにする
+				BMvTbl.AddLP(1,1); // とった回数を記憶
 				
 				// タメ途中の絵だったら
 				if( mvs.FrameID==50 )
@@ -740,9 +766,6 @@ t.Mv_Atk_CroC <-
 	function FrameUpdate_After()
 	{
 		Battle_Std.SetPattern_NotHoldButton( { ButtonMask=(1<<2), CheckFrameID=50, EndFrameID=60, SetPattern="CroC_End" } ); // ButtonMask, CheckFrameID, SetPattern
-	
-		// 足属性と足無敵ごっちゃにしないでね
-		Battle_Std.SetHitCheckFlag( 1, 32, _HitCheckFlag_Legs, _HitCheckFlag_Body ); // Param1 & 32 の時足属性
 	}
 }
 
@@ -838,7 +861,7 @@ t.Mv_Atk_Std4C <-
 {
 	function Init_After()
 	{
-		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺される
+		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺する＆される・相殺でヒット数を減算しない
 
 		BMvTbl.SetLP(2,0); // 飛び道具消したかどうか
 	}
@@ -853,6 +876,7 @@ t.Mv_Atk_Std4C <-
 		if( BMvTbl.GetLP(2)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(2,1); // 消した
+			BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 			
 			setSousaiBonus(); // GRD増加、空振り必殺キャンセル可能に
 		}
@@ -873,7 +897,13 @@ t.Mv_Atk_Cro3C <-
 	}
 }
 
-t.Mv_Atk_JC_JC <- {};
+t.Mv_Atk_JC_JC <-
+{
+	function Init_After()
+	{
+		Battle_Std.PassBeforeMoveCodeEx( 0, def_MC_CharaFlag2 ); // HAVOCカウンター引き継ぎ
+	}
+}
 
 t.Mv_Atk_2C_2C <-
 {
@@ -1005,33 +1035,16 @@ t.Mv_Skill_CircleEX <-
 	}
 	function HitInterrupt_After()
 	{
-		if( Battle_Std.MoveCode.CheckFlag( def_MC_CharaFlag2 ) )
-		{
-			_dpn("HAVOCしたので投げ抜け不可");
-			Battle_Std.SetThrowHitFinalize(300); // 投げ,　強引投げ, コンボ投げ, リジェクト＆投げを投げぬけ可, 投げ抜け失敗フレーム中
-		}
-		else
-		{
-			Battle_Std.SetThrowHitFinalize(512,700,256,300,300); // 投げ,　強引投げ, コンボ投げ, リジェクト＆投げを投げぬけ可, 投げ抜け失敗フレーム中
-		}
+		Battle_Std.SetThrowHitFinalize(256,512,256); // 投げ＆リジェクト(投げぬけ不可),　強引投げ, コンボ投げ, 	
 	}
 	function Finalize() // 
 	{
-		Battle_Std.SwitchNextMoveTable("Mv_Neutral",[256,"Mv_Skill_CircleEX_Hit"],[300,"Mv_Skill_CircleEX_Hit"],[512,"Mv_Skill_CircleEX_TechWait"],[700,"Mv_Skill_CircleEX_TechWait2"]); //デフォ,[code,mv]...
+		Battle_Std.SwitchNextMoveTable("Mv_Neutral",[256,"Mv_Skill_CircleEX_Hit"], [512,"Mv_Skill_CircleEX_TechWait"]); //デフォ,[code,mv]...
 	}
 }
 
-//生投げ待機Mv作成
-t.Mv_Skill_CircleEX_TechWait <- Battle_Std.MakeMv.TechWait(
-{
-	FrameID=512,
-	ThrowParam={ pattern=17, x=220, y=0 },
-	TechFrame = 20,
-	NextMv="Mv_Skill_CircleEX_Hit",
-});
-
 //強引投げ待機Mv作成
-t.Mv_Skill_CircleEX_TechWait2 <- Battle_Std.MakeMv.TechWait(
+t.Mv_Skill_CircleEX_TechWait <- Battle_Std.MakeMv.TechWait(
 {
 	FrameID=512,
 	ThrowParam={ pattern=17, x=220, y=0 },
@@ -1539,7 +1552,7 @@ local maketmpl_SkillExAtemi = function( param={} ) : (atemi_check)
 		BMvTbl.SetLP(0,0); //当身とったかどうか
 		BMvTbl.SetLP(1,0); //CS確認から出したかどうか
 
-		BMvTbl.SetLP(5,0); //見切りエフェクトを出したかどうか
+		BMvTbl.SetLP(5,0); //追撃エフェクトを出したかどうか　※見切り時だけでなく通常時も使うようになった
 		
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // 空振りCS可能
 		Battle_Std.MoveCodeEx.AddFlag( 7, def_MC7_NoMutekiAnnounce ); // 当身成立直後の判定が無敵なのでアナウンスなし
@@ -1561,8 +1574,7 @@ local maketmpl_SkillExAtemi = function( param={} ) : (atemi_check)
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 500: // EX
-			local stopFrame = 19;
-			BMvEff.SetStopTime({ time=stopFrame, stopme=0, });
+			// このタイミングで特殊判定を見てEX必殺技の共通処理で暗転
 			break;
 		case 600:
 			break;
@@ -1614,9 +1626,10 @@ local maketmpl_SkillExAtemi = function( param={} ) : (atemi_check)
 		}
 		
 		// 1ヒットなのでこの処理で良い
-		if( Battle_Std.CheckDamageTiming() && BMvTbl.GetLP(1)==1 && BMvTbl.GetLP(5)==0 ) // 蹴りヒット
+		// if( Battle_Std.CheckDamageTiming() && BMvTbl.GetLP(1)==1 && BMvTbl.GetLP(5)==0 ) // 見切り後に蹴りヒット
+		if( Battle_Std.CheckDamageTiming() && BMvTbl.GetLP(5)==0 ) // 蹴りヒット
 		{
-			BMvTbl.SetLP(5,1); //見切りエフェクトを出したかどうか（何個も出さないようにする）
+			BMvTbl.SetLP(5,1); //追撃エフェクトを出したかどうか（何個も出さないようにする）
 			local eff = BMvEff.CreateObject( { mvname="Mv_Obj_214EX_Tama", x=0, y=0, flags=_Position_ToolShift } );
 			if( eff.push() )
 			{
@@ -1635,7 +1648,7 @@ local maketmpl_SkillExAtemi = function( param={} ) : (atemi_check)
 
 t.Mv_Skill_214EX <- maketmpl_SkillExAtemi( { type="EX" } );
 
-// 見切り時の追撃
+// EX当身成功時の追撃
 t.Mv_Obj_214EX_Tama <-
 {
 	function Init_After()
@@ -1942,6 +1955,7 @@ t.Mv_Skill_0202EX <-
 {
 	function Init_After()
 	{
+		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
 	}
 	function FrameUpdate_After()
 	{
@@ -2062,6 +2076,9 @@ local maketmpl_Skill_AirDiveKick = function( param={} )
 	
 	ret_tmpl.FrameUpdate_After <- function() : ( mvparam )
 	{
+		// Param2 & 1 : 持続後半の強い判定部分
+		// Param2 & 4 : 落下中（エフェクト表示期間）
+		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100:
@@ -2076,6 +2093,19 @@ local maketmpl_Skill_AirDiveKick = function( param={} )
 				eff.pop();
 			}
 			break;		
+		}
+	}
+	
+	ret_tmpl.HitInterrupt_After <- function() : (mvparam)
+	{
+		if( Battle_Std.CheckHitTiming() )
+		{
+			local mvs = BMvTbl.GetMvStatus();
+			if( mvs.Param2&1 )
+			{
+				//ガードでの軽い揺らし
+				BMvEff.SetCamera_Quake( { time=10, type=0, clear=0, } ); //揺らし
+			}
 		}
 	}
 	

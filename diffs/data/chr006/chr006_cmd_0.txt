@@ -106,6 +106,7 @@ local t =
 	Add_3C_JFly =
 	{
 		num = def_CN_Skill_AddCommand2, name = "Cmd_Add_3C_JFly", command = [ "^","A+B" ], posstatus = _PosState_Air,
+		flags = [ "lastdelay" ],
 		CmdCheck = 
 		{
 			SkillType = "AddCommand", PosState="Air", 
@@ -203,7 +204,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}	
 	},
 ]

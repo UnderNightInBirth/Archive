@@ -1,0 +1,338 @@
+__dofile__("./script/btl_SEDefine.txt"); // ＳＥ定数
+
+SeList_Table <-
+{
+	TableNum = 1, // SEセレクトとかでのプログラム側参照用、テーブル最大値を入れておく
+	UseTable = 0, // 何番目のテーブルを使うか
+	Path = [], // パス設定簡略化用
+	Status = [], // 実際に再生時に使われる配列
+};
+
+SeList_Table.Path.append( "./se/normal_se/" ); // Path[0]
+SeList_Table.Path.append( "./se/battle_se/chr026/" ); // Path[1]
+SeList_Table.Path.append( "./se/battle_se/" ); // Path[2]
+
+SeList_Table.Status.resize(750); // 確保
+local st = SeList_Table.Status; // 登録しやすいように省略
+
+// SE関連
+st[50] = { volumetype=0, path=2, file="SE_WaterWaveSplash", type=1, category=-1, }; // IWE開始 ざっぱーん
+st[51] = { volumetype=0, path=2, file="SE_WaterDiveSplash", type=1, category=-1, }; // IWE水の中に入る どぷん
+st[52] = { volumetype=0, path=2, file="SE_WaterBubbleFlow", type=1, category=-1, }; // IWE魚泳ぐ びゅー
+st[53] = { volumetype=0, path=2, file="SE_WaterAbyssalEcho", type=1, category=-1, }; // IWE竜巻発生環境 ゴボゴボE
+st[54] = { volumetype=0, path=2, file="SE_WaterAquaTornado", type=1, category=-1, }; // IWE竜巻高速回転 ビシャー
+
+st[58] = { volumetype=0, path=2, file="SE_WaterTwisterShot", type=1, category=-1, }; // IW発動
+st[59] = { volumetype=0, path=2, file="SE_Bomb", type=1, category=-1, }; // IW発動２
+
+st[60] = { volumetype=0, path=2, file="SE_ShotSoapBubbles", type=1, category=-1, }; // シャボン玉発射
+st[61] = { volumetype=0, path=2, file="SE_FabricShift", type=1, category=-1, }; // 変形
+st[62] = { volumetype=0, path=2, file="SE_SwingDuster", type=1, category=-1, }; // 布
+st[63] = { volumetype=0, path=2, file="SE_ShotSoapBubblesShort", type=1, category=-1, }; // シャボン玉発射（小）
+
+st[70] = { volumetype=0, path=2, file="SE_SoapBubbleCapture", type=1, category=-1, }; // 泡つかみ
+st[71] = { volumetype=0, path=2, file="SE_SoapBubbleForm", type=1, category=-1, }; // 泡生成
+
+st[80] = { volumetype=0, path=2, file="SE_ShotSplashC", type=1, category=-1, }; // 水 バシャッ　必殺技系
+st[81] = { volumetype=0, path=2, file="SE_ShotSplashD", type=1, category=-1, }; // 水　ジョバー
+st[82] = { volumetype=0, path=2, file="SE_ShotSplashA", type=1, category=-1, }; // 水　ザバーン
+st[83] = { volumetype=0, path=2, file="SE_ShotSplashB", type=1, category=-1, }; // 水　シャーッ
+st[84] = { volumetype=0, path=2, file="SE_ShotSplashF", type=1, category=-1, }; // 水　パシャッ
+st[85] = { volumetype=0, path=2, file="SE_ShotSplashG", type=1, category=-1, }; // 水　ポチャン浅　B・C攻撃
+st[86] = { volumetype=0, path=2, file="SE_ShotSplashH", type=1, category=-1, }; // 水　ポチャン深
+st[87] = { volumetype=0, path=2, file="SE_ShotSplashG_Short", type=1, category=-1, }; // 水　ポチャ　B・C攻撃短め
+st[88] = { volumetype=0, path=2, file="SE_ShotSplashA_Short", type=1, category=-1, }; // 水　ザバ　短め
+
+
+
+// 登場
+st[100] = { volumetype=1, path=1, file="izu_010_b_2000", type=0, category=1, userparam=125 }; // 「エレフィ、準備は良いですね」
+st[101] = { volumetype=1, path=1, file="izu_010_b_2001", type=0, category=1, userparam=185 }; // 「母なる海の力、ご覧にいれましょう」
+st[102] = { volumetype=1, path=1, file="izu_010_b_2002", type=0, category=1, userparam=235 }; // 「だ、大丈夫、命までは取られませんよきっと…」
+st[103] = { volumetype=1, path=1, file="izu_010_b_2003", type=0, category=1, userparam=194 }; // 「波風立たぬよう穏やかに、いきましょうか」
+
+// 登場 特殊
+st[108] = { volumetype=1, path=1, file="izu_010_b_2012", type=0, category=1, userparam=267 }; // 対ハイド「同じ運命を背負う者、ですか。面白いですね。」（ハイド「似ちゃいるかも知れねぇが、同じじゃねぇよ」
+st[111] = { volumetype=1, path=1, file="izu_010_b_2015", type=0, category=1, userparam=171 }; // 対ウヅキ「食べる算段、考えてません……？」（ウヅキ「勝者の権利だかんな、そりゃ」
+st[114] = { volumetype=1, path=1, file="izu_010_b_2018", type=0, category=1, userparam=155 }; // 対クオン「エレフィ、大仕事の始まりですよ！」（クオン「光栄だ。僕も本気でかかるとしよう……」）
+st[117] = { volumetype=1, path=1, file="izu_010_b_2021", type=0, category=1, userparam=215 }; // 対ツルギ（ツルギ「ま、軽い試練だ。乗り越えてくれよ」）「メチャクチャ重そうですけど、やってみます……」
+st[120] = { volumetype=1, path=1, file="izu_010_b_2024", type=0, category=1, userparam=204 }; // 対リンネ「私達にお任せ頂けませんか、夜刀(やと)の姫」（リンネ「出来ぬ相談だな、それは」）
+
+// ラウンド勝利
+st[140] = { volumetype=1, path=1, file="izu_010_b_2100", type=0, category=1, userparam=104 }; // 「よし！この調子です！」
+st[141] = { volumetype=1, path=1, file="izu_010_b_2101", type=0, category=1, userparam=108 }; // 「油断大敵ですよ」
+st[142] = { volumetype=1, path=1, file="izu_010_b_2102", type=0, category=1, userparam=167 }; // 「ふぅ、落ち着いて落ち着いて」
+
+// 決着勝利 汎用
+st[150] = { volumetype=1, path=1, file="izu_010_b_2111", type=0, category=1, userparam=109 }; // 「やった！勝ちました！」
+st[151] = { volumetype=1, path=1, file="izu_010_b_2112", type=0, category=1, userparam=136 }; // 「これが貴方に下った裁定です」
+st[152] = { volumetype=1, path=1, file="izu_010_b_2113", type=0, category=1, userparam=173 }; // 「まったく、手間をかけさせないで下さい」
+st[153] = { volumetype=1, path=1, file="izu_010_b_2114", type=0, category=1, userparam=120 }; // 「エレフィ、ナイスコンビネーション！」
+
+// 決着勝利 辛勝
+st[157] = { volumetype=1, path=1, file="izu_010_b_2120", type=0, category=1, userparam=151 }; // 「あ、危ないところでした……」
+
+// 決着勝利 楽勝
+st[160] = { volumetype=1, path=1, file="izu_010_b_2123", type=0, category=1, userparam=187 }; // 「いかがです、エレフィ。ざっとこんなものです。」
+
+// 決着勝利 掛け合い
+st[170] = { volumetype=1, path=1, file="izu_010_b_2127", type=0, category=1, userparam=226 }; // 「終わりです、『永劫』のクオン。私たちの勝利です！」
+
+// タイムアップ判定負け
+st[180] = { volumetype=1, path=1, file="izu_010_b_2200", type=0, category=1, }; // 「うそっ！？私の負けですか！？」
+st[181] = { volumetype=1, path=1, file="izu_010_b_2201", type=0, category=1, }; // 「そ、そんなぁ～」
+st[182] = { volumetype=1, path=1, file="izu_010_b_2202", type=0, category=1, }; // 「待って待って！もう終わりですか！？」
+
+// 弱攻撃
+st[194] = { volumetype=1, path=1, file="izu_010_b_2300_b", type=0, category=1, }; // 「は」
+st[195] = { volumetype=1, path=1, file="izu_010_b_2301_b", type=0, category=1, }; // 「ふ」
+st[196] = { volumetype=1, path=1, file="izu_010_b_2302_b", type=0, category=1, }; // 「や」
+st[197] = { volumetype=1, path=1, file="izu_010_b_2303_b", type=0, category=1, }; // 「し」
+
+// 中攻撃
+st[214] = { volumetype=1, path=1, file="izu_010_b_2400_b", type=0, category=1, }; // 「せっ」
+st[215] = { volumetype=1, path=1, file="izu_010_b_2401_b", type=0, category=1, }; // 「やっ」
+st[216] = { volumetype=1, path=1, file="izu_010_b_2402_b", type=0, category=1, }; // 「たっ」
+st[217] = { volumetype=1, path=1, file="izu_010_b_2403_b", type=0, category=1, }; // 「しっ」
+
+// 強攻撃
+st[222] = { volumetype=1, path=1, file="izu_010_b_2502_a", type=0, category=1, }; // 「はあっ！」
+st[223] = { volumetype=1, path=1, file="izu_010_b_2503_a", type=0, category=1, }; // 「たあっ！」
+st[225] = { volumetype=1, path=1, file="izu_010_b_2500_b", type=0, category=1, }; // 「やあっ！」
+st[226] = { volumetype=1, path=1, file="izu_010_b_2501_b", type=0, category=1, }; // 「せぃっ！」
+st[227] = { volumetype=1, path=1, file="izu_010_b_2502_b", type=0, category=1, }; // 「はあっ！」
+st[228] = { volumetype=1, path=1, file="izu_010_b_2503_b", type=0, category=1, }; // 「たあっ！」
+st[229] = { volumetype=1, path=1, file="izu_010_b_2504_b", type=0, category=1, }; // 「えいっ！」J[B] 66B
+
+// 吹き飛ばし攻撃
+st[240] = { volumetype=1, path=1, file="izu_010_b_2600_a", type=0, category=1, }; // 「えーいっ！」 J[C]
+st[241] = { volumetype=1, path=1, file="izu_010_b_2600_b", type=0, category=1, }; // 「えーいっ！」BBB
+st[245] = { volumetype=1, path=1, file="izu_010_b_2601", type=0, category=1, }; // 「やあぁっ！」 J[C]
+st[246] = { volumetype=1, path=1, file="izu_010_b_2602", type=0, category=1, }; // 「いけぇっ！」
+st[247] = { volumetype=1, path=1, file="izu_010_b_2603", type=0, category=1, }; // 「そこだぁっ！」
+
+// 回避困難な攻撃
+st[251] = { volumetype=1, path=1, file="izu_010_b_2605", type=0, category=1, }; // 「見えますか！？」 66B
+st[252] = { volumetype=1, path=1, file="izu_010_b_2606", type=0, category=1, }; // 「遅いですよ！」ステアエンダー
+st[253] = { volumetype=1, path=1, file="izu_010_b_6008_s1", type=0, category=1, }; // 「波乗り！」 66C
+
+// その他特殊攻撃
+st[264] = { volumetype=1, path=1, file="izu_010_b_2611", type=0, category=1, }; // 「一気にやります！」 SE
+
+// 投げ成功
+st[270] = { volumetype=1, path=1, file="izu_010_b_2700", type=0, category=1, }; // 「捕まえた！」
+st[271] = { volumetype=1, path=1, file="izu_010_b_2604", type=0, category=1, }; // 「逃がさない！」
+
+// 投げ失敗
+st[280] = { volumetype=1, path=1, file="izu_010_b_2800", type=0, category=1, }; // 「あれっ！？」
+st[281] = { volumetype=1, path=1, file="izu_010_b_2801", type=0, category=1, }; // 「ちょっと！？」
+st[282] = { volumetype=1, path=1, file="izu_010_b_2802", type=0, category=1, }; // 「あっ！？」
+
+// 敵の投げ技を回避
+st[290] = { volumetype=1, path=1, file="izu_010_b_2900", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; // 「離れて！」
+st[291] = { volumetype=1, path=1, file="izu_010_b_2901", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; // 「やめて！」
+st[292] = { volumetype=1, path=1, file="izu_010_b_2902", type=0, category=1, prio=Def_SEP_ThrowTech, check=1, }; // 「流れる水のように…」
+
+// ガードキャンセル攻撃
+st[300] = { volumetype=1, path=1, file="izu_010_b_2950", type=0, category=1, }; // 「あっちいって！」
+st[301] = { volumetype=1, path=1, file="izu_010_b_2951", type=0, category=1, }; // 「好きにさせない！」
+
+// 振り向き
+st[310] = { volumetype=1, path=1, file="izu_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki, }; // 「む」
+st[311] = { volumetype=1, path=1, file="izu_010_b_3001", type=0, category=1, prio=Def_SEP_Furimuki, }; // 「そちらですか」
+
+// 待機モーション
+st[320] = { volumetype=1, path=1, file="izu_010_b_3100", type=0, category=1, }; // 「もう、何で私がこんなことを……」
+st[321] = { volumetype=1, path=1, file="izu_010_b_3101", type=0, category=1, }; // 「わたし、こう見えて結構忙しいんですけど……」
+st[322] = { volumetype=1, path=1, file="izu_010_b_3102", type=0, category=1, }; // 「う～ん、退屈です……」
+st[323] = { volumetype=1, path=1, file="izu_010_b_3103", type=0, category=1, }; // 「やる気がないんですか？」
+
+// 前方回避
+st[330] = { volumetype=1, path=1, file="izu_010_b_3200", type=0, category=1, }; // 「見えます！」
+st[331] = { volumetype=1, path=1, file="izu_010_b_3201", type=0, category=1, }; // 「チャンス！」
+
+// ダッシュ
+st[340] = { volumetype=1, path=1, file="izu_010_b_3300", type=0, category=1, }; // 「行きます！」
+st[341] = { volumetype=1, path=1, file="izu_010_b_3301", type=0, category=1, }; // 「追いかける！」
+st[342] = { volumetype=1, path=1, file="izu_010_b_3302", type=0, category=1, }; // 「前へっ！」
+
+// アサルト
+st[350] = { volumetype=1, path=1, file="izu_010_b_3310", type=0, category=1, }; // 「ふっ」
+st[351] = { volumetype=1, path=1, file="izu_010_b_3311", type=0, category=1, }; // 「仕掛ける！」
+
+// バックステップ
+st[360] = { volumetype=1, path=1, file="izu_010_b_3400_b", type=0, category=1, }; // 「よっ」
+st[361] = { volumetype=1, path=1, file="izu_010_b_3401", type=0, category=1, }; // 「危ない！」
+
+// 弱攻撃ガード
+st[370] = { volumetype=1, path=1, file="izu_010_b_3500", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; // 「くっ」
+st[371] = { volumetype=1, path=1, file="izu_010_b_3501", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; // 「うっ」
+st[372] = { volumetype=1, path=1, file="izu_010_b_3502", type=0, category=1, prio=Def_SEP_GuardLv1, check=1, }; // 「んっ」
+
+// 中攻撃ガード
+st[373] = { volumetype=1, path=1, file="izu_010_b_3600", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; // 「くぅっ」
+st[374] = { volumetype=1, path=1, file="izu_010_b_3601", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; // 「ふぅん」
+st[375] = { volumetype=1, path=1, file="izu_010_b_3602", type=0, category=1, prio=Def_SEP_GuardLv2, check=1, }; // 「むむっ」
+
+// 強攻撃ガード
+st[386] = { volumetype=1, path=1, file="izu_010_b_3700_c", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; // 「強い！」
+st[387] = { volumetype=1, path=1, file="izu_010_b_3701_c", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; // 「ぐうっ！」
+st[388] = { volumetype=1, path=1, file="izu_010_b_3702_c", type=0, category=1, prio=Def_SEP_GuardLv3, check=1, }; // 「やめてよ！」
+
+// 攻撃を見切り余裕でガード
+st[390] = { volumetype=1, path=1, file="izu_010_b_3800", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; // 「余裕！」
+st[391] = { volumetype=1, path=1, file="izu_010_b_3801", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; // 「平気よ」
+st[392] = { volumetype=1, path=1, file="izu_010_b_3802", type=0, category=1, prio=Def_SEP_NiceGuard, check=1, }; // 「見えた！」
+
+// ガード失敗ダメージ
+st[400] = { volumetype=1, path=1, file="izu_010_b_3900", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; // 「なんで！？」
+st[401] = { volumetype=1, path=1, file="izu_010_b_3901", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; // 「そんなぁ！？」
+st[402] = { volumetype=1, path=1, file="izu_010_b_3902", type=0, category=1, prio=Def_SEP_GuardMiss, check=1, }; // 「やだもう！」
+
+// 受け身
+st[410] = { volumetype=1, path=1, file="izu_010_b_4000", type=0, category=1, prio=Def_SEP_Recover, }; // 「はっ」
+st[411] = { volumetype=1, path=1, file="izu_010_b_4001", type=0, category=1, prio=Def_SEP_Recover, }; // 「あぶないあぶない……」
+
+// シールド発動
+st[420] = { volumetype=1, path=1, file="izu_010_b_4100", type=0, category=1, }; // 「今！」
+st[421] = { volumetype=1, path=1, file="izu_010_b_4101", type=0, category=1, }; // 「止める！」
+
+// シールド成功
+st[431] = { volumetype=1, path=1, file="izu_010_b_4200_b", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; // 「成功です！」
+st[432] = { volumetype=1, path=1, file="izu_010_b_4201", type=0, category=1, prio=Def_SEP_ShieldSuccess, check=1, }; // 「やった！」
+
+// 弱攻撃ダメージ
+st[440] = { volumetype=1, path=1, file="izu_010_b_4300", type=0, category=1, prio=Def_SEP_DamageLv1, }; // 「あっ」
+st[441] = { volumetype=1, path=1, file="izu_010_b_4301", type=0, category=1, prio=Def_SEP_DamageLv1, }; // 「うっ」
+st[442] = { volumetype=1, path=1, file="izu_010_b_4302", type=0, category=1, prio=Def_SEP_DamageLv1, }; // 「つっ」
+
+// 中攻撃ダメージ
+st[450] = { volumetype=1, path=1, file="izu_010_b_4400", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; // 「いたっ」
+st[451] = { volumetype=1, path=1, file="izu_010_b_4401", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; // 「ひゃっ」
+st[452] = { volumetype=1, path=1, file="izu_010_b_4402", type=0, category=1, prio=Def_SEP_DamageLv2, check=1, }; // 「くうっ」
+
+// 強攻撃ダメージ
+st[460] = { volumetype=1, path=1, file="izu_010_b_4500", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「きゃっ…！」
+st[461] = { volumetype=1, path=1, file="izu_010_b_4501", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「あぁっ！」
+st[462] = { volumetype=1, path=1, file="izu_010_b_4502", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「うあぁっ！」
+st[463] = { volumetype=1, path=1, file="izu_010_b_4503", type=0, category=1, prio=Def_SEP_DamageLv3, check=1, }; // 「いやぁっ！」
+
+// ダウン
+st[471] = { volumetype=1, path=1, file="izu_010_b_4600_b", type=0, category=1, prio=Def_SEP_KO, }; // 「いったぁーい！」
+st[473] = { volumetype=1, path=1, file="izu_010_b_4601_b", type=0, category=1, prio=Def_SEP_KO, }; // 「きゃぁあーーーー！」
+st[475] = { volumetype=1, path=1, file="izu_010_b_4602_b", type=0, category=1, prio=Def_SEP_KO, }; // 「なんたる不覚……」
+
+// ラウンド敗北
+st[481] = { volumetype=1, path=1, file="izu_010_b_4650_b", type=0, category=1, prio=Def_SEP_KO, }; // 「しっかりしなくちゃ」
+st[483] = { volumetype=1, path=1, file="izu_010_b_4651_b", type=0, category=1, prio=Def_SEP_KO, }; // 「この人、強いなぁ……」
+
+// ダウン・ノックアウト
+st[491] = { volumetype=1, path=1, file="izu_010_b_4700_b", type=0, category=1, prio=Def_SEP_KO, }; // 「いやぁあああーーーーー！」
+st[493] = { volumetype=1, path=1, file="izu_010_b_4701_b", type=0, category=1, prio=Def_SEP_KO, }; // 「どうしてこんなことに……」
+
+// 起き上がり
+st[502] = { volumetype=1, path=1, file="izu_010_b_4800_c", type=0, category=1, }; // 「まだやれますっ」
+st[505] = { volumetype=1, path=1, file="izu_010_b_4801_c", type=0, category=1, }; // 「大丈夫っ」
+
+// 起き上がり・瀕死
+st[510] = { volumetype=1, path=1, file="izu_010_b_4900", type=0, category=1, }; // 「負けません！」
+st[511] = { volumetype=1, path=1, file="izu_010_b_4901", type=0, category=1, }; // 「このままでは……！」
+
+// ヴェールオフ
+st[520] = { volumetype=1, path=1, file="izu_010_b_5000", type=0, category=3, }; // 「顕現開放！」
+st[521] = { volumetype=1, path=1, file="izu_010_b_5001", type=0, category=3, }; // 「我慢の限界！」
+
+// チェインシフト
+st[530] = { volumetype=1, path=1, file="izu_010_b_5100", type=0, category=1, }; // 「まだまだ！」
+st[531] = { volumetype=1, path=1, file="izu_010_b_5101", type=0, category=1, }; // 「見切った！」
+st[532] = { volumetype=1, path=1, file="izu_010_b_5102", type=0, category=1, }; // 「ここから！」
+
+// コンセントレーション
+st[540] = { volumetype=1, path=1, file="izu_010_b_5200", type=0, category=1, }; // 「はぁぁぁぁ……」
+st[541] = { volumetype=1, path=1, file="izu_010_b_5201", type=0, category=1, }; // 「集中集中……」
+
+// ヴォーパル
+st[550] = { volumetype=1, path=1, file="izu_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal, }; // 「ここしっかり」
+st[551] = { volumetype=1, path=1, file="izu_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal, }; // 「良い流れです…！」
+
+// ヴォーパル・瀕死
+st[560] = { volumetype=1, path=1, file="izu_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal, }; // 「どうしよエレフィー（泣）」
+
+// 必殺技
+// （技名：アクアスプラッシュ　波を撃ち出す飛び道具）
+st[570] = { volumetype=1, path=1, file="izu_010_b_6001", type=0, category=1, }; // 「水しぶき！」
+st[571] = { volumetype=1, path=1, file="izu_010_b_6002", type=0, category=1, }; // 「スプラッシュ！」
+st[572] = { volumetype=1, path=1, file="izu_010_b_6003", type=0, category=1, }; // 「アクアスプラッシュ！」
+
+// （技名：からの～波乗り！　波を撃ち出す飛び道具　追加ダッシュ）
+st[580] = { volumetype=1, path=1, file="izu_010_b_6007", type=0, category=1, }; // 「サーフ！」
+st[581] = { volumetype=1, path=1, file="izu_010_b_2301_d", type=0, category=1, }; // 「ふ！」
+st[582] = { volumetype=1, path=1, file="izu_010_b_2500_a", type=0, category=1, }; // 「やあ！」
+
+// 派生飛び上がり
+st[586] = { volumetype=1, path=1, file="izu_010_b_6067", type=0, category=1, }; // 「テイクオフ！」
+st[587] = { volumetype=1, path=1, file="izu_010_b_6022", type=0, category=1, }; // 「崩れろ！」
+
+// （技名：ＥＸ たくさんアクアスプラッシュ　波を撃ち出す飛び道具）
+st[620] = { volumetype=1, path=1, file="izu_010_b_6026", type=0, category=1, }; // 「うねり、飲み込め！」
+st[621] = { volumetype=1, path=1, file="izu_010_b_6027", type=0, category=1, }; // 「水かけっこなら負けません！」
+st[622] = { volumetype=1, path=1, file="izu_010_b_6028", type=0, category=1, }; // 「たくさんアクアスプラッシュ！」
+st[623] = { volumetype=1, path=1, file="izu_010_b_6012_m", type=0, category=1, }; // 「寄せては、返す！」
+
+// （技名：ウォータースプール　水の球を設置）
+st[632] = { volumetype=1, path=1, file="izu_010_b_6057_s0", type=0, category=1, }; // 「もう！」
+st[633] = { volumetype=1, path=1, file="izu_010_b_6031_d", type=0, category=1, }; // 「ここに溜めよ」
+st[634] = { volumetype=1, path=1, file="izu_010_b_6032", type=0, category=1, }; // 「水溜まり」
+st[635] = { volumetype=1, path=1, file="izu_010_b_6033", type=0, category=1, }; // 「ふ～っ（シャボン玉を出すような）」 236BC
+
+// （技名：ＥＸ おっきめウォータースプール　水の球を設置）
+st[638] = { volumetype=1, path=1, file="izu_010_b_6037", type=0, category=1, }; // 「いっぱい溜めとこ！」
+
+// （技名：ウォーターフォール　水の柱で攻撃）
+st[650] = { volumetype=1, path=1, file="izu_010_b_6042", type=0, category=1, }; // 「立ち昇れ！」
+st[651] = { volumetype=1, path=1, file="izu_010_b_6043", type=0, category=1, }; // 「そこ、狙ってました！」
+st[652] = { volumetype=1, path=1, file="izu_010_b_6044", type=0, category=1, }; // 「ウォーターフォール！」
+
+// （技名：ＥＸ 特大ウォーターフォール　水の柱で攻撃）
+st[655] = { volumetype=1, path=1, file="izu_010_b_6048_b", type=0, category=1, }; // 「特大のいきますよ！」
+st[656] = { volumetype=1, path=1, file="izu_010_b_6049", type=0, category=1, }; // 「たくさん飛び出せ！」 214BC
+
+st[658] = { volumetype=1, path=1, file="izu_010_b_6050_b", type=0, category=1, }; // 「特大ウォーターフォール！」
+
+// （技名：自分でなんとかする！　ストールによる多段攻撃）
+st[665] = { volumetype=1, path=1, file="izu_010_b_6055_a_s0", type=0, category=1, }; // 「えい」
+st[666] = { volumetype=1, path=1, file="izu_010_b_6055_a_s1", type=0, category=1, }; // 「えい」
+st[667] = { volumetype=1, path=1, file="izu_010_b_6055_a_s2", type=0, category=1, }; // 「えいっ！」
+
+st[670] = { volumetype=1, path=1, file="izu_010_b_6055_b_s0", type=0, category=1, }; // 「えい！」
+st[672] = { volumetype=1, path=1, file="izu_010_b_6055_b_s2", type=0, category=1, }; // 「えいっ！」
+
+// （技名：ＥＸ 自分でなんとかする！　ストールによる多段攻撃）
+st[676] = { volumetype=1, path=1, file="izu_010_b_6061", type=0, category=1, }; // 「わたしだってやれるんだから！」
+st[677] = { volumetype=1, path=1, file="izu_010_b_6057_s1", type=0, category=1, }; // 「自分でなんとかする！」
+
+// （技名：お願い、エレフィ）
+st[680] = { volumetype=1, path=1, file="izu_010_b_6063_a_s0", type=0, category=1, }; // 「お願い」
+st[681] = { volumetype=1, path=1, file="izu_010_b_6063_a_s1", type=0, category=1, }; // 「エレフィ」
+
+// （技名：おいで、エレフィ） B+C
+st[690] = { volumetype=1, path=1, file="izu_010_b_6069_a", type=0, category=1, }; // 「おいで、エレフィ」
+st[691] = { volumetype=1, path=1, file="izu_010_b_2610", type=0, category=1, }; // 「エレフィ！」
+
+// 超必殺技
+// IW （技名：すっごいオーシャンフロー）
+st[700] = { volumetype=1, path=1, file="izu_010_b_6501", type=0, category=1, }; // 「お願い、エレフィー！」
+st[701] = { volumetype=1, path=1, file="izu_010_b_6502", type=0, category=1, }; // 「荒ぶる海洋の波の如く！」
+st[702] = { volumetype=1, path=1, file="izu_010_b_6505", type=0, category=1, }; // 「オーシャンフローーーっ！！」
+
+// IWE
+st[716] = { volumetype=1, path=1, file="izu_010_b_6520", type=0, category=1, }; // 「大海の厳しさ、解らせてあげましょう！（次に続く）」
+
+st[720] = { volumetype=1, path=1, file="izu_010_b_6522_a", type=0, category=1, }; // 「優しく抱かれ、静かに揺られ、とどまらぬ流れに身を委ねて眠れ……」 
+st[721] = { volumetype=1, path=1, file="izu_010_b_6525_b", type=0, category=1, }; // 「プルーミー　ホワールプール」
+
+st[725] = { volumetype=1, path=1, file="izu_010_b_6523_a", type=0, category=1, }; // 「海を司る神なる竜！　その顎(あぎと)が貴方への裁定です……っ！」 
+st[726] = { volumetype=1, path=1, file="izu_010_b_6524_a", type=0, category=1, }; // 「プルーミー　ホワールプール！」
+
+
+

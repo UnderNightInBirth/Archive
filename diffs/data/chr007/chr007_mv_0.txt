@@ -36,12 +36,24 @@ t.Mv_Skill_SSRelayAtk <-
 				eff.pop();
 			}
 			break;
+		case 600:
+			// ダメージを与えていたときは行動可能になるのを早く
+			local hs = BMvTbl.GetMvHitStatus();
+			if( hs.Type & _HitType_Damage )
+			{
+				BMvTbl.SetMoveableFlag( { move=1, time=254, flag=_ClearFlag_ChangeMv } ); // Mv中行動可能にする
+			}
+			break;	
 		}
 	}
 }
 
 t.Mv_Obj_SSR_Tama <-
 {
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_NoSetUseExSkillFlag ); // EX技扱いだがEX技の保証補正制限はかけない
+	}
 	function HitInterrupt_After()
 	{
 		if( Battle_Std.CheckDamageTiming() )
@@ -732,7 +744,7 @@ t.Mv_Obj_41236SP_BeamHamon <-
 			
 			break;
 		case 200: //終了
-			if( oya_s.isFrameUpdate ) BMvTbl.JumpFrameID(200);				
+			if( oya_s.isFrameUpdate ) BMvTbl.JumpFrameID(200);
 			break;
 		}
 	}
@@ -740,6 +752,10 @@ t.Mv_Obj_41236SP_BeamHamon <-
 
 t.Mv_AtkObj_41236SP_AtkRect <-
 {
+	function Init_After()
+	{
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_ParentMove|_ObjFlags_EraseParentPatChange } );
+	}
 	function FrameUpdate_After()
 	{
 		local s = BMvTbl.GetMvStatus(); // ステータス取得
@@ -764,7 +780,6 @@ t.Mv_AtkObj_41236SP_AtkRect <-
 			}
 			
 			enemy.pop();
-			return 1;
 		}
 	}
 }
@@ -940,13 +955,16 @@ t.Mv_Skill_J236A <-
 			local speed = 1700;
 			local vec = Battle_Std.GetVector_FromAngle( { angle=angle, speed=speed, flags=0 } );
 			
-			func_236Create( { x=105, y=-200, vec=vec, mv="Mv_FireBall_J236A", pat="FB_J236", angle=angle, ex=0 } );
+			func_236Create( { x=105, y=-200, vec=vec, mv="Mv_FireBall_J236A", pat="FB_J236A", angle=angle, ex=0 } );
 						
 			local vec = BMvTbl.GetVector( { flags=_Vector_Keep } ); //保存してあったのを開く
 			//vec.y = -2000;
 			vec.x += -700;
 			if( vec.x < -1000 ) vec.x=-1000;
 			BMvTbl.SetVector( { x=vec.x, flags=_Vector_Normal } );				
+			break;
+		case 600:
+			BMvTbl.SetCommandLongDelay(1); // 先行入力を受け付ける
 			break;
 		}
 	}
@@ -970,7 +988,10 @@ t.Mv_Skill_J236B <-
 			local speed = 4500;
 			local vec = Battle_Std.GetVector_FromAngle( { angle=angle, speed=speed, flags=0 } );
 			
-			func_236Create( { x=105, y=-150, vec=vec, mv="Mv_FireBall_J236B", pat="FB_J236", angle=angle, ex=0 } );
+			func_236Create( { x=105, y=-150, vec=vec, mv="Mv_FireBall_J236B", pat="FB_J236B", angle=angle, ex=0 } );
+			break;
+		case 600:
+			BMvTbl.SetCommandLongDelay(1); // 先行入力を受け付ける
 			break;
 		}
 	}
@@ -1004,6 +1025,9 @@ t.Mv_Skill_J236EX <-
 			local speed = 900;
 			local vec = Battle_Std.GetVector_FromAngle( { angle=angle, speed=speed, flags=0 } );
 			func_236Create( { x=85, y=-244, vec=vec, mv="Mv_FireBall_236EX", pat="FB_J236EX", angle=angle, ex=1 } );
+			break;
+		case 600:
+			BMvTbl.SetCommandLongDelay(1); // 先行入力を受け付ける
 			break;
 		}
 	}
@@ -1900,8 +1924,8 @@ t.Mv_Obj_Bit_Bakuha <-
 
 		BSound.SE_Play( { type=_SeType_Player , num=4 } ); //ビット爆発SE
 		
-		BMvTbl.SetLP(0,0); //ヒットorガードしたかどうか
-		BMvTbl.SetLP(1,0); // ガードしてたら1
+		BMvTbl.SetLP(0,0); // 初段がヒットorガードしたかどうか
+		BMvTbl.SetLP(1,0); // ガードしてたら1（フィニッシュ判定にいかない用）　※ダメージ検知で0に戻るように
 		// BMvTbl.SetLP(4,0); // 向き
 		// BMvTbl.SetLP(5,0); // 0:通常　1:小サイズ
 		
@@ -1971,6 +1995,10 @@ t.Mv_Obj_Bit_Bakuha <-
 		{
 			BMvTbl.SetLP(1,1); // ガード
 		}
+		if( mvhs.Type&_HitType_Damage )
+		{
+			BMvTbl.SetLP(1,0); // ガードじゃないので0に戻す
+		}
 		
 		if( Battle_Std.CheckDamageTiming_FrameID( 800 ) ) // 最終段
 		{
@@ -2001,7 +2029,8 @@ t.Mv_BitCheckObject <-
 	
 		//print("\nMv_BitCheckObjectチェック開始");
 		BMvTbl.SetLP(0,0); //隙間カウンタ
-		BMvTbl.SetLP(1,0); //最後のisBoundの値
+		BMvTbl.SetLP(1,0); //最後のisBoundの値(bound中のみ更新される)
+		BMvTbl.SetLP(2,0); //前のフレームのisBoundの値
 	}
 	function FrameUpdate()
 	{
@@ -2061,11 +2090,21 @@ t.Mv_BitCheckObject <-
 			}
 		}
 		
+		// 連ガ制限のチェック中にコンボに行ったら一度消滅する
+		// 何度か固めた後にコンボ→設置しようとして不発弾がでるのがよくないため
+		if( BMvTbl.GetLP(2) == 2 && enemy_boundst.isBound == 1 )
+		{
+			_dpn("ガードを経由してやられになったら一度消える");
+			end_flag = true;
+		}
+		
 		if( end_flag )
 		{
 			//print("\nBoundでなくなったので消滅します");
 			BMvTbl.SetFinalize();
 		}
+		
+		BMvTbl.SetLP(2,enemy_boundst.isBound); //isBoundの値を毎フレーム更新
 	}
 	function Finalize()
 	{
@@ -2088,6 +2127,9 @@ t.Mv_Skill_623A <-
 {
 	function Init_After()
 	{
+		// 241211 カス当たりしづらいように吸い込み追加
+		BMvTbl.SetLP(0,0);
+		
 		// 各種補正は最初の１ヒットのみ
 		BMvTbl.SetNoHoseiFlag( {  val=1, time=254, flag=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } );
 		
@@ -2096,6 +2138,18 @@ t.Mv_Skill_623A <-
 	function FrameUpdate_After()
 	{
 		Battle_Std.SetHitMuteki2_Param1( { [8]=_HitCheckFlag_Head, [64]=Def_HitCheckFlag_AirDive } );//8:頭無敵 64:空突無敵
+	}
+	function HitInterrupt_After()
+	{
+		// １回目のヒットだけ引き寄せる処理
+		if( BMvTbl.GetLP(0)==0 )
+		{
+			if( Battle_Std.CheckDamageTiming() )
+			{
+				Battle_Std.SetPosition_DamageHanteiRect({ power=50, distance=500*128, flags=(1<<2) }); // 地上でも引き寄せ
+				BMvTbl.SetLP(0,1);
+			}
+		}
 	}
 	function LastUpdate_After()
 	{
@@ -2178,13 +2232,36 @@ t.Mv_Skill_623EX <-
 	function Init_After()
 	{
 		// 各種補正は最初の１ヒットのみ
-		BMvTbl.SetNoHoseiFlag( {  val=1, time=254, flag=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } );		
+		BMvTbl.SetNoHoseiFlag( {  val=1, time=254, flag=_ClearFlag_ChangeMv } );
+
+		// 20240528追加
+		BMvTbl.SetLP(0,0); // 分岐条件の攻撃がヒットしたかどうか
+	}
+	function FrameUpdate_After()
+	{
+		switch( Battle_Std.GetUpdateFrameID() )
+		{
+		case 250:
+			// 20240528追加 ヒット分岐
+			if( BMvTbl.GetLP(0)==1 )
+			{
+				BMvTbl.SetPattern("623EX_Hit");
+			}
+			break;
+		}
 	}
 	function HitInterrupt_After()
 	{
 		if( Battle_Std.CheckDamageTiming() )
 		{
 			Battle_Std.SetPosition_DamageHanteiRect({ power=50, distance=350*128 });
+			
+			// 20240528追加
+			local mvs = BMvTbl.GetMvStatus();
+			if( mvs.FrameID == 200 )
+			{
+				BMvTbl.SetLP(0,1); // 分岐条件の攻撃がヒットした
+			}
 		}
 	}
 	function LastUpdate_After()
@@ -2246,7 +2323,7 @@ t.Mv_Skill_J623B <-
 				// しゃがみガード可能にする
 				// BMvTbl.SetAtkGuardFlag( {  guard=_GuardFlag_GuardCrouch, time=254, flag=_ClearFlag_ChangeMv })
 				Battle_Std.MoveCode.AddFlag( def_MC_ExDamageHosei ); // 特殊な補正予約
-				print("\n 特殊な補正をかけます");
+				_dpn("特殊な補正をかけます");
 				
 				BMvTbl.SetLP(0,1); // ２回やらないように記憶
 			}
@@ -2271,6 +2348,20 @@ t.Mv_Skill_J623EX <-
 		BMvEff.ClearAttackHitNum(); //オブジェクト内ヒット数の初期化
 		
 		// BMvTbl.SetHitCheckFlag( { type=1, val=Def_HitCheckFlag_AirDive, time=255, flag=_ClearFlag_ChangeMv } ); // 空突無敵にスカる
+		
+		// 20240528追加 コンボ中は相手位置見てちょっと下がる距離減らす
+		if( Battle_Std.CheckEnemyisDamage() )
+		{
+			local now_vec = BMvTbl.GetVector( { flags=_Vector_Normal } );
+			local vec_x = Battle_Std.GetEnemyDistance()/12 - now_vec.x; //20F後に到達
+			if( vec_x > 6500 ) vec_x = 6500;
+			if( vec_x < 0 ) vec_x = 0;
+			// _dpn("vec_x:"+vec_x);
+
+			// 遠かったら加速
+			if( vec_x > -now_vec.x ) vec_x = -now_vec.x;  // 前には飛ばないようにする
+			BMvTbl.SetVector({ x=vec_x, flags=_Vector_Normal|_VecFlag_Add });
+		}
 	}
 	function HitInterrupt_After()
 	{
@@ -2409,6 +2500,21 @@ t.Mv_Obj_StdBangControl <-  GetControlTmplTable( {
 	EndFrameID=30, EndFrameID2=35 //終了チェック
 });
 
+local setSousaiBonus = function( addgrd = 1 )
+{
+	// GRD上昇
+	// ヒット扱いということでキャンセル可能に
+	// 飛び道具取るだけだから難易度は低いので増加も少なめ
+	if( addgrd )
+	{
+		Battle_Std.GRD_AddValue( { val=2500, boundplus=1 } ); // GRD増加
+	}
+	
+	_dpn("相殺成功でキャンセル可能にした");
+	BMvTbl.SetAsStatusFlag( { special=_CancelFlag_Always, time=254, flag=_ClearFlag_ChangeMv } );
+	Battle_Std.MoveCodeEx.DelFlag( 2, def_MC2_NoWhiffEXCancel ); // ツールでEX可でも空振りEX不可 を消す
+}
+
 t.Mv_Atk_StdBandC <-
 {
 	function Init_After()
@@ -2418,16 +2524,21 @@ t.Mv_Atk_StdBandC <-
 		
 		Battle_Std.SmartSteer.CheckBonus(); // スマートステアのアナウンス＆ボーナスのチェック
 
-		Battle_Std.MoveCode.AddFlag( def_MC_Sousai ); // 相殺される
+		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する
 		
 		// 違和感があるので弾無敵にも当たるように変更
 		// BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
 		
-		
+		BMvTbl.SetLP(0,0); // 相殺で飛び道具を消したか
 	}
-	function FrameUpdate_After()
+	function FrameUpdate_After() : (setSousaiBonus)
 	{
 		Battle_Std.CheckSousai(); // def_MC_Sousai と触れたら相殺する
+		if( BMvTbl.GetLP(0)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
+		{
+			BMvTbl.SetLP(0,1); // 消した
+			setSousaiBonus( Def_Sys_FF_RecoverGRD ); // GRD増加、空振り必殺キャンセル可能に
+		}
 		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
@@ -2503,14 +2614,21 @@ t.Mv_Atk_StdBandC_AddJump <-
 		BMvEff.CreateObject( { mvname="Mv_Obj_StdAddBangControl", } ); //操作オブジェクト
 
 		BMvTbl.SetMvAction(def_MVA_EXAtk);
-		Battle_Std.MoveCode.AddFlag( def_MC_Sousai ); // 相殺される
+		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する
 		
 		// 違和感があるので弾無敵にも当たるように変更
 		// BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
+		
+		BMvTbl.SetLP(0,0); // 相殺で飛び道具を消したか
 	}
-	function FrameUpdate_After()
+	function FrameUpdate_After() : (setSousaiBonus)
 	{
 		Battle_Std.CheckSousai(); // def_MC_Sousai と触れたら相殺する
+		if( BMvTbl.GetLP(0)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
+		{
+			BMvTbl.SetLP(0,1); // 消した
+			setSousaiBonus( Def_Sys_FF_RecoverGRD ); // GRD増加、空振り必殺キャンセル可能に
+		}
 		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
@@ -2559,14 +2677,21 @@ t.Mv_Atk_AirBandC <-
 	{
 		BMvEff.CreateObject( { mvname="Mv_Obj_AirBangControl", } ); //操作オブジェクト
 		//Battle_Std.SetPSFlag( def_PP_PS_isBallSousaiMv ); //飛び道具相殺属性		
-		Battle_Std.MoveCode.AddFlag( def_MC_Sousai ); // 相殺される
+		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する
 		
 		// 違和感があるので弾無敵にも当たるように変更
 		// BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_FireBall, time=255, flag=_ClearFlag_ChangeMv } ); // 弾無敵にスカる
+		
+		BMvTbl.SetLP(0,0); // 相殺で飛び道具を消したか
 	}
-	function FrameUpdate_After()
+	function FrameUpdate_After() : (setSousaiBonus)
 	{
 		Battle_Std.CheckSousai(); // def_MC_Sousai と触れたら相殺する
+		if( BMvTbl.GetLP(0)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
+		{
+			BMvTbl.SetLP(0,1); // 消した
+			setSousaiBonus( Def_Sys_FF_RecoverGRD ); // GRD増加、空振り必殺キャンセル可能に
+		}
 		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
@@ -2619,15 +2744,25 @@ t.Mv_Atk_CroBandC <-
 	function Init_After()
 	{
 		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
-		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel ); // ツールでEX可でも空振りEX不可
 		
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
 		
-		Battle_Std.MoveCode.AddFlag( def_MC_Sousai ); // 相殺される
+		Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する
+
+		BMvTbl.SetLP(0,0); // 相殺で飛び道具を消したか
 	}
-	function FrameUpdate_After()
+	function Start_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel ); // ツールでEX可でも空振りEX不可
+	}
+	function FrameUpdate_After() : (setSousaiBonus)
 	{
 		Battle_Std.CheckSousai(); // def_MC_Sousai と触れたら相殺する
+		if( BMvTbl.GetLP(0)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
+		{
+			BMvTbl.SetLP(0,1); // 消した
+			setSousaiBonus( Def_Sys_FF_RecoverGRD ); // GRD増加、空振り必殺キャンセル可能に
+		}
 		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
@@ -2800,7 +2935,7 @@ t.Mv_Skill_IWEXIST_Hit <-
 			if( BMvTbl.GetLP( 8 ) == 10 ) // 終わり要求
 			{
 				// すべてのおわり
-				BMvTbl.SetPosition( { x=(-256*128)*BMvTbl.GetMuki(), y=-900*128 });
+				BMvTbl.SetPosition( { x=(-256*128)*BMvTbl.GetMuki(), y=-730*128 });
 				Battle_Std.InitVector();
 				BMvTbl.SetPattern("IFXX_END"); // 終わり
 

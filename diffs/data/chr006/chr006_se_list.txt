@@ -15,54 +15,54 @@ SeList_Table.Path.append( "./se/battle_se/" ); // 2:バトルSE
 SeList_Table.Status.resize(650); // てきとう
 local st = SeList_Table.Status; // 登録しやすいように
 
-st[0] = { volumetype=0, path=2, file="SE_CuttingDing", type=0, category=3, }; 
+st[0] = { volumetype=0, path=2, file="SE_CuttingDing", type=0, category=-1, }; 
 
 st[3] = { volumetype=0, path=2, file="SE_BigBomb_Short", type=1, category=-1, }; //41236EX最後の爆発
 
-st[10] = { volumetype=0, path=0, file="SE202_BladeC", type=0, category=3, }; //IWE用のかみつき音
+st[10] = { volumetype=0, path=0, file="SE202_BladeC", type=0, category=-1, }; //IWE用のかみつき音
 st[11] = { volumetype=0, path=2, file="SE_BloodFallDown", type=1, category=-1, }; //IWE用のかみつきの血がビシャッ
 st[15] = { volumetype=0, path=0, file="SE048_LongSwingC", type=0, category=-1 }; // はばたき音
 st[16] = { volumetype=0, path=2, file="SE_BigBomb", type=1, category=-1, }; //IWEとどめ赤くなるところ
 
 
 // 登場
-st[100] = { volumetype=1, path=1, file="mer_010_b_2000", type=0, category=1, }; //「ギョッギョッギョー！（空から着陸しつつ）」
-st[101] = { volumetype=1, path=1, file="mer_010_b_2001", type=0, category=1, }; //「ギュオオーッ！（戦い前の雄叫び）」
-st[102] = { volumetype=1, path=1, file="mer_010_b_2002", type=0, category=1, }; //「存分に味わわせてもらおう」
-st[103] = { volumetype=1, path=1, file="mer_010_b_2003", type=0, category=1, }; //「キュエー！」
-st[104] = { volumetype=1, path=1, file="mer_010_b_2004", type=0, category=1, }; //「キュオァアアアアアアッ（戦い前の雄叫び）」
+st[100] = { volumetype=1, path=1, file="mer_010_b_2000", type=0, category=1, userparam=155 }; //「ギョッギョッギョー！（空から着陸しつつ）」
+st[101] = { volumetype=1, path=1, file="mer_010_b_2001", type=0, category=1, userparam=105 }; //「ギュオオーッ！（戦い前の雄叫び）」
+st[102] = { volumetype=1, path=1, file="mer_010_b_2002", type=0, category=1, userparam=188 }; //「存分に味わわせてもらおう」
+st[103] = { volumetype=1, path=1, file="mer_010_b_2003", type=0, category=1, userparam=71 }; //「キュエー！」
+st[104] = { volumetype=1, path=1, file="mer_010_b_2004", type=0, category=1, userparam=111 }; //「キュオァアアアアアアッ（戦い前の雄叫び）」
 
 // 登場 特殊
 // 対オリエ
-st[109] = { volumetype=1, path=1, file="mer_010_b_2012", type=0, category=1, }; //「それは思い上がりというものだ、小娘……」
+st[109] = { volumetype=1, path=1, file="mer_010_b_2012", type=0, category=1, userparam=246 }; //「それは思い上がりというものだ、小娘……」
 
 // 対ロンドレキア
-st[112] = { volumetype=1, path=1, file="mer_010_b_2016", type=0, category=1, }; //「あぁ、そのようなもの元より存在せぬ」
+st[112] = { volumetype=1, path=1, file="mer_010_b_2016", type=0, category=1, userparam=257 }; //「あぁ、そのようなもの元より存在せぬ」
 
 // 対クオン
-st[115] = { volumetype=1, path=1, file="mer_010_b_2019", type=0, category=1, }; //「この世界を食らうのは我だ……っ！」
+st[115] = { volumetype=1, path=1, file="mer_010_b_2019", type=0, category=1, userparam=217 }; //「この世界を食らうのは我だ……っ！」
 
 // ラウンド勝利
-st[125] = { volumetype=1, path=1, file="mer_010_b_2100", type=0, category=1, }; //「キュラアアアァ！！！！」
-st[126] = { volumetype=1, path=1, file="mer_010_b_2101", type=0, category=1, }; //「キイィーォオオオオオオオオオッ！」
-st[127] = { volumetype=1, path=1, file="mer_010_b_2102", type=0, category=1, }; //「昂ぶりが抑えられぬわ！」
+st[125] = { volumetype=1, path=1, file="mer_010_b_2100", type=0, category=1, userparam=137 }; //「キュラアアアァ！！！！」
+st[126] = { volumetype=1, path=1, file="mer_010_b_2101", type=0, category=1, userparam=197 }; //「キイィーォオオオオオオオオオッ！」
+st[127] = { volumetype=1, path=1, file="mer_010_b_2102", type=0, category=1, userparam=213 }; //「昂ぶりが抑えられぬわ！」
 
 // 決着勝利 汎用
-st[130] = { volumetype=1, path=1, file="mer_010_b_2111", type=0, category=1, }; //「グアァ…ガァー、ガァー！ガァー、ガァー！」
-st[131] = { volumetype=1, path=1, file="mer_010_b_2112", type=0, category=1, }; //「享受であったぞ、人の子よ」
+st[130] = { volumetype=1, path=1, file="mer_010_b_2111", type=0, category=1, userparam=230 }; //「グアァ…ガァー、ガァー！ガァー、ガァー！」
+st[131] = { volumetype=1, path=1, file="mer_010_b_2112", type=0, category=1, userparam=249 }; //「享受であったぞ、人の子よ」
 
 // 決着勝利 辛勝
-st[134] = { volumetype=1, path=1, file="mer_010_b_2120", type=0, category=1, }; //「楽しませてもらったぞ」
+st[134] = { volumetype=1, path=1, file="mer_010_b_2120", type=0, category=1, userparam=188 }; //「楽しませてもらったぞ」
 
 // 決着勝利 楽勝
-st[138] = { volumetype=1, path=1, file="mer_010_b_2123", type=0, category=1, }; //「他愛もない」
+st[138] = { volumetype=1, path=1, file="mer_010_b_2123", type=0, category=1, userparam=120 }; //「他愛もない」
 
 // 決着勝利 掛け合い
 // 対ロンドレキア
-st[143] = { volumetype=1, path=1, file="mer_010_b_2127", type=0, category=1, }; //「貴様の魂、我が力としてありがたくいただこう」
+st[143] = { volumetype=1, path=1, file="mer_010_b_2127", type=0, category=1, userparam=309 }; //「貴様の魂、我が力としてありがたくいただこう」
 
 // 対クオン
-st[145] = { volumetype=1, path=1, file="mer_010_b_2130", type=0, category=1, }; //「貴様も世界も我が飲み込んでくれよう…」
+st[145] = { volumetype=1, path=1, file="mer_010_b_2130", type=0, category=1, userparam=267 }; //「貴様も世界も我が飲み込んでくれよう…」
 
 // タイムアップ判定負け
 st[148] = { volumetype=1, path=1, file="mer_010_b_2200", type=0, category=1, }; //「キュウー」
@@ -146,7 +146,7 @@ st[312] = { volumetype=1, path=1, file="mer_010_b_2901", type=0, category=1, pri
 st[315] = { volumetype=1, path=1, file="mer_010_b_2950", type=0, category=1, prio=Def_SEP_ThrowTech, check=1 }; //「煩わしい」
 
 // 振り向き
-st[318] = { volumetype=1, path=1, file="mer_010_b_3000", type=0, prio=Def_SEP_Furimuki, }; //「そちらか」
+st[318] = { volumetype=1, path=1, file="mer_010_b_3000", type=0, category=1, prio=Def_SEP_Furimuki, }; //「そちらか」
 
 // 待機モーション
 st[321] = { volumetype=1, path=1, file="mer_010_b_3100", type=0, category=1, }; //「退屈なものよ」

@@ -21,6 +21,7 @@ t.Mv_Atk_Air2C <- {
 		local nowvec = BMvTbl.GetVector( { flags=_Vector_Normal } );
 		BMvTbl.SetVector( { x=nowvec.x, addx=nowvec.addx, y=nowvec.y, addy=nowvec.addy, flags=_Vector_Keep } ); //JFF用に保存
 		Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_FastJumpAtkNoThroughCrouch ); // のぼりで出しても屈に空振りさせる処理をしない
+		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_NoWhiffEXCancel ); // ツールでEX可でも空振りEX不可
 	}
 	function Init_After()
 	{
@@ -50,7 +51,7 @@ t.Mv_Skill_SSRelayAtk <-
 			
 			// 前方にいたら加速する
 			if( vec_x < 0 ) vec_x = 0;
-			if( vec_x > 1500 ) vec_x = 1500;
+			if( vec_x > 2200 ) vec_x = 2200; // 1.24 if( vec_x > 1500 ) vec_x = 1500;
 			BMvTbl.SetVector({ x=vec_x, flags=_VecFlag_Add });
 			break;
 		case 210:
@@ -58,7 +59,7 @@ t.Mv_Skill_SSRelayAtk <-
 			if( eff.push() )
 			{
 				BMvTbl.SetPosition( { y=0 } ); // 地面に出す
-				BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentHitStatus|_ObjFlags_MoveTimeStopAll } );
+				BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentHitStatus } );
 				eff.pop();
 			}
 			break;
@@ -67,12 +68,17 @@ t.Mv_Skill_SSRelayAtk <-
 }
 t.Mv_Obj_SS_Tama <- 
 {
+	function Init_After()
+	{
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_NoSetUseExSkillFlag ); // EX技扱いだがEX技の保証補正制限はかけない
+		
+		BMvTbl.SetForceUkemiTimeLimitFlag( { val=31, time=255, flag=_ClearFlag_ChangeMv } ); // 受身不能時間を31Fに固定
+	}
 	function FrameUpdate_After()
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
-		case 100: // 本体の時間停止が終わった辺りで時間停止中動かないようにする
-			BMvEff.EraseObjectFlags( { flags=_ObjFlags_MoveTimeStopAll } );
+		case 100:
 			break;
 		}
 	}
@@ -1033,10 +1039,18 @@ t.Mv_Skill_63214EX_Hit <-
 		{
 		case 500:
 			//1200だったのを600+600(120F)に変更
-			BMvEff.SetHpGauge( { value=600 } );
+			local isMinused = ( Battle_Std.EnemyGRD_CheckMinused(1) )? 1 : 0;
+			local hpVal = ( isMinused )? 500 : 600;
+			BMvEff.SetHpGauge( { value=hpVal } );
+			// _dpn("hpVal:"+hpVal);
 			Battle_Std.EnemyGRD_Drain( 10000, 1 ); // 相手のGRDを吸収する
 			
-			BMvEff.CreateObject( { mvname="Mv_Null_DrainEX" } );
+			local eff = BMvEff.CreateObject( { mvname="Mv_Null_DrainEX" } );
+			if( eff.push() )
+			{
+				BMvTbl.SetLP(9,isMinused); // すでに一度減らしていたら効果を減らす用に記憶
+				eff.pop();
+			}
 			Battle_Std.SetThrowEnemyMuteki( 0 ); // 掴み中の相手に無敵時間を設定
 			
 			Battle_Std.CreateObjectEX( { x=30, y=-360, flags=_Position_ToolShift, mvname="Mv_Obj_63214EX_Tama",
@@ -1073,11 +1087,19 @@ local makeTmpl_BloodDrainObj = function( param={} )
 	
 	ret_tmpl.Init_After <- function() : (param)
 	{
-		BMvTbl.SetLP(0,param.hp);
+		local isMinused = BMvTbl.GetLP(9); // 生成時に指定される
+		local useHp = (isMinused)? param.hp_minused : param.hp;
+		BMvTbl.SetLP(0,useHp);
 		
 		local id = (1 - BMvTbl.GetPP(def_PP_Car_BlodDrainObjID) );
 		BMvTbl.SetPP(def_PP_Car_BlodDrainObjID,id);
 		BMvTbl.SetLP(1,id); // PPがこのidの間生存
+		
+		local hpval = useHp / param.frame; //毎フレームの回復量
+		BMvTbl.SetLP(2,hpval); // 毎フレームの回復量をあらかじめ計算しておく
+
+		// BMvTbl.SetLP(9,0); // すでに一度減らしていたら効果を減らす
+		
 		BMvTbl.AddPP(def_PP_Car_BlodDrainObjSt,1);//生存カウンタ加算
 	}
 	
@@ -1097,7 +1119,7 @@ local makeTmpl_BloodDrainObj = function( param={} )
 			return;
 		}
 		
-		local hpval = param.hp / param.frame; //このフレームの回復量
+		local hpval = BMvTbl.GetLP(2); // param.hp / param.frame; //このフレームの回復量
 		local left_enagy = BMvTbl.AddLP(0,-hpval);//回復予定分を減らしていく（抜けたときに残りを一気に回復する用）
 		// _dpn("left_enagy:"+left_enagy);
 		if( left_enagy >= 0 )
@@ -1134,13 +1156,13 @@ local makeTmpl_BloodDrainObj = function( param={} )
 			}
 		}
 		BMvTbl.AddPP(def_PP_Car_BlodDrainObjSt,-1);//生存カウンタ減算
-		// _dpn("オワ");
+		// _dpn("オワ:"+BMvTbl.GetMvStatus().MvCount);
 	}
 	
 	return ret_tmpl;
 }
 
-t.Mv_Null_DrainEX <- makeTmpl_BloodDrainObj( { hp=600, frame=120 } );
+t.Mv_Null_DrainEX <- makeTmpl_BloodDrainObj( { hp=600, frame=120, hp_minused=500 } );
 
 
 t.Mv_Atk_B_B_B <-
@@ -1197,7 +1219,10 @@ t.Mv_Atk_B_B_B_Hit <-
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 500:
-			BMvEff.SetHpGauge( { value=400 } );
+			local isMinused = ( Battle_Std.EnemyGRD_CheckMinused(1) )? 1 : 0;
+			local hpVal = ( isMinused )? 300 : 400;
+			BMvEff.SetHpGauge( { value=hpVal } );
+			// _dpn("hpVal:"+hpVal);
 			Battle_Std.EnemyGRD_Drain( 5000, 1 ); // 相手のGRDを吸収する
 			
 			Battle_Std.SetThrowEnemyMuteki( 0 ); // 掴み中の相手に無敵時間を設定
@@ -2641,7 +2666,16 @@ local maketmpl_SkillChargeUpper = function( param={} ) : (use_BloodHP)
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 200: //１回目攻撃
-			local eff = BMvEff.CreateObject( { x=mvparam.ball1_xpos*128, y=0, mvname="Mv_Obj_214AB_Tama1" } );
+			local eff_x = mvparam.ball1_xpos; //目標
+
+			// 壁までの距離
+			local len = Battle_Std.GetGamenHajiDistance({flags=_Position_ToolShift});
+			if( len - 50 < eff_x ) // めりこみそう
+			{
+				eff_x = len - 50; // 限界値
+			}
+				
+			local eff = BMvEff.CreateObject( { x=eff_x*128, y=0, mvname="Mv_Obj_214AB_Tama1" } );
 			if( eff.push() )
 			{
 
@@ -2650,11 +2684,6 @@ local maketmpl_SkillChargeUpper = function( param={} ) : (use_BloodHP)
 			break;
 		case 300: //２回目攻撃
 			local eff_x = mvparam.ball2_xpos; //目標
-			local len = Battle_Std.GetGamenHajiDistance({flags=_Position_ToolShift});
-			if( len<eff_x+100 )
-			{
-				eff_x = len - 100;
-			}
 			
 			// 敵より遠くに出過ぎないようにする
 			local ekyori = Battle_Std.GetEnemyDistance()/128;
@@ -2667,6 +2696,13 @@ local maketmpl_SkillChargeUpper = function( param={} ) : (use_BloodHP)
 			if( eff_x < mvparam.ball1_xpos + 50 ) eff_x = mvparam.ball1_xpos + 50;
 			// _dp("\n eff_x:"+eff_x+" ekyori:"+ekyori );
 			
+			// 壁までの距離
+			local len = Battle_Std.GetGamenHajiDistance({flags=_Position_ToolShift});
+			if( len - 50 < eff_x ) // めりこみそう
+			{
+				eff_x = len - 50; // 限界値
+			}
+
 			local eff = BMvEff.CreateObject( { x=eff_x*128, y=0, mvname="Mv_Obj_214AB_Tama2" } );
 			if( eff.push() )
 			{
@@ -2762,6 +2798,8 @@ t.Mv_Obj_214Set <-
 		//LP0 : 何ボタンで出したか。0:A 1:B 2:C
 		//LP1 : 22EX後かどうか 1:22EX後
 		//LP5 : 
+		//LP7 : コンボレート加算チェック
+		BMvTbl.SetLP(7,0); // ヒット前にコンボレート加算したら1
 		BMvTbl.SetPP(def_PP_Car_214Hold, BMvTbl.GetPP(def_PP_Car_214Hold)|(1<<BMvTbl.GetLP(0)) ); //記憶
 		BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentHitBack } ); // ヒットバックを親に渡す
 		
@@ -2805,7 +2843,7 @@ t.Mv_Obj_214Set <-
 		{
 		case 100: //設置待機
 			if( Battle_Std.CheckPlayerisDamage( 1 ) ) BMvTbl.JumpFrameID(200); //殴られたら消滅
-			Battle_Std.JumpFrameID_NotHoldButton({ mask=mask, checkid=100, jumpid=101 }); //ボタンホールドしてなかったらIDジャンプ	
+			Battle_Std.JumpFrameID_NotHoldButton({ mask=mask, checkid=100, jumpid=101, flags=Def_JFIDNHB_ObjectHoldCheck }); //ボタンホールドしてなかったらIDジャンプ	
 
 			//ランダムで150にジャンプ
 			local check = 0; //ぼこぼこする確率
@@ -2838,10 +2876,37 @@ t.Mv_Obj_214Set <-
 			break;
 		case 150: //ぼこぼこ
 			if( Battle_Std.CheckPlayerisDamage() ) BMvTbl.JumpFrameID(200);
-			Battle_Std.JumpFrameID_NotHoldButton({ mask=mask, checkid=150, jumpid=101 }); //ボタンホールドしてなかったらIDジャンプ	
+			Battle_Std.JumpFrameID_NotHoldButton({ mask=mask, checkid=150, jumpid=101, flags=Def_JFIDNHB_ObjectHoldCheck }); //ボタンホールドしてなかったらIDジャンプ	
 			break;
 		case 200: //殴られて消滅
 			BMvTbl.SetPP(def_PP_Car_214Hold, BMvTbl.GetPP(def_PP_Car_214Hold)&~(1<<BMvTbl.GetLP(0)) ); //フラグを消す
+			break;
+		case 700:
+			// 開放攻撃の攻撃判定が出ているとき
+			if( BMvTbl.GetLP(7)==0 )
+			{
+				local enemy = BMvEff.CheckHantei( { src=[ _Hantei_Attack, 0, -1 ], dst=[ _Hantei_Kurai, 0, -1 ], flags=_HC_EnemyPc|_HC_WithoutNoHanteiFlagObj } );
+				if( enemy.push() )
+				{
+					local bs = BtlMvStd.GetBoundStatus();
+					local isCapture = bs.isCapture;
+					local isMuteki = Battle_Std.CheckDagekiMuteki(); // 無敵のとき
+					enemy.pop();
+					
+					// _dpn("isMuteki:"+isMuteki+" isCapture:"+isCapture);
+					
+					// ぶちためがヒットor空振りで本来よりダメージが下がらないようにする処理
+					// 通常投げやIWの演出などでロック中はコンボレートをかけない
+					// 無敵でスカりそうなときもコンボレートはかけないでおく
+					if( !isMuteki && !isCapture )
+					{
+						// 中下で崩してヒットさせたときに減りすぎないようにコンボレート加算
+						_dpn("ヒット前にコンボレート加算");
+						BMvTbl.AddComboRate();
+						BMvTbl.SetLP(7,1); // ヒット前にコンボレート加算したら1
+					}
+				}
+			}
 			break;
 		}
 		
@@ -2873,6 +2938,8 @@ t.Mv_Obj_214Set <-
 	{
 		if( Battle_Std.CheckDamageTiming() )
 		{
+			// ここでもLP7のチェックをしてもいいが万が一のことを考えてそのまま
+			// XXX:二重にコンボレートがかかってしまうバグはあるが影響はない
 			BMvTbl.AddComboRate();
 		}
 		
@@ -3084,9 +3151,9 @@ t.Mv_Skill_IWEXIST_Hit <-
 		//つかみ開放
 		//BMvEff.SetCamera_Focus( { zoom=1.0, time=[0,0,30] } ); //カメラ固定
 		BMvEff.FadeProc_Set({type=0, time=[0,10,30] color=0x000000}); //ブラックイン
-		BMvEff.ThrowParam( { x=100, y=-1024, } );
+		BMvEff.ThrowParam( { x=272, y=-1024, } );
 		//BMvEff.ThrowRelease( { type="斜め下叩きつけ", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
-		BMvEff.ThrowRelease( { type="斜め下バウンド", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
+		BMvEff.ThrowRelease( { type="鋭角斜め下バウンド", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
 		Battle_Std.FinalizeIWExistSkill();
 	}
 	function Finalize()

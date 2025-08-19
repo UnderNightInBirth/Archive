@@ -44,6 +44,17 @@ local check_214Add = function()
 	return 0;	
 }
 
+local check_Skill214Add = function()
+{
+	local mvname = BMvTbl.GetMvName();
+	local hs = BMvTbl.GetMvHitStatus();
+	if( ( mvname == "Mv_Skill_StdB_AddB" || mvname == "Mv_Skill_StdC_AddC" || mvname == "Mv_Skill_CroC_AddC" ) && hs.Type&_HitType_Hit ) // B_B,C_C,2C_2Cも対応
+	{
+		return 1;
+	}
+	return 0;	
+}
+
 local t =
 {
 	Skill_41236SP_ABC = {},
@@ -57,6 +68,7 @@ local t =
 	{
 		num = def_CN_Atk_AddCommand1,
 		command = [Def_CMD_236A,"26A@D,12@","6+A"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc() : (check_236Add)
 		{
 			if( !check_236Add() ) return 0;
@@ -73,6 +85,7 @@ local t =
 	{
 		num = def_CN_Atk_AddCommand2,
 		command = [Def_CMD_236B,Def_CMD_236C, "26B@D,12@","26C@D,12@","6+B","6+C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc() : (check_236Add)
 		{
 			if( !check_236Add() ) return 0;
@@ -89,6 +102,7 @@ local t =
 	{
 		num = def_CN_Atk_AddCommand3,
 		command = [Def_CMD_236A,"26A@D,12@","6+A"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc() : (check_236Add)
 		{
 			if( !check_236Add() ) return 0;
@@ -104,6 +118,7 @@ local t =
 	{
 		num = def_CN_Atk_AddCommand4,
 		command = [Def_CMD_236B,Def_CMD_236C, "26B@D,12@","26C@D,12@","6+B","6+C"],
+		commandcheckmuki = 1, // コマンドチェックの向き設定、 0-自動(基本値) 1-向いている方向 2-振り向き予定の方向
 		function CmdBeforeFunc() : (check_236Add)
 		{
 			if( !check_236Add() ) return 0;
@@ -125,9 +140,10 @@ local t =
 	Skill_NormalAtkAdd214A = {
 		num = def_CN_Skill_AddCommand2, //この優先度が低いと、通常技でちゃうかも？
 		command = [Def_CMD_214A],
-		function CmdBeforeFunc() : (check_214Add)
+		function CmdBeforeFunc() : (check_214Add, check_Skill214Add)
 		{
-			if( !check_214Add() ) return 0;
+			if( !check_214Add() && !check_Skill214Add() ) return 0;
+			return 1;
 		}
 		CmdCheck = { SkillType="AddCommand", MvCheck={ SkillFail="Mv_Skill_214A"}, ParamFlagCheck = { Only = { [2]=1 } }, },
 		UpdateTable = { name = "Mv_Skill_214A", }
@@ -135,9 +151,10 @@ local t =
 	Skill_NormalAtkAdd214B = {
 		num = def_CN_Skill_AddCommand1, //この優先度が低いと、通常技でちゃうかも？
 		command = [Def_CMD_214B],
-		function CmdBeforeFunc() : (check_214Add)
+		function CmdBeforeFunc() : (check_214Add, check_Skill214Add)
 		{
-			if( !check_214Add() ) return 0;
+			if( !check_214Add() && !check_Skill214Add() ) return 0;
+			return 1;
 		}
 		CmdCheck = { SkillType="AddCommand", MvCheck={ SkillFail="Mv_Skill_214B"}, ParamFlagCheck = { Only = { [2]=1 } }, },
 		UpdateTable = { name = "Mv_Skill_214B", }
@@ -285,13 +302,13 @@ local ar =
 	},
 	{
 		CheckMoveName="Mv_Atk_StdC",
-		UpdateMoveName="Mv_Skill_0202A",
+		UpdateMoveName="Mv_Skill_236A",
 		ResetTmplName="Atk_StdC",
 	},
 	{
-		CheckMoveName="Mv_Skill_0202A",
+		CheckMoveName="Mv_Skill_236A",
 		UpdateMoveName="Mv_Skill_SSRelayAtk",
-		ResetTmplName="Skill_0202A",
+		ResetTmplName="Skill_236A",
 		CmdCheck = 
 		{
 			SkillType = "AddCommand",
@@ -307,7 +324,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}	
 	},
 ]

@@ -1,4 +1,3 @@
-print("\n>>MoveTable");
 // 行動リストテーブル
 local t = {};
 
@@ -748,7 +747,7 @@ t.Mv_Atk_AirB <-
 		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
-		case 110:
+		case 60:
 			Battle_Std.MoveCode.AddFlag( def_MC_Sousai|def_MC_Sousai_NoSubHitCount ); // 相殺が発生する
 			break;
 		}
@@ -775,6 +774,28 @@ t.Mv_Atk_AirBandC <-
 	function Init_After()
 	{
 		BMvTbl.SetLP(0,0); // 1:ダメージした
+		
+		// BズラしCでFFを出したとき、Bを使った扱いになってしまうなどの対応
+		// 前の行動がズラし押し可能で、2F以内で、前の行動が各種地上攻撃だったら処理をする
+		if( Battle_Std.ChangeMoveCodeEx_CheckFlag( 1, def_MC1_CmdLvDZ_OK ) && BMvTbl.GetMvStatusBF().MvCount <= 2 )
+		{
+			local changeMv = BMvTbl.ChangeMv_GetMvName();
+			if( changeMv == "Mv_Atk_AirB" )
+			{
+				_dpn("ClearComboLimit - JB");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_AIRB);
+			}
+			else if( changeMv == "Mv_Atk_AirC" )
+			{
+				_dpn("ClearComboLimit - JC");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_AIRC);
+			}
+			else if( changeMv == "Mv_Atk_Air2C" )
+			{
+				_dpn("ClearComboLimit - J2C");
+				BMvTbl.ClearComboLimit(DEF_BS_CL_ATKJ2C);
+			}
+		}
 	}
 	function FrameUpdate_After()
 	{
@@ -930,6 +951,7 @@ t.Mv_Skill_421A <-
 {
 	function Init_After()
 	{
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_EnableZurashiDashCancel ); // （VOが出しにくいので）必殺技からもズラし押しで別行動にいける
 	}
 	function FrameUpdate_After()
 	{
@@ -1001,6 +1023,10 @@ t.Mv_Skill_421A_Hit <-
 			BMvEff.ThrowParam( { x=150, y=-150, pattern=330 } );
 			BMvEff.ThrowRelease( {type="低垂直吹き飛び", airrecover=0, flags=0 } );
 			BSound.SE_Play( { type=_SeType_Normal, num=220 } ); //爆発ＳＥ
+
+			// 受け身不能時間の最低保証を設定
+			local ukemi_time = ( BMvTbl.HitPat_Check( { num = -1 } ) == 0 )? 35 : 28;
+			BMvTbl.SetForceUkemiTimeLimitFlag( { val=ukemi_time, time=255, flag=_ClearFlag_ChangeMv } );
 			break;
 		}
 	}
@@ -1010,7 +1036,7 @@ t.Mv_Skill_421A_Hit <-
 		{
 			//強化じゃない場合
 			//強化時は追撃可能
-			Battle_Std.NoCansel_NoAttackHit(); //何かでキャンセルしなかった場合追撃不能にする
+			Battle_Std.NoCansel_NoAttackHit( { check_nosidou={ hosei=80 } } ); //何かでキャンセルしなかった場合追撃不能にする・始動時は追撃可能
 		}
 	}
 }
@@ -1326,6 +1352,30 @@ local make_tmpl_SwPowAddAtk = function( param={} ) : (chrFunc)
 				BMvTbl.SetAsStatusFlag( { normal=_CancelFlag_Always, special=_CancelFlag_Always, time=254, flag	=_ClearFlag_ChangePattern|_ClearFlag_ChangeMv } )
 				Battle_Std.MoveCode.AddFlag( def_MC_EnableCansel_SkilltoSkill );
 			}
+
+			// 画面端間際の相手にガードさせてワーグナーが先に画面端に到達したときに、ワーグナーが振り向きながら中央側に落ちてしまわないようにする
+			local pos = BMvTbl.GetPosition();
+			local muki = BMvTbl.GetMuki();
+			
+			if( pos.x*muki == -def_POS_GamenHajiX )
+			{
+				// _dpn("自分の背中がステージ端にくっついていて、");
+				local enemy = BMvCore.GetNearEnemyCharaData(); // 敵情報を得る
+				if( enemy.push() )
+				{
+					local epos = BMvTbl.GetPosition();
+					local emuki = BMvTbl.GetMuki();
+					if( epos.x*emuki >= -(def_POS_GamenHajiX+10*128) )
+					{
+						// _dpn("かつ敵がステージ端から10ドット以内の距離にいたら、敵をちょっとひっぱる");
+						BMvTbl.SetPosition( { x=10, flags=( _Position_Add | _Position_CaptureShift | _Position_ChangeMuki) } );
+						// ここで敵を端からひっぱらないと、このフレーム中のノックバックで相手が端到達したときに相手が端優先になってしまう
+						// この処理が走っている段階ではこのフレーム中のノックバックは処理されていないため、「端」ではなく「端から10ドット以内」にしている
+					}
+					enemy.pop();
+				}
+			}
+			BMvEff.SetPositionBufferFlag(0);//1Fだけコンボ中に同座標扱いにしないで位置関係を更新する			
 			break;
 		}
 	}
@@ -1395,8 +1445,12 @@ t.Mv_Obj_SSRelayAtkEff <-
 {
 	function Init_After()
 	{
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_NoSetUseExSkillFlag ); // EX技扱いだがEX技の保証補正制限はかけない
+		
 		// ダメージ時に相手の向きを変えない
 		Battle_Std.MoveCodeEx.AddFlag( 2, def_MC2_DamageNoFurimuki );
+
+		BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentHitStatus } ); // ステアエンダーの追撃不可チェック用に伝える
 	}
 	function HitInterrupt_After()
 	{
@@ -1627,11 +1681,13 @@ local make_tmpl_AntiAirSlash = function( param={} ) : (chrFunc)
 	
 	local mvparam = {
 		csAntenHosei = 0,
+		karaburics = 0,
 	};
 	
 	switch( param.type )
 	{
 	case "A":
+		mvparam.karaburics = 1;
 		break;
 	case "B":
 		mvparam.csAntenHosei = 1;
@@ -1641,7 +1697,7 @@ local make_tmpl_AntiAirSlash = function( param={} ) : (chrFunc)
 		break;
 	}
 	
-	ret_tmpl.Init_After <- function() : (chrFunc)
+	ret_tmpl.Init_After <- function() : (chrFunc, mvparam)
 	{
 		BMvTbl.SetLP(0,0); // 引き寄せ処理を行ったかどうか
 		
@@ -1651,7 +1707,11 @@ local make_tmpl_AntiAirSlash = function( param={} ) : (chrFunc)
 		// 剣強化状態なら削りダメージ付与
 		chrFunc.enchantScratchDamage( CDef_Wag_PP_SwordPowerUp );
 		
-		Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
+		if( mvparam.karaburics )
+		{
+			// _dpn("空振りCS可能")
+			Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_ChainShiftOK ); // ツールでCS可なら空振りCS可能
+		}
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function()
@@ -1863,6 +1923,7 @@ t.Mv_Atk_StdBandC <-
 		if( BMvTbl.GetLP(2)==0 && Battle_Std.MoveCode.CheckFlag( def_MC_Sousai_EnemySubSuccess ) )
 		{
 			BMvTbl.SetLP(2,1); // 飛び道具相殺処理した
+			BSound.SE_Play( { type=_SeType_Normal, num=195 } ); // 相殺SEを再生
 			
 			if( Def_Sys_FF_RecoverGRD )
 			{
@@ -2396,11 +2457,12 @@ t.Mv_Obj_22SpPowDot <-
 	function Init_After()
 	{
 		BMvTbl.SetLP(0,0);
+		BMvTbl.SetLP(1,0); // デバッグ用・減らしたダメージ表示
 	}
 	function FrameUpdate_After()
 	{
 		Battle_Std.SetPos_MarkingEnemy();
-		if( Battle_Std.CheckPlayerisDamage() )
+		if( Battle_Std.CheckPlayerisDamage(0) ) // 投げ抜けでは消えないように
 		{
 			BMvTbl.SetFinalize(0);
 		}
@@ -2419,16 +2481,17 @@ t.Mv_Obj_22SpPowDot <-
 		
 		// 相手との距離が500ドットより越えると効果を発揮しない
 		// 600F持続 or 60回以上減らす処理をやったら消える
+		// 1.30から距離制限と回数制限はほぼ廃止
 		
 		local mvs = BMvTbl.GetMvStatus();
-		if( mvs.MvCount > 600 || BMvTbl.GetLP(0)>60 )
+		if( mvs.MvCount > 600 || BMvTbl.GetLP(0)>70 )
 		{
 			BMvTbl.SetFinalize(0);
 			return;
 		}
 		
 		//相手の体力を減らす
-		local val = -17; // 最大10で相手が遠いと減る。1とか減ってもわかんねーよ…なので、ダメージ固定で距離が近いと燃える間隔が早くなる
+		local val = -20; // 最大10で相手が遠いと減る。1とか減ってもわかんねーよ…なので、ダメージ固定で距離が近いと燃える間隔が早くなる
 		
 		local enemy = BMvCore.GetEnemyCharaData();
 		local player = BMvCore.GetPlayerCharaData();
@@ -2437,14 +2500,15 @@ t.Mv_Obj_22SpPowDot <-
 			local posst = BMvEff.GetPointStatus( { target=enemy } ); // 位置情報取得
 			player.pop();					
 			
-			local len = posst.distance/128;
+			// local len = posst.distance/128;
+			local len = abs(posst.distance_x/128); // X距離だけ見るように変更
 			// _dp("\n 距離:"+len );
 			
 			//500ドットより離れていると効果はない
 			//一番近いときが100ドットとする
 			//100:100%
 			//500:0%
-			local max = 500;
+			local max = 1500; // 1.2X:500
 			local min = 100;
 			local uselen = len;
 			if( uselen < min ) uselen = min;
@@ -2456,7 +2520,8 @@ t.Mv_Obj_22SpPowDot <-
 			
 			if( use_par > 0 )
 			{
-				local timing = 10 + 10 * (100-use_par)/100;
+				// local timing = 10 + 10 * (100-use_par)/100; //Ver1.12 10F毎
+				local timing = 7 + 10 * (100-use_par)/100; //Ver1.20 7F毎
 				// _dp("\n timing:"+timing );
 				
 				if( mvs.MvCount%timing==0 )
@@ -2465,6 +2530,7 @@ t.Mv_Obj_22SpPowDot <-
 					if( val < 0 )
 					{
 						BMvTbl.AddLP(0,1); // 減らした回数カウント
+						BMvTbl.AddLP(1,val); // デバッグ用・減らしたダメージ表示
 						
 						if( enemy.push() )
 						{
@@ -2485,6 +2551,17 @@ t.Mv_Obj_22SpPowDot <-
 				}
 			}
 		}
+	}
+	function LastUpdate_After()
+	{
+		/*
+		// 増加量
+		//  46: -920
+		//  71:-1420 61:1220
+		local totalCount = BMvTbl.GetLP(0);
+		local totalVal = BMvTbl.GetLP(1);
+		_dpn("totalCount:"+totalCount+" totalVal:"+totalVal);
+		*/
 	}
 }
 
@@ -2755,6 +2832,8 @@ t.Mv_Skill_IWEXIST_Hit <-
 		BMvEff.ThrowChara_SetJoint( 0 ); //くっつけない
 		
 		BMvTbl.SetLP(0,0); // 子から受け取る終わりの合図
+		
+		BMvEff.CutInProc_SetResourceView( { mode=0 } ); // 軽量化のため謎空間を表示しない
 	}
 	function FrameUpdate_After()
 	{
@@ -2787,7 +2866,8 @@ t.Mv_Skill_IWEXIST_Hit <-
 		BMvEff.ThrowRelease( { type="真下叩きつけ", airrecover=0, flags=_ThrowRelease_NoAttackHit|_ThrowRelease_NoGroundRecover } );
 
 		BMvEff.ResetCamera(); //カメラ初期化
-		BMvEff.ResetViewCamera();		
+		BMvEff.ResetViewCamera();
+		BMvEff.CutInProc_SetResourceView( { mode=1 } ); // 謎空間を戻す
 
 		Battle_Std.FinalizeIWExistSkill();
 	}	

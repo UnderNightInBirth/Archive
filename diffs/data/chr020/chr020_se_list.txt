@@ -84,6 +84,9 @@ st[120] = { volumetype=1, path=1, file="udu_010_b_2024", type=0, category=1, use
 // 対ケイアス
 st[123] = { volumetype=1, path=1, file="udu_010_b_2027", type=0, category=1, userparam=235 }; //「隠し事、企み事…、嫌いじゃねぇがな」
 
+// 対イズミ
+st[126] = { volumetype=1, path=1, file="udu_010_b_2030", type=0, category=1, userparam=150 }; //「勝者の権利だかんな そりゃ」
+
 // ラウンド勝利
 st[135] = { volumetype=1, path=1, file="udu_010_b_2100", type=0, category=1, userparam=223 }; //「立てよ、死んだフリなんざ通じねえっつうの」
 st[136] = { volumetype=1, path=1, file="udu_010_b_2101", type=0, category=1, userparam=124 }; //「ふん、ざまぁねえなぁ！」
@@ -303,11 +306,11 @@ st[359] = { volumetype=1, path=1, file="udu_010_b_5201", type=0, category=1, }; 
 st[360] = { volumetype=1, path=1, file="udu_010_b_5202", type=0, category=1, }; //「もっと、もっとだ……」
 
 // ヴォーパル
-st[364] = { volumetype=1, path=1, file="udu_010_b_5300", type=0, category=4, }; //「ケケケケ！（喜）」
-st[365] = { volumetype=1, path=1, file="udu_010_b_5301", type=0, category=4, }; //「めんどくせー殺(や)っちまうか」
+st[364] = { volumetype=1, path=1, file="udu_010_b_5300", type=0, category=1, prio=Def_SEP_Vorpal }; //「ケケケケ！（喜）」
+st[365] = { volumetype=1, path=1, file="udu_010_b_5301", type=0, category=1, prio=Def_SEP_Vorpal }; //「めんどくせー殺(や)っちまうか」
 
 // ヴォーパル・瀕死
-st[370] = { volumetype=1, path=1, file="udu_010_b_5302", type=0, category=4, }; //「イヒヒヒヒ（苦し紛れの笑い）」
+st[370] = { volumetype=1, path=1, file="udu_010_b_5302", type=0, category=1, prio=Def_SEP_Vorpal }; //「イヒヒヒヒ（苦し紛れの笑い）」
 
 // 必殺技
 

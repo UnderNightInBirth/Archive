@@ -217,6 +217,7 @@ local t =
 					BMvTbl.SetPP(def_PP_Nan_StdBStickType,6);
 				}
 			}
+			return 1;
 		}
 	}
 	
@@ -285,7 +286,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

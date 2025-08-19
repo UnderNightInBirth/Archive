@@ -91,66 +91,66 @@ st[57] = { volumetype=0, path=0, file="SE060_BoundMetal", type=1, category=-1, }
 
 
 // 登場
-st[100] = { volumetype=1, path=1, file="gor_010_b_2000", type=0, category=1, }; //「風が騒がしいな」
-st[101] = { volumetype=1, path=1, file="gor_010_b_2001", type=0, category=1, }; //「ようやくお出ましかい」
-st[102] = { volumetype=1, path=1, file="gor_010_b_2002", type=0, category=1, }; //「手短に終わらせようか」
-st[103] = { volumetype=1, path=1, file="gor_010_b_2003", type=0, category=1, }; //「退屈しないで済みそうだ」
+st[100] = { volumetype=1, path=1, file="gor_010_b_2000", type=0, category=1, userparam=128 }; //「風が騒がしいな」
+st[101] = { volumetype=1, path=1, file="gor_010_b_2001", type=0, category=1, userparam=112 }; //「ようやくお出ましかい」
+st[102] = { volumetype=1, path=1, file="gor_010_b_2002", type=0, category=1, userparam=126 }; //「手短に終わらせようか」
+st[103] = { volumetype=1, path=1, file="gor_010_b_2003", type=0, category=1, userparam=133 }; //「退屈しないで済みそうだ」
 
 // 登場 特殊
 // 対ケイアス
-st[108] = { volumetype=1, path=1, file="gor_010_b_2012", type=0, category=1, }; //「お前さんが出向いてくるたぁ珍しい」
+st[108] = { volumetype=1, path=1, file="gor_010_b_2012", type=0, category=1, userparam=179 }; //「お前さんが出向いてくるたぁ珍しい」
 
 // 対カーマイン
-st[111] = { volumetype=1, path=1, file="gor_010_b_2021", type=0, category=1, }; //「顔色悪いな。大丈夫か？」
+st[111] = { volumetype=1, path=1, file="gor_010_b_2021", type=0, category=1, userparam=157 }; //「顔色悪いな。大丈夫か？」
 
 // 対ヒルダ
-st[114] = { volumetype=1, path=1, file="gor_010_b_2027", type=0, category=1, }; //「踏み込みすぎると、大ケガするぜ？」
+st[114] = { volumetype=1, path=1, file="gor_010_b_2027", type=0, category=1, userparam=152 }; //「踏み込みすぎると、大ケガするぜ？」
 
 // 対エンキドゥ
-st[117] = { volumetype=1, path=1, file="gor_010_b_2030", type=0, category=1, }; //「お眼鏡に叶う者は見つかったかい？」
+st[117] = { volumetype=1, path=1, file="gor_010_b_2030", type=0, category=1, userparam=164 }; //「お眼鏡に叶う者は見つかったかい？」
 
 // 対ワーグナー
-st[120] = { volumetype=1, path=1, file="gor_wag_010_b_2016", type=0, category=1, }; //「ようやく出会えたな、紅騎士(あかきし)よ。」
-st[121] = { volumetype=1, path=1, file="gor_wag_010_b_2017", type=0, category=1, }; //「ま、少しばかりつきあえよ」」（ワーグナーいいだろう、全力で来い。）
+st[120] = { volumetype=1, path=1, file="gor_wag_010_b_2016", type=0, category=1, userparam=160 }; //「ようやく出会えたな、紅騎士(あかきし)よ。」
+st[121] = { volumetype=1, path=1, file="gor_wag_010_b_2017", type=0, category=1, userparam=135 }; //「ま、少しばかりつきあえよ」」（ワーグナーいいだろう、全力で来い。）
 
-st[123] = { volumetype=1, path=1, file="gor_wag_010_b_2018", type=0, category=1, }; //「何も変わらねぇことは解ってるんだがな…」（ワーグナー「御託はいいから来たらどうだ？」）
+st[123] = { volumetype=1, path=1, file="gor_wag_010_b_2018", type=0, category=1, userparam=189 }; //「何も変わらねぇことは解ってるんだがな…」（ワーグナー「御託はいいから来たらどうだ？」）
 
 // ラウンド勝利
-st[132] = { volumetype=1, path=1, file="gor_010_b_2100", type=0, category=1, }; //「アマちゃんだな」
-st[133] = { volumetype=1, path=1, file="gor_010_b_2101", type=0, category=1, }; //「運が悪いのはお互い様だ」
+st[132] = { volumetype=1, path=1, file="gor_010_b_2100", type=0, category=1, userparam=86 }; //「アマちゃんだな」
+st[133] = { volumetype=1, path=1, file="gor_010_b_2101", type=0, category=1, userparam=158 }; //「運が悪いのはお互い様だ」
 
 // ラウンド勝利 掛け合い
 
 // 対ケイアス
-st[138] = { volumetype=1, path=1, file="gor_010_b_2109", type=0, category=1, }; //「随分と勘が鈍ってるみたいだな」
-st[139] = { volumetype=1, path=1, file="gor_010_b_2110", type=0, category=1, }; //「おいおい、手加減で勝たせて貰っても嬉しくないぜぇ？」
+st[138] = { volumetype=1, path=1, file="gor_010_b_2109", type=0, category=1, userparam=172 }; //「随分と勘が鈍ってるみたいだな」
+st[139] = { volumetype=1, path=1, file="gor_010_b_2110", type=0, category=1, userparam=211 }; //「おいおい、手加減で勝たせて貰っても嬉しくないぜぇ？」
 
 // 対ワーグナー
-st[142] = { volumetype=1, path=1, file="gor_wag_010_b_2106", type=0, category=1, }; //「おい、立てよ……。」
-st[143] = { volumetype=1, path=1, file="gor_wag_010_b_2107", type=0, category=1, }; //「これが赤騎士か……？」
+st[142] = { volumetype=1, path=1, file="gor_wag_010_b_2106", type=0, category=1, userparam=93 }; //「おい、立てよ……。」
+st[143] = { volumetype=1, path=1, file="gor_wag_010_b_2107", type=0, category=1, userparam=108 }; //「これが赤騎士か……？」
 
 // 決着勝利 汎用
-st[147] = { volumetype=1, path=1, file="gor_010_b_2111", type=0, category=1, }; //「相手が悪かったな」
-st[148] = { volumetype=1, path=1, file="gor_010_b_2112", type=0, category=1, }; //「お前さんの腕も悪くはなかったんだがな」
+st[147] = { volumetype=1, path=1, file="gor_010_b_2111", type=0, category=1, userparam=118 }; //「相手が悪かったな」
+st[148] = { volumetype=1, path=1, file="gor_010_b_2112", type=0, category=1, userparam=183 }; //「お前さんの腕も悪くはなかったんだがな」
 
 // 決着勝利 辛勝
-st[152] = { volumetype=1, path=1, file="gor_010_b_2120", type=0, category=1, }; //「これだから『夜』ってぇのは、おっかない……」
+st[152] = { volumetype=1, path=1, file="gor_010_b_2120", type=0, category=1, userparam=178 }; //「これだから『夜』ってぇのは、おっかない……」
 
 // 決着勝利 楽勝
-st[155] = { volumetype=1, path=1, file="gor_010_b_2123", type=0, category=1, }; //「強すぎるってのも考えもんだな」
+st[155] = { volumetype=1, path=1, file="gor_010_b_2123", type=0, category=1, userparam=162 }; //「強すぎるってのも考えもんだな」
 
 // 決着勝利 掛け合い
 
 // 対ヒルダ
-st[160] = { volumetype=1, path=1, file="gor_010_b_2127", type=0, category=1, }; //「ったく。手間のかかるやつだよ、お前さんは」
+st[160] = { volumetype=1, path=1, file="gor_010_b_2127", type=0, category=1, userparam=200 }; //「ったく。手間のかかるやつだよ、お前さんは」
 
 // 対ケイアス
-st[162] = { volumetype=1, path=1, file="gor_010_b_2130", type=0, category=1, }; //「さすがは我が友、そして最大の強敵。見事だったぜ」
-st[163] = { volumetype=1, path=1, file="gor_010_b_2131", type=0, category=1, }; //「たのしいねぇ。これだからお前さんの相手は やめられないんだ」
+st[162] = { volumetype=1, path=1, file="gor_010_b_2130", type=0, category=1, userparam=275 }; //「さすがは我が友、そして最大の強敵。見事だったぜ」
+st[163] = { volumetype=1, path=1, file="gor_010_b_2131", type=0, category=1, userparam=270 }; //「たのしいねぇ。これだからお前さんの相手は やめられないんだ」
 
 // 対ワーグナー
-st[166] = { volumetype=1, path=1, file="gor_wag_010_b_2127", type=0, category=1, }; //「拍子抜けだ……」
-st[167] = { volumetype=1, path=1, file="gor_wag_010_b_2128", type=0, category=1, }; //「なにも……、変わらないがな」
+st[166] = { volumetype=1, path=1, file="gor_wag_010_b_2127", type=0, category=1, userparam=85 }; //「拍子抜けだ……」
+st[167] = { volumetype=1, path=1, file="gor_wag_010_b_2128", type=0, category=1, userparam=140 }; //「なにも……、変わらないがな」
 
 // タイムアップ判定負け
 st[171] = { volumetype=1, path=1, file="gor_010_b_2200", type=0, category=1, }; //「ちょこまかと…」

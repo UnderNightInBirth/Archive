@@ -119,13 +119,15 @@ local t =
 		CmdCheck = { HeightLimit = def_POS_AirDashLimitHeight, }
 	},
 	
-	Throw_A = {},
+	Throw_A = {
+		CmdCheck = { SkillType = "AirThrow" },
+	},
 	
 	Atk_StdBandC = {},
 	
 	BackDash_Cancel =
 	{
-		num = def_CN_Skill_AddCommand2, name = "Cmd_BackDash_Cancel", command = ["0404","4+A+B"],
+		num = def_CN_EltBackDashCancel, name = "Cmd_BackDash_Cancel", command = ["0404","4+A+B"],
 		flags = [ "lastdelay" ],
 		function CmdBeforeFunc()
 		{
@@ -151,6 +153,29 @@ local t =
 			SkillType="SpecialDouji",
 		}
 	},
+	
+	// 特定の技から22Cリロードにキャンセルできる処理
+	// 623EX・IWから出せる
+	// 特定のMV中に受け付けて、成功するとPPに値を保存
+	// PPに値がある場合、MVが自動で別の行動へFinalizeする
+	Skill_Add0202C = 
+	{
+		num = def_CN_Skill_AddCommand3, command = Def_CMD_22C, 
+		CmdCheck = 
+		{
+			SkillType = "AddCommand",
+			MvCheck = { Only = ["Mv_Skill_623EX_Hit","Mv_Skill_41236SP"] },
+			ParamFlagCheck = { Only = { [2]=1 } }, // このフラグ中のみチェックで少しシビアにしておく
+		},
+		function CmdAfterFunc()
+		{
+			BMvTbl.SetPP(def_PP_Elt_SkillAddReload,1);
+			// 絶対にMVを更新しない
+			return 0;
+		}
+		// MVは更新しません
+		// UpdateTable = { name = "Mv_Skill_0202C", },
+	}
 	
 	Atk_Std6C = {},	
 }
@@ -181,7 +206,7 @@ local ar =
 		CmdCheck = 
 		{
 			SkillType = "AddCommand",
-			FrameIDCheck = { Only = [50,500,1000] },
+			FrameIDCheck = { Only = [50,500,1000,1001] },
 		}
 		CmdTmplFlags=def_CMDFlags_AnnounceSmaetSteer, //スマートステアアナウンスの追加
 	},
@@ -193,7 +218,7 @@ local ar =
 		{
 			SkillType = "SpSpecial",
 			HitStatus="Damage",
-			Cost = { ComboGauge = 20000 },
+			Cost = { ComboGauge = "OverLiberate" },
 		}
 	},
 ]

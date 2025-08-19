@@ -52,56 +52,62 @@ st[46] = { volumetype=0, path=2, file="SE_RoaringI", type=0, category=2, }; //�
 
 
 // 登場
-st[100] = { volumetype=1, path=1, file="cha_010_b_2000", type=0, category=1, }; //「さて、片づけを始めようか」
-st[101] = { volumetype=1, path=1, file="cha_010_b_2001", type=0, category=1, }; //「僕は頭脳労働担当なんだけどね…」
-st[102] = { volumetype=1, path=1, file="cha_010_b_2002", type=0, category=1, }; //「キミはどこまで足掻いてくれるのかな」
-st[103] = { volumetype=1, path=1, file="cha_010_b_2003", type=0, category=1, }; //「お手柔らかに頼むよ」
-st[104] = { volumetype=1, path=1, file="cha_010_b_2004", type=0, category=1, }; //「メガネを壊すのは止めてくれよ？」
+st[100] = { volumetype=1, path=1, file="cha_010_b_2000", type=0, category=1, userparam=150 }; //「さて、片づけを始めようか」
+st[101] = { volumetype=1, path=1, file="cha_010_b_2001", type=0, category=1, userparam=161 }; //「僕は頭脳労働担当なんだけどね…」
+st[102] = { volumetype=1, path=1, file="cha_010_b_2002", type=0, category=1, userparam=156 }; //「キミはどこまで足掻いてくれるのかな」
+st[103] = { volumetype=1, path=1, file="cha_010_b_2003", type=0, category=1, userparam=97 }; //「お手柔らかに頼むよ」
+st[104] = { volumetype=1, path=1, file="cha_010_b_2004", type=0, category=1, userparam=134 }; //「メガネを壊すのは止めてくれよ？」
 
 // 登場 特殊
 // 対ゴルドー
-st[108] = { volumetype=1, path=1, file="cha_010_b_2012", type=0, category=1, }; //「キミを思っての事、それ以外にあるかい？」
+st[108] = { volumetype=1, path=1, file="cha_010_b_2012", type=0, category=1, userparam=205 }; //「キミを思っての事、それ以外にあるかい？」
 
 // 対ヒルダ
-st[110] = { volumetype=1, path=1, file="cha_010_b_2016", type=0, category=1, }; //「ヒルダ…、またキミは（こんなことをして）…（呆れ）」
-st[111] = { volumetype=1, path=1, file="cha_010_b_2018", type=0, category=1, }; //「ま、キミとぶつかるのも想定内ではある」
+st[110] = { volumetype=1, path=1, file="cha_010_b_2016", type=0, category=1, userparam=145 }; //「ヒルダ…、またキミは（こんなことをして）…（呆れ）」
+st[111] = { volumetype=1, path=1, file="cha_010_b_2018", type=0, category=1, userparam=189 }; //「ま、キミとぶつかるのも想定内ではある」
 
 // 対セト
-st[113] = { volumetype=1, path=1, file="cha_010_b_2021", type=0, category=1, }; //「どうだい？　再び手を組む最後のチャンス」
+st[113] = { volumetype=1, path=1, file="cha_010_b_2021", type=0, category=1, userparam=210 }; //「どうだい？　再び手を組む最後のチャンス」
 
 // 対クオン
-st[115] = { volumetype=1, path=1, file="cha_010_b_2027", type=0, category=1, }; //「僕が勝ったら…、解ってるだろ？」
+st[115] = { volumetype=1, path=1, file="cha_010_b_2027", type=0, category=1, userparam=170 }; //「僕が勝ったら…、解ってるだろ？」
+
+// 対ウヅキ
+st[117] = { volumetype=1, path=1, file="cha_010_b_2030", type=0, category=1, userparam=210 }; //「同感だ、僕もキミのことは嫌いじゃない」
 
 // ラウンド勝利
-st[125] = { volumetype=1, path=1, file="cha_010_b_2100_b", type=0, category=1, }; //「予想よりは、やるみたいだね」
-st[126] = { volumetype=1, path=1, file="cha_010_b_2101", type=0, category=1, }; //「インテリジェンスな勝ち方だ」
+st[125] = { volumetype=1, path=1, file="cha_010_b_2100_b", type=0, category=1, userparam=119 }; //「予想よりは、やるみたいだね」
+st[126] = { volumetype=1, path=1, file="cha_010_b_2101", type=0, category=1, userparam=118 }; //「インテリジェンスな勝ち方だ」
 
 // ラウンド勝利 掛け合い
 // 対ゴルドー
-st[127] = { volumetype=1, path=1, file="cha_010_b_2106", type=0, category=1, }; //「…ゴルドー、今の手を抜いたろ？」
+st[127] = { volumetype=1, path=1, file="cha_010_b_2106", type=0, category=1, userparam=139 }; //「…ゴルドー、今の手を抜いたろ？」
 
 // 対ヒルダ
-st[128] = { volumetype=1, path=1, file="cha_010_b_2109", type=0, category=1, }; //「相変わらずだね、キミも」
+st[128] = { volumetype=1, path=1, file="cha_010_b_2109", type=0, category=1, userparam=113 }; //「相変わらずだね、キミも」
  
 // 決着勝利 汎用
-st[130] = { volumetype=1, path=1, file="cha_010_b_2111", type=0, category=1, }; //「すまないね、こいつ行儀が悪くて」
-st[131] = { volumetype=1, path=1, file="cha_010_b_2112", type=0, category=1, }; //「良い勝負だったと思うよ」
+st[130] = { volumetype=1, path=1, file="cha_010_b_2111", type=0, category=1, userparam=161 }; //「すまないね、こいつ行儀が悪くて」
+st[131] = { volumetype=1, path=1, file="cha_010_b_2112", type=0, category=1, userparam=106 }; //「良い勝負だったと思うよ」
 
 // 決着勝利 辛勝
-st[132] = { volumetype=1, path=1, file="cha_010_b_2120", type=0, category=1, }; //「もっとスマートに勝ちたかったんだが」
+st[132] = { volumetype=1, path=1, file="cha_010_b_2120", type=0, category=1, userparam=158 }; //「もっとスマートに勝ちたかったんだが」
 
 // 決着勝利 楽勝
-st[133] = { volumetype=1, path=1, file="cha_010_b_2123", type=0, category=1, }; //「君の戦い方にはインテリジェンスを感じないな」
+st[133] = { volumetype=1, path=1, file="cha_010_b_2123", type=0, category=1, userparam=204 }; //「君の戦い方にはインテリジェンスを感じないな」
 
 // 決着勝利 掛け合い
 // 対ゴルドー
-st[134] = { volumetype=1, path=1, file="cha_010_b_2127", type=0, category=1, }; //「キミとの闘いは楽しいけど、命がいくつあっても足りないね…」
+st[134] = { volumetype=1, path=1, file="cha_010_b_2127", type=0, category=1, userparam=259 }; //「キミとの闘いは楽しいけど、命がいくつあっても足りないね…」
 
 // 対ヒルダ
-st[135] = { volumetype=1, path=1, file="cha_010_b_2129", type=0, category=1, }; //「め、滅茶苦茶すぎる…死ぬかと思ったよ」
+st[135] = { volumetype=1, path=1, file="cha_010_b_2129", type=0, category=1, userparam=226 }; //「め、滅茶苦茶すぎる…死ぬかと思ったよ」
 
 // 対エンキドゥ
-st[136] = { volumetype=1, path=1, file="cha_010_b_2131", type=0, category=1, }; //「腕試しで命を奪われかけるなんて、たまったものじゃないよ…」
+st[136] = { volumetype=1, path=1, file="cha_010_b_2131", type=0, category=1, userparam=242 }; //「腕試しで命を奪われかけるなんて、たまったものじゃないよ…」
+
+//対ウヅキ
+st[137] = { volumetype=1, path=1, file="cha_010_b_2133", type=0, category=1, userparam=267 }; //うん やっぱり面白いねキミは 僕の目に狂いはなかった
 
 // タイムアップ判定負け
 st[138] = { volumetype=1, path=1, file="cha_010_b_2200", type=0, category=1, }; //「ふっ…少し及ばず、か」

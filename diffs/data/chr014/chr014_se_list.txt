@@ -34,38 +34,33 @@ st[56] = { volumetype=0, path=2, file="SE_VanishDiscBall", type=1, category=-1, 
 
 
 // 登場
-st[100] = { volumetype=1, path=1, file="aka_010_b_2000", type=0, category=1, }; //「我、死すとも死せず！」
-st[101] = { volumetype=1, path=1, file="aka_010_b_2001", type=0, category=1, }; //「願わくば我に七難八苦を与えたまえ！」
-st[102] = { volumetype=1, path=1, file="aka_010_b_2002", type=0, category=1, }; //「憂き事の、尚この上に積もれかし（限りある身の、力試さん！）」
+st[100] = { volumetype=1, path=1, file="aka_010_b_2000", type=0, category=1, userparam=155 }; //「我、死すとも死せず！」
+st[101] = { volumetype=1, path=1, file="aka_010_b_2001", type=0, category=1, userparam=209 }; //「願わくば我に七難八苦を与えたまえ！」
+st[102] = { volumetype=1, path=1, file="aka_010_b_2002", type=0, category=1, userparam=211 }; //「憂き事の、尚この上に積もれかし（限りある身の、力試さん！）」
 
 // 登場 特殊
 // 対エルトナム
-st[106] = { volumetype=1, path=1, file="aka_010_b_2012", type=0, category=1, }; //「相変わらず妙なやつだ」
-
-// 後が無くなったラウンドの開幕
-// st[109] = { volumetype=1, path=1, file="aka_010_b_2070", type=0, category=1, }; //「まだやれるぞ！」
-// st[110] = { volumetype=1, path=1, file="aka_010_b_2071", type=0, category=1, }; //「任務続行！」
-// st[111] = { volumetype=1, path=1, file="aka_010_b_2072", type=0, category=1, }; //「退かぬ！」
+st[106] = { volumetype=1, path=1, file="aka_010_b_2012", type=0, category=1, userparam=122 }; //「相変わらず妙なやつだ」
 
 // ラウンド勝利
-st[114] = { volumetype=1, path=1, file="aka_010_b_2100", type=0, category=1, }; //「セイッ！ （腰を落として拳を構える決めポーズ）」
-st[115] = { volumetype=1, path=1, file="aka_010_b_2101", type=0, category=1, }; //「不甲斐ない、立て！」
-st[116] = { volumetype=1, path=1, file="aka_010_b_2102", type=0, category=1, }; //「もう終わりか！」
+st[114] = { volumetype=1, path=1, file="aka_010_b_2100", type=0, category=1, userparam=49 }; //「セイッ！ （腰を落として拳を構える決めポーズ）」
+st[115] = { volumetype=1, path=1, file="aka_010_b_2101", type=0, category=1, userparam=112 }; //「不甲斐ない、立て！」
+st[116] = { volumetype=1, path=1, file="aka_010_b_2102", type=0, category=1, userparam=78 }; //「もう終わりか！」
 
 // 決着勝利 汎用
-st[119] = { volumetype=1, path=1, file="aka_010_b_2111", type=0, category=1, }; //「我は雷神、絶対不敗なり！」
-st[120] = { volumetype=1, path=1, file="aka_010_b_2112", type=0, category=1, }; //「我が身は死して護国の鬼となりぬ！」
+st[119] = { volumetype=1, path=1, file="aka_010_b_2111", type=0, category=1, userparam=212 }; //「我は雷神、絶対不敗なり！」
+st[120] = { volumetype=1, path=1, file="aka_010_b_2112", type=0, category=1, userparam=220 }; //「我が身は死して護国の鬼となりぬ！」
 
 // 決着勝利 辛勝
-st[123] = { volumetype=1, path=1, file="aka_010_b_2120", type=0, category=1, }; //「見事。獅子奮迅の戦いであった…」
+st[123] = { volumetype=1, path=1, file="aka_010_b_2120", type=0, category=1, userparam=230 }; //「見事。獅子奮迅の戦いであった…」
 
 // 決着勝利 楽勝
-st[126] = { volumetype=1, path=1, file="aka_010_b_2123", type=0, category=1, }; //「練成が足りん！」
+st[126] = { volumetype=1, path=1, file="aka_010_b_2123", type=0, category=1, userparam=79 }; //「練成が足りん！」
 
 // 決着勝利 掛け合い
 // 対エルトナム
-st[130] = { volumetype=1, path=1, file="aka_010_b_2127", type=0, category=1, }; //「さらばだ後輩とやら。喧嘩もほどほどにな」
-st[131] = { volumetype=1, path=1, file="aka_010_b_2128", type=0, category=1, }; //「奇妙な縁だ……生きていればまた会うのかもしれん」
+st[130] = { volumetype=1, path=1, file="aka_010_b_2127", type=0, category=1, userparam=243 }; //「さらばだ後輩とやら。喧嘩もほどほどにな」
+st[131] = { volumetype=1, path=1, file="aka_010_b_2128", type=0, category=1, userparam=251 }; //「奇妙な縁だ……生きていればまた会うのかもしれん」
 
 // タイムアップ判定負け
 st[134] = { volumetype=1, path=1, file="aka_010_b_2200", type=0, category=1, }; //「不覚…！」
