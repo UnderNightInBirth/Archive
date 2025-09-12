@@ -11,6 +11,7 @@ const def_VL_NagenukerarePat	= 17;
 //ベクトルタイム
 const def_VL_VT_Hit_Std_LV1		= 13; // Ver.1.03:13
 const def_VL_VT_Hit_Std_LV2		= 16; // Ver.1.03:16
+const def_VL_VT_Hit_Std_LV2p	= 17;
 const def_VL_VT_Hit_Std_LV3		= 18; // Ver.1.03:18
 const def_VL_VT_Hit_Std_LV4		= 23; // Ver.1.03:23
 const def_VL_VT_Hit_Std_LV5		= 26; // 未使用
@@ -25,6 +26,7 @@ const def_VL_VT_Hit_Std_RLV5		= 24;
 
 const def_VL_VT_Hit_Cro_LV1		= 14;
 const def_VL_VT_Hit_Cro_LV2		= 17;
+const def_VL_VT_Hit_Cro_LV2p	= 18;
 const def_VL_VT_Hit_Cro_LV3		= 19;
 const def_VL_VT_Hit_Cro_LV4		= 24;
 const def_VL_VT_Hit_Cro_LV5		= 27;
@@ -72,15 +74,18 @@ const def_VL_VT_Guard_Std_LV1	= 11; //ヒット13
 const def_VL_VT_Guard_Std_LV2	= 15; //ヒット16
 const def_VL_VT_Guard_Std_LV3	= 17; //ヒット18
 const def_VL_VT_Guard_Std_LV4	= 22; //ヒット23
+const def_VL_VT_Guard_Std_LV4p	= 23;
 const def_VL_VT_Guard_Std_LV5	= 25; //ヒット26
 const def_VL_VT_Guard_Std_LV3p	= 19; //ヒット20
 const def_VL_VT_Guard_Std_LV1p	= 12; //ヒット14
 const def_VL_VT_Guard_Std_LV2m	= 13;
+const def_VL_VT_Guard_Std_LV5p	= 27; //ヒット28
 
 const def_VL_VT_Guard_Air_LV1	= 9;
 const def_VL_VT_Guard_Air_LV2	= 13;
 const def_VL_VT_Guard_Air_LV3	= 17;
 const def_VL_VT_Guard_Air_LV4	= 20;
+const def_VL_VT_Guard_Air_LV4p	= 21;
 const def_VL_VT_Guard_Air_LV5	= 22;
 const def_VL_VT_Guard_Air_LV3p	= 19;
 const def_VL_VT_Guard_Air_LV1p	= 10;
@@ -856,6 +861,8 @@ VectorList <-
 		[  31,  1200, -800,    0, 250 ], // ジャンプ攻撃浮き中
 		[  32,  1500, -900,    0, 250 ], // ジャンプ攻撃浮き強
 
+		[  33,  1500, -1500,    0, 200 ], // イズミ用
+		[  34,   900, -1800,    0, 200 ], // イズミ用　近め低めきりもみ転倒
 		//[  30,  700, -2400,    0, 250 ], // ジャンプ攻撃浮き弱
 		//[  31,  900, -2600,    0, 250 ], // ジャンプ攻撃浮き中
 		//[  32,  1100, -2700,    0, 250 ], // ジャンプ攻撃浮き強
@@ -878,7 +885,7 @@ VectorList <-
 		
 		// 44
 		// 045
-		
+		[  45,   800, -3200,    0, 300 ], // 低め近め
 		[  46,  2400,  -500,  -90,  80 ], // 横浮きとかの地面で滑る
 
 		[  47,    32, -7200,    0, 300 ], // 垂直バウンド上吹き飛び（超浮き）		
@@ -927,9 +934,11 @@ VectorList <-
 		
 		//[  30,  700, -2400,    0, 250 ], // ジャンプ攻撃浮き弱
 		[  94,  900, -2300,    0, 250 ], // エリアル浮き
-		//[  32,  1100, -2700,    0, 250 ], // ジャンプ攻撃浮き強		
+		//[  32,  1100, -2700,    0, 250 ], // ジャンプ攻撃浮き強
+		[  95,  4500, -1800, -100, 300 ], // 浮きの低い早い横吹き飛び中
 		[  96,  5500, -2000, -100, 300 ], // 浮きの低い早い横吹き飛び
 		
+		[  97,     0, -2800,    0, 250 ], // 壁完全貼り付き
 		[  98,   300, -2800,    0, 250 ], // 壁貼り付き
 		[  99,  1000, -2800,    0, 250 ], // 小壁跳ね返り
 		[ 100,  2000, -2800,    0, 250 ], // 壁跳ね返り
@@ -4049,7 +4058,7 @@ vectmpl.add({
 			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
 			vector_num = 85, // 使用ベクトル番号
 			hit_pattern = 308,
-			vector_time = 27, // 発生時間
+			vector_time = 27, // 発生時間　※LV4ではないバグがあるまま
 			vector_returntime = 25, // 壁反射ベクトル
 			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
 			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
@@ -4334,6 +4343,53 @@ vectmpl.add({
 		},	
 	]
 })
+
+/////////////////////
+vectmpl.add({
+	number = 97, // 定義番号
+
+	name = "中横吹きバウンド",
+	prio_vector = 100, // ベクトル優先度
+	ko_vector = 0, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+	power=def_VL_Pow_LV3|def_VL_Pow_BoundCPHosei, //強やられレベル
+
+	tblcount = 3, // テーブル数
+	tbl = 
+	[
+		{
+			ukemitime = 31, // 基本受け身不可時間
+			vector_num = 96, // 使用ベクトル番号
+			hit_pattern = 320,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ground_ukemi_num = 3, // 床受け身番号
+		},
+		{
+			vector_num = 46, // 使用ベクトル番号
+			hit_pattern = 353,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -1010, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = 2, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名
+			flag_noboundmutekiplus = true, // バウンドによる無敵カウントの加算を行わない
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 354,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},	
+	]
+})
+
 /////////////////////
 vectmpl.add({
 	number = 98, // 定義番号
@@ -4418,7 +4474,7 @@ vectmpl.add({
 vectmpl.add({
 	number = 100, // 定義番号
 
-	name = "しりもちCH尻特",
+	name = "しりもちCH尻特",//31
 	ukemitime = 0, // 基本受け身不可時間
 	prio_vector = 30, // ベクトル優先度
 	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
@@ -7167,7 +7223,7 @@ vectmpl.add({
 vectmpl.add({
 	number = 197, // 定義番号
 
-	name = "しりもち弱",
+	name = "しりもち弱",//20
 	ukemitime = 0, // 基本受け身不可時間
 	prio_vector = 30, // ベクトル優先度
 	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
@@ -7193,7 +7249,7 @@ vectmpl.add({
 vectmpl.add({
 	number = 198, // 定義番号
 
-	name = "しりもち中",
+	name = "しりもち中",//25
 	ukemitime = 0, // 基本受け身不可時間
 	prio_vector = 30, // ベクトル優先度
 	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
@@ -7300,7 +7356,7 @@ vectmpl.add({
 vectmpl.add({
 	number = 201, // 定義番号
 
-	name = "しりもち",
+	name = "しりもち",//31
 	ukemitime = 0, // 基本受け身不可時間
 	prio_vector = 30, // ベクトル優先度
 	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
@@ -7473,7 +7529,7 @@ vectmpl.add({
 vectmpl.add({
 	number = 205, // 定義番号
 
-	name = "しりもち特",
+	name = "しりもち特",//36
 	ukemitime = 0, // 基本受け身不可時間
 	prio_vector = 30, // ベクトル優先度
 	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
@@ -9354,6 +9410,7 @@ vectmpl.add({
 })
 
 // キャラ固有の吹き飛びなど
+
 /////////////////////
 vectmpl.add({
 	number = 260, // 定義番号
@@ -10241,7 +10298,7 @@ vectmpl.add({
 vectmpl.add({
 	number = 286, // 定義番号
 
-	name = "しりもち中P短",
+	name = "しりもち中P短",//27
 	ukemitime = 0, // 基本受け身不可時間
 	prio_vector = 30, // ベクトル優先度
 	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
@@ -10375,6 +10432,786 @@ vectmpl.add({
 			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名
 			flag_down = true,
 		},			
+	]
+})
+
+/////////////////////
+vectmpl.add({
+	number = 290, // 定義番号
+
+	name = "イズミIW用腹吹き飛び", // 壁バウンドを消費しない
+	prio_vector = 110, // ベクトル優先度
+	ko_vector = 0, // KO時のベクトル修正 0 だと修正しない
+	wallbound_vector = 291, //壁貼り付き
+
+	Finalize_Hit = "Mv_Modori_Down",
+
+	tblcount = 2, // テーブル数
+	tbl = 
+	[
+		{
+			ukemitime = 31, // 基本受け身不可時間
+			vector_num = 9, // 使用ベクトル番号
+			hit_pattern = 331,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ground_ukemi_num = 3, // 床受け身番号
+			
+			flags = [ "boundwall", "erasekasanari" ],
+			//flag_boundwall = true, // 
+			//flag_erasekasanari = true, // 重なり消去
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 350,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},
+	]
+})
+
+/////////////////////
+vectmpl.add({
+	number = 291, // 定義番号
+
+	name = "イズミIW用壁バウンド", // 壁バウンドを消費しない
+	prio_vector = 999, // ベクトル優先度
+	ko_vector = 0, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+	power=def_VL_Pow_WallBound, //壁バウンド
+
+	tblcount = 2, // テーブル数
+	tbl = 
+	[
+		{
+			vector_num = 97, // 使用ベクトル番号　壁張り付き
+			hit_pattern = "YKabe",
+			vector_time = 1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = 1, // 床受け身番号
+			flag_noboundmutekiplus = true, // 激突時の無敵カウントを加算しない
+			
+			out_effect_name = "Eff_WallBound",
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 354,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},				
+	]
+})
+
+/////////////////////
+vectmpl.add({
+	number = 292, // 定義番号
+
+	name = "イズミ236浮き",
+	prio_vector = 90, // ベクトル優先度
+	ko_vector = def_VL_KoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+
+	power=def_VL_Pow_LV3, //強やられレベル
+	
+	tblcount = 2, // テーブル数
+	tbl = 
+	[
+		{
+			ukemitime = 26, // 基本受け身不可時間
+			vector_num = 33, // 使用ベクトル番号
+			hit_pattern = 320,
+			vector_time = -1, // 発生時間
+			vector_returntime = 8, // 壁反射ベクトル
+			ground_ukemi_num = 1, // 床受け身番号
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 350,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},
+	]
+})
+
+vectmpl.add({
+	number = 293, // 定義番号
+	name = "イズミ泡浮き強",
+	prio_vector = 90, // ベクトル優先度
+	reflexhit_vector = 32, // 再起ヒットベクトル修正（-1 or ツールでチェック無し だと修正しない）
+
+	ko_vector = def_VL_KoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+	power=def_VL_Pow_BoundCPHosei,
+	
+	tblcount = 3, // テーブル数
+	tbl = 
+	[
+		{
+			vector_time = 60, // 発生時間・終了すると次へ
+			
+			ukemitime = 86, // 基本受け身不可時間
+			vector_num = 235, // 使用ベクトル番号
+			hit_pattern = 320,
+			vector_returntime = 8, // 壁反射ベクトル
+			ground_ukemi_num = 2, // 床受け身番号
+			// flag_erasekasanari = true, // 重なり消去
+		},
+		{
+			vector_time = -1, // 発生時間・最後まで
+
+			ukemitime = -2, // 基本受け身不可時間
+			vector_num = 7, // 使用ベクトル番号
+			hit_pattern = 320,
+			vector_returntime = 8, // 壁反射ベクトル
+			ground_ukemi_num = 2, // 床受け身番号
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 350,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},		
+	]
+})
+
+
+
+vectmpl.add({
+	number = 294, // 定義番号
+	name = "イズミ泡浮きEX",
+	prio_vector = 90, // ベクトル優先度
+	reflexhit_vector = 32, // 再起ヒットベクトル修正（-1 or ツールでチェック無し だと修正しない）
+
+	hitflag_set = 1, // 「当たった時」にセットするフラグ（0-31）
+	hitflag_check = 1, // 「当たった時」にチェックするフラグ（0-31）
+	hitflag_vector = 32, // hitflag_check が有効だった場合に移行するベクトルテーブル番号
+	
+	ko_vector = def_VL_KoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+	power=def_VL_Pow_BoundCPHosei,
+	
+	tblcount = 3, // テーブル数
+	tbl = 
+	[
+		{
+			vector_time = 120, // 発生時間・終了すると次へ
+			
+			ukemitime = 146, // 基本受け身不可時間
+			vector_num = 235, // 使用ベクトル番号
+			hit_pattern = 320,
+			vector_returntime = 8, // 壁反射ベクトル
+			ground_ukemi_num = 2, // 床受け身番号
+			// flag_erasekasanari = true, // 重なり消去
+		},
+		{
+			vector_time = -1, // 発生時間・最後まで
+
+			ukemitime = -2, // 基本受け身不可時間
+			vector_num = 7, // 使用ベクトル番号
+			hit_pattern = 320,
+			vector_returntime = 8, // 壁反射ベクトル
+			ground_ukemi_num = 2, // 床受け身番号
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 350,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},		
+	]
+})
+
+/////////////////////
+vectmpl.add({
+	number = 295, // 定義番号
+
+	name = "きりもみ近低転倒",
+	prio_vector = 100, // ベクトル優先度
+	ko_vector = 0, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+
+	tblcount = 2, // テーブル数
+	tbl = 
+	[
+		{
+			ukemitime = 26, // 基本受け身不可時間
+			vector_num = 34, // 使用ベクトル番号
+			hit_pattern = 333,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ground_ukemi_num = 1, // 床受け身番号
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 350,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},
+	]
+})
+
+/////////////////////
+vectmpl.add({
+	number = 296, // 定義番号
+
+	name = "追撃ダウン近め低め",
+	prio_vector = 100, // ベクトル優先度
+	ko_vector = 0, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+
+	tblcount = 2, // テーブル数
+	tbl = 
+	[
+		{
+			ukemitime = 25, // 基本受け身不可時間
+			vector_num = 45, // 使用ベクトル番号
+			hit_pattern = 320,
+			vector_time = -1, // 発生時間
+			vector_returntime = 8, // 壁反射ベクトル
+			ground_ukemi_num = 2, // 床受け身番号
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 350,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},
+	]
+})
+
+//ゴルドEXモータル引き寄せ
+/////////////////////
+vectmpl.add({
+	number = 297, // 定義番号
+
+	name = "立ガード超P",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Guard = "Mv_Modori_GuardS",
+	power=def_VL_Pow_LV3, //強やられレベル
+	
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 68, // 使用ベクトル番号
+			hit_pattern = def_VL_GuardPat_Ground, //
+			guard_pattern = def_VL_GuardPat_Ground,
+			vector_time = def_VL_VT_Guard_Std_LV5p, // 発生時間
+			vector_returntime = 27, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル
+		},
+	]
+})
+/////////////////////
+vectmpl.add({
+	number = 298, // 定義番号
+
+	name = "屈ガード超P",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Guard = "Mv_Modori_GuardC",
+	power=def_VL_Pow_LV3, //強やられレベル
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 68, // 使用ベクトル番号
+			hit_pattern = def_VL_GuardPat_Crouch, //
+			guard_pattern = def_VL_GuardPat_Crouch,
+			vector_time = def_VL_VT_Guard_Std_LV5p, // 発生時間
+			vector_returntime = 27, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル
+		},
+	]
+})
+
+// 特大のけぞり屈と同じのけぞり
+/////////////////////
+vectmpl.add({
+	number = 299, // 定義番号
+
+	name = "特大のけぞり頭真",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_YarareS",			
+	power=def_VL_Pow_LV3, //強やられレベル
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 85, // 使用ベクトル番号
+			hit_pattern = 307,
+			vector_time = 27, // 発生時間
+			vector_returntime = 25, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Ground_B", // 発生エフェクト名
+			flag_isgroundvector = true, // 地上のけぞりベクトル			
+		},
+	]
+})
+
+/////////////////////
+vectmpl.add({
+	number = 300, // 定義番号
+
+	name = "特大のけぞり腹真",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_YarareS",			
+	power=def_VL_Pow_LV3, //強やられレベル
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 85, // 使用ベクトル番号
+			hit_pattern = 307,
+			vector_time = 27, // 発生時間
+			vector_returntime = 25, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Ground_B", // 発生エフェクト名					
+			flag_isgroundvector = true, // 地上のけぞりベクトル			
+		},
+	]
+})
+
+//オリエ3C用
+/////////////////////
+vectmpl.add({
+	number = 301, // 定義番号
+
+	name = "しりもち中CH尻",//23
+	ukemitime = 0, // 基本受け身不可時間
+	prio_vector = 30, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+	Finalize_Hit = "Mv_Modori_YarareC",
+	counterhit_vector = 201, //しりもち
+	
+	reflexhit_vector = 25, // 後ろ転倒
+	
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 2, // 使用ベクトル番号
+			hit_pattern = 312,
+			vector_time = 23, // 発生時間
+			vector_returntime = 23, // 壁反射ベクトル			
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル
+		},
+	]
+})
+
+//メルカヴァJA
+/////////////////////
+vectmpl.add({
+	number = 302, // 定義番号
+
+	name = "空攻撃頭やられ中P",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+	reflexhit_vector = 71, //再帰
+
+	Finalize_Hit = "Mv_Modori_YarareS",			
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）
+			vector_num = 1, // 使用ベクトル番号
+			hit_pattern = 303,			
+			vector_time = def_VL_VT_Hit_Std_LV2p, // 発生時間
+			vector_returntime = def_VL_VT_Hit_Std_LV2p, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル			
+			out_effect_name = "Eff_Hit_Ground_A", // 発生エフェクト名
+		},
+	]
+})
+/////////////////////
+vectmpl.add({
+	number = 303, // 定義番号
+
+	name = "空攻撃腹やられ中P",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+	reflexhit_vector = 74, //再帰
+
+	Finalize_Hit = "Mv_Modori_YarareS",			
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）
+			vector_num = 1, // 使用ベクトル番号
+			hit_pattern = 304,
+			vector_time = def_VL_VT_Hit_Std_LV2p, // 発生時間
+			vector_returntime = def_VL_VT_Hit_Std_LV2p, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル			
+			out_effect_name = "Eff_Hit_Ground_A", // 発生エフェクト名
+		},
+	]
+})
+/////////////////////
+vectmpl.add({
+	number = 304, // 定義番号
+
+	name = "空攻撃屈やられ中P",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+	reflexhit_vector = 77, //再帰
+
+	Finalize_Hit = "Mv_Modori_YarareC",			
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 1, // 使用ベクトル番号
+			hit_pattern = 305,
+			vector_time = def_VL_VT_Hit_Cro_LV2p, // 発生時間
+			vector_returntime = def_VL_VT_Hit_Cro_LV2p, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル			
+			out_effect_name = "Eff_Hit_Ground_A", // 発生エフェクト名
+		},
+	]
+})
+
+//トナム236EX
+/////////////////////
+vectmpl.add({
+	number = 305, // 定義番号
+
+	name = "超きりもみ大壁バウンドNoBound",
+	prio_vector = 100, // ベクトル優先度
+	ko_vector = 0, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+	wallbound_vector=306, //大壁バウンド
+
+	tblcount = 2, // テーブル数
+	tbl = 
+	[
+		{
+			ukemitime = 31, // 基本受け身不可時間
+			vector_num = 88, // 使用ベクトル番号
+			hit_pattern = 333,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ground_ukemi_num = 1, // 床受け身番号
+			
+			flags = [ "boundwall", "erasekasanari" ],
+			//flag_boundwall = true, // 
+			//flag_erasekasanari = true, // 重なり消去
+		},		
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 350,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},
+	]
+})
+
+/////////////////////
+vectmpl.add({
+	number = 306, // 定義番号
+
+	name = "大壁バウンドNoBound", // 
+	prio_vector = 999, // ベクトル優先度
+	ko_vector = 0, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Hit = "Mv_Modori_Down",
+	power=def_VL_Pow_WallBound, //壁バウンド
+
+	tblcount = 2, // テーブル数
+	tbl = 
+	[
+		{
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+
+			vector_num = 101, // 使用ベクトル番号
+			hit_pattern = "YKabe",
+			vector_time = 1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ground_ukemi_num = 1, // 床受け身番号
+			
+			out_effect_name = "Eff_WallBound",
+			flag_noboundmutekiplus = true, // バウンドによる無敵カウントの加算を行わない
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 354,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名					
+			flag_down = true,
+		},				
+	]
+})
+
+//エンキ236[B]
+/////////////////////
+vectmpl.add({
+	number = 307, // 定義番号
+
+	name = "中腹吹き飛びバウンド",
+	prio_vector = 100, // ベクトル優先度
+	ko_vector = 0, // KO時のベクトル修正 0 だと修正しない
+	wallbound_vector = 250, //小壁
+
+	Finalize_Hit = "Mv_Modori_Down",
+
+	tblcount = 3, // テーブル数
+	tbl = 
+	[
+		{
+			ukemitime = 31, // 基本受け身不可時間
+			vector_num = 21, // 使用ベクトル番号
+			hit_pattern = 320,
+			vector_time = -1, // 発生時間
+			vector_returntime = 8, // 壁反射ベクトル
+			ground_ukemi_num = 3, // 床受け身番号
+
+			flag_boundwall = true, // 
+			flag_erasekasanari = true, // 重なり消去
+		},
+		{
+			vector_num = 46, // 使用ベクトル番号
+			hit_pattern = 355,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -1010, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = 2, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_SlideDown", // 発生エフェクト名
+			flag_noboundmutekiplus = true, // バウンドによる無敵カウントの加算を行わない
+		},
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 20, // 使用ベクトル番号
+			hit_pattern = 356,
+			vector_time = -1, // 発生時間
+			vector_returntime = 0, // 壁反射ベクトル
+			ukemitime = -2, // 受身不能時間 -1:空中受け身不可 -2:引継ぎ -1000以下:((n+1000)*-1)加算
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			out_effect_name = "Eff_Hit_Down", // 発生エフェクト名
+			flag_down = true,
+		},
+	]
+})
+
+//ゴルドーBモタ派生用
+/////////////////////
+vectmpl.add({
+	number = 308, // 定義番号
+
+	name = "立ガード中特長",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Guard = "Mv_Modori_GuardS",
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 205, // 使用ベクトル番号
+			hit_pattern = def_VL_GuardPat_Ground, //
+			guard_pattern = def_VL_GuardPat_Ground,
+			vector_time = def_VL_VT_Guard_Std_LV2, // 発生時間
+			vector_returntime = 16, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル
+		},
+	]
+})
+
+/////////////////////
+vectmpl.add({
+	number = 309, // 定義番号
+
+	name = "屈ガード中特長",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Guard = "Mv_Modori_GuardC",
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 205, // 使用ベクトル番号
+			hit_pattern = def_VL_GuardPat_Crouch, //
+			guard_pattern = def_VL_GuardPat_Crouch,
+			vector_time = def_VL_VT_Guard_Std_LV2, // 発生時間
+			vector_returntime = 17, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル
+		},
+	]
+})
+
+//イズミ6BC_C
+/////////////////////
+vectmpl.add({
+	number = 310, // 定義番号
+
+	name = "立ガード特Ｐ",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Guard = "Mv_Modori_GuardS",
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 66, // 使用ベクトル番号
+			hit_pattern = def_VL_GuardPat_Ground, //
+			guard_pattern = def_VL_GuardPat_Ground,
+			vector_time = def_VL_VT_Guard_Std_LV4p, // 発生時間
+			vector_returntime = 24, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル
+		},
+	]
+})
+/////////////////////
+vectmpl.add({
+	number = 311, // 定義番号
+
+	name = "屈ガード特Ｐ",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_GroundKoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Guard = "Mv_Modori_GuardC",
+	power=def_VL_Pow_LV3, //強やられレベル
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_type = 0, // 状態 0-地上 1-空中 （基本値 1）		
+			vector_num = 66, // 使用ベクトル番号
+			hit_pattern = def_VL_GuardPat_Crouch, //
+			guard_pattern = def_VL_GuardPat_Crouch,
+			vector_time = def_VL_VT_Guard_Std_LV4p, // 発生時間
+			vector_returntime = 24, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 地上のけぞりベクトル
+		},
+	]
+})
+/////////////////////
+vectmpl.add({
+	number = 312, // 定義番号
+
+	name = "空ガード特Ｐ",
+	prio_vector = 10, // ベクトル優先度
+	ko_vector = def_VL_KoVector, // KO時のベクトル修正 0 だと修正しない
+
+	Finalize_Guard = "Mv_Modori_GuardA",
+	power=def_VL_Pow_LV3, //強やられレベル
+
+	tblcount = 1, // テーブル数
+	tbl = 
+	[
+		{
+			vector_num = 92, // 使用ベクトル番号
+			hit_pattern = def_VL_GuardPat_Air, //
+			guard_pattern = def_VL_GuardPat_Air,
+			vector_time = def_VL_VT_Guard_Air_LV4p, // 発生時間
+			vector_returntime = 10, // 壁反射ベクトル
+			ukemitime = -1, // 受身不能時間 -1:空中受け身不可
+			ground_ukemi_num = -1, // 床受け身番号 -1:地上受け身不可
+			flag_isgroundvector = true, // 判定ツールのパターンの状態（地上とか空中）を見るフラグ
+		},
 	]
 })
 
