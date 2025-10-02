@@ -2068,6 +2068,17 @@ t.Mv_Skill_0202C <-
 								// リロード弾数ボーナス:0.5
 								local rel_grd_bo = 5000 + ( charge_bullet * 100 / 13 * 50);
 								
+								//250912 相手がやられ中か受身中のときはGRD増加量を半分にする
+								local eukemi = Battle_Std.CheckEnemyisUkemi(); // 相手が受身中だった
+								local edamage = Battle_Std.CheckEnemyisDamage();
+								_dpn("eukemi="+eukemi+",edamage="+edamage);
+								
+								if( eukemi || edamage ) 
+								{
+									// _dpn("相手がやられ中か受身中のときはGRD増加量を半分にする");
+									rel_grd_bo = rel_grd_bo * 50 / 100;
+								}
+								
 								// 他でタメてたら増加量減らす
 								if( Battle_Std.EnemyDamageFlag_Check( use_flag_their ) )
 								{
@@ -3152,6 +3163,12 @@ local maketmpl_J214_Hit = function( param={} )
 			if( BMvTbl.CheckStickHold( (1<<6) ) )
 			{
 				BMvTbl.SetMuki( _Direction_Reverse ); //向きを反転
+				
+				// ミッションでJ214>6入れ反転の検知用に処理を追加
+				if( BMvTbl.GetMvStageStatus().IsTrainingBattle() == 3 )// ミッション中
+				{
+					Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CharaFlag3 ); // レバー6入れで向きを反転した
+				}
 			}
 		}
 		
@@ -3258,6 +3275,12 @@ t.Mv_Skill_J214EX_Hit <-
 				if( BMvTbl.CheckStickHold( (1<<6) ) )
 				{
 					BMvTbl.SetMuki( _Direction_Reverse ); //向きを反転
+					
+					// ミッションでJ214>6入れ反転の検知用に処理を追加
+					if( BMvTbl.GetMvStageStatus().IsTrainingBattle() == 3 )// ミッション中
+					{
+						Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CharaFlag3 ); // レバー6入れで向きを反転した
+					}
 				}
 			}
 		case 220: // とどめ叩きつけ

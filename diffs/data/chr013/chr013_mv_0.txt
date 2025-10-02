@@ -1999,12 +1999,11 @@ t.Mv_Atk_StdBandC <-
 				eff.pop();
 			}
 			break;	
-		case 1000: // ’…’nd’¼
-			// ƒCƒ“ƒNƒŠ[ƒX”Å‚ÍDAMAGEŽžd’¼‚ð2F’Z‚­(DC‚ÅE‚¦‚é)
+		case 1000: // ’…’n
 			local hs = BMvTbl.GetMvHitStatus();
-			if( hs.Type&_HitType_Damage && Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_ExtendAction ) ) // ”O‚Ìˆ×ƒCƒ“ƒNƒŠ[ƒX”Å‚ÉŒÀ’è
+			if( hs.Type&_HitType_Damage )
 			{
-				_dpn("ƒ_ƒ[ƒW‚ð—^‚¦‚Ä‚¢‚½‚Ì‚Åd’¼2F’Z‚­");
+				_dpn("ƒ_ƒ[ƒW‚ð—^‚¦‚Ä‚¢‚½‚Ì‚Åd’¼‚ð’²®");
 				BMvTbl.SetMoveableFlag( { move=1, time=254, flag=_ClearFlag_ChangeMv } ); // Mv’†s“®‰Â”\‚É‚·‚é
 			}
 			break;	

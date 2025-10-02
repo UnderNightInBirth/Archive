@@ -165,7 +165,18 @@ local move_guriguri = function( _xpower=128, _xmax=1600 )
 	
 	local addx = 0;
 	if( BMvTbl.CheckStickHold( (1<<4) | (1<<7) | (1<<1) ) ) addx = -_xpower;
-	if( BMvTbl.CheckStickHold( (1<<6) | (1<<9) | (1<<3) ) ) addx = _xpower;
+	if( BMvTbl.CheckStickHold( (1<<6) | (1<<9) | (1<<3) ) ) 
+	{
+		addx = _xpower;
+		
+		// ミッションでFF/JFF>6入れの検知用に処理を追加
+		if( BMvTbl.GetMvStageStatus().IsTrainingBattle() == 3 )// ミッション中
+		{
+			_dpn("FF/JFFの動作中に6入れした");
+			Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // FF/JFFの動作中に6入れした
+		}
+	}
+	
 	vec.x += addx;
 
 	// 高速になりすぎないように

@@ -159,11 +159,27 @@ local func_BandCMove = function( param={} )
 	}
 }
 
+// MEMO:飛び道具MVなのに普通に生成されていておかしい
 t.Mv_FireBall_BCMove <-
 {
 	function Init_After()
 	{
 		BMvTbl.SetHitCheckFlag( { type=1, val=_HitCheckFlag_Legs, time=255, flag=_ClearFlag_ChangeMv } ); // 足無敵にスカる
+		Battle_Std.MoveCode.AddFlag( def_MC_BCAction ); // BC技　※のぼりFF検知用に追加
+
+		// MEMO:生成前だとどうしても処理できないのでここで対応
+		// uniqのチェックも不可だがおそらく大丈夫だと思われる
+		local player = BMvCore.GetPlayerCharaData();
+		if( player.push() )
+		{
+			local fastrocker_atkmv = Battle_Std.MoveCodeEx.CheckFlag( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
+			player.pop();
+			
+			if( fastrocker_atkmv )
+			{
+				Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
+			}
+		}
 	}
 }
 
@@ -1043,7 +1059,10 @@ t.Mv_Skill_63214EX_Hit <-
 			local hpVal = ( isMinused )? 500 : 600;
 			BMvEff.SetHpGauge( { value=hpVal } );
 			// _dpn("hpVal:"+hpVal);
-			Battle_Std.EnemyGRD_Drain( 10000, 1 ); // 相手のGRDを吸収する
+			
+			//250912 始動ヒットでないときはGRD吸収量を半分にする
+			local grdval = ( Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_SidouHitSkill ) )? 10000 : 5000;
+			Battle_Std.EnemyGRD_Drain( grdval, 1 ); // 相手のGRDを吸収する
 			
 			local eff = BMvEff.CreateObject( { mvname="Mv_Null_DrainEX" } );
 			if( eff.push() )
@@ -1223,7 +1242,10 @@ t.Mv_Atk_B_B_B_Hit <-
 			local hpVal = ( isMinused )? 300 : 400;
 			BMvEff.SetHpGauge( { value=hpVal } );
 			// _dpn("hpVal:"+hpVal);
-			Battle_Std.EnemyGRD_Drain( 5000, 1 ); // 相手のGRDを吸収する
+			
+			//250912 始動ヒットでないときはGRD吸収量を半分にする
+			local grdval = ( Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_SidouHitSkill ) )? 5000 : 2500;
+			Battle_Std.EnemyGRD_Drain( grdval, 1 ); // 相手のGRDを吸収する
 			
 			Battle_Std.SetThrowEnemyMuteki( 0 ); // 掴み中の相手に無敵時間を設定
 			

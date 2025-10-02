@@ -2561,7 +2561,9 @@ local maketmpl_IcePillar = function( param={} ) : (Freeze)
 		}
 		if( Battle_Std.CheckDamageTiming() )
 		{
-			Battle_Std.EnemyGRD_Drain( 5000, 0 ); // GRD‹zŽû
+			//250912 Žn“®ƒqƒbƒg‚Å‚È‚¢‚Æ‚«‚ÍGRD‹zŽû—Ê‚ð”¼•ª‚É‚·‚é
+			local grdval = ( Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_SidouHitSkill ) )? 5000 : 2500;
+			Battle_Std.EnemyGRD_Drain( grdval, 0 ); // GRD‹zŽû
 		}
 	}
 	ret_tmpl.LastUpdate_After <- function() : (mvparam)

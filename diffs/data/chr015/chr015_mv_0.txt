@@ -1704,6 +1704,20 @@ local dah_GetActionCode = function( flags=0, call_action=0 ) : (dah_CheckYarare)
 				BMvTbl.SetPP(def_PP_Cha_DahRiseUpYoyaku,60);//F（ぐらい）使える
 				Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CharaFlag3 );//備えろの先行受付はこのMV中継続する
 				//_dpn("cha_input_rise:"+cha_input_rise);
+				
+				// ミッションで備えろの検知用に処理を追加
+				if( BMvTbl.GetMvStageStatus().IsTrainingBattle() == 3 )// ミッション中
+				{
+					// ケイアスに備えろ成功フラグを伝える
+					// ※このときのケイアスのMVはまったくの不明なので注意！
+					// （しゃがみだったり攻撃中だったりいろんな状況で入る）
+					local oya = BMvCore.GetParentCharaData(); // 親（ケイアス）の情報を得る
+					if( oya.push() )
+					{
+						Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_CharaFlag5 );//備えろ成功フラグを伝える
+						oya.pop();
+					}
+				}
 			}
 		}
 		
@@ -3061,8 +3075,9 @@ local makemv_dah_atk = function( param={} ) : ( dah_GetActionCode, dah_SetNextMo
 	local auto_direction = (no_direction)? 0 : 1;
 	local type = ( "type" in param )? param.type : def_MVA_Skill;//デフォはdef_MVA_Skillに一応しておく
 	local rise_pat = ( "rise_pat" in param )? param.rise_pat : 0;
+	local is_ff = ( "is_ff" in param )? param.is_ff : 0;
 	
-	retmv.Init <- function() : ( pat, ap, callact, auto_direction, type,SetDahAtkPattern, rise_pat)
+	retmv.Init <- function() : ( pat, ap, callact, auto_direction, type,SetDahAtkPattern, rise_pat, is_ff)
 	{
 		if( auto_direction ) Battle_Std.SetMukiAuto( { CheckEnemyVector=1 } ); //技の発動時は相手の方を向き直す
 		
@@ -3074,6 +3089,7 @@ local makemv_dah_atk = function( param={} ) : ( dah_GetActionCode, dah_SetNextMo
 		if( player.push() )
 		{
 			local flag_NoReceiveDahHit = Battle_Std.MoveCode.CheckFlag( def_MC_CharaFlag2 ); // ダハーカのキャンセルを受け取らないMv
+			local fastrocker_atkmv = Battle_Std.MoveCodeEx.CheckFlag( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
 			player.pop();
 
 			// _dp("\n flag_NoReceiveDahHit:"+flag_NoReceiveDahHit);
@@ -3086,6 +3102,12 @@ local makemv_dah_atk = function( param={} ) : ( dah_GetActionCode, dah_SetNextMo
 				BMvTbl.CheckMvUniqueID( { datatype=_DataType_Player, setid=1 } ); // ユニークIDを再設定する
 				BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentHitStatus } ); // このIDの間伝える　※ID更新されればMVは移行し続けるから何度も設定しないでいいっぽい
 			}
+			
+			if( is_ff && fastrocker_atkmv )
+			{
+				_dpn("ケイアスが低空発動なのを記憶");
+				Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
+			}			
 		}
 		
 		//def_PP_Cha_DahActListに使った技を記憶（コンボ状態解除でリセット）
@@ -3773,7 +3795,7 @@ t.Mv_Dah_HidingAtkEX <- makemv_dah_HidingAtk( { pat="Dah_HidingAtkEX", hitmv="Mv
 
 
 t.Mv_Dah_StdBreathAtkA_Appear <- makemv_dah_atk_appear( { atkmv="Mv_Dah_StdBreathAtkA", type=def_MVA_Skill } );
-t.Mv_Dah_StdBreathAtkA <- makemv_dah_atk( { pat="Dah_StdBreathAtkA", ap=350, callact=def_CHR_Dah_ActFlag_421A, type=def_MVA_Skill } );
+t.Mv_Dah_StdBreathAtkA <- makemv_dah_atk( { pat="Dah_StdBreathAtkA", ap=350, callact=def_CHR_Dah_ActFlag_421A, type=def_MVA_Skill, is_ff=1 } );
 
 
 t.Mv_Dah_StdBreathAtkA.FrameUpdate <- function()

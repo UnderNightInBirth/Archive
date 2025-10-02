@@ -1,3 +1,9 @@
+//1.35
+const Def_Sys_SmartStear_GRDBonusLimit = 1; //CPが極端に低いときはスマートステアのGRDボーナスを減らす 0:固定値増加
+const Def_Sys_FastRocketeerDamageHoseiLimit = 6; //のぼりジャンプ攻撃に補正をかける　※このフレーム以下なら補正がかかる
+const Def_Sys_FastRocketeerMaxJumpFrame = 20; // のぼりジャンプ攻撃の最大検知フレーム
+const Def_Sys_BackDashPunishDamageHosei = 85; //バクステから確定を取ったときにかける補正値（地上投げのみ対応）
+
 //1.30
 const Def_Sys_ExCutinDrawType = 1; // 0:通常　1:少し暗く（VPとかIWに比べると白飛びがキツいので調整）
 const Def_Sys_Concentration_AddTS_NoDamage = 1; // やられ中はコンセのTSを早める効果をなくす
@@ -727,8 +733,10 @@ const def_MC3_MaxJumpCtrlVector = 4194304; // レバー左右で動かす関数の制限にかか
 const def_MC3_DisableDirectSSSkill = 67108864; // ステアエンダーが出せない状態
 const def_MC3_SuccessHitFinalize = 134217728; // ヒット分岐成功予定の行動（ThrowHitFinalize）一部手動でも設定
 const def_MC3_EnableJumpFramePP = 268435456; // def_PP_JumpFrameが有効なMV
+const def_MC3_CharaFlag5 = 536870912;
+const def_MC3_FastRocketeerLimitAtkMv = 1073741824; // 低空で出したジャンプ攻撃やFF
 
-// Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_FastJumpAtkNoThroughCrouch );
+// Battle_Std.MoveCodeEx.AddFlag( 4, def_MC4_BackDashAvoided );
 const def_MC4_AddMv = 16; // 派生技・追加技の必殺技
 // const def_MC4_SkillVecAdded = 32; // ベクトル加算を行ったMv※引き継ぐ
 const def_MC4_EnablePanishAnnounce = 256; // パニッシュを出すMV（通常技、必殺技は自動で立つ）
@@ -738,6 +746,7 @@ const def_MC4_MutekiSidou = 4194304; // 無敵技で始動であてて補正をかけた行動
 const def_MC4_DelayMutekiSidouHosei = 8388608; // 無敵始動補正を遅らせてセットするかどうか
 const def_MC4_FastJumpAtkNoThroughCrouch = 16777216; // のぼりで出しても屈に空振りさせる処理をしない（Init_Before用）
 const def_MC4_AtemiSousaiSuccess = 536870912; // 当身系の相殺に成功した行動
+const def_MC4_BackDashAvoided = 1073741824; // バックステップされた行動（バクステ中に相手につけるフラグ）
 
 // Battle_Std.MoveCodeEx.AddFlag( 5, def_MC5_StrictFurimukiCheckNextMv );
 const def_MC5_FromSidouAddSkill = 4; // 始動技からの追加技かどうか
@@ -940,10 +949,13 @@ const def_FL_AtkAirC_LandRecovery_AssaultGuard		= 2; 	//
 
 
 
-//自由変数のどれを使うか・キャラ別定数（0～19）
+//16まではキャラ別で使用中
+//自由変数のどれを使うか・キャラ別定数（0～18）
 
-//自由変数のどれを使うか定数（20以降）
+//自由変数のどれを使うか定数（19以降）
 //操作親からしかいじっちゃだめなやつ
+
+const def_PP_LimitJumpFrameMng	= 19; // のぼりジャンプ攻撃カウンタマネージャーID
 
 const def_PP_TMP0 = 20; // Mv内でのみ使うか、Mv一致時のみ使おうな
 
@@ -1066,6 +1078,8 @@ const def_PP_PlayerStatus			= 51; //汎用ステータスとか？
 	const def_PP_PS_isLiberate_Celes= 1024;	//セレスティアルＶＯ
 	//↑この辺適当なタイミングで折られてるっぽいよ
 
+
+const def_PP_LimitJumpFrameCount	= 52; // のぼりジャンプ攻撃カウンタ
 
 const def_PP_ReversalLeftTime		= 53;	//これが1以上で必殺技を出すとリバーサル扱いになる
 // const def_PP_AssaultCount			= 43;	//アサルトを出したか（空中での回数制限用。地上状態になると０になる）
@@ -1773,7 +1787,7 @@ const def_CMDFlags_AnnounceSmaetSteerAir = 4;
 //なんかゲームバランスに影響ありそうなやつ
 //GRD増減値
 // Battle_Std.GRD_AddValue({ val=def_GRD_SSkill_Direct, pressure=0, boundplus=1 });
-const def_GRD_Guard_Frame					= 80;		//ガード時毎フレーム
+const def_GRD_Guard_Frame					= 100;		//ガード時毎フレーム
 const def_GRD_Guard_Frame_Vorpal			= -80;		//ガード時毎フレーム（ヴォーパル側）
 const def_GRD_Guard_Frame_GRD6Vorpal			= -120;		//ガード時毎フレーム（ヴォーパル側かつGRDが6より多い）
 const def_GRD_GuardSP_Frame				= 300;		//シールド成功時毎フレーム　↑と加算はされない

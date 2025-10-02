@@ -217,6 +217,9 @@ EleFunc.SetElefeeNextMoveTable <- function( param={} )
 			
 			if( remake )
 			{
+				// ヒットストップがかかっているとすぐに消えずにリメイクされてしまい二重に生成されてしまう
+				BMvTbl.SetHitStop( 0, _ValSet ); // ヒットストップをなくして確実に消滅させる
+				
 				BMvTbl.SetNextMoveTable( "..." );
 				Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag1 ); // MV終了予約を入れて他の変更で上書きされないようにする
 			}
@@ -233,7 +236,7 @@ EleFunc.SetElefeeNextMoveTable <- function( param={} )
 			// フレームメーターだったりヒット情報だったりのためにMVを再生成する
 			if( remake )
 			{
-				local eff = BMvEff.CreateObject( { mvname = mvname, id = 1 } );
+				local eff = BMvEff.CreateObject( { mvname = mvname, id = CDef_Izu_ID_Elefee } );
 				if( eff.push() )
 				{
 					BMvTbl.SetPosition( { x=ele_pos.x, y=ele_pos.y } );
@@ -1248,7 +1251,7 @@ t.Mv_Startup <-
 	function Init_After()
 	{
 		local startmv = ( Battle_Std.CheckTrainingCharaGaugeMode() )? "Mv_Elefee_StandOn" : "Mv_Elefee_StandOff";
-		local ele = BMvEff.CreateObject( { mvname=startmv, id=1 } );//サカナのid1
+		local ele = BMvEff.CreateObject( { mvname=startmv, id=CDef_Izu_ID_Elefee } );//サカナのid1
 		
 		if( BMvTbl.GetMvStageStatus().IsTrainingBattle() )
 		{
@@ -2413,7 +2416,7 @@ local makeSkillTmpl_LockBubbleBall = function( param={} )
 		BMvTbl.SetLP(0,0); // 終わり
 		BMvTbl.SetLP(1,0); // 初回ヒット検知用
 		BMvTbl.SetLP(2,0); // ヒットして跳ねる先の検知用 1:ヒットして跳ねた
-		BMvTbl.SetLP(3,0); // 殴られて跳ねる先の検知用 1:殴られて跳ねた
+		BMvTbl.SetLP(3,0); // 殴られて跳ねる先の検知用 1:殴られて跳ねた  10:殴る前にヒットした（ヒット＋殴って跳ねるはNG）
 		BMvTbl.SetLP(5,0); // オブジェクト表裏
 		if( Def_Sys_CheckObjectEnemyGuardMuki ) Battle_Std.InvalidateObjectMixupInit_SetLP(5); // オブジェクト表裏を無効化
 		
@@ -2450,7 +2453,7 @@ local makeSkillTmpl_LockBubbleBall = function( param={} )
 				else
 				{
 					_dpn("殴って跳ねる");
-					BMvTbl.SetLP(3,1); // 殴られて跳ねる先の検知用 1:殴られて跳ねた
+					BMvTbl.SetLP(3,1); // 殴られて跳ねる先の検知用 1:殴られて跳ねた  10:殴る前にヒットした（ヒット＋殴って跳ねるはNG）
 
 					local bmvs = BMvTbl.GetMvStatus();
 					BMvTbl.SetPattern(bmvs.DataPattern); // ダミーのシャボン玉を消すため
@@ -2531,6 +2534,12 @@ local makeSkillTmpl_LockBubbleBall = function( param={} )
 		{
 			if( Battle_Std.CheckAnyHitTiming() )
 			{
+				if( mvparam.naguri_bound && BMvTbl.GetLP(3)==0 )
+				{
+					_dpn("ヒットorガードで殴って跳ねるのはナシにする");
+					BMvTbl.SetLP(3,10); // 殴られて跳ねる先の検知用 1:殴られて跳ねた  10:殴る前にヒットした（ヒット＋殴って跳ねるはNG）
+				}
+				
 				local mvhs = BMvTbl.GetMvHitStatus();
 				local hitbound = mvparam.hit_bound && mvhs.Type&_HitType_Guard && BMvTbl.GetLP(2)==0;
 				

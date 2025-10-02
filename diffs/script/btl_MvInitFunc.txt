@@ -109,7 +109,7 @@ Battle_Std.StartGroundAtk <- function()
 	if( Def_Sys_ComboRateSetStartTiming ) BMvTbl.AddComboRate(); // コンボレート加算
 }
 
-// 空中の通常技
+// 空中の通常技とFF
 Battle_Std.InitAirAtk <- function( param={} )
 {
 	local flags = ( "flags" in param )? param.flags : 0;
@@ -346,6 +346,21 @@ Battle_Std.InitAirAtk <- function( param={} )
 	if( Def_Sys_CmdShortAtkInit )
 	{
 		BMvTbl.SetCommandShortDelay(Def_Sys_CmdShortAtkInit);
+	}
+	
+	if( Def_Sys_FastRocketeerDamageHoseiLimit )
+	{
+		// 離陸してまもないときに出していたらフラグをつけたりする
+		local count = BMvTbl.GetPP(def_PP_LimitJumpFrameCount); // これが有効＝ジャンプから20F以内の技
+		if( count > 0 )
+		{
+			local frame = Def_Sys_FastRocketeerMaxJumpFrame - count; // 1～19とか
+			if( frame <= Def_Sys_FastRocketeerDamageHoseiLimit ) // 6F以内とか
+			{
+				_dpn("のぼりで出したのを記憶:"+frame+"F");
+				Battle_Std.MoveCodeEx.AddFlag( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
+			}
+		}
 	}
 }
 

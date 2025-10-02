@@ -542,6 +542,7 @@ t.Mv_FireBall_AirBandC <-
 	{
 		// BMvEff.SetObjectFlags( { flags=_ObjFlags_ToParentStop } ); // 空中で固まると変なので
 		BMvEff.EraseObjectFlags( { flags=_ObjFlags_ToParentHitBack } ); // 画面端でのヒットバックをなしにする
+		Battle_Std.MoveCode.AddFlag( def_MC_BCAction ); // BC技　※のぼりFF検知用に追加
 	}
 	function FirstHitTiming() : (effMoveToEnemy)
 	{
@@ -1601,6 +1602,7 @@ local maketmpl_SkillAirSlash = function( param={} )
 		move_stop = 0,
 		isEX = 0,
 		hitcheck_muteki = 0,
+		fix_landbug = 0, // 慣性divベクトルで着地しそうなときの保険処理を入れる
 	}
 	
 	switch( param.type )
@@ -1619,6 +1621,7 @@ local maketmpl_SkillAirSlash = function( param={} )
 		mvparam.karaburi_cs = 1;
 		mvparam.isEX = 1;
 		mvparam.hitcheck_muteki = { [128]=Def_HitCheckFlag_LightLegs };
+		mvparam.fix_landbug = 1;
 		break;
 	}
 	
@@ -1645,7 +1648,8 @@ local maketmpl_SkillAirSlash = function( param={} )
 		BMvTbl.SetVector_MaxX( 0 ); //XMAXを初期化
 		
 		local pos = BMvTbl.GetPosition();
-		local fallYlen = nowvec.y + nowvec.y/10; // 落下まで進んでしまう距離
+		local fallYlen = nowvec.y + nowvec.y/10; // 落下まで進んでしまう距離　※この計算は間違いだが性能変わらないように処理は変えない
+		// local fallYlen = (nowvec.y * 110) / 100; // 少しズレはあるがだいたいこれくらい
 
 		// _dp("\n pos.y:"+pos.y+" nowvec.y:"+nowvec.y+" fallYlen:"+fallYlen+" flowYvec:"+flowYvec );
 		if( pos.y+nowvec.y >= 0 ) // 次のフレームで着地する
@@ -1663,16 +1667,34 @@ local maketmpl_SkillAirSlash = function( param={} )
 			BMvTbl.SetVector( { x=nowvec.x, y=(nowvec.y/5), addx=-nowvec.x/10, addy=-(nowvec.y/5)/10, flags=_Vector_Div } );
 		}
 		BMvTbl.SetLP(1,0); // 強化版かどうか
+		BMvTbl.SetLP(2,0); // 発射前に慣性で着地させない保険処理をやったか 1:やった -1:発射後なので処理しない
 	}
 	
 	ret_tmpl.FrameUpdate_After <- function() : (mvparam)
 	{
+		if( mvparam.fix_landbug ) // 保険処理
+		{
+			local mvs = BMvTbl.GetMvStatus();
+			if( BMvTbl.GetLP(2)==0 && mvs.MvCount < 10 ) // 収束ベクトルが有効な間は10F
+			{
+				local pos = BMvTbl.GetPosition();
+				local vec = BMvTbl.GetVector( { flags=_Vector_Div } );
+				if( vec.y > 0 && pos.y + vec.y > 0 )
+				{
+					// 慣性のせいで次のフレームで着地してしまうので強引に防ぐ
+					BMvTbl.SetVector( { y=0, addy=0, flags=_Vector_Div } );
+					BMvTbl.SetLP(2,1); // 発射前に慣性で着地させない保険処理をやったか 1:やった -1:発射後なので処理しない
+				}
+			}
+		}
+		
 		switch( Battle_Std.GetUpdateFrameID() )
 		{
 		case 100:
 			if( BMvTbl.GetLP(1)==0 || mvparam.isEX==1 )
 			{
 				Battle_Std.CreateFireBall( mvparam.ball_st );
+				BMvTbl.SetLP(2,-1); // 発射前に慣性で着地させない保険処理をやったか 1:やった -1:発射後なので処理しない
 			}
 			break;
 		case 200:
@@ -1912,11 +1934,14 @@ t.Mv_AtkObj_222EX_AtkRect <-
 	{
 		if( Battle_Std.CheckDamageTiming() )
 		{
-			local player = BMvCore.GetPlayerCharaData();
-			if( player.push() )
+			if( BMvTbl.CheckMvUniqueID( { datatype=_DataType_Player } ) != 0 )
 			{
-				BMvTbl.SetLP(0,1); // ヒットを記憶を伝える
-				player.pop();
+				local player = BMvCore.GetPlayerCharaData();
+				if( player.push() )
+				{
+					BMvTbl.SetLP(0,1); // ヒットを記憶を伝える
+					player.pop();
+				}
 			}
 			
 			if( BMvTbl.GetLP(0)==0 )

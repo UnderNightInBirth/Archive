@@ -1565,7 +1565,16 @@ local set_JumpCtrlVector = function()
 	local x = 0; //移動させるベクトル量
 	local plus_x = 250; //1F毎に変化させる値
 	if( ( BMvTbl.CheckStickHold( (1<<4) | (1<<7) | (1<<1) ) ) && vec.x > -1300 ) x -= plus_x;
-	if( ( BMvTbl.CheckStickHold( (1<<6) | (1<<9) | (1<<3) ) ) && vec.x <  2000 ) x += plus_x;
+	if( ( BMvTbl.CheckStickHold( (1<<6) | (1<<9) | (1<<3) ) ) && vec.x <  2000 ) 
+	{
+		x += plus_x;
+		
+		// ミッションでJ214>6入れの検知用に処理を追加
+		if( BMvTbl.GetMvStageStatus().IsTrainingBattle() == 3 )// ミッション中
+		{
+			Battle_Std.MoveCode.AddFlag( def_MC_CharaFlag2 ); // J214の動作中に6入れした
+		}
+	}
 
 	if( x ) // 移動予約あれば
 	{

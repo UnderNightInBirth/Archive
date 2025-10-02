@@ -119,6 +119,7 @@ t.Mv_Atk_StdBandC_AddA <-
 		Battle_Std.InitCharaVector() //慣性を残したベクトル初期化
 	
 		BMvTbl.SetMvAction(def_MVA_EXAtk);
+		Battle_Std.PassBeforeMoveCodeEx( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
 		
 		BMvTbl.SetLP(0,0); // ヒットしたかどうか　1:ヒット 2:ダメージ
 		BMvTbl.SetLP(1,0); // 着地して処理を行ったかどうか 1:着地して処理をおこなった
@@ -176,6 +177,7 @@ t.Mv_Atk_StdBandC_Add2A <-
 		Battle_Std.InitCharaVector() //慣性を残したベクトル初期化
 	
 		BMvTbl.SetMvAction(def_MVA_EXAtk);
+		Battle_Std.PassBeforeMoveCodeEx( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
 	}
 	function FrameUpdate_After()
 	{

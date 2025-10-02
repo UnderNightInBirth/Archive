@@ -1229,6 +1229,11 @@ t.Mv_FireBall_J236B_Blocked <- t.Mv_FireBall_J236B_Sousai;
 
 t.Mv_Skill_214A <-
 {
+	function Init_After()
+	{
+		// 6ため4Aズラし>Bなどでバクステを出せるように調整
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_EnableZurashiDashCancel ); // ズラし押しでダッシュキャンセル可能にする
+	}
 	function FrameUpdate_After()
 	{
 		switch( Battle_Std.GetUpdateFrameID() )
@@ -1242,6 +1247,11 @@ t.Mv_Skill_214A <-
 
 t.Mv_Skill_214B <-
 {
+	function Init_After()
+	{
+		// 6ため4Aズラし>Bなどでバクステを出せるように調整
+		Battle_Std.MoveCodeEx.AddFlag( 6, def_MC6_EnableZurashiDashCancel ); // ズラし押しでダッシュキャンセル可能にする
+	}
 	function FrameUpdate_After()
 	{
 		switch( Battle_Std.GetUpdateFrameID() )

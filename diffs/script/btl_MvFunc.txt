@@ -1496,6 +1496,7 @@ Battle_Std.DamageImpact_StdFunc <- function(info)
 	local PosisCro = (info.d_state==2);
 	local PosisAir = (info.d_state==1);
 	local PosisStd = (!PosisCro&&!PosisAir);
+	local PosisGro = (PosisStd || PosisCro);
 	
 	local StdGuardInput = (info.def_guard==1);
 	local CroGuardInput = (info.def_guard==2);
@@ -2099,6 +2100,104 @@ Battle_Std.DamageImpact_StdFunc <- function(info)
 					// Nageを含めると、3Dでかかりの投げのときだけ表示されてしまうので注意
 					_dpn("当身中の被弾!（投げ以外）");
 					Battle_Std.PP_AddFlag(def_PP_ImpactAnnounce,def_PP_IA_BarrierBreached );
+				}
+			}
+			
+			// のぼりジャンプ攻撃に補正をかける
+			// のぼりジャンプ攻撃が上段になるのと近いイメージ
+			if( Def_Sys_FastRocketeerDamageHoseiLimit )
+			{
+				local from_guard = 0; // 食らった瞬間がガード中だったか（ガード硬直中の被弾かどうか）
+				{
+					local mvname = BMvTbl.GetMvName();
+					// local bs = BtlMvStd.GetBoundStatus(); // isBoundは被弾した瞬間に1になってしまうみたいで使えない
+					// _dpn("mv:"+mvname+" bs:"+bs.isBound);
+					if( mvname=="Mv_Guard" ) from_guard = 1; // ガードのMV名は固定なのでこれでも大丈夫のはず
+				}
+				
+				local atk_enemy = BMvCore.GetLastDamageCharaData( 0 ); // そのままを取得（1だと一番上の親）
+				if( atk_enemy.push() )
+				{
+					local fromAssault = Battle_Std.MoveCodeEx.CheckFlag( 2, def_MC2_FromAssault );
+					local extend_action = Battle_Std.MoveCodeEx.CheckFlag( 1, def_MC1_ExtendAction ); // タメ攻撃
+					
+					// MEMO
+					// カーマインの空中FFは扱いがかなり特殊なのでまともに検知できないので無理やり対応中
+					
+					// ガード硬直中はF式連携にかなり補正がかかってしまうのを防ぐために除外している（カーマインとか）
+					if( !fromAssault && !extend_action && PosisGro && !from_guard ) // アサルトじゃない＆タメ版じゃない＆地上ヒットのときだけ＆ガード硬直中以外
+					{
+						local normal_atk_with_ff = Battle_Std.MoveCode.CheckFlag( def_MC_Atk|def_MC_BCAction ); // UNIだと結構当てにならないので注意
+						local fastrocker_atkmv = Battle_Std.MoveCodeEx.CheckFlag( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
+
+						_dpn("※fastrocker_atkmv:"+fastrocker_atkmv+" normal_atk_with_ff:"+normal_atk_with_ff);
+						
+						local set_hosei = 0; // !=0で補正をかける
+						
+						// のぼりで出した系
+						if( fastrocker_atkmv )
+						{
+							_dpn("☆のぼりで出した");
+							set_hosei = 1;
+						}
+						
+						local count = BMvTbl.GetPP(def_PP_LimitJumpFrameCount); // これが有効＝ジャンプから20F以内の技
+						if( count > 0 )
+						{
+							if( normal_atk_with_ff )
+							{
+								_dpn("☆ジャンプして"+Def_Sys_FastRocketeerMaxJumpFrame+"F以内:"+count);
+								set_hosei = 1;
+							}
+
+							if( !set_hosei && !atk_enemy.isPlayer() )
+							{
+								// _dpn("通常技orFFではないオブジェクト");
+								if( BMvTbl.CheckMvUniqueID( { datatype=_DataType_Player } ) != 0 )
+								{
+									local oya = BMvCore.GetPlayerCharaData();
+									if( oya.push() )
+									{
+										if( Battle_Std.MoveCode.CheckFlag( def_MC_Atk|def_MC_BCAction ) )
+										{
+											_dpn("☆ジャンプして20F以内(弾)");
+											set_hosei = 1; // 親が通常技orFF扱い　のときもOK
+										}
+										oya.pop();
+									}
+								}
+							}
+						}
+						
+						// 補正をかける
+						if( set_hosei )
+						{
+							// JAなどの補正ゆるい技は少し重くする
+							BMvEff.ComboView_Set( { val=90, type=0 } ); // 補正を上書き
+
+							_dpn("★★ロケッティア補正（乗算）" );
+							BMvEff.ComboView_Set( { val=90, type=1 } ); // 補正を乗算
+							
+							// ※結果的に最低でも81%はかかる想定
+						}
+					}
+					
+					atk_enemy.pop();
+				}
+			}
+			
+			if( Def_Sys_BackDashPunishDamageHosei )
+			{
+				local backdash_voided = Battle_Std.MoveCodeEx.CheckFlag( 4, def_MC4_BackDashAvoided );
+				if( backdash_voided )
+				{
+					local enemy = BMvCore.GetEnemyCharaData(); // 念の為純粋に相手プレイヤーデータを取得
+					if( enemy.push() )
+					{
+						_dpn("★バクステパニッシュ補正（乗算）:"+Def_Sys_BackDashPunishDamageHosei );
+						BMvEff.ComboView_Set( { val=Def_Sys_BackDashPunishDamageHosei, type=1 } ); // 補正を乗算
+						enemy.pop();
+					}
 				}
 			}
 		}
@@ -10463,7 +10562,7 @@ Battle_Std.PassHitMoveCodes <- function()
 	
 	Battle_Std.PassBeforeMoveCodeEx( 2, def_MC2_GRDBreakAttack ); // GRDブレイクを発生させた攻撃
 	Battle_Std.PassBeforeMoveCodeEx( 4, def_MC4_DelayMutekiSidouHosei ); // 無敵技始動の補正をLastUpdateでかける
-	
+	Battle_Std.PassBeforeMoveCodeEx( 3, def_MC3_FastRocketeerLimitAtkMv ); // 低空で出したジャンプ攻撃やFF
 }
 
 // 着地時に引き継ぐコードまとめ（ジャンプ攻撃、空中特殊技と一部空中必殺技）
@@ -11221,7 +11320,7 @@ Battle_Std.PassPlayerToFireBallMvCode <- function()
 			[0,def_MC_Skill],
 			[0,def_MC_EXAction],
 			[0,def_MC_SPAction],
-			//[0,def_MC_BCAction],
+			//[0,def_MC_BCAction], // ※セットしない理由は謎
 			[1,def_MC1_ExtendAction],
 			//[3,def_MC3_AirSkill],
 			//[4,def_MC4_NoDFSkillVecAdded],
@@ -11233,6 +11332,7 @@ Battle_Std.PassPlayerToFireBallMvCode <- function()
 			[5,def_MC5_FromSidouAddSkill],
 			[1,def_MC1_SidouHitSkill],
 			[2,def_MC2_SidouHitSkillTmp],
+			[3,def_MC3_FastRocketeerLimitAtkMv],
 		]
 		foreach( slot, val in pass_codes )
 		{

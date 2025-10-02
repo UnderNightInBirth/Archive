@@ -234,7 +234,16 @@ ChrFunc.FFAtk_Init <- function(_Pat=0)
 		local vec_y = -900;
 		if( stick == 7 || stick == 8 || stick == 9 ) vec_y = -1600;
 		// if( stick == 1 || stick == 2 || stick == 3 ) vec_y = 250;
-		if( stick == 1 || stick == 2 || stick == 3 ) vec_y = -600;
+		if( stick == 1 || stick == 2 || stick == 3 ) 
+		{
+			vec_y = -600;
+			
+			// ミッションでFF>下入れJAの検知用に処理を追加
+			if( BMvTbl.GetMvStageStatus().IsTrainingBattle() == 3 )// ミッション中
+			{
+				Battle_Std.MoveCodeEx.AddFlag( 1, def_MC1_CharaFlag3 ); // レバー下入れで出した
+			}
+		}
 		
 		BMvTbl.SetVector( { x=vec_x, addx=0, y=vec_y, addy=180, flags=_Vector_Normal|_VecFlag_Add } );
 		
